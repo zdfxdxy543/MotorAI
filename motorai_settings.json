@@ -1,0 +1,25 @@
+{
+  "llm": {
+    "api_key": "sk-edd64cb2e5b74fb984450bdf94ea31d5",
+    "model": "deepseek-v4-flash",
+    "base_url": "https://api.deepseek.com",
+    "temperature": 0.0,
+    "timeout": 180
+  },
+  "paths": {
+    "gmp_root": "D:/WorkDocuments/Github/gmp_pro",
+    "generate_root": "Generate",
+    "optimize_root": "Optimize"
+  },
+  "generate": {
+    "max_kb_items": 120,
+    "max_control_structure_attempts": 5,
+    "max_project4_file_attempts": 5,
+    "max_pipeline_attempts": 5
+  },
+  "optimize": {
+    "config_project": "Optimize/config_project.py",
+    "agent_project": "Optimize/agent_optimize/agent_project.json",
+    "run_tuning_agent": "Optimize/agent_optimize/run_tuning_agent.bat"
+  }
+}

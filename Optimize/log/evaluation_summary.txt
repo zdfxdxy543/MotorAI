@@ -1,0 +1,15 @@
+GMP Evaluation Summary
+================================================================================
+Generated At      : 2026-07-01T21:33:57
+Status            : failed
+Task Type         : N/A
+Objective         : N/A
+--------------------------------------------------------------------------------
+Metric Counts
+  Configured      : 0
+  OK              : 0
+  Error           : 0
+--------------------------------------------------------------------------------
+Errors
+  1. stage=global; type=SignalNotFoundError; message=logical signal 'rotor_speed_rad_s' maps to source signal 'rotor_speed_rad_s', but that source signal does not exist in processed.json. Available source signals: []
+================================================================================

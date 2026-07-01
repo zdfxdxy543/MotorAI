@@ -1,0 +1,60 @@
+{
+  "task_type": "constant_speed_control",
+  "objective": "稳态误差小于0.1%",
+  "signals": {
+    "rotor_speed_rad_s": "rotor_speed_rad_s",
+    "electromagnetic_torque_nm": "electromagnetic_torque_nm",
+    "stator_iq_a": "stator_iq_a",
+    "stator_id_a": "stator_id_a"
+  },
+  "metrics": [
+    {
+      "metric_name": "steady_state_error",
+      "signal": "rotor_speed_rad_s",
+      "weight": 0.25,
+      "optimization_direction": "minimize",
+      "target_value": 314.16,
+      "window": 0.1,
+      "result_name": "speed_steady_state_error",
+      "good_threshold": 15.708,
+      "bad_threshold": 62.832,
+      "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+    },
+    {
+      "metric_name": "steady_state_error",
+      "signal": "electromagnetic_torque_nm",
+      "weight": 0.15,
+      "optimization_direction": "minimize",
+      "target_value": 0.2,
+      "window": 0.1,
+      "result_name": "torque_steady_state_error",
+      "good_threshold": 15.708,
+      "bad_threshold": 62.832,
+      "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+    },
+    {
+      "metric_name": "steady_state_error",
+      "signal": "stator_iq_a",
+      "weight": 0.15,
+      "optimization_direction": "minimize",
+      "target_value": 3.0,
+      "window": 0.1,
+      "result_name": "iq_steady_state_error",
+      "good_threshold": 15.708,
+      "bad_threshold": 62.832,
+      "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+    },
+    {
+      "metric_name": "steady_state_error",
+      "signal": "stator_id_a",
+      "weight": 0.15,
+      "optimization_direction": "minimize",
+      "target_value": 0.0,
+      "window": 0.1,
+      "result_name": "id_steady_state_error",
+      "good_threshold": 15.708,
+      "bad_threshold": 62.832,
+      "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+    }
+  ]
+}

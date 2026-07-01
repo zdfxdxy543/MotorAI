@@ -1,0 +1,54 @@
+[INFO] Running exe at 2026/07/01 周三 21:32:59.86 
+[INFO] Exe: "D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\x64\Release\Motor_Control_Suite_SIL_Env.exe" 
+[INFO] Working dir: "D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate" 
+[INFO] SIL_NO_PAUSE=1 
+Hello World!
+[ASIO-TCP] Server waiting for data connection on port 12500...
+[ASIO-TCP] Data channel connected from: 127.0.0.1
+[ASIO-TCP] Server waiting for command connection on port 12502...
+[ASIO-TCP] Command channel connected from: 127.0.0.1
+[ASIO-TCP] All channels ready. TCP_NODELAY enabled.
+[INFO] Simulink RX buffer size: 264
+[INFO] Simulink TX buffer size: 200
+[INFO] Saving directory is : rt_trace/crt_bin.
+                      ..,;;;;,                                    
+                .,ooKWMXxKMMN.                                    
+             ,lKMMW:cMNk,:ddl                                     
+           cXMlckWk;   ..,. oo                                    
+         lWMMMW;  .:d0NN'X: od                                    
+       .KOcxNd. cONNNNNN.0: od      ;o,                           
+      cWMM0:  lNk..XNNNN.O: od    ;xkkkx;                         
+     lWxXKd ,XNNc..0NNNXKX: okdockkkkkko'                         
+    ,MMKO' :NNNNNNNNNX0l,.    .,okkkkl.                           
+    XWXWX .XXXNNNNNXK,  .,...,.  .dkx.                ,cNdoodl    
+   ,WxOc, 0occcccONK  .c.  .. .c.  oko.......       ..xdll:lll,   
+   oMMMM' ``````````  o         x   `````````      .'.,0WK,lMMk   
+   xMMMM' ddclodddd,  o         x  ,dddddoood.    lXMx;OMWoKMMX'  
+   cWd:,, WX''''lMMN.  c.     .c. .X0o;.'',dN  .xcxxMM0dol:llll.  
+   .MMMMX lWllxKWMMMN:  .'''',.  lk.';,,;;;0o ,WMMXXd.            
+    xMXo;, kMNx:..XMMMXd;.   .;ox'Ok;,';c:ok .o0XMX.              
+     KWOKMd kK. :XMKoKMMMM: oNNo'd.c:;c;;ck lMX0X0                
+     .NMM0O..;NWMNc  0Mo:M: oNd.x.x.d.;0Xc.'xKMMX.                
+      .ONkKXWo.lX0'.oMo  M: oX 0.d.d;lKc.lNKxdWO                  
+        lWMMMM0.''o0WM:.;M: oO X'Kokl'..kMMMMN:                   
+         .oWMKdOWWk..;:ldk: oxol:;' dNMx;XMNo                     
+            ;OMMMMockMNx.:xxxx.cNMKooMMMWx:                       
+              .:xKXMMMMOdKMMMMxoMMMMXKx;                          
+                   ':oxOOXXXXXKxxo:'                              
+                                                                  
+             ________________________________                     
+            |    ____     __  __     ____    |                    
+            |   / ___|   |  \/  |   |  _ \   |                    
+            |  | |  _    | |\/| |   | |_) |  |                    
+            |  | |_| |   | |  | |   |  __/   |                    
+            |   \____|   |_|  |_|   |_|      |                    
+            |________________________________|                    
+                                                                  
+[okay] General motor platform ready.
+Hello World!
+[ASIO-TCP] Recv Error: read: 远程主机强迫关闭了一个现有的连接。 (code: asio.system:10054)
+receive complete.
+received 10560000 Bytes, aka 10312.5kBytes
+transmitted 8000200 Bytes, aka 7812.7kBytes
+[ASIO-TCP] Connection released.
+请按任意键继续. . . 

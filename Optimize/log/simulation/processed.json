@@ -1,0 +1,20 @@
+{
+  "status": "done",
+  "diagnostics": {
+    "error_msg": null,
+    "execution_time_sec": 55.182,
+    "resolved_model": "MCS_STD_PMSM_MODEL",
+    "matlab_console": "GMP_SIL_Core: unpack malloc:200, packed malloc:264\nGMP_SIL_Core: mdlStart is invoked\nGMP_SIL_Core: Host IP address:127.0.0.1.\nGMP_SIL_Core: Host port:transmit port: 12500, receive port: 12501, cmd transmit port: 12502, cmd receive port: 12503.\n\n  {\"command_recv_port\":12502,\"command_trans_port\":12503,\"receive_port\":12500,\"target_address\":\"127.0.0.1\",\"transmit_port\":12501}\n\n\nGMP_SIL_Core: Network Script is generated.\nGMP_SIL_Core: network.json is generated, this script is for controller program!\nGMP_SIL_Core: Connecting to target (TCP) in background thread: 127.0.0.1.\nGMP_SIL_Core: mdlTerminate is invoked\nGMP_SIL_Core: Bye!\n",
+    "matlab_error_report": "",
+    "matlab_lastwarn_msg": "",
+    "matlab_lastwarn_id": "",
+    "model_sim_status": "stopped",
+    "matlab_session": "MATLAB_30628"
+  },
+  "scope_mapping_errors": [
+    "ScopeData1: Scope variable 'ScopeData1' not found. Available in out: tout",
+    "ScopeData2: Scope variable 'ScopeData2' not found. Available in out: tout",
+    "ScopeData3: Scope variable 'ScopeData3' not found. Available in out: tout"
+  ],
+  "signals": {}
+}

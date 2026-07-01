@@ -1,0 +1,87 @@
+生成启动时间为 2026/7/1 21:32:57。
+日志记录详细程度设置为: Normal。
+     1>项目“D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\GMP_Motor_Control_simulink.sln”在节点 1 上(Build 个目标)。
+     1>ValidateSolutionConfiguration:
+         正在生成解决方案配置“Release|x64”。
+     1>项目“D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\GMP_Motor_Control_simulink.sln”(1)正在节点 1 上生成“D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\DigialPower_simulink.vcxproj”(2) (默认目标)。
+     2>PrepareForBuild:
+         已启用结构化输出。编译器诊断的格式设置将反映错误层次结构。有关详细信息，请参阅 https://aka.ms/cpp/structured-output。
+       InitializeBuildStatus:
+         正在创建“Motor_Co.2890a777\x64\Release\Motor_Co.2890a777.tlog\unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+         正在对“Motor_Co.2890a777\x64\Release\Motor_Co.2890a777.tlog\unsuccessfulbuild”执行 Touch 任务。
+       PreBuildEvent:
+         Generate Facilities files for GMP library.
+         gmp_fac_generate_srcs_example.bat
+         :VCEnd
+         "All the GMP related files will be copy and overwritten."
+         gmp_src folder exists, deleting...
+         gmp_src folder has been deleted.
+         gmp_src
+         Related source files:
+         D:\WorkDocuments\Github\gmp_pro\core\src
+         D:\WorkDocuments\Github\gmp_pro\ctl\component\dsa\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\dsa\src\dsa_scope.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\dsa\src\dsa_trigger.c'
+         D:\WorkDocuments\Github\gmp_pro\ctl\component\interface\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\interface\src\ctl_component_interface.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\interface\src\ctl_if_pwm_h.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\interface\src\ctl_if_pwm_npc.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\interface\src\ctl_if_pwm_spwm.c'
+         D:\WorkDocuments\Github\gmp_pro\csp\c28x_syscfg\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\c28x_syscfg\src\peripheral_driver.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\c28x_syscfg\src\sysconfig_adapter.c'
+         D:\WorkDocuments\Github\gmp_pro\ctl\component\digital_power\src
+         D:\WorkDocuments\Github\gmp_pro\ctl\framework\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\framework\src\ctl_cia402_callback_fn.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\framework\src\ctl_cia402_state_machine.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\framework\src\ctl_nano.c'
+         D:\WorkDocuments\Github\gmp_pro\csp\stm32\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\stm32\src\stm32_chip_common.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\stm32\src\stm32_peripheral_driver.c'
+         D:\WorkDocuments\Github\gmp_pro\ctl\component\motor_control\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\ctl\component\motor_control\src\ctl_mc_basic.c'
+         D:\WorkDocuments\Github\gmp_pro\csp\silan_spc6l64\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\silan_spc6l64\src\spc6l64b_csp.c'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\silan_spc6l64\src\spc6l64b_uart_model.c'
+         D:\WorkDocuments\Github\gmp_pro\ctl\component\intrinsic\src
+         D:\WorkDocuments\Github\gmp_pro\csp\windows_simulink\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\windows_simulink\src\windows_peripheral_driver.cpp'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\windows_simulink\src\windows_rt_tracer.cpp'
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\windows_simulink\src\windows_simulink_main.cpp'
+         D:\WorkDocuments\Github\gmp_pro\csp\null\src
+         [CREATE] Source File: 'D:\WorkDocuments\Github\gmp_pro\csp\null\src\null_csp.c'
+         
+         
+         Related header files:
+         csp/stm32
+         third_party/fmt/include/fmt
+         csp/windows_simulink
+         third_party/eigen/Eigen
+         csp/silan_spc6l64
+         third_party/asio/include
+         csp/c28x_sys_cfg
+         .
+         csp/null
+         source code generate done.
+       VcpkgTripletSelection:
+         Using triplet "x64-windows" from "D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\vcpkg_installed\x64-windows\x64-windows\"
+         Using normalized configuration "Release"
+       VcpkgInstallManifestDependencies:
+       正在跳过目标“VcpkgInstallManifestDependencies”，因为所有输出文件相对于输入文件而言都是最新的。
+       ClCompile:
+         所有输出均为最新。
+         所有输出均为最新。
+       Link:
+         所有输出均为最新。
+         DigialPower_simulink.vcxproj -> D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\x64\Release\Motor_Control_Suite_SIL_Env.exe
+       FinalizeBuildStatus:
+         正在删除文件“Motor_Co.2890a777\x64\Release\Motor_Co.2890a777.tlog\unsuccessfulbuild”。
+         正在对“Motor_Co.2890a777\x64\Release\Motor_Co.2890a777.tlog\Motor_Control_Suite_SIL_Env.lastbuildstate”执行 Touch 任务。
+     2>已完成生成项目“D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\DigialPower_simulink.vcxproj”(默认目标)的操作。
+     1>已完成生成项目“D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\GMP_Motor_Control_simulink.sln”(Build 个目标)的操作。
+
+已成功生成。
+    0 个警告
+    0 个错误
+
+已用时间 00:00:02.01

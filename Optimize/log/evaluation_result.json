@@ -1,0 +1,22 @@
+{
+  "status": "failed",
+  "task_type": null,
+  "objective": null,
+  "processed_json_path": "D:\\WorkDocuments\\Github\\MotorAI\\Optimize\\log\\simulation\\processed.json",
+  "evaluation_config_path": "D:\\WorkDocuments\\Github\\MotorAI\\Optimize\\log\\evaluation_config.json",
+  "configured_signal_count": 0,
+  "configured_metric_count": 0,
+  "signals": {},
+  "derived_signals": {},
+  "metrics": {},
+  "metric_ok_count": 0,
+  "metric_error_count": 0,
+  "warnings": [],
+  "errors": [
+    {
+      "stage": "global",
+      "type": "SignalNotFoundError",
+      "message": "logical signal 'rotor_speed_rad_s' maps to source signal 'rotor_speed_rad_s', but that source signal does not exist in processed.json. Available source signals: []"
+    }
+  ]
+}
