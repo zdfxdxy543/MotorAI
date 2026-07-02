@@ -1,6 +1,6 @@
-[INFO] Running exe at 2026/07/01 周三 21:32:59.86 
-[INFO] Exe: "D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\x64\Release\Motor_Control_Suite_SIL_Env.exe" 
-[INFO] Working dir: "D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate" 
+[INFO] Running exe at 2026/07/02 周四 11:49:28.42 
+[INFO] Exe: "D:\WorkDocuments\Github\MotorAIoutput\test2\project\simulate\x64\Release\Motor_Control_Suite_SIL_Env.exe" 
+[INFO] Working dir: "D:\WorkDocuments\Github\MotorAIoutput\test2\project\simulate" 
 [INFO] SIL_NO_PAUSE=1 
 Hello World!
 [ASIO-TCP] Server waiting for data connection on port 12500...
@@ -48,7 +48,7 @@ Hello World!
 Hello World!
 [ASIO-TCP] Recv Error: read: 远程主机强迫关闭了一个现有的连接。 (code: asio.system:10054)
 receive complete.
-received 10560000 Bytes, aka 10312.5kBytes
-transmitted 8000200 Bytes, aka 7812.7kBytes
+received 10486080 Bytes, aka 10240.3kBytes
+transmitted 7944200 Bytes, aka 7758.01kBytes
 [ASIO-TCP] Connection released.
 请按任意键继续. . . 

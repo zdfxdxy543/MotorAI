@@ -1,7 +1,23 @@
-请创建一个python文件，实现以下几件事：
-1.该python文件运行时需要传入一个json文件的地址，在该json文件中包含sln_path，simulink_model_path，src_folder_path这三个键；
-2.运行该Python文件，修改agent_project.json文件的resources键下的project_src键的path的值为src_folder_path,automation键下的sim_model_path的值为simulink_model_path;
-3.修改build_sln.bat文件的第28行为"set "SLN_PATH=<sln_path>\GMP_Motor_Control_simulink.sln"",其中<sln_path>为传入的sln_path的值到文件夹为止（去掉最后的.slx文件部分）
-4.修改build_sln.bat文件的第29行为"set "SLN_DIR=<sln_path>"",含义同上
-5.修改build_sln.bat文件的第113行为"    if exist "<sln_path>\GMP_Motor_Control_simulink.sln" (",含义同上
-6.修改run_local_quick.bat的第14行为"set "DEFAULT_MODEL_PATH=<sln_path>\MCS_STD_PMSM_MODEL_2022b.slx"",含义同上
+config_project.py用于把某个项目JSON同步到Optimize运行配置。
+
+输入JSON至少需要包含：
+1. gmp_path：GMP根目录，通常来自MotorAI根目录motorai_settings.json中的paths.gmp_root。
+2. sln_path：项目工程中的project/simulate/GMP_Motor_Control_simulink.sln。
+3. simulink_model_path：项目工程中的project/simulate/MCS_STD_PMSM_MODEL.slx。
+4. src_folder_path：项目工程中的src目录。
+5. iteration_parameter_header_path：项目工程中的src/paras.generated.h，可缺省，缺省时由src_folder_path推导。
+
+运行方式：
+python config_project.py <path_to_project.json>
+
+脚本会执行：
+1. 从agent_optimize/Example复制agent_project.json、build_sln.bat、start_exe.bat模板到agent_optimize目录。
+2. 修改agent_project.json中的resources.project_src.path、automation.sim_model_path、automation.parameter_header。
+3. 按变量名重写build_sln.bat中的REPO_ROOT、SLN_PATH、SLN_DIR、LOG_DIR。
+4. 按变量名重写start_exe.bat中的REPO_ROOT、SLN_DIR、LOG_DIR。
+5. 按变量名重写agent_silhelper/run_local_quick.bat中的DEFAULT_MODEL_PATH。
+
+注意：
+- 项目工程不需要位于GMP的ctl/suite目录下，可以位于MotorAI/Output或用户选择的任意目录。
+- GMP根目录仍用于定位tools/facilities_generator等GMP资源。
+- 不再依赖固定行号替换bat文件。

@@ -1,7 +1,7 @@
-点击新建按钮新建一个项目描述json文件。新建时需要用户选择存储路径和项目名。该json文件包含以下信息：
+点击新建按钮新建一个项目描述json文件。新建时默认使用MotorAI/Output作为项目保存路径，用户也可以选择任意项目保存路径和项目名。该json文件包含以下信息：
     gmp位置：从MotorAI根目录motorai_settings.json文件中读取
-    sln位置：项目根目录+main.sln
-    simulink模型位置：项目根目录+simulink_model.slx
+    sln位置：项目根目录+project/simulate/GMP_Motor_Control_simulink.sln
+    simulink模型位置：项目根目录+project/simulate/MCS_STD_PMSM_MODEL.slx
     src文件夹位置：项目根目录+src文件夹
     迭代参数头文件位置：项目根目录+src/paras.generated.h
     用户输入提示词：留空字符串
@@ -9,4 +9,4 @@
     最大迭代次数：默认为5
     用户需求性能指标：留空字符串
 
-在用户点击新建文件夹后，从项目根目录拷贝simulink_model.slx文件和src文件夹到项目存储路径根目录下。
+在用户点击新建项目后，从GMP根目录的ctl/suite/mcs_pmsm_nt模板工程拷贝完整工程到项目保存路径下，并立即同步Optimize中的构建、运行、仿真和参数头文件路径。

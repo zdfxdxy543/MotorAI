@@ -24,9 +24,10 @@ if not "%~1"=="" (
 
 set "REPO_ROOT=D:\WorkDocuments\Github\gmp_pro"
 
-set "SLN_PATH=D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate\GMP_Motor_Control_simulink.sln"
-set "SLN_DIR=D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate"
+set "SLN_PATH=D:\WorkDocuments\Github\MotorAIoutput\test2\project\simulate\GMP_Motor_Control_simulink.sln"
+set "SLN_DIR=D:\WorkDocuments\Github\MotorAIoutput\test2\project\simulate"
 set "FAC_DIR=%REPO_ROOT%\tools\facilities_generator"
+set "GMP_PRO_LOCATION=D:\WorkDocuments\Github\gmp_pro"
 
 rem Log directory required by agent:
 rem   <repo_root>\tools\agent\log\build

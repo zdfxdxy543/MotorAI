@@ -27,7 +27,7 @@ if not "%~1"=="" (
 
 set "REPO_ROOT=D:\WorkDocuments\Github\gmp_pro"
 
-set "SLN_DIR=D:\WorkDocuments\Github\gmp_pro\ctl\suite\test6\project\simulate"
+set "SLN_DIR=D:\WorkDocuments\Github\MotorAIoutput\test2\project\simulate"
 set "LOG_DIR=%SCRIPT_DIR%..\log\build"
 set "RUN_LOG=%LOG_DIR%\run_exe.log"
 

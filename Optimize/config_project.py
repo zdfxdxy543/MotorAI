@@ -1,8 +1,10 @@
 import json
+import re
 import sys
 import shutil
 from pathlib import Path
 from typing import Dict, Any
+from xml.sax.saxutils import escape
 
 
 def load_json_file(file_path: Path) -> Dict[str, Any]:
@@ -97,6 +99,121 @@ def rewrite_bat_variables(bat_path: Path, replacements: Dict[str, str], *, repo_
         f.writelines(rewritten)
 
 
+def upsert_msbuild_property(text: str, name: str, value: str) -> str:
+    """Upsert a project-level MSBuild property under the Globals group."""
+    property_pattern = re.compile(
+        rf'(<{re.escape(name)}>)(.*?)(</{re.escape(name)}>)',
+        re.IGNORECASE | re.DOTALL,
+    )
+    globals_pattern = re.compile(
+        r'(<PropertyGroup\s+Label="Globals"\s*>)(.*?)(\n\s*</PropertyGroup>)',
+        re.IGNORECASE | re.DOTALL,
+    )
+
+    globals_match = globals_pattern.search(text)
+    if not globals_match:
+        raise ValueError("MSBuild project missing PropertyGroup Label=\"Globals\"")
+
+    escaped_value = escape(value)
+    has_globals_property = bool(property_pattern.search(globals_match.group(0)))
+    text = property_pattern.sub(
+        lambda match: f'{match.group(1)}{escaped_value}{match.group(3)}',
+        text,
+    )
+
+    if has_globals_property:
+        return text
+
+    globals_match = globals_pattern.search(text)
+    return (
+        text[:globals_match.start()]
+        + f'{globals_match.group(1)}{globals_match.group(2)}\n'
+        + f'    <{name}>{escaped_value}</{name}>'
+        + globals_match.group(3)
+        + text[globals_match.end():]
+    )
+
+
+def rewrite_gmp_property_sheet_imports(text: str) -> str:
+    """Rewrite GMP property sheet imports so copied projects work outside the GMP tree."""
+    replacements = [
+        (
+            r'Project="[^"]*csp[\\/]+windows_simulink[\\/]+GMPCorePropertySheet\.props"',
+            r'Project="$(GMP_PRO_LOCATION)\csp\windows_simulink\GMPCorePropertySheet.props"',
+        ),
+        (
+            r'Project="[^"]*tools[\\/]+facilities_generator[\\/]+GMPSrcGenPropertySheet\.props"',
+            r'Project="$(GMP_PRO_LOCATION)\tools\facilities_generator\GMPSrcGenPropertySheet.props"',
+        ),
+    ]
+
+    updated = text
+    for pattern, replacement in replacements:
+        updated = re.sub(pattern, lambda _match, value=replacement: value, updated, flags=re.IGNORECASE)
+    return updated
+
+
+def modify_simulink_vcxproj(sln_dir: str, gmp_root: str) -> None:
+    """Patch copied Visual Studio projects to use the configured GMP root."""
+    sln_path = Path(sln_dir)
+    gmp_root_path = Path(gmp_root).expanduser().resolve()
+    required_props = [
+        gmp_root_path / 'csp' / 'windows_simulink' / 'GMPCorePropertySheet.props',
+        gmp_root_path / 'tools' / 'facilities_generator' / 'GMPSrcGenPropertySheet.props',
+    ]
+    missing_props = [str(path) for path in required_props if not path.exists()]
+    if missing_props:
+        raise FileNotFoundError(
+            "GMP property sheet(s) not found:\n" + "\n".join(missing_props)
+        )
+
+    vcxproj_files = sorted(sln_path.glob('*.vcxproj'))
+    if not vcxproj_files:
+        print(f"Warning: no .vcxproj files found in {sln_path}")
+        return
+
+    updated_count = 0
+    for vcxproj_path in vcxproj_files:
+        text = vcxproj_path.read_text(encoding='utf-8-sig')
+        if (
+            'GMPCorePropertySheet.props' not in text
+            and 'GMPSrcGenPropertySheet.props' not in text
+            and 'GMP_PRO_LOCATION' not in text
+        ):
+            continue
+
+        updated = upsert_msbuild_property(text, 'GMP_PRO_LOCATION', str(gmp_root_path))
+        updated = rewrite_gmp_property_sheet_imports(updated)
+        if updated != text:
+            vcxproj_path.write_text(updated, encoding='utf-8')
+            updated_count += 1
+            print(f"Updated {vcxproj_path.name}: GMP_PRO_LOCATION = {gmp_root_path}")
+
+    if updated_count == 0:
+        print("No GMP-related .vcxproj changes needed.")
+
+
+def modify_gmp_compiler_include_summaries(project_root: Path, gmp_root: str) -> None:
+    """Normalize stale copied gmp_compiler_includes.txt paths when present."""
+    search_root = project_root / 'project'
+    if not search_root.exists():
+        return
+
+    gmp_root_posix = Path(gmp_root).expanduser().resolve().as_posix()
+    stale_gmp_root_pattern = re.compile(r'(?i)[A-Z]:[\\/][^\r\n]*?gmp_pro')
+    updated_count = 0
+
+    for include_file in sorted(search_root.glob('**/gmp_src_mgr/gmp_compiler_includes.txt')):
+        text = include_file.read_text(encoding='utf-8-sig')
+        updated = stale_gmp_root_pattern.sub(gmp_root_posix, text)
+        if updated != text:
+            include_file.write_text(updated, encoding='utf-8')
+            updated_count += 1
+
+    if updated_count:
+        print(f"Updated {updated_count} gmp_compiler_includes.txt file(s) with GMP root = {gmp_root_posix}")
+
+
 def modify_agent_project_json(
     agent_project_path: Path,
     src_folder_path: str,
@@ -133,6 +250,7 @@ def modify_build_sln_bat(bat_path: Path, sln_dir: str, gmp_root: str) -> None:
         {
             'SLN_PATH': sln_path_full,
             'SLN_DIR': sln_dir,
+            'GMP_PRO_LOCATION': gmp_root,
             'LOG_DIR': '%SCRIPT_DIR%..\\log\\build',
         },
         repo_root=gmp_root,
@@ -173,7 +291,7 @@ def modify_start_exe_bat(bat_path: Path, sln_dir: str, gmp_root: str) -> None:
 def main():
     if len(sys.argv) != 2:
         print("Usage: python config_project.py <path_to_config.json>")
-        print("Example: python config_project.py E:\\Related_Github_Project\\gmp_pro\\ctl\\suite\\Main1\\Main1.json")
+        print("Example: python config_project.py D:\\WorkDocuments\\Github\\MotorAI\\Output\\Main1\\Main1.json")
         sys.exit(1)
     
     # 获取传入的 JSON 文件路径
@@ -205,6 +323,7 @@ def main():
     # 从 sln_path 提取文件夹路径（去掉文件名）
     sln_dir = str(Path(sln_path).parent)
     gmp_root = resolve_gmp_root(config, sln_dir)
+    project_root = Path(src_folder_path).parent
     
     print(f"Loaded configuration:")
     print(f"  gmp_root: {gmp_root}")
@@ -239,6 +358,8 @@ def main():
         modify_build_sln_bat(build_sln_path, sln_dir, gmp_root)
         modify_run_local_quick_bat(run_local_quick_path, sln_dir)
         modify_start_exe_bat(start_exe_path, sln_dir, gmp_root)
+        modify_simulink_vcxproj(sln_dir, gmp_root)
+        modify_gmp_compiler_include_summaries(project_root, gmp_root)
         print()
         print("Successfully updated all configuration files!")
     except Exception as e:

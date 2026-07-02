@@ -22,6 +22,7 @@ DEFAULT_SETTINGS: dict[str, Any] = {
         "gmp_root": "",
         "generate_root": "Generate",
         "optimize_root": "Optimize",
+        "output_root": "Output",
     },
     "generate": {
         "max_kb_items": 120,
@@ -104,6 +105,12 @@ def get_optimize_root(settings: dict[str, Any] | None = None) -> Path:
     settings = settings if isinstance(settings, dict) else load_settings()
     paths = settings.get("paths") if isinstance(settings.get("paths"), dict) else {}
     return resolve_motorai_path(paths.get("optimize_root"), DEFAULT_SETTINGS["paths"]["optimize_root"])
+
+
+def get_output_root(settings: dict[str, Any] | None = None) -> Path:
+    settings = settings if isinstance(settings, dict) else load_settings()
+    paths = settings.get("paths") if isinstance(settings.get("paths"), dict) else {}
+    return resolve_motorai_path(paths.get("output_root"), DEFAULT_SETTINGS["paths"]["output_root"])
 
 
 def normalize_optimize_config(settings: dict[str, Any] | None = None) -> dict[str, str]:

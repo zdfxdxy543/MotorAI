@@ -30,6 +30,37 @@ def bat_has_assignment(path, name, value):
     return f'set "{name}={value}"' in text
 
 
+def vcxproj_has_current_gmp_root(sln_path, gmp_root):
+    sln_dir = Path(sln_path).parent
+    vcxproj_files = sorted(sln_dir.glob('*.vcxproj'))
+    if not vcxproj_files:
+        return False
+
+    inspected = False
+    for vcxproj_path in vcxproj_files:
+        try:
+            text = vcxproj_path.read_text(encoding='utf-8-sig')
+        except OSError:
+            return False
+
+        if 'GMPCorePropertySheet.props' not in text and 'GMPSrcGenPropertySheet.props' not in text:
+            continue
+
+        inspected = True
+        if f'<GMP_PRO_LOCATION>{gmp_root}</GMP_PRO_LOCATION>' not in text:
+            return False
+        if '..\\..\\..\\..\\..\\csp\\windows_simulink\\GMPCorePropertySheet.props' in text:
+            return False
+        if '..\\..\\..\\..\\..\\tools\\facilities_generator\\GMPSrcGenPropertySheet.props' in text:
+            return False
+        if r'Project="$(GMP_PRO_LOCATION)\csp\windows_simulink\GMPCorePropertySheet.props"' not in text:
+            return False
+        if r'Project="$(GMP_PRO_LOCATION)\tools\facilities_generator\GMPSrcGenPropertySheet.props"' not in text:
+            return False
+
+    return inspected
+
+
 def normalize_path_text(value):
     value = str(value or '').strip()
     if not value:
@@ -84,6 +115,8 @@ def optimize_project_is_current(project_json_path, optimize_config):
 
     if gmp_root and not bat_has_assignment(build_sln_path, 'REPO_ROOT', gmp_root):
         return False
+    if gmp_root and not bat_has_assignment(build_sln_path, 'GMP_PRO_LOCATION', gmp_root):
+        return False
     if not bat_has_assignment(build_sln_path, 'SLN_PATH', sln_path):
         return False
     if not bat_has_assignment(build_sln_path, 'SLN_DIR', sln_dir):
@@ -91,6 +124,8 @@ def optimize_project_is_current(project_json_path, optimize_config):
     if not bat_has_assignment(start_exe_path, 'SLN_DIR', sln_dir):
         return False
     if not bat_has_assignment(run_local_quick_path, 'DEFAULT_MODEL_PATH', simulink_model_path):
+        return False
+    if gmp_root and not vcxproj_has_current_gmp_root(sln_path, gmp_root):
         return False
 
     return True

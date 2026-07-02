@@ -50,8 +50,10 @@ for import_root in (MOTORAI_ROOT, V2_ROOT):
 from motorai_config import (
     get_gmp_root,
     get_llm_settings,
+    get_output_root,
     load_settings,
     normalize_optimize_config,
+    resolve_motorai_path,
     save_settings,
 )
 
@@ -176,8 +178,17 @@ class NewProjectDialog(QDialog):
         main_layout = QVBoxLayout(self)
         form_layout = QFormLayout()
 
-        self.fixed_path_label = QLabel(self._get_project_parent_display_path())
-        self.fixed_path_label.setWordWrap(True)
+        project_parent_row = QWidget()
+        project_parent_layout = QHBoxLayout(project_parent_row)
+        project_parent_layout.setContentsMargins(0, 0, 0, 0)
+        project_parent_layout.setSpacing(6)
+        self.project_parent_edit = QLineEdit()
+        self.project_parent_edit.setPlaceholderText('请选择或输入项目保存路径')
+        self.project_parent_edit.setText(str(self._get_project_parent_path()))
+        self.project_parent_btn = QPushButton('浏览...')
+        self.project_parent_btn.clicked.connect(self.choose_project_parent)
+        project_parent_layout.addWidget(self.project_parent_edit)
+        project_parent_layout.addWidget(self.project_parent_btn)
 
         self.project_name_edit = QLineEdit()
         self.project_name_edit.setPlaceholderText('请输入项目名')
@@ -186,7 +197,7 @@ class NewProjectDialog(QDialog):
         self.max_iter_spin.setRange(1, 9999)
         self.max_iter_spin.setValue(5)
 
-        form_layout.addRow('固定路径', self.fixed_path_label)
+        form_layout.addRow('项目保存路径', project_parent_row)
         form_layout.addRow('项目名', self.project_name_edit)
         form_layout.addRow('最大迭代次数', self.max_iter_spin)
 
@@ -204,20 +215,29 @@ class NewProjectDialog(QDialog):
         return get_gmp_root(load_settings())
 
     def _get_project_parent_path(self):
+        if hasattr(self, 'project_parent_edit'):
+            raw_path = self.project_parent_edit.text().strip()
+            if raw_path:
+                return resolve_motorai_path(raw_path, raw_path)
+        return get_output_root(load_settings())
+
+    def choose_project_parent(self):
+        current_path = str(self._get_project_parent_path())
+        folder = QFileDialog.getExistingDirectory(self, '选择项目保存路径', current_path)
+        if folder:
+            self.project_parent_edit.setText(folder)
+
+    def _get_template_project_path(self):
         gmp_root = self._read_gmp_root()
         if not gmp_root:
             return None
-        return Path(gmp_root) / 'ctl' / 'suite'
+        return Path(gmp_root) / 'ctl' / 'suite' / 'mcs_pmsm_nt'
 
-    def _get_project_parent_display_path(self):
-        project_parent = self._get_project_parent_path()
-        return str(project_parent) if project_parent else '未配置 GMP 根目录'
-
-    def _get_template_project_path(self):
-        project_parent = self._get_project_parent_path()
-        if not project_parent:
-            return None
-        return project_parent / 'mcs_pmsm_nt'
+    def _save_output_root(self, project_parent: Path):
+        settings = load_settings()
+        paths = settings.setdefault('paths', {})
+        paths['output_root'] = str(project_parent.resolve())
+        save_settings(settings)
 
     def _build_project_data(self, project_root):
         parameter_header_path = project_root / 'src' / 'paras.generated.h'
@@ -259,8 +279,9 @@ class NewProjectDialog(QDialog):
 
         project_parent = self._get_project_parent_path()
         if project_parent is None:
-            QMessageBox.warning(self, '提示', '无法确定项目固定路径。')
+            QMessageBox.warning(self, '提示', '无法确定项目保存路径。')
             return
+        project_parent = project_parent.expanduser()
 
         project_root = project_parent / project_name
         if project_root.exists():
@@ -279,6 +300,7 @@ class NewProjectDialog(QDialog):
         try:
             project_parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(template_root, project_root)
+            self._save_output_root(project_parent)
 
             project_data = self._build_project_data(project_root)
             self.project_json_path = project_root / f'{project_name}.json'
@@ -1421,9 +1443,12 @@ class MainProgramPanel(QWidget):
         self.welcome_gif_label.setAlignment(Qt.AlignCenter)
         self.welcome_gif_label.setFrameShape(QFrame.NoFrame)
         self.welcome_gif_label.setStyleSheet('border: none; outline: none; margin: 0; padding: 0;')
-        self.welcome_movie = QMovie(r'e:\Related_Github_Project\GMP_Generator_Engine\v2\旋转.gif')
-        self.welcome_gif_label.setMovie(self.welcome_movie)
-        self.welcome_movie.start()
+        self.welcome_movie = None
+        welcome_gif_path = GENERATE_ROOT / '旋转.gif'
+        if welcome_gif_path.exists():
+            self.welcome_movie = QMovie(str(welcome_gif_path))
+            self.welcome_gif_label.setMovie(self.welcome_movie)
+            self.welcome_movie.start()
         
         self.welcome_layout.addStretch(2)
         self.welcome_layout.addWidget(self.welcome_gif_label, 0, Qt.AlignCenter)
@@ -2991,11 +3016,11 @@ class MainWindow(QMainWindow):
         except Exception as exc:
             QMessageBox.error(self, '错误', f'启动失败：{exc}')
 
-    def _read_gmp_root(self):
-        return get_gmp_root(load_settings())
+    def _read_project_open_root(self):
+        return str(get_output_root(load_settings()))
 
     def open_project_json(self):
-        default_dir = self._read_gmp_root()
+        default_dir = self._read_project_open_root()
         file_path, _ = QFileDialog.getOpenFileName(self, '选择项目 JSON 文件', default_dir, 'JSON Files (*.json)')
         if not file_path:
             return

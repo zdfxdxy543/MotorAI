@@ -28,6 +28,7 @@ if errorlevel 1 goto ERR_REPO_ROOT
 set "SLN_PATH=%REPO_ROOT%\ctl\suite\mcs_pmsm_nt\project\simulate\GMP_Motor_Control_simulink.sln"
 set "SLN_DIR=%REPO_ROOT%\ctl\suite\mcs_pmsm_nt\project\simulate"
 set "FAC_DIR=%REPO_ROOT%\tools\facilities_generator"
+set "GMP_PRO_LOCATION=%REPO_ROOT%"
 
 rem Log directory required by agent:
 rem   <repo_root>\tools\agent\log\build
