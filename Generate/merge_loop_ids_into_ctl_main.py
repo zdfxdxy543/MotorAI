@@ -285,6 +285,7 @@ def main(
     if mech_mode == "pid":
         ctext = apply_pid_macros_to_c(ctext)
 
+    output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(ctext, encoding="utf-8")
     print(f"Wrote {output_path}")
 
@@ -292,6 +293,7 @@ def main(
     if header_template_path and header_output_path:
         htpl = header_template_path.read_text(encoding="utf-8")
         hout = generate_header(htpl, loops, mech_mode)
+        header_output_path.parent.mkdir(parents=True, exist_ok=True)
         header_output_path.write_text(hout, encoding="utf-8")
         print(f"Wrote {header_output_path}")
 
@@ -299,6 +301,7 @@ def main(
     if paras_template_path and paras_output_path:
         ptpl = paras_template_path.read_text(encoding="utf-8")
         pout = generate_paras(ptpl, mech_mode)
+        paras_output_path.parent.mkdir(parents=True, exist_ok=True)
         paras_output_path.write_text(pout, encoding="utf-8")
         print(f"Wrote {paras_output_path}")
 

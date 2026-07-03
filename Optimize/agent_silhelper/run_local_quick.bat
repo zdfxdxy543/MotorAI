@@ -11,7 +11,7 @@ set "SCRIPT_DIR=%~dp0"
 
 for %%D in ("%SCRIPT_DIR%..\..\..") do set "REPO_ROOT=%%~fD"
 
-set "DEFAULT_MODEL_PATH=D:\WorkDocuments\Github\MotorAIoutput\test2\project\simulate\MCS_STD_PMSM_MODEL.slx"
+set "DEFAULT_MODEL_PATH=D:\WorkDocuments\Github\MotorAI\Output\test\project\simulate\MCS_STD_PMSM_MODEL.slx"
 set "MODEL_PATH=%DEFAULT_MODEL_PATH%"
 
 if not "%~1"=="" (

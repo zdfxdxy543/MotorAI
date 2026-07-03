@@ -59,6 +59,18 @@ from motorai_config import (
 
 import controller_loop_id_exporter as loop_exporter
 import merge_loop_ids_into_ctl_main as merger
+from Competition.competition_workspace import (
+    apply_candidate_profile_overrides,
+    build_candidate_generation_requirement,
+    candidate_design_profile,
+    candidate_llm_temperature,
+    configure_candidate_optimize,
+    discover_candidate_dirs,
+    init_candidates,
+    sync_candidate_profiles_from_common,
+    write_candidate_generation_context,
+    write_common_requirement_snapshot,
+)
 
 
 def sync_optimize_project_from_settings(project_json_path: Path) -> tuple[bool, str]:
@@ -197,9 +209,14 @@ class NewProjectDialog(QDialog):
         self.max_iter_spin.setRange(1, 9999)
         self.max_iter_spin.setValue(5)
 
+        self.candidate_count_spin = QSpinBox()
+        self.candidate_count_spin.setRange(1, 16)
+        self.candidate_count_spin.setValue(4)
+
         form_layout.addRow('项目保存路径', project_parent_row)
         form_layout.addRow('项目名', self.project_name_edit)
         form_layout.addRow('最大迭代次数', self.max_iter_spin)
+        form_layout.addRow('候选工作区数量', self.candidate_count_spin)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.on_accept)
@@ -239,17 +256,18 @@ class NewProjectDialog(QDialog):
         paths['output_root'] = str(project_parent.resolve())
         save_settings(settings)
 
-    def _build_project_data(self, project_root):
-        parameter_header_path = project_root / 'src' / 'paras.generated.h'
+    def _build_project_data(self, project_root, template_root: Path, candidate_count: int):
         return {
+            'schema_version': 1,
+            'workspace_mode': 'competition',
+            'candidate_count': int(candidate_count),
+            'template_project_path': str(template_root),
             'gmp_path': self._read_gmp_root(),
-            'sln_path': str(project_root / 'project' / 'simulate' / 'GMP_Motor_Control_simulink.sln'),
-            'simulink_model_path': str(project_root / 'project' / 'simulate' / 'MCS_STD_PMSM_MODEL.slx'),
-            'src_folder_path': str(project_root / 'src'),
-            'iteration_parameter_header_path': str(parameter_header_path),
             'paths': {
-                'header_path': str(Path('src') / 'paras.generated.h'),
-                'result_file': 'tuning_result.json',
+                'candidates_dir': 'candidates',
+                'common_dir': 'common',
+                'record_file': 'record.json',
+                'competition_file': 'competition.json',
             },
             'objective_text': '',
             'task_type': '',
@@ -299,26 +317,30 @@ class NewProjectDialog(QDialog):
 
         try:
             project_parent.mkdir(parents=True, exist_ok=True)
-            shutil.copytree(template_root, project_root)
+            project_root.mkdir(parents=True, exist_ok=False)
             self._save_output_root(project_parent)
 
-            project_data = self._build_project_data(project_root)
+            candidate_count = int(self.candidate_count_spin.value())
+            project_data = self._build_project_data(project_root, template_root, candidate_count)
             self.project_json_path = project_root / f'{project_name}.json'
             with open(self.project_json_path, 'w', encoding='utf-8') as f:
                 json.dump(project_data, f, ensure_ascii=False, indent=2)
 
             self.project_root = project_root
-            sync_ok, sync_detail = sync_optimize_project_from_settings(self.project_json_path)
-            if not sync_ok:
-                QMessageBox.warning(
-                    self,
-                    'Optimize 配置未完成',
-                    f'项目已创建，但同步 Optimize 路径失败：\n{sync_detail}',
-                )
+            competition_manifest = init_candidates(
+                self.project_json_path,
+                candidate_count,
+                force=False,
+                template_root=template_root,
+            )
             QMessageBox.information(
                 self,
                 '完成',
-                f'项目已创建：{self.project_json_path}',
+                (
+                    f'项目已创建：{self.project_json_path}\n'
+                    f'候选工作区：{competition_manifest.get("candidate_count", candidate_count)} 个\n'
+                    f'候选策略文件：{project_root / "common" / "candidate_profiles.json"}'
+                ),
             )
             self.accept()
         except Exception as exc:
@@ -820,6 +842,7 @@ class ControllerStructurePanel(QWidget):
             return None, None
 
         candidates = [project_json]
+        candidates.append(project_json.parent / 'candidates' / 'candidate_01' / 'log' / 'generate' / 'controller_loop_ids_generated.json')
         candidates.append(project_json.parent / 'controller_loop_ids_generated.json')
 
         for path in candidates:
@@ -1498,6 +1521,7 @@ class MainProgramPanel(QWidget):
         
         self.current_requirement = text
         self._append_chat('user', text)
+        self._apply_candidate_profile_overrides(text)
         self._append_chat('system', '正在调用大模型完善需求...')
         
         self.show_main_content()
@@ -1514,6 +1538,8 @@ class MainProgramPanel(QWidget):
                 '2) 明确机械环（mech_loop）控制目标与结构层级（速度或位置）；'
                 '3) 明确机械环控制方法（pid/mit/smc）及其选择依据；'
                 '4) 明确内外环关系、必要信号链路与关键性能指标。'
+                '如果用户提到 candidate_01/candidate_02/候选1/候选2 等候选方案设置，例如高生成温度、低生成温度、偏滑模、偏前馈、偏抗扰，请保留为“候选方案设置：...”文本；'
+                '如果用户没有指定候选方案设置，则说明沿用默认四策略：稳健低超调、快速响应、抗扰恢复、平滑低纹波。'
                 '输出要求：仅输出“完善后的需求文本”，不输出代码块、不输出额外解释。'
             ),
             self,
@@ -1558,6 +1584,7 @@ class MainProgramPanel(QWidget):
 
         self.current_requirement = text
         self._append_chat('user', text)
+        self._apply_candidate_profile_overrides(text)
         self._append_chat('system', '正在调用大模型完善需求...')
         self.status_label.setText('状态：对话处理中...')
         self.send_btn.setEnabled(False)
@@ -1572,6 +1599,8 @@ class MainProgramPanel(QWidget):
                 '2) 明确机械环（mech_loop）控制目标与结构层级（速度或位置）；'
                 '3) 明确机械环控制方法（pid/mit/smc）及其选择依据；'
                 '4) 明确内外环关系、必要信号链路与关键性能指标。'
+                '如果用户提到 candidate_01/candidate_02/候选1/候选2 等候选方案设置，例如高生成温度、低生成温度、偏滑模、偏前馈、偏抗扰，请保留为“候选方案设置：...”文本；'
+                '如果用户没有指定候选方案设置，则说明沿用默认四策略：稳健低超调、快速响应、抗扰恢复、平滑低纹波。'
                 '输出要求：仅输出“完善后的需求文本”，不输出代码块、不输出额外解释。'
             ),
             self,
@@ -1599,9 +1628,118 @@ class MainProgramPanel(QWidget):
             data['objective_text'] = requirement_text
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
+            write_common_requirement_snapshot(Path(project_json), data)
+            for candidate_dir in self._candidate_dirs():
+                candidate_json = candidate_dir / 'candidate.json'
+                if not candidate_json.exists():
+                    continue
+                with open(candidate_json, 'r', encoding='utf-8') as f:
+                    candidate_data = json.load(f)
+                if isinstance(candidate_data, dict):
+                    candidate_data['objective_text'] = requirement_text
+                    with open(candidate_json, 'w', encoding='utf-8') as f:
+                        json.dump(candidate_data, f, ensure_ascii=False, indent=2)
             self._append_chat('system', f'已写入需求到项目文件 {project_json.name}')
         except Exception as exc:
             self._append_chat('system', f'写入项目 JSON 失败：{exc}')
+
+    def _apply_candidate_profile_overrides(self, text: str):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            result = apply_candidate_profile_overrides(Path(project_json), text)
+            updated = result.get('updated') if isinstance(result, dict) else None
+            if updated:
+                profiles_path = result.get('profiles_path', '')
+                self._append_chat(
+                    'system',
+                    f'已更新候选生成策略：{", ".join(updated)}。策略文件：{profiles_path}'
+                )
+        except Exception as exc:
+            self._append_chat('system', f'更新 candidate 策略失败：{exc}')
+
+    def _candidate_dirs(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return []
+        try:
+            return discover_candidate_dirs(Path(project_json), ['all'])
+        except Exception:
+            return []
+
+    @staticmethod
+    def _candidate_profile(index: int) -> dict:
+        return candidate_design_profile(index)
+
+    def _load_candidate_profile(self, candidate_dir: Path, index: int) -> dict:
+        profile = self._candidate_profile(index)
+        candidate_json = candidate_dir / 'candidate.json'
+        if not candidate_json.exists():
+            return profile
+        try:
+            with open(candidate_json, 'r', encoding='utf-8') as f:
+                candidate_data = json.load(f)
+            candidate_profile = candidate_data.get('design_profile') if isinstance(candidate_data, dict) else None
+            if isinstance(candidate_profile, dict):
+                merged = dict(profile)
+                merged.update(candidate_profile)
+                return merged
+        except Exception:
+            pass
+        return profile
+
+    @staticmethod
+    def _build_tuning_policy_from_loops(selected_loops):
+        loop_names = {loop.get('name', '').lower() for loop in selected_loops if isinstance(loop, dict)}
+
+        allowed_parameters = {}
+        if 'current_loop' in loop_names or 'current_error_loop' in loop_names:
+            allowed_parameters['CUR_KP'] = {'min': 1.0, 'max': 500.0, 'description': '电流环比例增益'}
+            allowed_parameters['CUR_KI'] = {'min': 0.0, 'max': 100.0, 'description': '电流环积分增益'}
+            allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
+        if 'speed_loop' in loop_names or 'speed_error_loop' in loop_names or 'mech_loop' in loop_names:
+            allowed_parameters['VEL_KP'] = {'min': 0.1, 'max': 20.0, 'description': '速度环比例增益'}
+            allowed_parameters['VEL_KI'] = {'min': 0.0, 'max': 5.0, 'description': '速度环积分增益'}
+            allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
+        if 'position_loop' in loop_names or 'position_error_loop' in loop_names:
+            allowed_parameters['POS_KP'] = {'min': 0.1, 'max': 50.0, 'description': '位置环比例增益'}
+            allowed_parameters['POS_KI'] = {'min': 0.0, 'max': 10.0, 'description': '位置环积分增益'}
+            allowed_parameters['VEL_LIMIT'] = {'min': 0.1, 'max': 100.0, 'description': '速度限幅'}
+        if 'torque_loop' in loop_names or 'torque_reference_loop' in loop_names:
+            allowed_parameters['TRQ_KP'] = {'min': 1.0, 'max': 500.0, 'description': '转矩环比例增益'}
+            allowed_parameters['TRQ_KI'] = {'min': 0.0, 'max': 100.0, 'description': '转矩环积分增益'}
+
+        return {
+            'allowed_parameters': allowed_parameters,
+            'update_rule': '每轮只允许小幅修改 1 到 2 个参数；如果编译、仿真或评价失败，不修改参数。'
+        }
+
+    def _write_candidate_generated_result(self, candidate_dir: Path, loop_ids_path: Path, profile: dict):
+        with open(loop_ids_path, 'r', encoding='utf-8') as f:
+            loops_payload = json.load(f)
+        if not isinstance(loops_payload, dict):
+            return {}
+
+        candidate_json = candidate_dir / 'candidate.json'
+        with open(candidate_json, 'r', encoding='utf-8') as f:
+            candidate_data = json.load(f)
+        if not isinstance(candidate_data, dict):
+            candidate_data = {}
+
+        selected_loops = loops_payload.get('selected_loops') or []
+        candidate_data['selected_loops'] = selected_loops
+        candidate_data['generated_loop_ids_path'] = str(loop_ids_path)
+        candidate_data['design_profile'] = profile
+        candidate_data['tuning_policy'] = self._build_tuning_policy_from_loops(selected_loops)
+        candidate_data.setdefault('paths', {})
+        candidate_data['paths']['header_path'] = 'src/paras.generated.h'
+        candidate_data['paths']['result_file'] = 'log/optimize/tuning_result.json'
+        with open(candidate_json, 'w', encoding='utf-8') as f:
+            json.dump(candidate_data, f, ensure_ascii=False, indent=2)
+
+        configure_candidate_optimize(candidate_json)
+        return candidate_data
 
     def _update_project_json_selected_loops(self, loop_ids_path: Path):
         project_json = self._project_json_path()
@@ -1620,14 +1758,11 @@ class MainProgramPanel(QWidget):
 
             project_data['selected_loops'] = loops_payload.get('selected_loops') or []
             project_data['generated_loop_ids_path'] = str(loop_ids_path)
-            parameter_header_path = project_json.parent / 'src' / 'paras.generated.h'
-            project_data['iteration_parameter_header_path'] = str(parameter_header_path)
             paths = project_data.get('paths')
             if not isinstance(paths, dict):
                 paths = {}
                 project_data['paths'] = paths
-            paths['header_path'] = str(Path('src') / 'paras.generated.h')
-            paths.setdefault('result_file', 'tuning_result.json')
+            paths['generated_loop_ids_path'] = str(loop_ids_path)
 
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(project_data, f, ensure_ascii=False, indent=2)
@@ -1644,30 +1779,7 @@ class MainProgramPanel(QWidget):
             with open(project_json, 'r', encoding='utf-8') as f:
                 data = json.load(f)
             selected_loops = data.get('selected_loops', [])
-            loop_names = {loop.get('name', '').lower() for loop in selected_loops if isinstance(loop, dict)}
-
-            allowed_parameters = {}
-            if 'current_loop' in loop_names or 'current_error_loop' in loop_names:
-                allowed_parameters['CUR_KP'] = {'min': 1.0, 'max': 500.0, 'description': '电流环比例增益'}
-                allowed_parameters['CUR_KI'] = {'min': 0.0, 'max': 100.0, 'description': '电流环积分增益'}
-                allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
-            if 'speed_loop' in loop_names or 'speed_error_loop' in loop_names or 'mech_loop' in loop_names:
-                allowed_parameters['VEL_KP'] = {'min': 0.1, 'max': 20.0, 'description': '速度环比例增益'}
-                allowed_parameters['VEL_KI'] = {'min': 0.0, 'max': 5.0, 'description': '速度环积分增益'}
-                allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
-            if 'position_loop' in loop_names or 'position_error_loop' in loop_names:
-                allowed_parameters['POS_KP'] = {'min': 0.1, 'max': 50.0, 'description': '位置环比例增益'}
-                allowed_parameters['POS_KI'] = {'min': 0.0, 'max': 10.0, 'description': '位置环积分增益'}
-                allowed_parameters['VEL_LIMIT'] = {'min': 0.1, 'max': 100.0, 'description': '速度限幅'}
-            if 'torque_loop' in loop_names or 'torque_reference_loop' in loop_names:
-                allowed_parameters['TRQ_KP'] = {'min': 1.0, 'max': 500.0, 'description': '转矩环比例增益'}
-                allowed_parameters['TRQ_KI'] = {'min': 0.0, 'max': 100.0, 'description': '转矩环积分增益'}
-
-            tuning_policy = {
-                'allowed_parameters': allowed_parameters,
-                'update_rule': '每轮只允许小幅修改 1 到 2 个参数；如果编译、仿真或评价失败，不修改参数。'
-            }
-            data['tuning_policy'] = tuning_policy
+            data['tuning_policy'] = self._build_tuning_policy_from_loops(selected_loops)
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             self._append_chat('system', f'已生成调参策略到项目文件')
@@ -1676,6 +1788,7 @@ class MainProgramPanel(QWidget):
 
     def on_chat_success(self, reply: str):
         self._append_chat('model', reply)
+        self._apply_candidate_profile_overrides(reply)
         self.current_requirement = reply
         self._update_project_json_requirement(reply)
         self.status_label.setText('状态：需求已完善，可点击“生成程序”')
@@ -1695,54 +1808,96 @@ class MainProgramPanel(QWidget):
 
         script_path = Path(__file__).resolve().parent.parent / 'run_llm_to_program.py'
         project_json = self._project_json_path()
-        output_root = project_json.parent if project_json else script_path.parent
-        loop_ids_output = output_root / 'controller_loop_ids_generated.json'
-        c_output = output_root / 'ctl_main.c'
-        h_output = output_root / 'ctl_main.h'
-        paras_output = output_root / 'paras.generated.h'
         llm_config = MOTORAI_ROOT / 'motorai_settings.json'
-        project_src_dir = (project_json.parent / 'src') if project_json else None
+        candidate_dirs = self._candidate_dirs()
+
+        if not project_json or not candidate_dirs:
+            self._append_chat('system', '未找到 candidate 工作区。请重新新建竞争模式工程。')
+            self.status_label.setText('状态：缺少 candidate')
+            return
 
         self.status_label.setText('状态：正在生成程序...')
-        self._append_chat('system', '开始生成控制器程序（复用交互界面同一大模型调用）。')
-        self._append_chat('system', f'输出目录 {output_root}')
+        self._append_chat('system', f'开始为 {len(candidate_dirs)} 个 candidate 生成控制器程序。')
 
         try:
-            self._append_chat('system', '[1/2] 生成 loop-ids...')
-            loop_exporter.export_json(
-                output_path=loop_ids_output,
-                requirement=self.current_requirement,
-                settings_path=llm_config,
-                chat_text_caller=lambda system_prompt, user_prompt, temp: call_ui_chat_model(
-                    user_prompt=user_prompt,
-                    system_prompt=system_prompt,
-                    temperature=temp,
-                ),
-            )
-            self._append_chat('system', f'loop-ids 已生成：{loop_ids_output.name}')
+            sync_candidate_profiles_from_common(Path(project_json), candidate_dirs)
+            candidate_summaries = []
+            first_loop_ids_path = None
+            first_candidate_data = None
 
-            self._append_chat('system', '[2/2] 生成 ctl_main 与 paras 代码文件...')
+            for index, candidate_dir in enumerate(candidate_dirs, start=1):
+                profile = self._load_candidate_profile(candidate_dir, index)
+                loop_ids_output = candidate_dir / 'log' / 'generate' / 'controller_loop_ids_generated.json'
+                c_output = candidate_dir / 'src' / 'ctl_main.c'
+                h_output = candidate_dir / 'src' / 'ctl_main.h'
+                paras_output = candidate_dir / 'src' / 'paras.generated.h'
+                loop_ids_output.parent.mkdir(parents=True, exist_ok=True)
+                c_output.parent.mkdir(parents=True, exist_ok=True)
 
-            merger.main(
-                loop_ids_path=loop_ids_output,
-                template_path=script_path.parent.joinpath('Example', 'ctl_main.c'),
-                output_path=c_output,
-                header_template_path=script_path.parent.joinpath('Example', 'ctl_main.h'),
-                header_output_path=h_output,
-                paras_template_path=script_path.parent.joinpath('Example', 'paras.h'),
-                paras_output_path=paras_output,
-            )
+                candidate_requirement = build_candidate_generation_requirement(self.current_requirement, profile)
+                write_candidate_generation_context(
+                    candidate_dir / 'candidate.json',
+                    self.current_requirement,
+                    candidate_requirement,
+                    profile,
+                )
+                profile_temperature = candidate_llm_temperature(profile)
 
-            if project_src_dir is not None:
-                project_src_dir.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(c_output, project_src_dir / c_output.name)
-                shutil.copy2(h_output, project_src_dir / h_output.name)
-                shutil.copy2(paras_output, project_src_dir / paras_output.name)
-                self._append_chat('system', f'已覆盖拷贝到项目源码目录：{project_src_dir}')
+                profile_name = profile.get("name", candidate_dir.name)
+                self._append_chat('system', f'[{index}/{len(candidate_dirs)}] {candidate_dir.name} 生成 loop-ids：{profile_name}')
+                loop_exporter.export_json(
+                    output_path=loop_ids_output,
+                    requirement=candidate_requirement,
+                    settings_path=llm_config,
+                    chat_text_caller=lambda system_prompt, user_prompt, temp: call_ui_chat_model(
+                        user_prompt=user_prompt,
+                        system_prompt=system_prompt,
+                        temperature=profile_temperature if profile_temperature is not None else temp,
+                    ),
+                    temperature_override=profile_temperature,
+                )
+
+                self._append_chat('system', f'[{index}/{len(candidate_dirs)}] {candidate_dir.name} 生成 ctl_main 与 paras')
+                merger.main(
+                    loop_ids_path=loop_ids_output,
+                    template_path=script_path.parent.joinpath('Example', 'ctl_main.c'),
+                    output_path=c_output,
+                    header_template_path=script_path.parent.joinpath('Example', 'ctl_main.h'),
+                    header_output_path=h_output,
+                    paras_template_path=script_path.parent.joinpath('Example', 'paras.h'),
+                    paras_output_path=paras_output,
+                )
+
+                candidate_data = self._write_candidate_generated_result(candidate_dir, loop_ids_output, profile)
+                if first_loop_ids_path is None:
+                    first_loop_ids_path = loop_ids_output
+                    first_candidate_data = candidate_data
+
+                candidate_summaries.append({
+                    'candidate_id': candidate_dir.name,
+                    'design_profile': profile,
+                    'loop_ids': str(loop_ids_output),
+                    'ctl_main_c': str(c_output),
+                    'ctl_main_h': str(h_output),
+                    'paras_header': str(paras_output),
+                })
+
+            if first_loop_ids_path is not None:
+                self._update_project_json_selected_loops(first_loop_ids_path)
+
+            with open(project_json, 'r', encoding='utf-8') as f:
+                project_data = json.load(f)
+            if not isinstance(project_data, dict):
+                project_data = {}
+            project_data['candidate_generation'] = candidate_summaries
+            if isinstance(first_candidate_data, dict):
+                project_data['selected_loops'] = first_candidate_data.get('selected_loops') or []
+                project_data['tuning_policy'] = first_candidate_data.get('tuning_policy') or {}
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(project_data, f, ensure_ascii=False, indent=2)
 
             self.status_label.setText('状态：生成完成')
-            self._append_chat('system', '控制器程序生成完成。')
-            self._update_project_json_selected_loops(loop_ids_output)
+            self._append_chat('system', '所有 candidate 控制器程序生成完成。根目录 src 未被修改。')
             if callable(self.structure_refresh_callback):
                 self.structure_refresh_callback()
         except Exception as exc:
@@ -1881,7 +2036,18 @@ class LoadCurvePanel(QWidget):
         return Path(__file__).resolve().parent.parent
 
     def _simulate_folder(self):
-        return self._project_folder() / 'project' / 'simulate'
+        return self._project_folder() / 'common'
+
+    def _candidate_simulate_folders(self):
+        if not callable(self.project_json_getter):
+            return []
+        project_json = self.project_json_getter()
+        if not project_json:
+            return []
+        try:
+            return [candidate / 'project' / 'simulate' for candidate in discover_candidate_dirs(Path(project_json), ['all'])]
+        except Exception:
+            return []
 
     def save_to_csv(self):
         points = self.collect_points()
@@ -1896,6 +2062,9 @@ class LoadCurvePanel(QWidget):
                 writer = csv.writer(f)
                 for x, y in points:
                     writer.writerow([x, y])
+            for candidate_sim_dir in self._candidate_simulate_folders():
+                candidate_sim_dir.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(out_path, candidate_sim_dir / 'load.csv')
             QMessageBox.information(self, '完成', f'已保存：{out_path}')
         except Exception as exc:
             QMessageBox.critical(self, '错误', f'保存失败：{exc}')
@@ -2217,6 +2386,7 @@ class RequirementPanel(QWidget):
             data['objective'] = requirement_text
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
+            write_common_requirement_snapshot(Path(project_json), data)
             self._append_chat('system', f'已写入需求指标到项目文件 {project_json.name}')
         except Exception as exc:
             self._append_chat('system', f'写入项目 JSON 失败：{exc}')
@@ -3002,15 +3172,37 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, '提示', '请先打开或创建一个项目文件')
             return
         
-        import subprocess
-        import sys
-        
-        run_agent_script = Path(__file__).parent / 'run_agent.py'
-        if not run_agent_script.exists():
-            QMessageBox.warning(self, '提示', f'未找到脚本文件：{run_agent_script}')
-            return
-        
         try:
+            with open(project_json_path, 'r', encoding='utf-8') as f:
+                project_data = json.load(f)
+        except Exception as exc:
+            QMessageBox.warning(self, '提示', f'读取项目文件失败：{exc}')
+            return
+
+        try:
+            if isinstance(project_data, dict) and project_data.get('workspace_mode') == 'competition':
+                runner_script = MOTORAI_ROOT / 'Competition' / 'competition_runner.py'
+                candidate_count = int(project_data.get('candidate_count') or 4)
+                subprocess.Popen([
+                    sys.executable,
+                    str(runner_script),
+                    str(project_json_path),
+                    '--candidates',
+                    str(candidate_count),
+                    '--parallel',
+                    '2',
+                    '--optimize-parallel',
+                    '1',
+                    '--skip-generate',
+                ])
+                QMessageBox.information(self, '已启动', '多 candidate 调优任务已启动，将按 candidate_01、candidate_02... 串行迭代，请查看终端输出')
+                return
+
+            run_agent_script = Path(__file__).parent / 'run_agent.py'
+            if not run_agent_script.exists():
+                QMessageBox.warning(self, '提示', f'未找到脚本文件：{run_agent_script}')
+                return
+
             subprocess.Popen([sys.executable, str(run_agent_script), str(project_json_path)])
             QMessageBox.information(self, '已启动', '调优任务已启动，请查看终端输出')
         except Exception as exc:

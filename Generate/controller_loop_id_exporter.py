@@ -431,13 +431,14 @@ def select_loops(
     requirement: str,
     settings: dict[str, Any],
     chat_text_caller: Callable[[str, str, float], str] | None = None,
+    temperature_override: float | None = None,
 ) -> dict[str, Any]:
     api_key = resolve_api_key(settings)
     if not api_key and chat_text_caller is None:
         raise RuntimeError("missing API key in llm settings or environment")
 
     system_prompt = settings.get("system_prompts", {}).get("loop_selector") or DEFAULT_SETTINGS["system_prompts"]["loop_selector"]
-    temperature = float(settings.get("temperature", 0.0))
+    temperature = float(temperature_override if temperature_override is not None else settings.get("temperature", 0.0))
     timeout = int(settings.get("timeout", 180))
     model = str(settings.get("model") or DEFAULT_SETTINGS["model"])
     base_url = str(settings.get("base_url") or DEFAULT_SETTINGS["base_url"])
@@ -471,9 +472,15 @@ def export_json(
     requirement: str,
     settings_path: str | Path | None = None,
     chat_text_caller: Callable[[str, str, float], str] | None = None,
+    temperature_override: float | None = None,
 ) -> Path:
     settings = read_llm_settings(settings_path)
-    payload = select_loops(requirement, settings, chat_text_caller=chat_text_caller)
+    payload = select_loops(
+        requirement,
+        settings,
+        chat_text_caller=chat_text_caller,
+        temperature_override=temperature_override,
+    )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     return output_path
