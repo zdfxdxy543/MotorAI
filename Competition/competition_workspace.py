@@ -22,6 +22,10 @@ AGENT_OPTIMIZE_DIR = OPTIMIZE_ROOT / "agent_optimize"
 AGENT_OPTIMIZE_EXAMPLE_DIR = AGENT_OPTIMIZE_DIR / "Example"
 AGENT_SILHELPER_DIR = OPTIMIZE_ROOT / "agent_silhelper"
 SETTINGS_PATH = MOTORAI_ROOT / "motorai_settings.json"
+SIMULINK_MODEL_CANDIDATES = (
+    "MCS_STD_PMSM_MODEL_2022b.slx",
+    "MCS_STD_PMSM_MODEL.slx",
+)
 
 if str(MOTORAI_ROOT) not in sys.path:
     sys.path.insert(0, str(MOTORAI_ROOT))
@@ -80,6 +84,37 @@ def load_json_object(path: Path) -> dict[str, Any]:
 def write_json(path: Path, data: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def preferred_simulink_model_path(simulate_dir: Path) -> Path:
+    simulate_dir = simulate_dir.expanduser().resolve()
+    for file_name in SIMULINK_MODEL_CANDIDATES:
+        candidate = simulate_dir / file_name
+        if candidate.exists():
+            return candidate
+    return simulate_dir / SIMULINK_MODEL_CANDIDATES[0]
+
+
+def normalize_candidate_simulink_model_path(candidate: dict[str, Any]) -> bool:
+    workspace = candidate.get("workspace") if isinstance(candidate.get("workspace"), dict) else {}
+    simulate_raw = workspace.get("simulate")
+    if simulate_raw:
+        simulate_dir = Path(str(simulate_raw)).expanduser().resolve()
+    elif candidate.get("sln_path"):
+        simulate_dir = Path(str(candidate["sln_path"])).expanduser().resolve().parent
+    elif candidate.get("candidate_root"):
+        simulate_dir = Path(str(candidate["candidate_root"])).expanduser().resolve() / "project" / "simulate"
+    else:
+        return False
+
+    preferred = preferred_simulink_model_path(simulate_dir)
+    current_raw = candidate.get("simulink_model_path")
+    current = Path(str(current_raw)).expanduser().resolve() if current_raw else None
+    if current == preferred:
+        return False
+
+    candidate["simulink_model_path"] = str(preferred)
+    return True
 
 
 def common_requirement_path(project_json: Path) -> Path:
@@ -575,7 +610,7 @@ def build_candidate_json(
 
     candidate["src_folder_path"] = str(paths.src.resolve())
     candidate["sln_path"] = str((paths.simulate / "GMP_Motor_Control_simulink.sln").resolve())
-    candidate["simulink_model_path"] = str((paths.simulate / "MCS_STD_PMSM_MODEL.slx").resolve())
+    candidate["simulink_model_path"] = str(preferred_simulink_model_path(paths.simulate))
     candidate["iteration_parameter_header_path"] = str((paths.src / "paras.generated.h").resolve())
     candidate["generated_loop_ids_path"] = str(
         (paths.log_generate / "controller_loop_ids_generated.json").resolve()
@@ -822,6 +857,8 @@ exit /b %ERRORLEVEL%
 def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
     candidate_json = candidate_json.expanduser().resolve()
     candidate = sync_candidate_common_fields(candidate_json)
+    normalize_candidate_simulink_model_path(candidate)
+    write_json(candidate_json, candidate)
     candidate_root = Path(candidate["candidate_root"]).expanduser().resolve()
     src_dir = Path(candidate["src_folder_path"]).expanduser().resolve()
     sln_path = Path(candidate["sln_path"]).expanduser().resolve()

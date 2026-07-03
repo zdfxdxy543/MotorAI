@@ -262,7 +262,9 @@ def modify_build_sln_bat(bat_path: Path, sln_dir: str, gmp_root: str) -> None:
 
 def modify_run_local_quick_bat(bat_path: Path, sln_dir: str) -> None:
     """Modify run_local_quick.bat with new model path."""
-    model_path = f'{sln_dir}\\MCS_STD_PMSM_MODEL.slx'
+    preferred_model = Path(sln_dir) / 'MCS_STD_PMSM_MODEL_2022b.slx'
+    fallback_model = Path(sln_dir) / 'MCS_STD_PMSM_MODEL.slx'
+    model_path = str(preferred_model if preferred_model.exists() else fallback_model)
     rewrite_bat_variables(
         bat_path,
         {
