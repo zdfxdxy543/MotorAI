@@ -2,8 +2,6 @@ from PyQt5.QtWidgets import (
     QAction,
     QFileDialog,
     QDialog,
-    QFrame,
-    QGraphicsDropShadowEffect,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -16,7 +14,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QColor, QIcon
+from PyQt5.QtGui import QIcon
 import json
 import os
 import subprocess
@@ -29,6 +27,14 @@ from dialogs.project import NewProjectDialog, SettingsDialog
 from panels.controller_structure import ControllerStructurePanel
 from panels.tuning_result import TuningResultPanel
 from panels.workspace import Design3RightPanel
+from styles.theme import (
+    COLOR_MUTED,
+    COLOR_PANEL,
+    COLOR_SURFACE,
+    COLOR_TEXT,
+    app_qss,
+    primary_button_qss,
+)
 
 
 class MainWindow(QMainWindow):
@@ -71,7 +77,7 @@ class MainWindow(QMainWindow):
         file_button = QPushButton('文件')
         file_button.setMenu(file_menu)
         file_button.setStyleSheet(
-            'QPushButton { border: none; background: transparent; padding: 4px 8px; font-size: 24px; color: black; }'
+            f'QPushButton {{ border: none; background: transparent; padding: 4px 8px; font-size: 24px; color: {COLOR_TEXT}; }}'
             'QPushButton::menu-indicator { image: none; width: 0px; }'
             'QPushButton:hover { background: #e5e5e5; }'
         )
@@ -79,12 +85,7 @@ class MainWindow(QMainWindow):
 
         self.run_agent_button = QPushButton('运行调优')
         self.run_agent_button.setObjectName('primaryButton')
-        self.run_agent_button.setStyleSheet(
-            'QPushButton{background:#0f62fe;color:#ffffff;border:none;font-weight:600;padding:6px 16px;border-radius:4px;}'
-            'QPushButton:hover{background:#0a55df;}'
-            'QPushButton:pressed{background:#0848c7;}'
-            'QPushButton:disabled{background:#9abafc;color:#f8fbff;}'
-        )
+        self.run_agent_button.setStyleSheet(primary_button_qss(padding='6px 16px'))
         self.run_agent_button.clicked.connect(self.run_agent_optimization)
         toolbar_layout.addWidget(self.run_agent_button)
 
@@ -98,9 +99,9 @@ class MainWindow(QMainWindow):
         central_layout.setSpacing(6)
 
         self.left_controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
-        self.left_controller_panel.setStyleSheet('background: #ffffff; border: 1px solid #ddd;')
+        self.left_controller_panel.setStyleSheet(f'background:{COLOR_SURFACE};border:none;')
         self.tuning_result_panel = TuningResultPanel(project_json_getter=self.get_current_project_json_path)
-        self.tuning_result_panel.setStyleSheet('background: #ffffff; border: 1px solid #ddd;')
+        self.tuning_result_panel.setStyleSheet(f'background:{COLOR_SURFACE};border:none;')
 
         left_splitter = QSplitter(Qt.Vertical)
         left_splitter.setChildrenCollapsible(False)
@@ -115,7 +116,7 @@ class MainWindow(QMainWindow):
             project_json_getter=self.get_current_project_json_path,
             run_tuning_callback=self.run_agent_optimization,
         )
-        self.right_panel_widget.setStyleSheet('background: #ffffff; border: 1px solid #ddd;')
+        self.right_panel_widget.setStyleSheet(f'background:{COLOR_SURFACE};border:none;')
         self.right_panel_widget.set_controller_panel(self.left_controller_panel)
         self.right_panel_widget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
         self.right_panel_widget.setMinimumWidth(0)
@@ -130,14 +131,14 @@ class MainWindow(QMainWindow):
         info_layout.setContentsMargins(6, 6, 6, 6)
         info_layout.setSpacing(6)
         info_label = QLabel('Status: Ready')
-        info_label.setStyleSheet('color: #475467; font-weight: 600;')
+        info_label.setStyleSheet(f'color:{COLOR_MUTED};font-weight:600;')
         info_layout.addWidget(info_label)
         info_layout.addStretch()
         user_label = QLabel('User: Guest')
-        user_label.setStyleSheet('color: #475467;')
+        user_label.setStyleSheet(f'color:{COLOR_MUTED};')
         info_layout.addWidget(user_label)
         self.info_widget.setMinimumHeight(46)
-        self.info_widget.setStyleSheet('background: #f7f9fc;')
+        self.info_widget.setStyleSheet(f'background:{COLOR_PANEL};border:none;')
 
         # Assemble main layout
         main_layout.addWidget(toolbar)
@@ -149,197 +150,12 @@ class MainWindow(QMainWindow):
         self._install_surface_effects()
 
     def _apply_visual_theme(self):
-        self.setStyleSheet(
-            """
-            QMainWindow {
-                background: #eef2f7;
-            }
-            QWidget {
-                color: #1f2937;
-                font-family: Segoe UI, Microsoft YaHei, Arial;
-                font-size: 10pt;
-            }
-            QLabel {
-                color: #1f2937;
-            }
-            QFrame#ControllerStructureCanvas,
-            QFrame#CurveCanvas,
-            QTextEdit,
-            QTableWidget,
-            QTabWidget::pane,
-            QMenu,
-            QDialog,
-            QWidget#panelCard {
-                background: #ffffff;
-                border: 1px solid #d9e2ec;
-                border-radius: 14px;
-            }
-            QFrame#chatBubble_user {
-                background: #0f62fe;
-                color: #ffffff;
-                border: none;
-                border-top-left-radius: 18px;
-                border-top-right-radius: 18px;
-                border-bottom-left-radius: 18px;
-                border-bottom-right-radius: 4px;
-            }
-            QFrame#chatBubble_model {
-                background: #ffffff;
-                color: #1f2937;
-                border: 1px solid #d9e2ec;
-                border-top-left-radius: 18px;
-                border-top-right-radius: 18px;
-                border-bottom-left-radius: 4px;
-                border-bottom-right-radius: 18px;
-            }
-            QFrame#systemBubble {
-                background: #eef2f7;
-                color: #64748b;
-                border: 1px solid #d9e2ec;
-                border-radius: 999px;
-            }
-            QLabel#chatBubbleTitle {
-                font-size: 14pt;
-                font-weight: 700;
-                color: rgba(255,255,255,0.90);
-            }
-            QFrame#chatBubble_user QLabel#chatBubbleTitle,
-            QFrame#chatBubble_user QLabel#chatBubbleBody {
-                color: #ffffff;
-            }
-            QFrame#chatBubble_model QLabel#chatBubbleTitle {
-                color: #0f62fe;
-            }
-            QFrame#chatBubble_model QLabel#chatBubbleBody {
-                color: #1f2937;
-            }
-            QFrame#systemBubble QLabel#chatBubbleTitle {
-                color: #64748b;
-            }
-            QFrame#systemBubble QLabel#chatBubbleBody {
-                color: #64748b;
-            }
-            QLabel#chatBubbleBody {
-                font-size: 11pt;
-                line-height: 1.55;
-            }
-            QTabWidget::pane {
-                padding: 6px;
-            }
-            QTabBar::tab {
-                background: #e9eef5;
-                color: #344054;
-                border: 1px solid #cfd8e3;
-                border-bottom: none;
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-                min-width: 120px;
-                padding: 8px 14px;
-                margin-right: 4px;
-            }
-            QTabBar::tab:selected {
-                background: #ffffff;
-                color: #0f62fe;
-                font-weight: 600;
-            }
-            QTabBar::tab:hover {
-                background: #f6f8fc;
-            }
-            QPushButton {
-                background: #ffffff;
-                color: #0f172a;
-                border: 1px solid #cfd8e3;
-                border-radius: 10px;
-                padding: 7px 14px;
-                min-height: 18px;
-            }
-            QPushButton:hover {
-                background: #f3f7ff;
-                border-color: #7da7ff;
-            }
-            QPushButton:pressed {
-                background: #dce8ff;
-            }
-            QPushButton#primaryButton {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #0f62fe, stop:1 #1d7bff);
-                color: white;
-                border: none;
-                font-weight: 600;
-            }
-            QPushButton#primaryButton:hover {
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #0a55df, stop:1 #1769dd);
-            }
-            QPushButton#ghostButton,
-            QPushButton#secondaryActionButton {
-                background: #f8fafc;
-                color: #344054;
-                border: 1px solid #d6deea;
-                font-weight: 600;
-            }
-            QPushButton#secondaryActionButton {
-                min-width: 112px;
-            }
-            QPushButton#ghostButton:hover,
-            QPushButton#secondaryActionButton:hover {
-                background: #eef4ff;
-                border-color: #9fb7ff;
-            }
-            QToolButton {
-                background: #ffffff;
-                color: #0f172a;
-                border: 1px solid #cfd8e3;
-                border-radius: 10px;
-                padding: 7px 14px;
-            }
-            QToolButton:hover {
-                background: #f3f7ff;
-                border-color: #7da7ff;
-            }
-            QTextEdit {
-                padding: 10px;
-                selection-background-color: #dbeafe;
-                line-height: 1.4;
-            }
-            QTableWidget {
-                gridline-color: #e1e8f0;
-                selection-background-color: #dbeafe;
-                selection-color: #111827;
-            }
-            QHeaderView::section {
-                background: #f2f6fb;
-                color: #344054;
-                border: none;
-                border-bottom: 1px solid #d9e2ec;
-                padding: 8px 10px;
-                font-weight: 600;
-            }
-            QMenu {
-                border: 1px solid #d9e2ec;
-                padding: 6px;
-            }
-            QMenu::item {
-                padding: 8px 24px 8px 18px;
-                border-radius: 8px;
-                margin: 2px 0;
-            }
-            QMenu::item:selected {
-                background: #eaf1ff;
-                color: #0f62fe;
-            }
-            QDialog {
-                background: #f7f9fc;
-            }
-            """
-        )
+        self.setStyleSheet(app_qss())
 
     def _install_surface_effects(self):
         for widget in [self.left_controller_panel, self.right_panel(), self.info_bar()]:
-            effect = QGraphicsDropShadowEffect(widget)
-            effect.setBlurRadius(26)
-            effect.setXOffset(0)
-            effect.setYOffset(6)
-            effect.setColor(QColor(31, 41, 55, 38))
-            widget.setGraphicsEffect(effect)
+            if widget is not None:
+                widget.setGraphicsEffect(None)
 
     def right_panel(self):
         return getattr(self, 'right_panel_widget', None)

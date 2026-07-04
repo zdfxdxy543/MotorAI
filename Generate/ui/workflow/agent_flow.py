@@ -161,6 +161,38 @@ def looks_like_program_revision(text: str) -> bool:
     return any(term in normalized for term in program_terms)
 
 
+def looks_like_initial_program_requirement(text: str) -> bool:
+    normalized = normalize_text(text)
+    if not normalized:
+        return False
+    seed_terms = (
+        '设计',
+        '开发',
+        '生成',
+        '驱动器',
+        '电机',
+        'pmsm',
+        'bldc',
+        '伺服',
+        '吸尘器',
+        '控制',
+        '控制器',
+        '控制系统',
+        '环路',
+        '电流环',
+        '速度环',
+        '位置环',
+        '转矩环',
+        'foc',
+        'svpwm',
+        'pid',
+        'pi',
+        '滑模',
+        '弱磁',
+    )
+    return any(term in normalized for term in seed_terms)
+
+
 def heuristic_route(text: str, state: dict) -> dict | None:
     program_generated = bool(state.get('program_generated'))
     load_curve_saved = bool(state.get('load_curve_saved'))
@@ -181,7 +213,13 @@ def heuristic_route(text: str, state: dict) -> dict | None:
     if not program_generated:
         if looks_like_question(text) and not looks_like_program_revision(text) and not looks_like_metrics_request(text):
             return None
-        return {'action': ACTION_REVISE_PROGRAM, 'reason': '程序生成前的输入默认视为需求补充'}
+        if looks_like_program_revision(text) or looks_like_initial_program_requirement(text):
+            return {'action': ACTION_REVISE_PROGRAM, 'reason': '用户提供了控制程序需求'}
+        return {
+            'action': ACTION_CLARIFY,
+            'reply': '请提供原始需求，例如电机类型、控制目标、控制环路和关键约束。',
+            'reason': '程序生成前输入不足以形成控制程序需求',
+        }
 
     if looks_like_metrics_request(text):
         return {'action': ACTION_SUBMIT_METRICS, 'reason': '用户提供了性能指标或目标约束'}

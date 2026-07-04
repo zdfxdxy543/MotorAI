@@ -14,6 +14,14 @@ import json
 from pathlib import Path
 
 import core.paths  # ensures repository roots are on sys.path
+from styles.theme import (
+    COLOR_BORDER,
+    COLOR_PANEL,
+    COLOR_SURFACE,
+    RADIUS_CARD,
+    primary_button_qss,
+    status_label_qss,
+)
 from widgets.chat import ChatInputEdit, ChatStreamWidget, ChatWorker, call_ui_chat_model
 from Competition.competition_workspace import write_common_requirement_snapshot
 
@@ -33,7 +41,7 @@ class RequirementPanel(QWidget):
         layout.setSpacing(8)
 
         self.chat_view = ChatStreamWidget()
-        self._append_chat('system', '请输入需求指标。')
+        self._append_notice('请输入需求指标。')
 
         self.input_edit = ChatInputEdit()
         self.input_edit.setPlaceholderText('请输入需求指标描述...')
@@ -42,12 +50,7 @@ class RequirementPanel(QWidget):
 
         self.send_btn = QPushButton('发送需求')
         self.send_btn.setObjectName('primaryButton')
-        self.send_btn.setStyleSheet(
-            'QPushButton{background:#0f62fe;color:#ffffff;border:none;font-weight:600;}'
-            'QPushButton:hover{background:#0a55df;}'
-            'QPushButton:pressed{background:#0848c7;}'
-            'QPushButton:disabled{background:#9abafc;color:#f8fbff;}'
-        )
+        self.send_btn.setStyleSheet(primary_button_qss(padding='7px 14px'))
         self.send_btn.clicked.connect(self.send_requirement)
 
         self.clear_btn = QPushButton('清空')
@@ -55,9 +58,11 @@ class RequirementPanel(QWidget):
         self.clear_btn.clicked.connect(self.input_edit.clear)
 
         self.status_label = QLabel('状态：等待输入需求指标')
+        self.status_label.setObjectName('taskStatusLabel')
+        self.status_label.setStyleSheet(status_label_qss())
 
         self.param_form = QWidget()
-        self.param_form.setStyleSheet('background:#f4f4f4;border-radius:4px;')
+        self.param_form.setStyleSheet(f'background:{COLOR_PANEL};border-radius:{RADIUS_CARD}px;')
         param_layout = QVBoxLayout(self.param_form)
         param_layout.setContentsMargins(10, 10, 10, 10)
         param_layout.setSpacing(8)
@@ -68,7 +73,11 @@ class RequirementPanel(QWidget):
         self.param_table.setHorizontalHeaderLabels(['信号名称', '目标值', '单位'])
         self.param_table.horizontalHeader().setStretchLastSection(True)
         self.param_table.verticalHeader().setVisible(False)
-        self.param_table.setStyleSheet('QTableWidget{background:white;border:1px solid #ddd;}QHeaderView::section{background:#e0e0e0;padding:4px;}')
+        self.param_table.setStyleSheet(
+            f'QTableWidget{{background:{COLOR_SURFACE};border:1px solid {COLOR_BORDER};'
+            f'border-radius:{RADIUS_CARD}px;}}'
+            'QHeaderView::section{background:#f2f6fb;padding:4px;}'
+        )
         param_layout.addWidget(self.param_table)
 
         input_bar = QWidget()
@@ -100,16 +109,46 @@ class RequirementPanel(QWidget):
         self.external_status_callback = status_callback
         self.external_finished_callback = finished_callback
 
-    def _append_chat(self, role: str, text: str):
+    def _append_chat(self, role: str, text: str, echo_external: bool = True):
+        role = self._normalize_chat_role(role)
         self.chat_view.append_message(role, text)
-        self.chat_history.append({
-            'role': role,
-            'text': text,
-            'timestamp': QDateTime.currentDateTime().toString(Qt.ISODate)
-        })
-        self._save_chat_record()
-        if callable(self.external_chat_callback):
+        if role != 'debug':
+            self.chat_history.append({
+                'role': role,
+                'text': text,
+                'timestamp': QDateTime.currentDateTime().toString(Qt.ISODate)
+            })
+            self._save_chat_record()
+        if echo_external and callable(self.external_chat_callback):
             self.external_chat_callback(role, text)
+
+    @staticmethod
+    def _normalize_chat_role(role: str) -> str:
+        role = (role or 'assistant').strip().lower()
+        if role in {'model', 'system', 'notice', 'success', 'error'}:
+            return 'assistant'
+        if role in {'progress', 'debug'}:
+            return 'debug'
+        if role in {'user', 'assistant'}:
+            return role
+        return 'assistant'
+
+    def _append_notice(self, text: str):
+        self._append_chat('assistant', text)
+
+    def _append_success(self, text: str):
+        self._append_chat('assistant', text)
+
+    def _append_error(self, text: str, detail: str = ''):
+        self._append_chat('assistant', text)
+        if detail:
+            self._append_debug(detail)
+
+    def _append_debug(self, text: str):
+        self._append_chat('debug', text)
+
+    def _set_progress(self, text: str):
+        self._set_status_text(f'状态：{text}')
 
     def _set_status_text(self, text: str):
         self.status_label.setText(text)
@@ -148,11 +187,11 @@ class RequirementPanel(QWidget):
 
         project_folder = self._project_folder()
         if project_folder is None:
-            self.chat_view.append_message('system', '请输入需求指标。')
+            self.chat_view.append_message('assistant', '请输入需求指标。')
             return
         record_path = project_folder / 'record.json'
         if not record_path.exists():
-            self.chat_view.append_message('system', '请输入需求指标。')
+            self.chat_view.append_message('assistant', '请输入需求指标。')
             return
         try:
             with open(record_path, 'r', encoding='utf-8') as f:
@@ -163,7 +202,7 @@ class RequirementPanel(QWidget):
         except Exception:
             pass
         if not self.chat_history:
-            self.chat_view.append_message('system', '请输入需求指标。')
+            self.chat_view.append_message('assistant', '请输入需求指标。')
 
     def load_from_project_json(self):
         """Load targets and other UI state from the current project JSON.
@@ -187,11 +226,11 @@ class RequirementPanel(QWidget):
         if self.submit_requirement_text(text):
             self.input_edit.clear()
 
-    def submit_requirement_text(self, text: str):
+    def submit_requirement_text(self, text: str, append_user: bool = True, echo_user_external: bool = True):
         if not text:
             return False
         if self.chat_worker is not None and self.chat_worker.isRunning():
-            self._append_chat('system', '正在等待上一条对话返回，请稍后。')
+            self._append_notice('正在等待上一条对话返回，请稍后。')
             return False
 
         project_json = self._project_json_path()
@@ -210,9 +249,10 @@ class RequirementPanel(QWidget):
             QMessageBox.warning(self, '提示', f'读取项目文件失败：{exc}')
             return False
 
-        self._append_chat('user', text)
-        self._append_chat('system', '正在调用大模型完善需求指标...')
-        self._set_status_text('状态：对话处理中...')
+        if append_user:
+            self._append_chat('user', text, echo_external=echo_user_external)
+        self._set_progress('正在整理需求指标...')
+        self.chat_view.show_thinking()
         self.send_btn.setEnabled(False)
 
         loop_info = '\n'.join([f"- {loop.get('name', '')}: {loop.get('description', '')}" for loop in selected_loops])
@@ -302,9 +342,9 @@ class RequirementPanel(QWidget):
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             write_common_requirement_snapshot(Path(project_json), data)
-            self._append_chat('system', f'已写入需求指标到项目文件 {project_json.name}')
+            self._append_debug('需求指标已保存到当前项目。')
         except Exception as exc:
-            self._append_chat('system', f'写入项目 JSON 失败：{exc}')
+            self._append_error('需求指标保存失败。', str(exc))
 
     METRICS_PARAM_TEMPLATES = {
         "overshoot": {
@@ -349,17 +389,18 @@ class RequirementPanel(QWidget):
     }
 
     def on_chat_success(self, reply: str):
-        self._append_chat('model', reply)
+        self.chat_view.hide_thinking()
+        self._append_chat('assistant', reply)
         self._write_requirement_to_project_json(reply)
-        self._append_chat('system', '正在生成任务类型...')
+        self._set_progress('正在生成任务类型...')
         self._generate_task_type()
-        self._append_chat('system', '正在生成信号、目标和事件...')
+        self._set_progress('正在生成信号、目标和事件...')
         self._generate_signals_targets_events()
-        self._append_chat('system', '正在生成评价指标...')
+        self._set_progress('正在生成评价指标...')
         self._generate_metrics()
-        self._append_chat('system', '正在生成目标参数...')
+        self._set_progress('正在生成目标参数...')
         self._generate_targets_from_metrics()
-        self._append_chat('system', '正在生成停止条件...')
+        self._set_progress('正在生成停止条件...')
         self._generate_stop_conditions()
         self._set_status_text('状态：需求指标已完善')
         if callable(self.completion_callback):
@@ -383,7 +424,7 @@ class RequirementPanel(QWidget):
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as exc:
-            self._append_chat('system', f'生成 task_type 失败：{exc}')
+            self._append_error('任务类型生成失败。', str(exc))
 
     def _generate_signals_targets_events(self):
         project_json = self._project_json_path()
@@ -414,15 +455,15 @@ class RequirementPanel(QWidget):
             for attempt in range(max_retries + 1):
                 result = call_ui_chat_model(objective, system_prompt, temperature=0.2)
                 
-                self._append_chat('system', f'大模型返回（环路分析）：{result.strip()}')
+                self._append_debug(f'大模型返回（环路分析）：{result.strip()}')
                 
                 if not result or not result.strip():
                     if attempt < max_retries:
-                        self._append_chat('system', f'第{attempt+1}次调用返回为空，重新调用...')
+                        self._append_debug(f'第{attempt+1}次环路分析返回为空，重新调用。')
                         system_prompt = f'你上次返回了空内容。请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
                         continue
                     else:
-                        self._append_chat('system', '多次调用返回为空，使用默认值')
+                        self._append_debug('多次环路分析返回为空，使用默认值。')
                         parsed = []
                         break
                 
@@ -434,11 +475,11 @@ class RequirementPanel(QWidget):
                         raise ValueError("返回内容不是有效的JSON数组")
                 except (json.JSONDecodeError, ValueError) as e:
                     if attempt < max_retries:
-                        self._append_chat('system', f'第{attempt+1}次调用解析失败({e})，重新调用...')
+                        self._append_debug(f'第{attempt+1}次环路分析解析失败({e})，重新调用。')
                         system_prompt = f'你上次返回的内容不是有效的JSON格式：{result.strip()}\n\n请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
                         continue
                     else:
-                        self._append_chat('system', f'多次调用解析失败({e})，使用默认值')
+                        self._append_debug(f'多次环路分析解析失败({e})，使用默认值。')
                         parsed = []
                         break
             
@@ -463,7 +504,7 @@ class RequirementPanel(QWidget):
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as exc:
-            self._append_chat('system', f'生成 available_signals 失败：{exc}')
+            self._append_error('信号和目标事件生成失败。', str(exc))
 
     def _generate_metrics(self):
         project_json = self._project_json_path()
@@ -500,15 +541,15 @@ class RequirementPanel(QWidget):
             for attempt in range(max_retries + 1):
                 result = call_ui_chat_model(objective, system_prompt, temperature=0.2)
                 
-                self._append_chat('system', f'大模型返回：{result.strip()}')
+                self._append_debug(f'大模型返回（评价指标分析）：{result.strip()}')
                 
                 if not result or not result.strip():
                     if attempt < max_retries:
-                        self._append_chat('system', f'第{attempt+1}次调用返回为空，重新调用...')
+                        self._append_debug(f'第{attempt+1}次评价指标分析返回为空，重新调用。')
                         system_prompt = f'你上次返回了空内容。请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
                         continue
                     else:
-                        self._append_chat('system', '多次调用返回为空，使用默认指标')
+                        self._append_debug('多次评价指标分析返回为空，使用默认指标。')
                         parsed = ["speed_overshoot", "speed_settling_time", "speed_steady_state_error"]
                         break
                 
@@ -520,11 +561,11 @@ class RequirementPanel(QWidget):
                         raise ValueError("返回内容不是有效的JSON数组或数组为空")
                 except (json.JSONDecodeError, ValueError) as e:
                     if attempt < max_retries:
-                        self._append_chat('system', f'第{attempt+1}次调用解析失败({e})，重新调用...')
+                        self._append_debug(f'第{attempt+1}次评价指标分析解析失败({e})，重新调用。')
                         system_prompt = f'你上次返回的内容不是有效的JSON格式：{result.strip()}\n\n请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
                         continue
                     else:
-                        self._append_chat('system', f'多次调用解析失败({e})，使用默认指标')
+                        self._append_debug(f'多次评价指标分析解析失败({e})，使用默认指标。')
                         parsed = ["speed_overshoot", "speed_settling_time", "speed_steady_state_error"]
                         break
             
@@ -555,7 +596,7 @@ class RequirementPanel(QWidget):
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as exc:
-            self._append_chat('system', f'生成 metrics 失败：{exc}')
+            self._append_error('评价指标生成失败。', str(exc))
 
     def _generate_targets_from_metrics(self):
         project_json = self._project_json_path()
@@ -603,7 +644,7 @@ class RequirementPanel(QWidget):
             
             self._update_param_table(targets)
         except Exception as exc:
-            self._append_chat('system', f'生成 targets 失败：{exc}')
+            self._append_error('目标参数生成失败。', str(exc))
 
     def _update_param_table(self, targets):
         self.param_table.setRowCount(len(targets))
@@ -676,7 +717,7 @@ class RequirementPanel(QWidget):
             if signal == 'rotor_speed_rad_s':
                 self._update_ctl_main_target_velocity(new_value)
         except Exception as exc:
-            self._append_chat('system', f'同步目标值失败：{exc}')
+            self._append_error('目标值同步失败。', str(exc))
 
     def _update_ctl_main_target_velocity(self, target_speed):
         ctl_main_paths = self._ctl_main_paths()
@@ -698,11 +739,11 @@ class RequirementPanel(QWidget):
 
             if updated_paths:
                 names = ', '.join(path.name for path in updated_paths)
-                self._append_chat('system', f'已同步目标速度到 {names}')
+                self._append_success(f'目标速度已同步到 {names}。')
             else:
-                self._append_chat('system', '未找到可更新的 ctl_main.c 目标速度行')
+                self._append_notice('未找到可更新的 ctl_main.c 目标速度行。')
         except Exception as exc:
-            self._append_chat('system', f'更新 ctl_main.c 目标速度失败：{exc}')
+            self._append_error('更新 ctl_main.c 目标速度失败。', str(exc))
 
     def _generate_stop_conditions(self):
         project_json = self._project_json_path()
@@ -718,13 +759,15 @@ class RequirementPanel(QWidget):
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as exc:
-            self._append_chat('system', f'生成 stop_conditions 失败：{exc}')
+            self._append_error('停止条件生成失败。', str(exc))
 
     def on_chat_failure(self, error_text: str):
-        self._append_chat('system', f'对话失败：{error_text}')
+        self.chat_view.hide_thinking()
+        self._append_error('对话失败，请检查设置与网络。', error_text)
         self._set_status_text('状态：对话失败，请检查设置与网络')
 
     def on_chat_finished(self):
+        self.chat_view.hide_thinking()
         self.send_btn.setEnabled(True)
         if callable(self.external_finished_callback):
             self.external_finished_callback()
