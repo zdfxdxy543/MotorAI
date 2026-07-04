@@ -1,0 +1,730 @@
+from PyQt5.QtWidgets import (
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QWidget,
+    QVBoxLayout,
+)
+from PyQt5.QtCore import Qt, QDateTime
+import json
+from pathlib import Path
+
+import core.paths  # ensures repository roots are on sys.path
+from widgets.chat import ChatInputEdit, ChatStreamWidget, ChatWorker, call_ui_chat_model
+from Competition.competition_workspace import write_common_requirement_snapshot
+
+
+class RequirementPanel(QWidget):
+    def __init__(self, project_json_getter=None, parent=None):
+        super().__init__(parent)
+        self.chat_worker = None
+        self.project_json_getter = project_json_getter
+        self.chat_history = []
+        self.completion_callback = None
+        self.external_chat_callback = None
+        self.external_status_callback = None
+        self.external_finished_callback = None
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
+
+        self.chat_view = ChatStreamWidget()
+        self._append_chat('system', '请输入需求指标。')
+
+        self.input_edit = ChatInputEdit()
+        self.input_edit.setPlaceholderText('请输入需求指标描述...')
+        self.input_edit.setFixedHeight(110)
+        self.input_edit.enterPressed.connect(self.send_requirement)
+
+        self.send_btn = QPushButton('发送需求')
+        self.send_btn.setObjectName('primaryButton')
+        self.send_btn.setStyleSheet(
+            'QPushButton{background:#0f62fe;color:#ffffff;border:none;font-weight:600;}'
+            'QPushButton:hover{background:#0a55df;}'
+            'QPushButton:pressed{background:#0848c7;}'
+            'QPushButton:disabled{background:#9abafc;color:#f8fbff;}'
+        )
+        self.send_btn.clicked.connect(self.send_requirement)
+
+        self.clear_btn = QPushButton('清空')
+        self.clear_btn.setObjectName('ghostButton')
+        self.clear_btn.clicked.connect(self.input_edit.clear)
+
+        self.status_label = QLabel('状态：等待输入需求指标')
+
+        self.param_form = QWidget()
+        self.param_form.setStyleSheet('background:#f4f4f4;border-radius:4px;')
+        param_layout = QVBoxLayout(self.param_form)
+        param_layout.setContentsMargins(10, 10, 10, 10)
+        param_layout.setSpacing(8)
+        param_layout.addWidget(QLabel('目标参数设置'))
+        
+        self.param_table = QTableWidget()
+        self.param_table.setColumnCount(3)
+        self.param_table.setHorizontalHeaderLabels(['信号名称', '目标值', '单位'])
+        self.param_table.horizontalHeader().setStretchLastSection(True)
+        self.param_table.verticalHeader().setVisible(False)
+        self.param_table.setStyleSheet('QTableWidget{background:white;border:1px solid #ddd;}QHeaderView::section{background:#e0e0e0;padding:4px;}')
+        param_layout.addWidget(self.param_table)
+
+        input_bar = QWidget()
+        input_bar_layout = QHBoxLayout(input_bar)
+        input_bar_layout.setContentsMargins(0, 0, 0, 0)
+        input_bar_layout.setSpacing(10)
+        input_bar_layout.addWidget(self.input_edit, 1)
+
+        side_actions = QWidget()
+        side_actions_layout = QVBoxLayout(side_actions)
+        side_actions_layout.setContentsMargins(0, 0, 0, 0)
+        side_actions_layout.setSpacing(8)
+        side_actions_layout.addWidget(self.send_btn)
+        side_actions_layout.addWidget(self.clear_btn)
+        side_actions_layout.addStretch()
+        input_bar_layout.addWidget(side_actions)
+
+        layout.addWidget(QLabel('需求指标设置'))
+        layout.addWidget(self.chat_view, 1)
+        layout.addWidget(self.param_form, 1)
+        layout.addWidget(input_bar)
+        layout.addWidget(self.status_label)
+
+    def set_completion_callback(self, callback):
+        self.completion_callback = callback
+
+    def set_external_callbacks(self, chat_callback=None, status_callback=None, finished_callback=None):
+        self.external_chat_callback = chat_callback
+        self.external_status_callback = status_callback
+        self.external_finished_callback = finished_callback
+
+    def _append_chat(self, role: str, text: str):
+        self.chat_view.append_message(role, text)
+        self.chat_history.append({
+            'role': role,
+            'text': text,
+            'timestamp': QDateTime.currentDateTime().toString(Qt.ISODate)
+        })
+        self._save_chat_record()
+        if callable(self.external_chat_callback):
+            self.external_chat_callback(role, text)
+
+    def _set_status_text(self, text: str):
+        self.status_label.setText(text)
+        if callable(self.external_status_callback):
+            self.external_status_callback(text)
+
+    def _project_folder(self):
+        if callable(self.project_json_getter):
+            pj = self.project_json_getter()
+            if pj:
+                try:
+                    return Path(pj).parent
+                except Exception:
+                    pass
+        return None
+
+    def _save_chat_record(self):
+        project_folder = self._project_folder()
+        if project_folder is None:
+            return
+        record_path = project_folder / 'record.json'
+        try:
+            data = {}
+            if record_path.exists():
+                with open(record_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+            data['requirement'] = self.chat_history
+            with open(record_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception:
+            pass
+
+    def _load_chat_record(self):
+        self.chat_view.clear_messages()
+        self.chat_history = []
+
+        project_folder = self._project_folder()
+        if project_folder is None:
+            self.chat_view.append_message('system', '请输入需求指标。')
+            return
+        record_path = project_folder / 'record.json'
+        if not record_path.exists():
+            self.chat_view.append_message('system', '请输入需求指标。')
+            return
+        try:
+            with open(record_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            self.chat_history = data.get('requirement', [])
+            for msg in self.chat_history:
+                self.chat_view.append_message(msg.get('role', 'system'), msg.get('text', ''))
+        except Exception:
+            pass
+        if not self.chat_history:
+            self.chat_view.append_message('system', '请输入需求指标。')
+
+    def load_from_project_json(self):
+        """Load targets and other UI state from the current project JSON.
+        Called by the main window when a project is opened.
+        """
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            targets = data.get('targets', {})
+            # ensure format: mapping signal -> {target_value, unit, description}
+            if isinstance(targets, dict):
+                self._update_param_table(targets)
+        except Exception:
+            pass
+
+    def send_requirement(self):
+        text = self.input_edit.toPlainText().strip()
+        if self.submit_requirement_text(text):
+            self.input_edit.clear()
+
+    def submit_requirement_text(self, text: str):
+        if not text:
+            return False
+        if self.chat_worker is not None and self.chat_worker.isRunning():
+            self._append_chat('system', '正在等待上一条对话返回，请稍后。')
+            return False
+
+        project_json = self._project_json_path()
+        if not project_json:
+            QMessageBox.warning(self, '提示', '请先打开项目文件。')
+            return False
+
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                project_data = json.load(f)
+            selected_loops = project_data.get('selected_loops', [])
+            if not selected_loops:
+                QMessageBox.warning(self, '提示', '请先在“主程序生成”中生成并保存 loop-ids 结果。')
+                return False
+        except Exception as exc:
+            QMessageBox.warning(self, '提示', f'读取项目文件失败：{exc}')
+            return False
+
+        self._append_chat('user', text)
+        self._append_chat('system', '正在调用大模型完善需求指标...')
+        self._set_status_text('状态：对话处理中...')
+        self.send_btn.setEnabled(False)
+
+        loop_info = '\n'.join([f"- {loop.get('name', '')}: {loop.get('description', '')}" for loop in selected_loops])
+        existing_objective = project_data.get('objective', '')
+
+        user_input = f"控制器结构：\n{loop_info}\n\n"
+        if existing_objective:
+            user_input += f"当前已有的需求指标：\n{existing_objective}\n\n"
+        user_input += f"用户新增需求：\n{text}\n\n请对已有需求指标和新增需求进行整合，输出一句完整的需求指标描述。"
+
+        self.chat_worker = ChatWorker(
+            user_input,
+            (
+                '你是面向 loop-ids 生成系统的需求指标完善助手。'
+                '你的任务是根据给定的控制器结构，把用户输入改写为可执行、可测量、适合控制器设计验证的中文需求指标。'
+                '性能指标仅限于：超调量、调整时间、上升时间、稳态误差。'
+                '当存在已有需求指标时，需要将其与新增需求进行整合、合并，保留合理的部分，去除冲突的部分。'
+                '请在现有控制器结构的基础上设计指标，不要改变控制器结构。'
+                '输出要求：用一句话简洁描述整合后的需求指标，不输出其他内容。'
+            ),
+            self,
+        )
+        self.chat_worker.success.connect(self.on_chat_success)
+        self.chat_worker.failure.connect(self.on_chat_failure)
+        self.chat_worker.finished.connect(self.on_chat_finished)
+        self.chat_worker.start()
+        return True
+
+    def _project_json_path(self):
+        if callable(self.project_json_getter):
+            return self.project_json_getter()
+        return None
+
+    def _ctl_main_paths(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return []
+
+        base_dir = project_json.parent
+        candidates = [
+            base_dir / 'ctl_main.c',
+            base_dir / 'src' / 'ctl_main.c',
+        ]
+
+        paths = []
+        seen = set()
+        for candidate in candidates:
+            if candidate in seen:
+                continue
+            seen.add(candidate)
+            if candidate.exists():
+                paths.append(candidate)
+        return paths
+
+    def _format_float_literal(self, value):
+        literal = f'{value:.6f}'.rstrip('0').rstrip('.')
+        if not literal:
+            literal = '0'
+        if '.' not in literal and 'e' not in literal.lower():
+            literal = f'{literal}.0'
+        return f'{literal}f'
+
+    def _rewrite_target_velocity_literal(self, content, target_speed):
+        import re
+
+        velocity_value = target_speed / 3000.0 * 9.55
+        velocity_literal = self._format_float_literal(velocity_value)
+
+        pattern = r'(ctl_set_mech_target_velocity\(&mech_ctrl,\s*)([^)]*?)(\)\s*;)'
+
+        def repl(match):
+            return f'{match.group(1)}{velocity_literal}{match.group(3)}'
+
+        updated_content, count = re.subn(pattern, repl, content, count=1)
+        return updated_content, bool(count)
+
+    def _write_requirement_to_project_json(self, requirement_text: str):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                data = {}
+            data['objective'] = requirement_text
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            write_common_requirement_snapshot(Path(project_json), data)
+            self._append_chat('system', f'已写入需求指标到项目文件 {project_json.name}')
+        except Exception as exc:
+            self._append_chat('system', f'写入项目 JSON 失败：{exc}')
+
+    METRICS_PARAM_TEMPLATES = {
+        "overshoot": {
+            "metric_name": "overshoot",
+            "optimization_direction": "minimize",
+            "normalize": True,
+            "good_threshold": 0.10,
+            "bad_threshold": 0.30,
+            "description": "超调量，归一化后 0.10 表示 10%"
+        },
+        "settling_time": {
+            "metric_name": "settling_time",
+            "optimization_direction": "minimize",
+            "tolerance_ratio": 0.05,
+            "good_threshold": 0.20,
+            "bad_threshold": 1.00,
+            "description": "调节时间，进入并保持在目标值 ±5% 范围内所需时间"
+        },
+        "steady_state_error": {
+            "metric_name": "steady_state_error",
+            "optimization_direction": "minimize",
+            "window": 0.10,
+            "good_threshold": 15.708,
+            "bad_threshold": 62.832,
+            "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+        },
+        "ripple": {
+            "metric_name": "ripple",
+            "optimization_direction": "minimize",
+            "window": 0.10,
+            "good_threshold": 0.02,
+            "bad_threshold": 0.20,
+            "description": "稳态纹波，末尾 10% 数据窗口内的峰峰值"
+        }
+    }
+
+    PHYSICAL_QUANTITIES = {
+        "speed": {"signal": "rotor_speed_rad_s", "target_value": 314.16, "weight": 0.25},
+        "torque": {"signal": "electromagnetic_torque_nm", "target_value": 0.2, "weight": 0.15},
+        "iq": {"signal": "stator_iq_a", "target_value": 3.0, "weight": 0.15},
+        "id": {"signal": "stator_id_a", "target_value": 0.0, "weight": 0.15}
+    }
+
+    def on_chat_success(self, reply: str):
+        self._append_chat('model', reply)
+        self._write_requirement_to_project_json(reply)
+        self._append_chat('system', '正在生成任务类型...')
+        self._generate_task_type()
+        self._append_chat('system', '正在生成信号、目标和事件...')
+        self._generate_signals_targets_events()
+        self._append_chat('system', '正在生成评价指标...')
+        self._generate_metrics()
+        self._append_chat('system', '正在生成目标参数...')
+        self._generate_targets_from_metrics()
+        self._append_chat('system', '正在生成停止条件...')
+        self._generate_stop_conditions()
+        self._set_status_text('状态：需求指标已完善')
+        if callable(self.completion_callback):
+            self.completion_callback()
+
+    def _generate_task_type(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            objective_text = data.get('objective_text', '')
+            system_prompt = (
+                '你是需求分析助手。请根据用户需求文本，总结出一句话描述用户设计的是什么控制系统。'
+                '输出要求：仅输出任务类型，例如："PMSM速度控制系统"、"PMSM位置控制系统"、"永磁同步电机转矩控制系统"等。'
+                '不要输出其他内容。'
+            )
+            result = call_ui_chat_model(objective_text, system_prompt, temperature=0.2)
+            data['task_type'] = result.strip()
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as exc:
+            self._append_chat('system', f'生成 task_type 失败：{exc}')
+
+    def _generate_signals_targets_events(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            objective_text = data.get('objective_text', '')
+            objective = data.get('objective', '')
+            
+            system_prompt = (
+                '你是控制器分析助手。请分析用户需求中是否涉及以下控制环路类型：\n\n'
+                '1. 机械环/速度环/位置环：涉及速度、位置、转速等控制要求\n'
+                '2. 电流环：涉及电流、iq、id等控制要求\n\n'
+                '输出格式要求（严格遵守）：\n'
+                '1. 只输出JSON数组格式，不输出任何其他文字、解释或说明\n'
+                '2. JSON必须是有效的，可以被标准JSON解析器解析\n'
+                '3. 数组元素只能是 "mechanical"（机械环）和/或 "current"（电流环）\n'
+                '4. 如果两种环都涉及，输出 ["mechanical", "current"]\n'
+                '5. 如果都不涉及，输出空数组 []\n\n'
+                '用户需求：' + objective + '\n\n'
+                '请输出JSON数组：'
+            )
+            
+            parsed = None
+            max_retries = 2
+            for attempt in range(max_retries + 1):
+                result = call_ui_chat_model(objective, system_prompt, temperature=0.2)
+                
+                self._append_chat('system', f'大模型返回（环路分析）：{result.strip()}')
+                
+                if not result or not result.strip():
+                    if attempt < max_retries:
+                        self._append_chat('system', f'第{attempt+1}次调用返回为空，重新调用...')
+                        system_prompt = f'你上次返回了空内容。请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        continue
+                    else:
+                        self._append_chat('system', '多次调用返回为空，使用默认值')
+                        parsed = []
+                        break
+                
+                try:
+                    parsed = json.loads(result.strip())
+                    if isinstance(parsed, list):
+                        break
+                    else:
+                        raise ValueError("返回内容不是有效的JSON数组")
+                except (json.JSONDecodeError, ValueError) as e:
+                    if attempt < max_retries:
+                        self._append_chat('system', f'第{attempt+1}次调用解析失败({e})，重新调用...')
+                        system_prompt = f'你上次返回的内容不是有效的JSON格式：{result.strip()}\n\n请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        continue
+                    else:
+                        self._append_chat('system', f'多次调用解析失败({e})，使用默认值')
+                        parsed = []
+                        break
+            
+            speed_signals = [
+                "rotor_angle_rad",
+                "rotor_speed_rad_s",
+                "electromagnetic_torque_nm"
+            ]
+            current_signals = [
+                "stator_iq_a",
+                "stator_id_a"
+            ]
+            
+            available_signals = []
+            if 'mechanical' in parsed:
+                available_signals.extend(speed_signals)
+            if 'current' in parsed:
+                available_signals.extend(current_signals)
+            
+            data['available_signals'] = available_signals
+            
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as exc:
+            self._append_chat('system', f'生成 available_signals 失败：{exc}')
+
+    def _generate_metrics(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            objective_text = data.get('objective_text', '')
+            objective = data.get('objective', '')
+            available_signals = data.get('available_signals', [])
+            
+            if not objective_text.strip() and not objective.strip():
+                data['metrics'] = []
+                with open(project_json, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+                return
+            
+            system_prompt = (
+                '你是性能评价指标分析助手。请根据用户需求，分析需要测量哪些物理量的哪些参数。\n\n'
+                '可选物理量：speed(速度), torque(转矩), iq(q轴电流), id(d轴电流)\n'
+                '可选测量参数：overshoot(超调量), settling_time(调整时间), steady_state_error(稳态误差), ripple(纹波)\n\n'
+                '输出格式要求（严格遵守）：\n'
+                '1. 只输出JSON数组格式，不输出任何其他文字、解释或说明\n'
+                '2. JSON必须是有效的，可以被标准JSON解析器解析\n'
+                '3. 顶层必须是一个数组，数组元素是字符串，表示物理量-测量参数组合\n'
+                '4. 每个字符串格式为：物理量_测量参数，如 "speed_overshoot", "torque_ripple"\n\n'
+                '用户需求：' + objective + '\n\n'
+                '请输出JSON数组：'
+            )
+            
+            parsed = None
+            max_retries = 2
+            for attempt in range(max_retries + 1):
+                result = call_ui_chat_model(objective, system_prompt, temperature=0.2)
+                
+                self._append_chat('system', f'大模型返回：{result.strip()}')
+                
+                if not result or not result.strip():
+                    if attempt < max_retries:
+                        self._append_chat('system', f'第{attempt+1}次调用返回为空，重新调用...')
+                        system_prompt = f'你上次返回了空内容。请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        continue
+                    else:
+                        self._append_chat('system', '多次调用返回为空，使用默认指标')
+                        parsed = ["speed_overshoot", "speed_settling_time", "speed_steady_state_error"]
+                        break
+                
+                try:
+                    parsed = json.loads(result.strip())
+                    if isinstance(parsed, list) and len(parsed) > 0:
+                        break
+                    else:
+                        raise ValueError("返回内容不是有效的JSON数组或数组为空")
+                except (json.JSONDecodeError, ValueError) as e:
+                    if attempt < max_retries:
+                        self._append_chat('system', f'第{attempt+1}次调用解析失败({e})，重新调用...')
+                        system_prompt = f'你上次返回的内容不是有效的JSON格式：{result.strip()}\n\n请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        continue
+                    else:
+                        self._append_chat('system', f'多次调用解析失败({e})，使用默认指标')
+                        parsed = ["speed_overshoot", "speed_settling_time", "speed_steady_state_error"]
+                        break
+            
+            metrics = []
+            for combo in parsed:
+                if isinstance(combo, str):
+                    parts = combo.split('_', 1)
+                    if len(parts) == 2:
+                        physical_quantity = parts[0].strip().lower()
+                        metric_param = parts[1].strip().lower()
+                        
+                        if physical_quantity in self.PHYSICAL_QUANTITIES and metric_param in self.METRICS_PARAM_TEMPLATES:
+                            phys_info = self.PHYSICAL_QUANTITIES[physical_quantity]
+                            param_template = self.METRICS_PARAM_TEMPLATES[metric_param]
+                            
+                            metric = {
+                                "result_name": combo,
+                                "signal": phys_info["signal"],
+                                "target_value": phys_info["target_value"],
+                                "weight": phys_info["weight"],
+                            }
+                            metric.update(param_template)
+                            
+                            if phys_info["signal"] in available_signals or not available_signals:
+                                metrics.append(metric)
+            
+            data['metrics'] = metrics
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as exc:
+            self._append_chat('system', f'生成 metrics 失败：{exc}')
+
+    def _generate_targets_from_metrics(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            metrics = data.get('metrics', [])
+            if not metrics:
+                return
+            
+            signals_needed = set()
+            for metric in metrics:
+                signal = metric.get('signal')
+                if signal:
+                    signals_needed.add(signal)
+            
+            signal_info = {
+                "rotor_speed_rad_s": {"unit": "rad/s", "description": "期望稳定转速"},
+                "electromagnetic_torque_nm": {"unit": "N*m", "description": "期望稳定转矩"},
+                "stator_iq_a": {"unit": "A", "description": "期望 q 轴电流"},
+                "stator_id_a": {"unit": "A", "description": "期望 d 轴电流"}
+            }
+            
+            targets = {}
+            for signal in signals_needed:
+                if signal in signal_info:
+                    target_value = 0.0
+                    for metric in metrics:
+                        if metric.get('signal') == signal:
+                            target_value = metric.get('target_value', 0.0)
+                            break
+                    
+                    targets[signal] = {
+                        "target_value": target_value,
+                        "unit": signal_info[signal]["unit"],
+                        "description": signal_info[signal]["description"]
+                    }
+            
+            data['targets'] = targets
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            
+            self._update_param_table(targets)
+        except Exception as exc:
+            self._append_chat('system', f'生成 targets 失败：{exc}')
+
+    def _update_param_table(self, targets):
+        self.param_table.setRowCount(len(targets))
+        row = 0
+        for signal, target_info in targets.items():
+            signal_item = QTableWidgetItem(signal)
+            signal_item.setFlags(signal_item.flags() & ~Qt.ItemIsEditable)
+            
+            target_value_item = QTableWidgetItem(str(target_info.get('target_value', 0.0)))
+            target_value_item.setData(Qt.UserRole, signal)
+            
+            unit_item = QTableWidgetItem(target_info.get('unit', ''))
+            unit_item.setFlags(unit_item.flags() & ~Qt.ItemIsEditable)
+            
+            self.param_table.setItem(row, 0, signal_item)
+            self.param_table.setItem(row, 1, target_value_item)
+            self.param_table.setItem(row, 2, unit_item)
+            row += 1
+        
+        self.param_table.itemChanged.connect(self._on_target_value_changed)
+
+    def _on_target_value_changed(self, item):
+        if item.column() != 1:
+            return
+        
+        signal = item.data(Qt.UserRole)
+        if not signal:
+            return
+        
+        try:
+            new_value = float(item.text())
+        except ValueError:
+            QMessageBox.warning(self, '提示', '请输入有效的数字')
+            item.setText(str(self._get_current_target_value(signal)))
+            return
+        
+        self._sync_target_value(signal, new_value)
+
+    def _get_current_target_value(self, signal):
+        project_json = self._project_json_path()
+        if not project_json:
+            return 0.0
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            targets = data.get('targets', {})
+            return targets.get(signal, {}).get('target_value', 0.0)
+        except Exception:
+            return 0.0
+
+    def _sync_target_value(self, signal, new_value):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            if 'targets' in data and signal in data['targets']:
+                data['targets'][signal]['target_value'] = new_value
+            
+            if 'metrics' in data:
+                for metric in data['metrics']:
+                    if metric.get('signal') == signal:
+                        metric['target_value'] = new_value
+            
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            
+            if signal == 'rotor_speed_rad_s':
+                self._update_ctl_main_target_velocity(new_value)
+        except Exception as exc:
+            self._append_chat('system', f'同步目标值失败：{exc}')
+
+    def _update_ctl_main_target_velocity(self, target_speed):
+        ctl_main_paths = self._ctl_main_paths()
+        if not ctl_main_paths:
+            return
+        try:
+            updated_paths = []
+            for ctl_main_path in ctl_main_paths:
+                with open(ctl_main_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                updated_content, changed = self._rewrite_target_velocity_literal(content, target_speed)
+                if not changed:
+                    continue
+
+                with open(ctl_main_path, 'w', encoding='utf-8') as f:
+                    f.write(updated_content)
+                updated_paths.append(ctl_main_path)
+
+            if updated_paths:
+                names = ', '.join(path.name for path in updated_paths)
+                self._append_chat('system', f'已同步目标速度到 {names}')
+            else:
+                self._append_chat('system', '未找到可更新的 ctl_main.c 目标速度行')
+        except Exception as exc:
+            self._append_chat('system', f'更新 ctl_main.c 目标速度失败：{exc}')
+
+    def _generate_stop_conditions(self):
+        project_json = self._project_json_path()
+        if not project_json:
+            return
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            data['stop_conditions'] = {
+                'overall_score_min': 85,
+                'metric_error_count_max': 0
+            }
+            with open(project_json, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+        except Exception as exc:
+            self._append_chat('system', f'生成 stop_conditions 失败：{exc}')
+
+    def on_chat_failure(self, error_text: str):
+        self._append_chat('system', f'对话失败：{error_text}')
+        self._set_status_text('状态：对话失败，请检查设置与网络')
+
+    def on_chat_finished(self):
+        self.send_btn.setEnabled(True)
+        if callable(self.external_finished_callback):
+            self.external_finished_callback()
