@@ -90,16 +90,20 @@ class IntentConfirmCard(QFrame):
         self.alternative_btn = QPushButton(alternative_label)
         self.alternative_btn.setObjectName('secondaryActionButton')
         self.alternative_btn.setStyleSheet(secondary_button_qss())
+        if not alternative_label:
+            self.alternative_btn.hide()
         self.cancel_btn = QPushButton('取消')
         self.cancel_btn.setObjectName('ghostButton')
         self.cancel_btn.setStyleSheet(ghost_button_qss())
 
         self.confirm_btn.clicked.connect(lambda: self._resolve(self._on_confirm))
-        self.alternative_btn.clicked.connect(lambda: self._resolve(self._on_alternative))
+        if alternative_label:
+            self.alternative_btn.clicked.connect(lambda: self._resolve(self._on_alternative))
         self.cancel_btn.clicked.connect(lambda: self._resolve(self._on_cancel))
 
         button_layout.addWidget(self.confirm_btn)
-        button_layout.addWidget(self.alternative_btn)
+        if alternative_label:
+            button_layout.addWidget(self.alternative_btn)
         button_layout.addWidget(self.cancel_btn)
         layout.addWidget(button_row)
 
@@ -134,6 +138,7 @@ class MainProgramPanel(QWidget):
         self._main_content_widgets = []
         self._load_curve_card_count = 0
         self._auto_tuning_started = False
+        self._auto_tuning_confirm_pending = False
         
         self.main_layout = QVBoxLayout(self)
         self.main_layout.setContentsMargins(0, 0, 0, 0)
@@ -436,15 +441,24 @@ class MainProgramPanel(QWidget):
         return (
             '你是面向 loop-ids 生成系统的控制器需求完善助手。'
             '你的任务是把用户原始需求改写为可直接用于控制环路选择与程序生成的中文需求。'
+            '控制结构、环路层级、控制方法、PWM 调制策略和候选方案侧重是 MotorAI 需要根据需求推断和设计的内容；'
+            '不要要求用户先指定速度环/位置环/电流环、pid/mit/smc、PWM 频率或具体控制结构。'
+            '如果用户只给出应用场景或模糊目标，也要给出合理工程假设并继续整理需求。'
             '重点聚焦以下内容：'
-            '1) 明确电流环（current_loop）目标、约束、动态响应与可测量量；'
-            '2) 明确机械环（mech_loop）控制目标与结构层级（速度或位置）；'
-            '3) 明确机械环控制方法（pid/mit/smc）及其选择依据；'
+            '1) 根据场景推断是否需要电流环（current_loop），并明确目标、约束、动态响应与可测量量；'
+            '2) 根据场景推断机械环（mech_loop）的控制目标与结构层级（速度或位置）；'
+            '3) 根据目标自行选择机械环控制方法（pid/mit/smc）并写出选择依据；'
             '4) 明确内外环关系、必要信号链路与关键性能指标。'
+            '默认工程假设：吸尘器/风机/泵类驱动按高速 BLDC/PMSM 速度控制处理；'
+            '伺服驱动按 PMSM 位置-速度-电流级联处理；电流环驱动按 PMSM FOC 电流环处理；'
+            '一般“电机驱动器”默认按 PMSM/BLDC FOC 速度外环加电流内环处理。'
+            '用户说“响应速度快”时，默认理解为速度外环响应快且电流内环带宽充足；'
+            '用户说“低噪音/噪音低”时，默认转化为 SVPWM、较低电流纹波、平滑限幅和合理较高 PWM 频率约束；'
+            '不要追问“响应速度快指哪个环”或“低噪音是否需要指定 PWM 频率”。'
+            '如果使用了默认假设，请在完善后的需求文本中自然写出“默认假设：...”，然后继续给出可生成需求。'
             '如果用户提到 candidate_01/candidate_02/候选1/候选2 等候选方案设置，例如高生成温度、低生成温度、偏滑模、偏前馈、偏抗扰，请保留为“候选方案设置：...”文本；'
             '如果用户没有指定候选方案设置，则说明沿用默认四策略：稳健低超调、快速响应、抗扰恢复、平滑低纹波。'
-            '如果用户没有提供可识别的电机类型、控制对象、控制目标或约束，不要编造需求；'
-            '请只输出一条以“NEED_MORE_INFO:”开头的追问，提示用户补充原始需求。'
+            '只有当用户完全没有提供可识别的应用场景、控制对象或控制目标时，才输出一条以“NEED_MORE_INFO:”开头的追问。'
             '输出要求：信息充分时仅输出“完善后的需求文本”；信息不足时仅输出 NEED_MORE_INFO 追问；'
             '不要输出代码块，不要输出额外解释。'
         )
@@ -581,7 +595,7 @@ class MainProgramPanel(QWidget):
         if not state.get('program_generated'):
             return {
                 'action': ACTION_CLARIFY,
-                'reply': '请提供原始需求，例如电机类型、控制目标、控制环路和关键约束。',
+                'reply': '请描述原始应用场景或控制目标，例如吸尘器驱动、伺服位置控制、电流环控制或调速驱动。',
                 'reason': '缺少可整理的程序需求',
             }
         if state.get('load_curve_saved') and not state.get('metrics_ready'):
@@ -633,7 +647,7 @@ class MainProgramPanel(QWidget):
                 self._append_chat('assistant', 'Optimize Agent 已经启动。你可以继续询问结果、修改负载曲线或补充指标；如果需要重新运行，请明确输入“重新调优”。')
                 self.status_label.setText('状态：调优已启动')
                 return
-            self._auto_start_tuning_if_ready(force=True)
+            self._auto_start_tuning_if_ready(force=True, confirmed=True)
             return
 
         if action == ACTION_ANSWER_QUESTION:
@@ -750,7 +764,7 @@ class MainProgramPanel(QWidget):
             self._append_chat('assistant', 'Optimize Agent 已经启动。你可以继续询问结果、修改负载曲线或补充指标；如果需要重新运行，请明确输入“重新调优”。')
             self.status_label.setText('状态：调优已启动')
             return
-        self._auto_start_tuning_if_ready(force=True)
+        self._auto_start_tuning_if_ready(force=True, confirmed=True)
 
     def _answer_prompt(self):
         state = self._flow_state()
@@ -871,7 +885,7 @@ class MainProgramPanel(QWidget):
                 return True
         return False
 
-    def _auto_start_tuning_if_ready(self, force: bool = False, announce: bool = True):
+    def _auto_start_tuning_if_ready(self, force: bool = False, announce: bool = True, confirmed: bool = False):
         missing = []
         if not self._has_generated_program():
             missing.append('控制程序')
@@ -888,6 +902,12 @@ class MainProgramPanel(QWidget):
         if self._auto_tuning_started and not force:
             return True
 
+        if not confirmed:
+            if announce:
+                self._append_auto_tuning_confirm_card()
+            return False
+
+        self._auto_tuning_confirm_pending = False
         self._auto_tuning_started = True
         self._workflow_steps.add('tuning_started')
         self._append_success('控制程序、负载曲线和需求指标已收集完成，开始启动 Optimize Agent。')
@@ -897,6 +917,31 @@ class MainProgramPanel(QWidget):
         else:
             self._append_error('调优入口尚未初始化，无法启动 Optimize Agent。')
         return True
+
+    def _append_auto_tuning_confirm_card(self):
+        if self._auto_tuning_confirm_pending or self._auto_tuning_started:
+            return
+        self._auto_tuning_confirm_pending = True
+        card = IntentConfirmCard(
+            intent_title='启动自动调优',
+            summary='控制程序、负载曲线和需求指标已准备好。是否现在启动 Optimize Agent？',
+            confirm_label='启动调优',
+            alternative_label='',
+            on_confirm=self._confirm_auto_tuning_start,
+            on_alternative=None,
+            on_cancel=self._cancel_auto_tuning_start,
+        )
+        self.chat_view.append_widget(card, width_ratio=0.78)
+        self.status_label.setText('状态：等待确认是否启动调优')
+
+    def _confirm_auto_tuning_start(self):
+        self._auto_tuning_confirm_pending = False
+        self._auto_start_tuning_if_ready(force=True, announce=True, confirmed=True)
+
+    def _cancel_auto_tuning_start(self):
+        self._auto_tuning_confirm_pending = False
+        self._append_notice('已暂缓启动调优。准备好后可以输入“启动调优”。')
+        self.status_label.setText('状态：调优已暂缓')
 
     def _update_project_json_requirement(self, requirement_text: str):
         project_json = self._project_json_path()
@@ -1122,8 +1167,8 @@ class MainProgramPanel(QWidget):
         text = (reply or '').strip()
         for marker in ('NEED_MORE_INFO:', 'NEED_MORE_INFO：'):
             if text.upper().startswith(marker):
-                return text[len(marker):].strip() or '请提供原始需求，例如电机类型、控制目标、控制环路和关键约束。'
-        return text or '请提供原始需求，例如电机类型、控制目标、控制环路和关键约束。'
+                return text[len(marker):].strip() or '请描述原始应用场景或控制目标，例如吸尘器驱动、伺服位置控制、电流环控制或调速驱动。'
+        return text or '请描述原始应用场景或控制目标，例如吸尘器驱动、伺服位置控制、电流环控制或调速驱动。'
 
     def on_chat_failure(self, error_text: str):
         self.chat_view.hide_thinking()
@@ -1284,6 +1329,7 @@ class MainProgramPanel(QWidget):
         self.chat_history = []
         self._workflow_steps.clear()
         self._load_curve_card_count = 0
+        self._auto_tuning_confirm_pending = False
 
         project_folder = self._project_folder()
         if project_folder is None:
@@ -1303,6 +1349,7 @@ class MainProgramPanel(QWidget):
     def reload_for_project(self):
         self.current_requirement = ''
         self._auto_tuning_started = False
+        self._auto_tuning_confirm_pending = False
         self._load_chat_record()
         self._set_program_input_mode()
         if not self.chat_history and not self._project_has_workflow_state():

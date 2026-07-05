@@ -217,7 +217,7 @@ def heuristic_route(text: str, state: dict) -> dict | None:
             return {'action': ACTION_REVISE_PROGRAM, 'reason': '用户提供了控制程序需求'}
         return {
             'action': ACTION_CLARIFY,
-            'reply': '请提供原始需求，例如电机类型、控制目标、控制环路和关键约束。',
+            'reply': '请描述原始应用场景或控制目标，例如吸尘器驱动、伺服位置控制、电流环控制或调速驱动。',
             'reason': '程序生成前输入不足以形成控制程序需求',
         }
 

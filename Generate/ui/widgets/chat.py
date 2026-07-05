@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import (
     QWidget,
     QVBoxLayout,
 )
-from PyQt5.QtCore import QSize, Qt, QThread, pyqtSignal
+from PyQt5.QtCore import QSize, Qt, QThread, QTimer, pyqtSignal
 from PyQt5.QtGui import QMovie
 import json
 import os
@@ -177,6 +177,11 @@ class ChatBubbleWidget(QFrame):
         visible = not self.body.isVisible()
         self.body.setVisible(visible)
         self.debug_toggle.setText('收起调试详情' if visible else '调试详情')
+        stream = self.parent()
+        while stream is not None and not hasattr(stream, '_scroll_to_bottom'):
+            stream = stream.parent()
+        if stream is not None:
+            stream._scroll_to_bottom()
 
     def append_text(self, text: str):
         next_text = text or ''
@@ -326,7 +331,7 @@ class ChatStreamWidget(QWidget):
         if role == 'debug' and self._append_to_last_debug(text):
             self.messages.append((role, text))
             self._update_bubble_widths()
-            self.scroll.verticalScrollBar().setValue(self.scroll.verticalScrollBar().maximum())
+            self._scroll_to_bottom()
             return
 
         self.messages.append((role, text))
@@ -363,7 +368,7 @@ class ChatStreamWidget(QWidget):
         self.container_layout.addStretch(1)
         self.message_rows.append((role, row, bubble))
         self._update_bubble_widths()
-        self.scroll.verticalScrollBar().setValue(self.scroll.verticalScrollBar().maximum())
+        self._scroll_to_bottom()
 
     def _append_to_last_debug(self, text: str) -> bool:
         if not self.message_rows:
@@ -394,7 +399,7 @@ class ChatStreamWidget(QWidget):
         self.message_rows.append(('__widget__', row, widget))
         widget.setProperty('chatWidthRatio', width_ratio)
         self._update_bubble_widths()
-        self.scroll.verticalScrollBar().setValue(self.scroll.verticalScrollBar().maximum())
+        self._scroll_to_bottom()
 
     def show_thinking(self, text: str = '正在思考中'):
         if self._thinking_row is not None:
@@ -421,7 +426,7 @@ class ChatStreamWidget(QWidget):
         self._thinking_row = row
         self._thinking_widget = indicator
         self._update_bubble_widths()
-        self.scroll.verticalScrollBar().setValue(self.scroll.verticalScrollBar().maximum())
+        self._scroll_to_bottom()
 
     def hide_thinking(self):
         if self._thinking_row is None:
@@ -443,6 +448,7 @@ class ChatStreamWidget(QWidget):
         self._thinking_row = None
         self._thinking_widget = None
         self._ensure_trailing_stretch()
+        self._scroll_to_bottom()
 
     def _remove_trailing_stretch(self):
         last_item = self.container_layout.itemAt(self.container_layout.count() - 1)
@@ -457,6 +463,15 @@ class ChatStreamWidget(QWidget):
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self._update_bubble_widths()
+        self._scroll_to_bottom()
+
+    def _scroll_to_bottom(self):
+        QTimer.singleShot(0, self._scroll_to_bottom_now)
+        QTimer.singleShot(50, self._scroll_to_bottom_now)
+
+    def _scroll_to_bottom_now(self):
+        bar = self.scroll.verticalScrollBar()
+        bar.setValue(bar.maximum())
 
     def _update_bubble_widths(self):
         viewport_width = max(0, self.scroll.viewport().width())
