@@ -26,6 +26,12 @@ class AutomationTools:
             return None
         return self.ctx.resolve_config_path(str(value))
 
+    def _simulation_backend(self) -> Dict[str, Any]:
+        backend = self._automation().get("simulation_backend")
+        if isinstance(backend, dict):
+            return backend
+        return {"mode": "local"}
+
     def build_solution(self) -> str:
         """Run build_sln.bat synchronously. With the split-bat design, this bat must only build and exit."""
         automation = self._automation()
@@ -124,20 +130,36 @@ class AutomationTools:
         )
 
     def run_simulation_bat(self) -> str:
-        """Run run_local_quick.bat synchronously. It should finish after Simulink writes processed.json."""
+        """Run the configured simulation backend and wait until processed.json is fully written."""
         automation = self._automation()
-        bat_path = self._path_from_automation("sim_bat_path")
-        if bat_path is None:
-            return "Error: automation.sim_bat_path is not configured in agent_project.json."
+        backend = self._simulation_backend()
+        mode = str(backend.get("mode", "local") or "local").strip().lower()
+        if mode == "remote":
+            bat_path = self._path_from_automation("remote_sim_bat_path", "run_remote_simulation.bat")
+        elif mode == "local":
+            bat_path = self._path_from_automation("sim_bat_path")
+        else:
+            return f"Error: unsupported automation.simulation_backend.mode: {mode}"
 
-        timeout_sec = int(automation.get("sim_timeout_sec", 1800))
+        if bat_path is None:
+            return "Error: simulation bat path is not configured in agent_project.json."
+
+        timeout_sec = int(backend.get("timeout_sec") or automation.get("sim_timeout_sec", 1800))
         result_json = self._path_from_automation("simulation_result", "../log/processed.json")
         run_exe_log = self._path_from_automation("run_exe_log", "../log/run_exe.log")
 
         args = []
-        model_path = self._path_from_automation("sim_model_path")
-        if model_path is not None:
+        model_path = self._path_from_automation("sim_model_path") if mode == "local" else None
+        if mode == "local" and model_path is not None:
             args.append(str(model_path))
+
+        if result_json is not None:
+            try:
+                result_json.unlink()
+            except FileNotFoundError:
+                pass
+            except OSError as exc:
+                return f"Error: failed to remove stale processed.json before simulation: {result_json}\n{exc}"
 
         sim_started_at = time.time()
         sim_result = run_bat_sync_in_new_console(
@@ -147,15 +169,40 @@ class AutomationTools:
         )
 
         result_status = ""
+        result_ready = False
         if result_json is not None:
             if file_updated_after(result_json, sim_started_at, slack_sec=3.0):
                 result_status = f"processed.json was updated: {result_json}"
+                result_ready = True
             elif result_json.exists():
                 result_status = f"processed.json exists but timestamp does not look newer than this run: {result_json}"
             else:
                 result_status = f"processed.json does not exist: {result_json}"
 
+        if sim_result.lstrip().startswith("Error:"):
+            return "\n".join(
+                [
+                    sim_result,
+                    result_status,
+                    "",
+                    f"[run_exe.log]\n{read_text_if_exists(run_exe_log, 4000) if run_exe_log else '[not configured]'}",
+                ]
+            )
+
+        if result_json is not None and not result_ready:
+            return "\n".join(
+                [
+                    "Error: simulation backend finished but processed.json was not updated.",
+                    f"backend_mode={mode}",
+                    result_status,
+                    f"[bat_result]\n{sim_result}",
+                    "",
+                    f"[run_exe.log]\n{read_text_if_exists(run_exe_log, 4000) if run_exe_log else '[not configured]'}",
+                ]
+            )
+
         parts = [
+            f"OK: simulation backend finished. backend_mode={mode}",
             sim_result,
             result_status,
             "",
@@ -256,7 +303,7 @@ def register_automation_tools(registry: ToolRegistry, ctx: ProjectContext) -> Au
             "type": "function",
             "function": {
                 "name": "run_simulation_bat",
-                "description": "Synchronously call run_local_quick.bat to run the Simulink simulation and generate processed.json.",
+                "description": "Synchronously call the configured local or remote Simulink backend and generate processed.json.",
                 "parameters": {"type": "object", "properties": {}},
             },
         },
@@ -287,7 +334,7 @@ def register_automation_tools(registry: ToolRegistry, ctx: ProjectContext) -> Au
             "type": "function",
             "function": {
                 "name": "run_closed_loop_once",
-                "description": "Run one complete split-bat closed loop: build_sln.bat, start_exe.bat, run_local_quick.bat, wait for exe exit, then report processed.json and run_exe.log.",
+                "description": "Run one complete split-bat closed loop: build_sln.bat, start_exe.bat, simulation backend, wait for exe exit, then report processed.json and run_exe.log.",
                 "parameters": {"type": "object", "properties": {}},
             },
         },

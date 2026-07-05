@@ -1,0 +1,41 @@
+{
+  "received_at_unix": 1783231629.082091,
+  "worker_id": "sim_pc_01",
+  "job_id": "candidate_01_1783231629057",
+  "candidate_id": "candidate_01",
+  "network_config": {
+    "target_address": "127.0.0.1",
+    "receive_port": 12600,
+    "transmit_port": 12601,
+    "command_recv_port": 12602,
+    "command_trans_port": 12603
+  },
+  "request": {
+    "job_id": "candidate_01_1783231629057",
+    "candidate_id": "candidate_01",
+    "remote_model_path": "D:\\WorkDocuments\\Github\\MotorAI\\Output\\test123\\candidates\\candidate_01\\project\\simulate\\MCS_STD_PMSM_MODEL_2022b.slx",
+    "scope_map": {
+      "ScopeData1": [
+        "rotor_angle_rad"
+      ],
+      "ScopeData2": [
+        "rotor_speed_rad_s",
+        "electromagnetic_torque_nm"
+      ],
+      "ScopeData3": [
+        "stator_iq_a",
+        "stator_id_a"
+      ]
+    },
+    "timeout_sec": 1800,
+    "no_open_ui": false,
+    "agent_project": "D:\\WorkDocuments\\Github\\MotorAI\\Output\\test123\\candidates\\candidate_01\\log\\optimize\\agent_project.json",
+    "network_config": {
+      "target_address": "127.0.0.1",
+      "receive_port": 12600,
+      "transmit_port": 12601,
+      "command_recv_port": 12602,
+      "command_trans_port": 12603
+    }
+  }
+}

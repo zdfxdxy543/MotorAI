@@ -1,0 +1,9 @@
+{
+  "worker_id": "sim_pc_01",
+  "job_root": "jobs",
+  "default_matlab_session_name": null,
+  "allow_model_roots": [],
+  "default_timeout_sec": 1800,
+  "max_request_bytes": 5242880,
+  "python_executable": "python"
+}

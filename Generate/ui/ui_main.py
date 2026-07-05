@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import (
     QAction,
     QFileDialog,
     QDialog,
+    QDialogButtonBox,
     QHBoxLayout,
     QLabel,
     QMainWindow,
@@ -25,6 +26,7 @@ from core.paths import MOTORAI_ROOT
 from motorai_config import get_output_root, load_settings
 from dialogs.project import NewProjectDialog, SettingsDialog
 from panels.controller_structure import ControllerStructurePanel
+from panels.cosim_config import CandidateNetworkPanel
 from panels.tuning_result import TuningResultPanel
 from panels.workspace import Design3RightPanel
 from styles.theme import (
@@ -35,6 +37,23 @@ from styles.theme import (
     app_qss,
     primary_button_qss,
 )
+
+
+class NetworkConfigDialog(QDialog):
+    def __init__(self, project_json_getter=None, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle('网络配置')
+        self.resize(760, 560)
+
+        layout = QVBoxLayout(self)
+        self.panel = CandidateNetworkPanel(project_json_getter=project_json_getter)
+        layout.addWidget(self.panel)
+
+        buttons = QDialogButtonBox(QDialogButtonBox.Close)
+        buttons.rejected.connect(self.reject)
+        layout.addWidget(buttons)
+
+        self.panel.reload_for_project()
 
 
 class MainWindow(QMainWindow):
@@ -65,14 +84,18 @@ class MainWindow(QMainWindow):
         self.action_save = QAction('保存', self)
         self.action_load = QAction('读取', self)
         self.action_settings = QAction('设置', self)
+        self.action_network_config = QAction('网络配置', self)
+        self.action_network_config.setEnabled(False)
         file_menu.addAction(self.action_new)
         file_menu.addAction(self.action_save)
         file_menu.addAction(self.action_load)
         file_menu.addAction(self.action_settings)
+        file_menu.addAction(self.action_network_config)
         self.action_new.triggered.connect(self.open_new_project_dialog)
         self.action_load.triggered.connect(self.open_project_json)
         self.action_save.triggered.connect(self.save_project_json)
         self.action_settings.triggered.connect(self.open_settings_dialog)
+        self.action_network_config.triggered.connect(self.open_network_config_dialog)
 
         file_button = QPushButton('文件')
         file_button.setMenu(file_menu)
@@ -167,10 +190,18 @@ class MainWindow(QMainWindow):
         dialog = SettingsDialog(self)
         dialog.exec_()
 
+    def open_network_config_dialog(self):
+        if not self.current_project_json_path:
+            QMessageBox.warning(self, '提示', '请先新建或读取项目 JSON。')
+            return
+        dialog = NetworkConfigDialog(project_json_getter=self.get_current_project_json_path, parent=self)
+        dialog.exec_()
+
     def open_new_project_dialog(self):
         dialog = NewProjectDialog(self)
         if dialog.exec_() == QDialog.Accepted and dialog.project_json_path:
             self.current_project_json_path = Path(dialog.project_json_path)
+            self.action_network_config.setEnabled(True)
             QMessageBox.information(self, '已加载项目', f'当前项目：{self.current_project_json_path}')
             self._refresh_project_panels()
             self._load_panel_data()
@@ -277,6 +308,7 @@ class MainWindow(QMainWindow):
             if not isinstance(data, dict):
                 raise ValueError('JSON 顶层必须是对象')
             self.current_project_json_path = selected
+            self.action_network_config.setEnabled(True)
             QMessageBox.information(self, '已加载项目', f'当前项目：{self.current_project_json_path}')
             self._refresh_project_panels()
             

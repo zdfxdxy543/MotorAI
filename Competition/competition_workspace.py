@@ -611,6 +611,11 @@ def build_candidate_json(
     candidate["src_folder_path"] = str(paths.src.resolve())
     candidate["sln_path"] = str((paths.simulate / "GMP_Motor_Control_simulink.sln").resolve())
     candidate["simulink_model_path"] = str(preferred_simulink_model_path(paths.simulate))
+    candidate["simulation_backend"] = select_candidate_simulation_backend(
+        base_project,
+        paths.candidate_id,
+        index,
+    )
     candidate["iteration_parameter_header_path"] = str((paths.src / "paras.generated.h").resolve())
     candidate["generated_loop_ids_path"] = str(
         (paths.log_generate / "controller_loop_ids_generated.json").resolve()
@@ -650,6 +655,74 @@ def build_candidate_json(
         "paras_header": str((paths.src / "paras.generated.h").resolve()),
     }
     return candidate
+
+
+def select_candidate_simulation_backend(
+    project: dict[str, Any],
+    candidate_name: str,
+    index: int,
+) -> dict[str, Any]:
+    """Return per-candidate simulation backend config, defaulting to local."""
+    default_backend: dict[str, Any] = {"mode": "local"}
+
+    global_backend = project.get("simulation_backend")
+    if isinstance(global_backend, dict):
+        default_backend = dict(global_backend)
+
+    backends = project.get("candidate_simulation_backends") or project.get("simulation_backends")
+    selected: Any = None
+    if isinstance(backends, dict):
+        key_candidates = (
+            candidate_name,
+            candidate_name.lower(),
+            str(index),
+            f"candidate_{index}",
+            f"candidate_{index:02d}",
+        )
+        for key in key_candidates:
+            if key in backends:
+                selected = backends[key]
+                break
+        if selected is None:
+            selected = backends.get("default")
+    elif isinstance(backends, list) and 0 <= index - 1 < len(backends):
+        selected = backends[index - 1]
+
+    if isinstance(selected, dict):
+        backend = dict(default_backend)
+        backend.update(selected)
+    else:
+        backend = dict(default_backend)
+
+    backend["mode"] = str(backend.get("mode") or "local").strip().lower() or "local"
+    return backend
+
+
+def resolve_candidate_simulation_backend(candidate_json: Path, candidate: dict[str, Any]) -> dict[str, Any]:
+    backend = candidate.get("simulation_backend")
+    if isinstance(backend, dict):
+        resolved = dict(backend)
+        resolved["mode"] = str(resolved.get("mode") or "local").strip().lower() or "local"
+        return resolved
+
+    parent_raw = candidate.get("parent_project_json")
+    if parent_raw:
+        parent_path = Path(str(parent_raw)).expanduser()
+        if not parent_path.is_absolute():
+            parent_path = candidate_json.parent / parent_path
+        parent_path = parent_path.resolve()
+        if parent_path.exists():
+            try:
+                parent = load_json_object(parent_path)
+                return select_candidate_simulation_backend(
+                    parent,
+                    str(candidate.get("candidate_id") or candidate_json.parent.name),
+                    int(candidate.get("candidate_index") or candidate_index_from_name(candidate_json.parent.name)),
+                )
+            except Exception:
+                pass
+
+    return {"mode": "local"}
 
 
 def init_candidates(
@@ -742,6 +815,7 @@ def candidate_optimize_paths(candidate_dir: Path) -> dict[str, Path]:
         "build_bat": log_optimize / "build_sln.bat",
         "start_exe_bat": log_optimize / "start_exe.bat",
         "sim_bat": log_optimize / "run_local_quick.bat",
+        "remote_sim_bat": log_optimize / "run_remote_simulation.bat",
         "scope_map": log_optimize / "simulation" / "scope_channel_map.json",
         "raw_simulation": log_optimize / "simulation" / "raw.json",
         "processed_simulation": log_optimize / "simulation" / "processed.json",
@@ -758,6 +832,7 @@ def build_candidate_agent_project(candidate_json: Path) -> dict[str, Any]:
     src_dir = Path(candidate["src_folder_path"]).expanduser().resolve()
     parameter_header = Path(candidate["iteration_parameter_header_path"]).expanduser().resolve()
     sim_model = Path(candidate["simulink_model_path"]).expanduser().resolve()
+    simulation_backend = resolve_candidate_simulation_backend(candidate_json, candidate)
 
     template_path = AGENT_OPTIMIZE_EXAMPLE_DIR / "agent_project.json"
     agent_project = load_json_object(template_path)
@@ -811,9 +886,11 @@ def build_candidate_agent_project(candidate_json: Path) -> dict[str, Any]:
             "build_bat_path": "build_sln.bat",
             "start_exe_bat_path": "start_exe.bat",
             "sim_bat_path": "run_local_quick.bat",
+            "remote_sim_bat_path": "run_remote_simulation.bat",
             "parameter_header": str(parameter_header),
             "optimization_history": "optimization_history.jsonl",
             "sim_model_path": str(sim_model),
+            "scope_map": "simulation/scope_channel_map.json",
             "build_agent_log": "build/build.log",
             "run_exe_log": "build/run_exe.log",
             "simulation_result": "simulation/processed.json",
@@ -822,6 +899,7 @@ def build_candidate_agent_project(candidate_json: Path) -> dict[str, Any]:
             "evaluation_summary": "evaluation_summary.txt",
             "build_timeout_sec": int(automation.get("build_timeout_sec", 900)),
             "sim_timeout_sec": int(automation.get("sim_timeout_sec", 1800)),
+            "simulation_backend": simulation_backend,
         }
     )
     return agent_project
@@ -854,10 +932,26 @@ exit /b %ERRORLEVEL%
     bat_path.write_text(content, encoding="utf-8")
 
 
+def write_candidate_run_remote_simulation_bat(candidate_json: Path, bat_path: Path) -> None:
+    remote_client = (AGENT_SILHELPER_DIR / "remote_sil_client.py").resolve()
+    content = f"""@echo off
+setlocal EnableExtensions
+
+set "SCRIPT_DIR=%~dp0"
+if not exist "%SCRIPT_DIR%simulation" mkdir "%SCRIPT_DIR%simulation"
+
+python "{remote_client}" --agent-project "%SCRIPT_DIR%agent_project.json" > "%SCRIPT_DIR%simulation\\remote_client_stdout.txt" 2> "%SCRIPT_DIR%simulation\\remote_client_stderr.txt"
+exit /b %ERRORLEVEL%
+"""
+    bat_path.parent.mkdir(parents=True, exist_ok=True)
+    bat_path.write_text(content, encoding="utf-8")
+
+
 def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
     candidate_json = candidate_json.expanduser().resolve()
     candidate = sync_candidate_common_fields(candidate_json)
     normalize_candidate_simulink_model_path(candidate)
+    candidate["simulation_backend"] = resolve_candidate_simulation_backend(candidate_json, candidate)
     write_json(candidate_json, candidate)
     candidate_root = Path(candidate["candidate_root"]).expanduser().resolve()
     src_dir = Path(candidate["src_folder_path"]).expanduser().resolve()
@@ -893,6 +987,7 @@ def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
         repo_root=gmp_root,
     )
     write_candidate_run_local_quick_bat(candidate_json, optimize_paths["sim_bat"])
+    write_candidate_run_remote_simulation_bat(candidate_json, optimize_paths["remote_sim_bat"])
 
     if not optimize_paths["scope_map"].exists():
         default_scope_map = OPTIMIZE_ROOT / "log" / "simulation" / "scope_channel_map.json"
@@ -914,11 +1009,13 @@ def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
         "build_bat": str(optimize_paths["build_bat"].resolve()),
         "start_exe_bat": str(optimize_paths["start_exe_bat"].resolve()),
         "sim_bat": str(optimize_paths["sim_bat"].resolve()),
+        "remote_sim_bat": str(optimize_paths["remote_sim_bat"].resolve()),
         "evaluation_config": str((log_optimize / "evaluation_config.json").resolve()),
         "evaluation_result": str((log_optimize / "evaluation_result.json").resolve()),
         "simulation_result": str((log_optimize / "simulation" / "processed.json").resolve()),
         "optimization_history": str((log_optimize / "optimization_history.jsonl").resolve()),
         "tuning_result": str((log_optimize / "tuning_result.json").resolve()),
+        "simulation_backend": candidate["simulation_backend"],
     }
     write_json(candidate_json, candidate)
 
@@ -932,6 +1029,7 @@ def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
         "evaluation_result": str((log_optimize / "evaluation_result.json").resolve()),
         "simulation_result": str((log_optimize / "simulation" / "processed.json").resolve()),
         "optimization_history": str((log_optimize / "optimization_history.jsonl").resolve()),
+        "simulation_backend": candidate["simulation_backend"],
     }
 
 
