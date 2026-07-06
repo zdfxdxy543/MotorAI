@@ -421,6 +421,86 @@ Conservative update principles for LADRC:
 - OMEGA_BASE and I_BASE are motor-characteristic constants and should almost
   never be tuned unless you have strong evidence the datasheet values are wrong.
 
+SMC (Sliding Mode Control) guidance:
+
+When the project uses a Sliding Mode Controller, the parameter header will
+expose TARGET_BW and DIST_REJECT_TORQUE instead of PID gains or LADRC
+bandwidths. Recognize SMC projects by the presence of TARGET_BW and
+DIST_REJECT_TORQUE together in the header.
+
+SMC parameters and their roles:
+
+Physical parameters (same role as LADRC):
+
+- INERTIA: total system inertia J (kg*m^2). Affects equivalent control gain
+  and feedforward gain computed by autotuning.
+- TORQUE_CONST: motor torque constant Kt (Nm/A).
+- OMEGA_BASE: base mechanical speed for per-unit conversion (rad/s).
+- I_BASE: base current for per-unit conversion (A).
+
+Tuning targets (the primary tuning knobs):
+
+- TARGET_BW: sliding surface decay bandwidth (Hz). Determines how fast the
+  system converges to the sliding surface s = lambda*x1 + x2 = 0. Higher
+  values give faster convergence but increase chattering. Think of this as
+  the SMC analog of controller bandwidth — increase for faster response,
+  decrease to reduce oscillation.
+- DIST_REJECT_TORQUE: maximum disturbance torque to reject (Nm). Determines
+  the switching gain rho. Higher values give stronger disturbance rejection
+  but increase chattering amplitude. Only increase if load disturbances are
+  visibly not being rejected.
+
+Important SMC characteristics:
+
+- The SMC core uses a boundary layer (sat(s/phi) with phi=0.001) instead of
+  a pure sign function. This mitigates chattering but does not eliminate it
+  entirely. Some steady-state ripple is normal for SMC.
+- The control law is u = eta1*x1 + eta2*x2 + rho*sat(s/phi), where the
+  eta gains are state-dependent and auto-computed from TARGET_BW and
+  DIST_REJECT_TORQUE by ctl_autotuning_smc_mech_ctrl.
+- The SMC operates as a position controller. x1 = position error, x2 =
+  velocity error. It requires both position and velocity feedback.
+- CUR_LIMIT: maximum current/torque output (PU). If the controller hits the
+  limit during transients, the response will be clipped.
+
+SMC-specific tuning heuristics by symptom:
+
+- Excessive chattering (high-frequency ripple in torque/current):
+  Primary: reduce TARGET_BW by 10-20%. A lower BW means a shallower sliding
+  surface slope (smaller lambda) and smaller equivalent control gains.
+  Secondary: reduce DIST_REJECT_TORQUE by 10-20% to shrink the switching
+  gain rho.
+  Note: some chattering is inherent to SMC and cannot be fully eliminated.
+
+- Rise time too slow:
+  Increase TARGET_BW by 10-20%. This steepens the sliding surface slope
+  and increases the equivalent control gains, driving faster convergence.
+
+- Poor disturbance rejection (slow recovery after load change):
+  Increase DIST_REJECT_TORQUE by 20-30%. This directly increases the
+  switching gain rho, which is the term responsible for overcoming
+  disturbances. Watch for increased chattering after this change.
+
+- Steady-state position error:
+  SMC's switching term should drive the error to zero in the sliding mode.
+  If steady-state error persists, check CUR_LIMIT — the controller output
+  may be saturated. If CUR_LIMIT is adequate, try increasing TARGET_BW.
+
+- Both chattering AND slow response:
+  The gain structure may be mismatched to the plant. Verify INERTIA and
+  TORQUE_CONST are reasonable. The autotuning computes all gains from these
+  physical parameters — inaccurate b0 = Kt/J leads to incorrect gain scaling.
+
+Conservative update principles for SMC:
+
+- Prefer adjusting TARGET_BW and DIST_REJECT_TORQUE over physical parameters.
+- DIST_REJECT_TORQUE and TARGET_BW have interacting effects on chattering.
+  When increasing one, consider reducing the other slightly to maintain an
+  acceptable chattering level.
+- Physical parameters (INERTIA, TORQUE_CONST) should rarely change by more
+  than 15% per iteration.
+- OMEGA_BASE and I_BASE are datasheet constants — do not tune them.
+
 Safety and scope:
 
 Do not claim parameters have changed unless a tool actually changed them.

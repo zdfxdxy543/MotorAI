@@ -53,7 +53,13 @@ extern mc_foc_core_t mtr_ctrl;
 // extern ctl_mech_ctrl_t mech_ctrl;
 // End PID Mech Extern
 
+// Start SMC Mech Extern
 // extern ctl_smc_mech_ctrl_t smc_ctrl;
+// extern int32_t smc_target_revs;
+// extern ctrl_gt smc_target_angle_pu;
+// extern ctrl_gt smc_vel_ref_pu;
+// extern ctrl_gt smc_acc_ref_pu;
+// End SMC Mech Extern
 
 // Start LADRC Speed Extern
 // extern ctl_ladrc_spd_ctrl_t ladrc_spd_ctrl;

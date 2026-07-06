@@ -62,15 +62,29 @@ _LADRC_TUNABLE: set[str] = {
     "TORQUE_CONST",
 }
 
+# SMC signature parameter names.
+_SMC_SIGNATURE = {"TARGET_BW", "DIST_REJECT_TORQUE"}
+
+# Parameters the agent is allowed to tune in SMC mode.
+_SMC_TUNABLE: set[str] = {
+    "TARGET_BW",
+    "DIST_REJECT_TORQUE",
+    "CUR_LIMIT",
+    "INERTIA",
+    "TORQUE_CONST",
+}
+
 
 def _detect_tunable_allowlist(all_params: dict[str, Any]) -> set[str] | None:
-    """Return an allowlist if the header contains LADRC signature parameters, otherwise None.
+    """Return an allowlist based on controller type, or None to allow all.
 
     None means "allow all" — the caller should not filter.
     """
     names = {str(k).upper() for k in all_params}
     if _LADRC_SIGNATURE.issubset(names):
         return {n for n in _LADRC_TUNABLE if n in names}
+    if _SMC_SIGNATURE.issubset(names):
+        return {n for n in _SMC_TUNABLE if n in names}
     return None
 
 

@@ -28,8 +28,14 @@ mc_foc_init_t mtr_ctrl_init;
 // ctl_mech_init_t mech_init;
 // End PID Mech Var
 
+// Start SMC Mech Var
 // ctl_smc_mech_ctrl_t smc_ctrl;
 // ctl_smc_mech_init_t smc_init;
+// int32_t smc_target_revs = 0;
+// ctrl_gt smc_target_angle_pu = float2ctrl(0.0f);
+// ctrl_gt smc_vel_ref_pu = float2ctrl(0.1f);
+// ctrl_gt smc_acc_ref_pu = float2ctrl(0.0f);
+// End SMC Mech Var
 
 // Start LADRC Speed Var
 // ctl_ladrc_spd_ctrl_t ladrc_spd_ctrl;
@@ -69,7 +75,9 @@ void Setup_Motor_Current();
 // Start PID Mech Func Decl
 // void Setup_Mechanical_Controller();
 // End PID Mech Func Decl
+// Start SMC Mech Func Decl
 // void Setup_SMC_Mechanical_Controller();
+// End SMC Mech Func Decl
 // Start LADRC Speed Func Decl
 // void Setup_LADRC_Speed_Controller();
 // End LADRC Speed Func Decl
@@ -231,6 +239,9 @@ void clear_all_controllers()
     // Start PID Mech Clear
     // ctl_clear_mech_ctrl(&mech_ctrl);
     // End PID Mech Clear
+    // Start SMC Mech Clear
+    // ctl_disable_smc_mech_ctrl(&smc_ctrl);
+    // End SMC Mech Clear
     // Start LADRC Speed Clear
     // ctl_clear_ladrc_spd_ctrl(&ladrc_spd_ctrl);
     // End LADRC Speed Clear
@@ -400,23 +411,27 @@ void Setup_Motor_Current()
 // }
 // End PID Mech Setup
 
+// Start SMC Mech Setup
 // void Setup_SMC_Mechanical_Controller()
 // {
-//     smc_init.eta11 = ETA11;
-//     smc_init.eta12 = ETA12;
-//     smc_init.eta21 = ETA21;
-//     smc_init.eta22 = ETA22;
-
-//     smc_init.rho = RHO;
-//     smc_init.lambda = LAMBDA;
-
-//     smc_init.cur_limit = CUR_LIMIT;
-//     smc_init.k_ff = K_FF;
-
+//     smc_init.fs = CONTROLLER_FREQUENCY;
 //     smc_init.mech_division = CTRL_MECH_DIV;
-
+//
+//     smc_init.inertia = INERTIA;
+//     smc_init.torque_const = TORQUE_CONST;
+//
+//     smc_init.omega_base = OMEGA_BASE;
+//     smc_init.i_base = I_BASE;
+//
+//     smc_init.cur_limit = CUR_LIMIT;
+//
+//     smc_init.target_bw = TARGET_BW;
+//     smc_init.dist_reject_torque = DIST_REJECT_TORQUE;
+//
+//     ctl_autotuning_smc_mech_ctrl(&smc_init);
 //     ctl_init_smc_mech_ctrl(&smc_ctrl, &smc_init);
 // }
+// End SMC Mech Setup
 //
 // Start LADRC Speed Setup
 // void Setup_LADRC_Speed_Controller()

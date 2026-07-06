@@ -213,7 +213,7 @@ def build_user_prompt(requirement: str) -> str:
         "11) For position control scenarios, it is valid to return position_error_loop and torque_reference_loop when the requirement describes error-to-torque control.\n\n"
         "12) selected_loops must be ordered from inner loop to outer loop.\n"
         "13) properties must be a non-empty array of strings that names the key signals or variables used by that loop.\n"
-        "14) For mech_loop (or speed/position mechanical loops that will be normalized to mech_loop), properties must contain exactly two items in order: [speed|position, pid|mit|smc|ladrc].\n"
+        "14) For mech_loop (or speed/position mechanical loops that will be normalized to mech_loop), properties must contain exactly two items in order: [speed|position, pid|mit|smc|ladrc]. SMC is position-only — always pair smc with position, never with speed.\n"
         "15) For non-mechanical loops, each loop must have exactly one property, and for known loop names it must come from the designed property library.\n"
         f"Natural-language requirement:\n{requirement.strip()}\n\n"
         "Output JSON template:\n"
@@ -421,6 +421,10 @@ def _normalize_mechanical_loops(payload: dict[str, Any]) -> dict[str, Any]:
         raw_props = _split_raw_properties(loop.get("properties"))
         target = _infer_mech_target("mech_loop", raw_props)
         method = _infer_mech_method(requirement, raw_props)
+        # SMC is fundamentally a position-only controller — its step function
+        # always computes x1 = position_error.  Speed-mode SMC does not exist.
+        if method == "smc":
+            target = "position"
         loop["properties"] = [target, method]
 
     # Ensure deterministic order using existing ranking
