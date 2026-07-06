@@ -1,112 +1,245 @@
-FONT_FAMILY = 'Segoe UI, Microsoft YaHei, Arial'
+"""MotorAI UI theming ― light / dark tokens, QSS generators, and painter helpers."""
 
-COLOR_PRIMARY = '#0f62fe'
-COLOR_PRIMARY_HOVER = '#0a55df'
-COLOR_PRIMARY_PRESSED = '#0848c7'
-COLOR_PRIMARY_SOFT = '#eff6ff'
-COLOR_PRIMARY_BORDER = '#bfdbfe'
-COLOR_PRIMARY_TEXT = '#175cd3'
+from __future__ import annotations
 
-COLOR_TEXT = '#1f2937'
-COLOR_TEXT_STRONG = '#0f172a'
-COLOR_MUTED = '#64748b'
-COLOR_SUBTLE = '#475569'
-COLOR_BORDER = '#d9e2ec'
-COLOR_BORDER_STRONG = '#cfd8e3'
-COLOR_SURFACE = '#ffffff'
-COLOR_BACKGROUND = '#eef2f7'
-COLOR_PANEL = '#f8fafc'
-COLOR_PANEL_HOVER = '#eef4ff'
-COLOR_SELECTION = '#dbeafe'
+from dataclasses import dataclass
 
-COLOR_SUCCESS_BG = '#ecfdf3'
-COLOR_SUCCESS_BORDER = '#abefc6'
-COLOR_SUCCESS_TEXT = '#067647'
-COLOR_ERROR_BG = '#fef3f2'
-COLOR_ERROR_BORDER = '#fecdca'
-COLOR_ERROR_TEXT = '#b42318'
-
+FONT_FAMILY = "Segoe UI, Microsoft YaHei, Arial"
 RADIUS_CARD = 10
 RADIUS_CONTROL = 8
 RADIUS_BUBBLE = 10
 RADIUS_SMALL = 6
 
 
-def transparent_qss() -> str:
-    return 'border:none;background:transparent;margin:0;padding:0;'
+# ── Theme dataclass ──────────────────────────────────────────────────
+@dataclass(frozen=True)
+class Theme:
+    name: str
+
+    primary: str
+    primary_hover: str
+    primary_pressed: str
+    primary_soft: str
+    primary_border: str
+    primary_text: str
+
+    text: str
+    text_strong: str
+    muted: str
+    subtle: str
+    border: str
+    border_strong: str
+    surface: str
+    background: str
+    panel: str
+    panel_hover: str
+    selection: str
+
+    success_bg: str
+    success_border: str
+    success_text: str
+    error_bg: str
+    error_border: str
+    error_text: str
+
+    # Canvas / painter extras
+    canvas_bg: str
+    canvas_title: str
+    canvas_arrow: str
+    canvas_placeholder_start: tuple[int, int, int, int]
+    canvas_placeholder_end: tuple[int, int, int, int]
+    canvas_grid: str
+    canvas_grid_bg: str
+    canvas_axis: str
+    canvas_data_line: str
+    canvas_data_point_bg: str
+    canvas_label: str
+
+    tab_bg: str
+    tab_text: str
+    tab_hover: str
+
+    header_bg: str
+    header_text: str
+
+    menu_hover_bg: str
+    menu_hover_text: str
+
+    scrollbar_handle: str
+    scrollbar_track: str
 
 
-def surface_card_qss(object_name: str, radius: int = RADIUS_CARD) -> str:
-    return (
-        f'QFrame#{object_name}{{background:{COLOR_SURFACE};border:1px solid {COLOR_BORDER};'
-        f'border-radius:{radius}px;}}'
-        f'QFrame#{object_name} QLabel{{border:none;background:transparent;}}'
-    )
+# ── Light theme ──────────────────────────────────────────────────────
+LIGHT_THEME = Theme(
+    name="light",
+    primary="#0f62fe",
+    primary_hover="#0a55df",
+    primary_pressed="#0848c7",
+    primary_soft="#eff6ff",
+    primary_border="#bfdbfe",
+    primary_text="#175cd3",
+    text="#1f2937",
+    text_strong="#0f172a",
+    muted="#64748b",
+    subtle="#475569",
+    border="#d9e2ec",
+    border_strong="#cfd8e3",
+    surface="#ffffff",
+    background="#eef2f7",
+    panel="#f8fafc",
+    panel_hover="#eef4ff",
+    selection="#dbeafe",
+    success_bg="#ecfdf3",
+    success_border="#abefc6",
+    success_text="#067647",
+    error_bg="#fef3f2",
+    error_border="#fecdca",
+    error_text="#b42318",
+    canvas_bg="#fcfcfd",
+    canvas_title="#303030",
+    canvas_arrow="#4d4d4d",
+    canvas_placeholder_start=(220, 220, 220, 60),
+    canvas_placeholder_end=(180, 180, 180, 90),
+    canvas_grid="#d8d8d8",
+    canvas_grid_bg="#fbfbfb",
+    canvas_axis="#666666",
+    canvas_data_line="#0f62fe",
+    canvas_data_point_bg="#ffffff",
+    canvas_label="#444444",
+    tab_bg="#e9eef5",
+    tab_text="#344054",
+    tab_hover="#f6f8fc",
+    header_bg="#f2f6fb",
+    header_text="#344054",
+    menu_hover_bg="#eaf1ff",
+    menu_hover_text="#0f62fe",
+    scrollbar_handle="#c4c9d4",
+    scrollbar_track="#f1f3f5",
+)
+
+# ── Dark theme ───────────────────────────────────────────────────────
+DARK_THEME = Theme(
+    name="dark",
+    primary="#448aff",
+    primary_hover="#5c9aff",
+    primary_pressed="#2f6fd9",
+    primary_soft="#1a2740",
+    primary_border="#2a4380",
+    primary_text="#82b1ff",
+    text="#d1d5db",
+    text_strong="#e5e7eb",
+    muted="#9ca3af",
+    subtle="#6b7280",
+    border="#3a3d45",
+    border_strong="#4b4f59",
+    surface="#1e2027",
+    background="#14161b",
+    panel="#252830",
+    panel_hover="#2d3039",
+    selection="#1e3a6e",
+    success_bg="#0d2818",
+    success_border="#1b5e30",
+    success_text="#7ee0a0",
+    error_bg="#2d1515",
+    error_border="#7c2d2d",
+    error_text="#f4a0a0",
+    canvas_bg="#1a1c22",
+    canvas_title="#c8ccd4",
+    canvas_arrow="#6b7280",
+    canvas_placeholder_start=(40, 42, 50, 100),
+    canvas_placeholder_end=(30, 32, 40, 130),
+    canvas_grid="#3a3d45",
+    canvas_grid_bg="#18191e",
+    canvas_axis="#9ca3af",
+    canvas_data_line="#448aff",
+    canvas_data_point_bg="#1e2027",
+    canvas_label="#9ca3af",
+    tab_bg="#22252c",
+    tab_text="#9ca3af",
+    tab_hover="#2a2e38",
+    header_bg="#282c34",
+    header_text="#d1d5db",
+    menu_hover_bg="#1e3a6e",
+    menu_hover_text="#448aff",
+    scrollbar_handle="#4b4f59",
+    scrollbar_track="#1e2027",
+)
+
+# ── Legacy colour aliases (light theme) – used by chat widgets, etc. ──
+COLOR_PRIMARY = LIGHT_THEME.primary
+COLOR_PRIMARY_HOVER = LIGHT_THEME.primary_hover
+COLOR_PRIMARY_PRESSED = LIGHT_THEME.primary_pressed
+COLOR_PRIMARY_SOFT = LIGHT_THEME.primary_soft
+COLOR_PRIMARY_BORDER = LIGHT_THEME.primary_border
+COLOR_PRIMARY_TEXT = LIGHT_THEME.primary_text
+COLOR_TEXT = LIGHT_THEME.text
+COLOR_TEXT_STRONG = LIGHT_THEME.text_strong
+COLOR_MUTED = LIGHT_THEME.muted
+COLOR_SUBTLE = LIGHT_THEME.subtle
+COLOR_BORDER = LIGHT_THEME.border
+COLOR_BORDER_STRONG = LIGHT_THEME.border_strong
+COLOR_SURFACE = LIGHT_THEME.surface
+COLOR_BACKGROUND = LIGHT_THEME.background
+COLOR_PANEL = LIGHT_THEME.panel
+COLOR_PANEL_HOVER = LIGHT_THEME.panel_hover
+COLOR_SELECTION = LIGHT_THEME.selection
+COLOR_SUCCESS_BG = LIGHT_THEME.success_bg
+COLOR_SUCCESS_BORDER = LIGHT_THEME.success_border
+COLOR_SUCCESS_TEXT = LIGHT_THEME.success_text
+COLOR_ERROR_BG = LIGHT_THEME.error_bg
+COLOR_ERROR_BORDER = LIGHT_THEME.error_border
+COLOR_ERROR_TEXT = LIGHT_THEME.error_text
+
+DARK_PRIMARY = DARK_THEME.primary
+DARK_TEXT = DARK_THEME.text
+DARK_MUTED = DARK_THEME.muted
+DARK_SUBTLE = DARK_THEME.subtle
+DARK_BORDER = DARK_THEME.border
+DARK_BORDER_STRONG = DARK_THEME.border_strong
+DARK_SURFACE = DARK_THEME.surface
+DARK_BACKGROUND = DARK_THEME.background
+DARK_PANEL = DARK_THEME.panel
+DARK_PANEL_HOVER = DARK_THEME.panel_hover
+DARK_SELECTION = DARK_THEME.selection
+DARK_SUCCESS_BG = DARK_THEME.success_bg
+DARK_SUCCESS_BORDER = DARK_THEME.success_border
+DARK_SUCCESS_TEXT = DARK_THEME.success_text
+DARK_ERROR_BG = DARK_THEME.error_bg
+DARK_ERROR_BORDER = DARK_THEME.error_border
+DARK_ERROR_TEXT = DARK_THEME.error_text
+
+# ── Active theme ─────────────────────────────────────────────────────
+_current_theme: Theme = LIGHT_THEME
 
 
-def primary_button_qss(
-    radius: int = RADIUS_CONTROL,
-    padding: str = '7px 14px',
-    include_disabled: bool = True,
-) -> str:
-    qss = (
-        f'QPushButton{{background:{COLOR_PRIMARY};color:{COLOR_SURFACE};border:none;'
-        f'border-radius:{radius}px;font-weight:600;padding:{padding};}}'
-        f'QPushButton:hover{{background:{COLOR_PRIMARY_HOVER};}}'
-        f'QPushButton:pressed{{background:{COLOR_PRIMARY_PRESSED};}}'
-    )
-    if include_disabled:
-        qss += 'QPushButton:disabled{background:#9abafc;color:#f8fbff;}'
-    return qss
+def current_theme() -> Theme:
+    """Return the currently active theme."""
+    return _current_theme
 
 
-def secondary_button_qss(radius: int = RADIUS_CONTROL, padding: str = '7px 14px') -> str:
-    return (
-        f'QPushButton{{background:{COLOR_PANEL};color:#344054;border:1px solid #d6deea;'
-        f'border-radius:{radius}px;font-weight:600;padding:{padding};}}'
-        f'QPushButton:hover{{background:{COLOR_PANEL_HOVER};border-color:#9fb7ff;}}'
-        'QPushButton:disabled{color:#94a3b8;}'
-    )
+def set_theme(name: str) -> None:
+    """Switch the active theme by name ('light' or 'dark')."""
+    global _current_theme
+    if name == "dark":
+        _current_theme = DARK_THEME
+    else:
+        _current_theme = LIGHT_THEME
 
 
-def ghost_button_qss(radius: int = RADIUS_CONTROL, padding: str = '7px 14px') -> str:
-    return (
-        f'QPushButton{{background:{COLOR_SURFACE};color:{COLOR_MUTED};border:1px solid #e2e8f0;'
-        f'border-radius:{radius}px;font-weight:600;padding:{padding};}}'
-        f'QPushButton:hover{{background:{COLOR_PANEL};}}'
-        'QPushButton:disabled{color:#94a3b8;}'
-    )
-
-
-def flat_button_qss(radius: int = RADIUS_CONTROL, padding: str = '12px 24px') -> str:
-    return (
-        f'QPushButton{{background:#f3f4f6;border:none;outline:none;border-radius:{radius}px;'
-        f'padding:{padding};font-size:12pt;color:#374151;}}'
-        'QPushButton:hover{background:#e5e7eb;}'
-        'QPushButton:pressed{background:#d1d5db;}'
-        'QPushButton:focus{outline:none;}'
-    )
-
-
-def status_label_qss() -> str:
-    return (
-        f'QLabel#taskStatusLabel{{background:{COLOR_PANEL};border:none;'
-        f'border-radius:{RADIUS_CARD}px;padding:8px 10px;color:{COLOR_SUBTLE};}}'
-    )
-
-
-def app_qss() -> str:
+def current_qss() -> str:
+    """Return the full application QSS for the currently active theme."""
+    t = _current_theme
     return f"""
             QMainWindow {{
-                background: {COLOR_BACKGROUND};
+                background: {t.background};
             }}
             QWidget {{
-                color: {COLOR_TEXT};
+                color: {t.text};
                 font-family: {FONT_FAMILY};
                 font-size: 10pt;
             }}
             QLabel {{
-                color: {COLOR_TEXT};
+                color: {t.text};
             }}
             QWidget#chatStreamWidget,
             QWidget#chatStreamContainer,
@@ -126,14 +259,14 @@ def app_qss() -> str:
             QMenu,
             QDialog,
             QWidget#panelCard {{
-                background: {COLOR_SURFACE};
-                border: 1px solid {COLOR_BORDER};
+                background: {t.surface};
+                border: 1px solid {t.border};
                 border-radius: {RADIUS_CARD}px;
             }}
             QLabel#chatBubbleTitle {{
                 font-size: 10pt;
                 font-weight: 600;
-                color: {COLOR_MUTED};
+                color: {t.muted};
             }}
             QLabel#chatBubbleBody {{
                 font-size: 11pt;
@@ -143,9 +276,9 @@ def app_qss() -> str:
                 padding: 6px;
             }}
             QTabBar::tab {{
-                background: #e9eef5;
-                color: #344054;
-                border: 1px solid {COLOR_BORDER_STRONG};
+                background: {t.tab_bg};
+                color: {t.tab_text};
+                border: 1px solid {t.border_strong};
                 border-bottom: none;
                 border-top-left-radius: {RADIUS_CONTROL}px;
                 border-top-right-radius: {RADIUS_CONTROL}px;
@@ -154,42 +287,42 @@ def app_qss() -> str:
                 margin-right: 4px;
             }}
             QTabBar::tab:selected {{
-                background: {COLOR_SURFACE};
-                color: {COLOR_PRIMARY};
+                background: {t.surface};
+                color: {t.primary};
                 font-weight: 600;
             }}
             QTabBar::tab:hover {{
-                background: #f6f8fc;
+                background: {t.tab_hover};
             }}
             QPushButton {{
-                background: {COLOR_SURFACE};
-                color: {COLOR_TEXT_STRONG};
-                border: 1px solid {COLOR_BORDER_STRONG};
+                background: {t.surface};
+                color: {t.text_strong};
+                border: 1px solid {t.border_strong};
                 border-radius: {RADIUS_CONTROL}px;
                 padding: 7px 14px;
                 min-height: 18px;
             }}
             QPushButton:hover {{
-                background: #f3f7ff;
-                border-color: #7da7ff;
+                background: {t.panel_hover};
+                border-color: {t.primary_border};
             }}
             QPushButton:pressed {{
-                background: #dce8ff;
+                background: {t.primary_soft};
             }}
             QPushButton#primaryButton {{
-                background: {COLOR_PRIMARY};
+                background: {t.primary};
                 color: white;
                 border: none;
                 font-weight: 600;
             }}
             QPushButton#primaryButton:hover {{
-                background: {COLOR_PRIMARY_HOVER};
+                background: {t.primary_hover};
             }}
             QPushButton#ghostButton,
             QPushButton#secondaryActionButton {{
-                background: {COLOR_PANEL};
-                color: #344054;
-                border: 1px solid #d6deea;
+                background: {t.panel};
+                color: {t.text};
+                border: 1px solid {t.border_strong};
                 font-weight: 600;
             }}
             QPushButton#secondaryActionButton {{
@@ -197,40 +330,40 @@ def app_qss() -> str:
             }}
             QPushButton#ghostButton:hover,
             QPushButton#secondaryActionButton:hover {{
-                background: {COLOR_PANEL_HOVER};
-                border-color: #9fb7ff;
+                background: {t.panel_hover};
+                border-color: {t.primary_border};
             }}
             QToolButton {{
-                background: {COLOR_SURFACE};
-                color: {COLOR_TEXT_STRONG};
-                border: 1px solid {COLOR_BORDER_STRONG};
+                background: {t.surface};
+                color: {t.text_strong};
+                border: 1px solid {t.border_strong};
                 border-radius: {RADIUS_CONTROL}px;
                 padding: 7px 14px;
             }}
             QToolButton:hover {{
-                background: #f3f7ff;
-                border-color: #7da7ff;
+                background: {t.panel_hover};
+                border-color: {t.primary_border};
             }}
             QTextEdit {{
                 padding: 10px;
-                selection-background-color: {COLOR_SELECTION};
+                selection-background-color: {t.selection};
                 line-height: 1.4;
             }}
             QTableWidget {{
-                gridline-color: #e1e8f0;
-                selection-background-color: {COLOR_SELECTION};
-                selection-color: #111827;
+                gridline-color: {t.border};
+                selection-background-color: {t.selection};
+                selection-color: {t.text_strong};
             }}
             QHeaderView::section {{
-                background: #f2f6fb;
-                color: #344054;
+                background: {t.header_bg};
+                color: {t.header_text};
                 border: none;
-                border-bottom: 1px solid {COLOR_BORDER};
+                border-bottom: 1px solid {t.border};
                 padding: 8px 10px;
                 font-weight: 600;
             }}
             QMenu {{
-                border: 1px solid {COLOR_BORDER};
+                border: 1px solid {t.border};
                 padding: 6px;
             }}
             QMenu::item {{
@@ -239,10 +372,125 @@ def app_qss() -> str:
                 margin: 2px 0;
             }}
             QMenu::item:selected {{
-                background: #eaf1ff;
-                color: {COLOR_PRIMARY};
+                background: {t.menu_hover_bg};
+                color: {t.menu_hover_text};
             }}
             QDialog {{
-                background: #f7f9fc;
+                background: {t.background};
+            }}
+            QScrollBar:vertical {{
+                background: {t.scrollbar_track};
+                width: 8px;
+                border-radius: 4px;
+            }}
+            QScrollBar::handle:vertical {{
+                background: {t.scrollbar_handle};
+                border-radius: 4px;
+                min-height: 30px;
+            }}
+            QScrollBar::add-line:vertical,
+            QScrollBar::sub-line:vertical {{
+                height: 0px;
+            }}
+            QScrollBar:horizontal {{
+                background: {t.scrollbar_track};
+                height: 8px;
+                border-radius: 4px;
+            }}
+            QScrollBar::handle:horizontal {{
+                background: {t.scrollbar_handle};
+                border-radius: 4px;
+                min-width: 30px;
+            }}
+            QScrollBar::add-line:horizontal,
+            QScrollBar::sub-line:horizontal {{
+                width: 0px;
             }}
             """
+
+
+# ── Legacy helpers (used by chat / tuning-result / etc.) ──
+
+
+def transparent_qss() -> str:
+    return "border:none;background:transparent;margin:0;padding:0;"
+
+
+def surface_card_qss(object_name: str, radius: int = RADIUS_CARD) -> str:
+    t = _current_theme
+    return (
+        f"QFrame#{object_name}{{background:{t.surface};border:1px solid {t.border};"
+        f"border-radius:{radius}px;}}"
+        f"QFrame#{object_name} QLabel{{border:none;background:transparent;}}"
+    )
+
+
+def primary_button_qss(
+    radius: int = RADIUS_CONTROL,
+    padding: str = "7px 14px",
+    include_disabled: bool = True,
+) -> str:
+    t = _current_theme
+    qss = (
+        f"QPushButton{{background:{t.primary};color:white;border:none;"
+        f"border-radius:{radius}px;font-weight:600;padding:{padding};}}"
+        f"QPushButton:hover{{background:{t.primary_hover};}}"
+        f"QPushButton:pressed{{background:{t.primary_pressed};}}"
+    )
+    if include_disabled:
+        qss += "QPushButton:disabled{background:#6b7280;color:#d1d5db;}"
+    return qss
+
+
+def secondary_button_qss(radius: int = RADIUS_CONTROL, padding: str = "7px 14px") -> str:
+    t = _current_theme
+    return (
+        f"QPushButton{{background:{t.panel};color:{t.text};border:1px solid {t.border_strong};"
+        f"border-radius:{radius}px;font-weight:600;padding:{padding};}}"
+        f"QPushButton:hover{{background:{t.panel_hover};border-color:{t.primary_border};}}"
+        "QPushButton:disabled{color:#6b7280;}"
+    )
+
+
+def ghost_button_qss(radius: int = RADIUS_CONTROL, padding: str = "7px 14px") -> str:
+    t = _current_theme
+    return (
+        f"QPushButton{{background:{t.surface};color:{t.muted};border:1px solid {t.border};"
+        f"border-radius:{radius}px;font-weight:600;padding:{padding};}}"
+        f"QPushButton:hover{{background:{t.panel};}}"
+        "QPushButton:disabled{color:#6b7280;}"
+    )
+
+
+def flat_button_qss(radius: int = RADIUS_CONTROL, padding: str = "12px 24px") -> str:
+    t = _current_theme
+    return (
+        f"QPushButton{{background:{t.panel};border:none;outline:none;border-radius:{radius}px;"
+        f"padding:{padding};font-size:12pt;color:{t.text};}}"
+        f"QPushButton:hover{{background:{t.panel_hover};}}"
+        f"QPushButton:pressed{{background:{t.border};}}"
+        "QPushButton:focus{outline:none;}"
+    )
+
+
+def status_label_qss() -> str:
+    t = _current_theme
+    return (
+        f"QLabel#taskStatusLabel{{background:{t.panel};border:none;"
+        f"border-radius:{RADIUS_CARD}px;padding:8px 10px;color:{t.subtle};}}"
+    )
+
+
+# ── Backwards-compatible aliases (called by MainWindow, etc.) ──
+
+
+def app_qss() -> str:
+    """Light-theme QSS (legacy name)."""
+    set_theme("light")
+    return current_qss()
+
+
+def dark_qss() -> str:
+    """Dark-theme QSS (legacy name)."""
+    set_theme("dark")
+    return current_qss()

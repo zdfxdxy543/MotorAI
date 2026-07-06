@@ -20,14 +20,9 @@ import core.paths  # ensures repository roots are on sys.path
 from core.paths import GENERATE_ROOT
 from motorai_config import get_llm_settings, load_settings
 from styles.theme import (
-    COLOR_MUTED,
-    COLOR_PANEL,
-    COLOR_PRIMARY,
-    COLOR_PRIMARY_SOFT,
-    COLOR_SURFACE,
-    COLOR_TEXT,
     RADIUS_BUBBLE,
     RADIUS_CARD,
+    current_theme,
     transparent_qss,
 )
 
@@ -118,25 +113,26 @@ class ChatBubbleWidget(QFrame):
         layout.addWidget(self.header_widget)
         layout.addWidget(self.body)
 
+        t = current_theme()
         if self.role == 'user':
             self.header_widget.hide()
             layout.setContentsMargins(16, 12, 16, 12)
             self.setStyleSheet(
-                f'QFrame#chatBubble_user{{background:{COLOR_PRIMARY};border:none;border-radius:{RADIUS_BUBBLE}px;}}'
+                f'QFrame#chatBubble_user{{background:{t.primary};border:none;border-radius:{RADIUS_BUBBLE}px;}}'
                 'QFrame#chatBubble_user * { border: none; }'
             )
-            self.body.setStyleSheet(f'color:{COLOR_SURFACE};background:transparent;border:none;')
+            self.body.setStyleSheet(f'color:white;background:transparent;border:none;')
         elif self.role == 'assistant':
             self.title.setText('MotorAI')
             self.avatar.hide()
             layout.setContentsMargins(16, 12, 16, 12)
             self.setStyleSheet(
-                f'QFrame#chatBubble_assistant{{background:{COLOR_SURFACE};border:1px solid #e5edf6;'
+                f'QFrame#chatBubble_assistant{{background:{t.surface};border:1px solid {t.border};'
                 f'border-radius:{RADIUS_BUBBLE}px;}}'
                 'QFrame#chatBubble_assistant * { outline: none; }'
             )
-            self.title.setStyleSheet(f'color:{COLOR_MUTED};font-size:10pt;font-weight:600;border:none;background:transparent;')
-            self.body.setStyleSheet(f'color:{COLOR_TEXT};background:transparent;border:none;')
+            self.title.setStyleSheet(f'color:{t.muted};font-size:10pt;font-weight:600;border:none;background:transparent;')
+            self.body.setStyleSheet(f'color:{t.text};background:transparent;border:none;')
         elif self.role == 'debug':
             self._apply_debug_style(layout)
         else:
@@ -154,21 +150,23 @@ class ChatBubbleWidget(QFrame):
         return 'assistant'
 
     def _apply_debug_style(self, layout: QVBoxLayout):
+        t = current_theme()
         self.header_widget.hide()
         layout.setContentsMargins(12, 8, 12, 8)
         self.setStyleSheet(
-            f'QFrame#chatBubble_debug{{background:{COLOR_PANEL};border:none;border-radius:{RADIUS_CARD}px;}}'
+            f'QFrame#chatBubble_debug{{background:{t.panel};border:none;border-radius:{RADIUS_CARD}px;}}'
             'QFrame#chatBubble_debug * { border: none; }'
         )
-        self.body.setStyleSheet(f'color:{COLOR_MUTED};background:transparent;border:none;font-family:Consolas, Microsoft YaHei, monospace;')
+        self.body.setStyleSheet(f'color:{t.muted};background:transparent;border:none;font-family:Consolas, Microsoft YaHei, monospace;')
         self.body.setAlignment(Qt.AlignLeft | Qt.AlignTop)
         self.body.hide()
 
         self.debug_toggle = QPushButton('调试详情')
         self.debug_toggle.setCursor(Qt.PointingHandCursor)
+        t = current_theme()
         self.debug_toggle.setStyleSheet(
-            f'QPushButton{{background:transparent;color:{COLOR_MUTED};font-weight:600;padding:0;text-align:left;}}'
-            f'QPushButton:hover{{color:{COLOR_PRIMARY};}}'
+            f'QPushButton{{background:transparent;color:{t.muted};font-weight:600;padding:0;text-align:left;}}'
+            f'QPushButton:hover{{color:{t.primary};}}'
         )
         self.debug_toggle.clicked.connect(self._toggle_debug_body)
         layout.insertWidget(0, self.debug_toggle)
@@ -253,14 +251,16 @@ class ThinkingIndicatorWidget(QFrame):
             self.gif_label.setMovie(self.movie)
             self.movie.start()
         else:
+            t = current_theme()
             self.gif_label.setText('M')
             self.gif_label.setStyleSheet(
-                f'background:{COLOR_PRIMARY_SOFT};color:{COLOR_PRIMARY};border:none;'
+                f'background:{t.primary_soft};color:{t.primary};border:none;'
                 'border-radius:14px;font-weight:700;'
             )
 
+        t = current_theme()
         self.text_label = QLabel(text)
-        self.text_label.setStyleSheet(f'color:{COLOR_MUTED};font-weight:600;')
+        self.text_label.setStyleSheet(f'color:{t.muted};font-weight:600;')
 
         layout.addWidget(self.gif_label)
         layout.addWidget(self.text_label)

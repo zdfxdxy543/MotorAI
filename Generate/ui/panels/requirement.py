@@ -15,10 +15,8 @@ from pathlib import Path
 
 import core.paths  # ensures repository roots are on sys.path
 from styles.theme import (
-    COLOR_BORDER,
-    COLOR_PANEL,
-    COLOR_SURFACE,
     RADIUS_CARD,
+    current_theme,
     primary_button_qss,
     status_label_qss,
 )
@@ -62,7 +60,7 @@ class RequirementPanel(QWidget):
         self.status_label.setStyleSheet(status_label_qss())
 
         self.param_form = QWidget()
-        self.param_form.setStyleSheet(f'background:{COLOR_PANEL};border-radius:{RADIUS_CARD}px;')
+        self.param_form.setStyleSheet(f'background:{current_theme().panel};border-radius:{RADIUS_CARD}px;')
         param_layout = QVBoxLayout(self.param_form)
         param_layout.setContentsMargins(10, 10, 10, 10)
         param_layout.setSpacing(8)
@@ -76,7 +74,7 @@ class RequirementPanel(QWidget):
         self.param_table.setStyleSheet(
             f'QTableWidget{{background:{COLOR_SURFACE};border:1px solid {COLOR_BORDER};'
             f'border-radius:{RADIUS_CARD}px;}}'
-            'QHeaderView::section{background:#f2f6fb;padding:4px;}'
+            f'QHeaderView::section{{background:{current_theme().header_bg};padding:4px;}}'
         )
         param_layout.addWidget(self.param_table)
 

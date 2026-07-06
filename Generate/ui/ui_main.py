@@ -30,11 +30,9 @@ from panels.cosim_config import CandidateNetworkPanel
 from panels.tuning_result import TuningResultPanel
 from panels.workspace import Design3RightPanel
 from styles.theme import (
-    COLOR_MUTED,
-    COLOR_PANEL,
-    COLOR_SURFACE,
-    COLOR_TEXT,
     app_qss,
+    current_theme,
+    dark_qss,
     primary_button_qss,
 )
 
@@ -60,6 +58,10 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.current_project_json_path = None
+
+        # ── load theme BEFORE creating any widgets ──
+        self._apply_visual_theme()
+
         self.setWindowTitle('GMP Generator Engine - UI')
         self.resize(1000, 600)
         
@@ -100,9 +102,9 @@ class MainWindow(QMainWindow):
         file_button = QPushButton('文件')
         file_button.setMenu(file_menu)
         file_button.setStyleSheet(
-            f'QPushButton {{ border: none; background: transparent; padding: 4px 8px; font-size: 24px; color: {COLOR_TEXT}; }}'
+            f'QPushButton {{ border: none; background: transparent; padding: 4px 8px; font-size: 24px; color: {current_theme().text}; }}'
             'QPushButton::menu-indicator { image: none; width: 0px; }'
-            'QPushButton:hover { background: #e5e5e5; }'
+            f'QPushButton:hover {{ background: {current_theme().panel_hover}; }}'
         )
         toolbar_layout.addWidget(file_button)
 
@@ -158,10 +160,10 @@ class MainWindow(QMainWindow):
         info_layout.addWidget(info_label)
         info_layout.addStretch()
         user_label = QLabel('User: Guest')
-        user_label.setStyleSheet(f'color:{COLOR_MUTED};')
+        user_label.setStyleSheet(f'color:{current_theme().muted};')
         info_layout.addWidget(user_label)
         self.info_widget.setMinimumHeight(46)
-        self.info_widget.setStyleSheet(f'background:{COLOR_PANEL};border:none;')
+        self.info_widget.setStyleSheet(f'background:{current_theme().panel};border:none;')
 
         # Assemble main layout
         main_layout.addWidget(toolbar)
@@ -169,11 +171,21 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.info_widget)
 
         self.setCentralWidget(container)
-        self._apply_visual_theme()
         self._install_surface_effects()
 
     def _apply_visual_theme(self):
-        self.setStyleSheet(app_qss())
+        theme = 'light'
+        try:
+            settings = load_settings()
+            ui_cfg = settings.get('ui') if isinstance(settings.get('ui'), dict) else {}
+            theme = str(ui_cfg.get('theme', 'light')).lower()
+        except Exception:
+            pass
+
+        if theme == 'dark':
+            self.setStyleSheet(dark_qss())
+        else:
+            self.setStyleSheet(app_qss())
 
     def _install_surface_effects(self):
         for widget in [self.left_controller_panel, self.right_panel(), self.info_bar()]:
@@ -188,7 +200,8 @@ class MainWindow(QMainWindow):
 
     def open_settings_dialog(self):
         dialog = SettingsDialog(self)
-        dialog.exec_()
+        if dialog.exec_() == SettingsDialog.Accepted:
+            self._apply_visual_theme()
 
     def open_network_config_dialog(self):
         if not self.current_project_json_path:
