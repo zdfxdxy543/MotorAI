@@ -48,6 +48,32 @@ from .automation import AutomationTools
 from .evaluation import EvaluationTools
 
 
+# LADRC signature parameter names. When both are present in the header, the
+# agent is restricted to the LADRC allowlist so it cannot accidentally modify
+# datasheet constants or safety limits that should stay fixed.
+_LADRC_SIGNATURE = {"TARGET_WC", "TARGET_WO"}
+
+# Parameters the agent is allowed to tune in LADRC mode.
+_LADRC_TUNABLE: set[str] = {
+    "TARGET_WC",
+    "TARGET_WO",
+    "CUR_LIMIT",
+    "INERTIA",
+    "TORQUE_CONST",
+}
+
+
+def _detect_tunable_allowlist(all_params: dict[str, Any]) -> set[str] | None:
+    """Return an allowlist if the header contains LADRC signature parameters, otherwise None.
+
+    None means "allow all" — the caller should not filter.
+    """
+    names = {str(k).upper() for k in all_params}
+    if _LADRC_SIGNATURE.issubset(names):
+        return {n for n in _LADRC_TUNABLE if n in names}
+    return None
+
+
 class OptimizationTools:
     """LLM-callable tools for one-step tuning orchestration.
 
@@ -194,7 +220,14 @@ class OptimizationTools:
 
         # Read parameters before running, so even failed runs report current state.
         try:
-            context["current_parameters_before_run"] = read_header_parameters(resolved_header_path)
+            all_params = read_header_parameters(resolved_header_path)
+            tunable_allowlist = _detect_tunable_allowlist(all_params)
+            context["current_parameters_before_run"] = (
+                {k: v for k, v in all_params.items() if tunable_allowlist is None or k in tunable_allowlist}
+                if tunable_allowlist is not None
+                else all_params
+            )
+            context["_tunable_allowlist"] = sorted(tunable_allowlist) if tunable_allowlist is not None else None
         except (ParameterHeaderError, OSError, TypeError, ValueError) as exc:
             return f"Error: failed to read current tunable parameters. {type(exc).__name__}: {exc}"
 
@@ -236,7 +269,13 @@ class OptimizationTools:
             context["evaluation_result"] = {}
 
         try:
-            context["current_parameters_after_run"] = read_header_parameters(resolved_header_path)
+            all_after = read_header_parameters(resolved_header_path)
+            tunable_allowlist = _detect_tunable_allowlist(all_after)
+            context["current_parameters_after_run"] = (
+                {k: v for k, v in all_after.items() if tunable_allowlist is None or k in tunable_allowlist}
+                if tunable_allowlist is not None
+                else all_after
+            )
         except (ParameterHeaderError, OSError, TypeError, ValueError) as exc:
             context["parameter_read_after_run_error"] = f"{type(exc).__name__}: {exc}"
 
@@ -288,6 +327,7 @@ class OptimizationTools:
             evaluation_result_path = self._evaluation_result_path()
 
             parameters_before = read_header_parameters(resolved_header_path)
+            tunable_allowlist = _detect_tunable_allowlist(parameters_before)
             evaluation_result = self._load_json_file(evaluation_result_path)
 
             patch_result = patch_header_parameters(
@@ -295,6 +335,7 @@ class OptimizationTools:
                 updates,
                 backup=backup,
                 dry_run=dry_run,
+                allowed_names=tunable_allowlist,
             )
 
             parameters_after = read_header_parameters(resolved_header_path)
@@ -389,12 +430,20 @@ class OptimizationTools:
             else:
                 resolved_output_path = self.ctx.resolve_config_path("../log/tuning_context_snapshot.json")
 
+            all_params = read_header_parameters(resolved_header_path)
+            tunable_allowlist = _detect_tunable_allowlist(all_params)
+
             snapshot = {
                 "status": "ok",
                 "header_path": str(resolved_header_path),
                 "evaluation_result_path": str(evaluation_result_path),
                 "optimization_history_path": str(resolved_history_path),
-                "current_parameters": read_header_parameters(resolved_header_path),
+                "current_parameters": (
+                    {k: v for k, v in all_params.items() if tunable_allowlist is None or k in tunable_allowlist}
+                    if tunable_allowlist is not None
+                    else all_params
+                ),
+                "_tunable_allowlist": sorted(tunable_allowlist) if tunable_allowlist is not None else None,
                 "evaluation_result": self._load_json_file(evaluation_result_path),
                 "recent_history": read_optimization_history(resolved_history_path, limit=history_limit),
                 "history_summary": summarize_optimization_history(resolved_history_path, limit=history_limit),

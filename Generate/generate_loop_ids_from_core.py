@@ -52,6 +52,8 @@ def infer_mech_method(requirement: str) -> str:
         return "smc"
     if " mit" in f" {low_req}" or " model-in-the-loop" in low_req or "模型在环" in requirement:
         return "mit"
+    if " ladrc" in f" {low_req}" or "adrc" in low_req or "自抗扰" in requirement or "线性自抗扰" in requirement:
+        return "ladrc"
     if " pid" in f" {low_req}" or "比例积分" in requirement:
         return "pid"
     return "pid"

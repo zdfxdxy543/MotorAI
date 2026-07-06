@@ -23,6 +23,81 @@ def replace_section(text: str, start_marker: str, end_marker: str, insert_lines:
     return before + "\n" + "".join(insert_lines) + after
 
 
+def activate_commented_section(text: str, start_marker: str, end_marker: str) -> str:
+    """Remove //-comment prefixes from every line between start_marker and end_marker.
+
+    The markers themselves are kept in place.  Only the lines *between* the
+    markers are un-commented.  Handles indented comments correctly.
+    """
+    start_idx = text.find(start_marker)
+    end_idx = text.find(end_marker, start_idx + len(start_marker))
+    if start_idx == -1 or end_idx == -1:
+        return text  # markers absent → nothing to activate, leave as-is
+
+    before = text[: start_idx + len(start_marker)]
+    after = text[end_idx:]
+    section = text[start_idx + len(start_marker) : end_idx]
+
+    activated_lines: List[str] = []
+    for line in section.split("\n"):
+        idx = line.find("//")
+        if idx >= 0:
+            # Keep whatever is before the // (e.g. indentation), drop the // and
+            # the optional space that follows it.
+            after_comment = line[idx + 2:]
+            if after_comment.startswith(" "):
+                activated_lines.append(line[:idx] + after_comment[1:])
+            else:
+                activated_lines.append(line[:idx] + after_comment)
+        else:
+            activated_lines.append(line)
+
+    return before + "\n".join(activated_lines) + after
+
+
+def activate_ladrc_in_c(ctext: str, mech_mode: str) -> str:
+    """Activate the LADRC speed or position blocks in the generated C file."""
+    if mech_mode == "ladrc_spd":
+        ctext = activate_commented_section(ctext, "// Start LADRC Speed Var", "// End LADRC Speed Var")
+        ctext = activate_commented_section(ctext, "// Start LADRC Speed Func Decl", "// End LADRC Speed Func Decl")
+        ctext = activate_commented_section(ctext, "// Start LADRC Speed Clear", "// End LADRC Speed Clear")
+        ctext = activate_commented_section(ctext, "// Start LADRC Speed Setup", "// End LADRC Speed Setup")
+    elif mech_mode == "ladrc_pos":
+        ctext = activate_commented_section(ctext, "// Start LADRC Position Var", "// End LADRC Position Var")
+        ctext = activate_commented_section(ctext, "// Start LADRC Position Func Decl", "// End LADRC Position Func Decl")
+        ctext = activate_commented_section(ctext, "// Start LADRC Position Clear", "// End LADRC Position Clear")
+        ctext = activate_commented_section(ctext, "// Start LADRC Position Setup", "// End LADRC Position Setup")
+    return ctext
+
+
+def activate_ladrc_in_h(htext: str, mech_mode: str) -> str:
+    """Activate the LADRC extern declarations in the generated header file."""
+    if mech_mode == "ladrc_spd":
+        htext = activate_commented_section(htext, "// Start LADRC Speed Extern", "// End LADRC Speed Extern")
+    elif mech_mode == "ladrc_pos":
+        htext = activate_commented_section(htext, "// Start LADRC Position Extern", "// End LADRC Position Extern")
+    return htext
+
+
+def activate_pid_in_c(ctext: str, mech_mode: str) -> str:
+    """Activate the PID mechanical blocks in the generated C file."""
+    if mech_mode != "pid":
+        return ctext
+    ctext = activate_commented_section(ctext, "// Start PID Mech Var", "// End PID Mech Var")
+    ctext = activate_commented_section(ctext, "// Start PID Mech Func Decl", "// End PID Mech Func Decl")
+    ctext = activate_commented_section(ctext, "// Start PID Mech Clear", "// End PID Mech Clear")
+    ctext = activate_commented_section(ctext, "// Start PID Mech Setup", "// End PID Mech Setup")
+    return ctext
+
+
+def activate_pid_in_h(htext: str, mech_mode: str) -> str:
+    """Activate the PID extern declaration in the generated header file."""
+    if mech_mode != "pid":
+        return htext
+    htext = activate_commented_section(htext, "// Start PID Mech Extern", "// End PID Mech Extern")
+    return htext
+
+
 def ensure_include_line(text: str, include_line: str, after_include: str) -> str:
     if include_line in text:
         return text
@@ -71,7 +146,16 @@ def current_input_kind(loop_items: List[dict]) -> str:
 
 
 def detect_mech_mode(loop_items: List[dict]) -> str:
-    """Return 'smc', 'pid', or 'none'."""
+    """Return 'smc', 'pid', 'ladrc_spd', 'ladrc_pos', or 'none'."""
+    # LADRC takes priority — check it first so ladrc isn't caught by the pid fallback
+    for item in loop_items:
+        if not ("mech" in loop_name(item) or "mech" in loop_id(item)):
+            continue
+        props = loop_props(item)
+        if any("ladrc" in p for p in props):
+            if any("position" in p for p in props):
+                return "ladrc_pos"
+            return "ladrc_spd"
     for item in loop_items:
         if not ("mech" in loop_name(item) or "mech" in loop_id(item)):
             continue
@@ -156,6 +240,15 @@ def build_c_sections(loop_items: List[dict], mech_mode: str) -> tuple[List[str],
             add_unique(init_lines, "    Setup_SMC_Mechanical_Controller();\n")
             add_unique(bind_lines, "    ctl_attach_smc_mech_ctrl(&smc_ctrl, &pos_enc.encif, &spd_enc.encif);\n")
             add_unique(enable_lines, "    ctl_enable_smc_mech_ctrl(&smc_ctrl);\n")
+        elif mech_mode == "ladrc_spd":
+            add_unique(init_lines, "    Setup_LADRC_Speed_Controller();\n")
+            add_unique(bind_lines, "    ctl_attach_ladrc_spd_ctrl(&ladrc_spd_ctrl, &spd_enc.encif);\n")
+            add_unique(enable_lines, "    ctl_set_ladrc_spd_mode(&ladrc_spd_ctrl, LADRC_SPD_MODE_ENABLE, float2ctrl(0.0f));\n")
+            add_unique(enable_lines, "    ctl_set_ladrc_target_velocity(&ladrc_spd_ctrl, 0.1);\n")
+        elif mech_mode == "ladrc_pos":
+            add_unique(init_lines, "    Setup_LADRC_Position_Controller();\n")
+            add_unique(bind_lines, "    ctl_attach_ladrc_pos_ctrl(&ladrc_pos_ctrl, &pos_enc.encif);\n")
+            add_unique(enable_lines, "    ctl_enable_ladrc_pos_ctrl(&ladrc_pos_ctrl, float2ctrl(0.0f));\n")
         else:
             add_unique(init_lines, "    Setup_Mechanical_Controller();\n")
             add_unique(bind_lines, "    ctl_attach_mech_ctrl(&mech_ctrl, &pos_enc.encif, &spd_enc.encif);\n")
@@ -177,6 +270,16 @@ def generate_header(template_text: str, loop_items: List[dict], mech_mode: str) 
             "#include <ctl/component/motor_control/mechanical_loop/basic_mech_ctrl.h>",
             "#include <ctl/component/motor_control/mechanical_loop/smc_mech_ctrl.h>",
         )
+    elif mech_mode == "ladrc_spd":
+        htext = htext.replace(
+            "#include <ctl/component/motor_control/mechanical_loop/basic_mech_ctrl.h>",
+            "#include <ctl/component/motor_control/mechanical_loop/ladrc_spd_ctrl.h>",
+        )
+    elif mech_mode == "ladrc_pos":
+        htext = htext.replace(
+            "#include <ctl/component/motor_control/mechanical_loop/basic_mech_ctrl.h>",
+            "#include <ctl/component/motor_control/mechanical_loop/ladrc_pos_ctrl.h>",
+        )
     else:
         htext = htext.replace(
             "#include <ctl/component/motor_control/mechanical_loop/smc_mech_ctrl.h>",
@@ -190,7 +293,17 @@ def generate_header(template_text: str, loop_items: List[dict], mech_mode: str) 
         if mech_mode == "smc":
             lines.append(f"{indent}ctl_step_smc_mech_ctrl(&smc_ctrl);\n")
             lines.append("\n")
-            lines.append(f"{indent}ctl_set_mtr_current_ctrl_ref(&mtr_ctrl, 0, ctl_get_mech_cmd(&smc_ctrl));\n")
+            lines.append(f"{indent}ctl_set_foc_core_idq_ref(&mtr_ctrl, 0, ctl_get_mech_cmd(&smc_ctrl));\n")
+            lines.append("\n")
+        elif mech_mode == "ladrc_spd":
+            lines.append(f"{indent}ctl_step_ladrc_spd_ctrl(&ladrc_spd_ctrl);\n")
+            lines.append("\n")
+            lines.append(f"{indent}ctl_set_foc_core_idq_ref(&mtr_ctrl, 0, ctl_get_ladrc_spd_cmd(&ladrc_spd_ctrl));\n")
+            lines.append("\n")
+        elif mech_mode == "ladrc_pos":
+            lines.append(f"{indent}ctl_step_ladrc_pos_ctrl(&ladrc_pos_ctrl, 0, float2ctrl(0.0f), float2ctrl(0.0f), float2ctrl(0.0f));\n")
+            lines.append("\n")
+            lines.append(f"{indent}ctl_set_foc_core_idq_ref(&mtr_ctrl, 0, ctl_get_ladrc_pos_cmd(&ladrc_pos_ctrl));\n")
             lines.append("\n")
         else:
             lines.append(f"{indent}ctl_step_mech_ctrl(&mech_ctrl);\n")
@@ -224,6 +337,24 @@ def generate_paras(template_text: str, mech_mode: str) -> str:
             "\n",
             "#define CUR_LIMIT 1.0f\n",
             "#define K_FF 0.5f\n",
+        ]
+    elif mech_mode in ("ladrc_spd", "ladrc_pos"):
+        # LADRC paras: physical parameters + tuning bandwidths + limits
+        insert_lines = [
+            "// LADRC physical parameters\n",
+            "#define INERTIA 0.0002f\n",
+            "#define TORQUE_CONST 0.5f\n",
+            "#define OMEGA_BASE 314.159f\n",
+            "#define I_BASE 20.0f\n",
+            "\n",
+            "// LADRC tuning targets\n",
+            "#define TARGET_WC 50.0f\n",
+            "#define TARGET_WO 200.0f\n",
+            "\n",
+            "// Limits\n",
+            "#define SPEED_LIMIT 1.0f\n",
+            "#define SPEED_SLOPE_LIMIT 0.1f\n",
+            "#define CUR_LIMIT 0.3f\n",
         ]
     elif mech_mode == "pid":
         # Example3 paras
@@ -271,8 +402,10 @@ def main(
 
     # C generation
     ctext = template_path.read_text(encoding="utf-8")
-    if mech_mode == "smc" and has_mech(loops):
-        pass
+
+    # Activate mode-specific blocks (un-comment them) before section replacements.
+    ctext = activate_pid_in_c(ctext, mech_mode)
+    ctext = activate_ladrc_in_c(ctext, mech_mode)
 
     init_lines, bind_lines, enable_lines = build_c_sections(loops, mech_mode)
     ctext = replace_section(ctext, "    // Start Controller Init", "    // End Controller Init", init_lines)
@@ -293,6 +426,8 @@ def main(
     if header_template_path and header_output_path:
         htpl = header_template_path.read_text(encoding="utf-8")
         hout = generate_header(htpl, loops, mech_mode)
+        hout = activate_pid_in_h(hout, mech_mode)
+        hout = activate_ladrc_in_h(hout, mech_mode)
         header_output_path.parent.mkdir(parents=True, exist_ok=True)
         header_output_path.write_text(hout, encoding="utf-8")
         print(f"Wrote {header_output_path}")

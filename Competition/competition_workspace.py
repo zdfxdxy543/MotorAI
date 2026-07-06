@@ -23,8 +23,8 @@ AGENT_OPTIMIZE_EXAMPLE_DIR = AGENT_OPTIMIZE_DIR / "Example"
 AGENT_SILHELPER_DIR = OPTIMIZE_ROOT / "agent_silhelper"
 SETTINGS_PATH = MOTORAI_ROOT / "motorai_settings.json"
 SIMULINK_MODEL_CANDIDATES = (
-    "MCS_STD_PMSM_MODEL_2022b.slx",
     "MCS_STD_PMSM_MODEL.slx",
+    "MCS_STD_PMSM_MODEL_2022b.slx",
 )
 
 if str(MOTORAI_ROOT) not in sys.path:
@@ -1113,6 +1113,7 @@ def generate_outputs(candidate_dir: Path) -> dict[str, str]:
         "ctl_main_c": str((candidate_dir / "src" / "ctl_main.c").resolve()),
         "ctl_main_h": str((candidate_dir / "src" / "ctl_main.h").resolve()),
         "paras_header": str((candidate_dir / "src" / "paras.generated.h").resolve()),
+        "user_main_c": str((candidate_dir / "src" / "user_main.c").resolve()),
     }
 
 

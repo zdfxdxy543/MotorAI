@@ -321,6 +321,106 @@ For angle/position control:
   damping.
 - Slow but stable recovery suggests gains may be too conservative.
 
+LADRC controller guidance:
+
+When the project uses a Linear Active Disturbance Rejection Controller (LADRC),
+the parameter header will expose a different parameter set than traditional PID.
+Recognize LADRC projects by the presence of TARGET_WC, TARGET_WO, INERTIA, and
+TORQUE_CONST in the header file.
+
+LADRC parameters and their roles:
+
+Physical parameters (usually tuned once or rarely):
+
+- INERTIA: total system inertia J (kg*m^2). Together with TORQUE_CONST, this
+  determines the system gain b0 = Kt / J. If the response shape looks
+  fundamentally wrong (e.g. consistently too aggressive or too sluggish across
+  all bandwidth settings), b0 may be misestimated. Adjust INERTIA or
+  TORQUE_CONST by at most 10-20% per iteration.
+- TORQUE_CONST: motor torque constant Kt (Nm/A). See INERTIA.
+- OMEGA_BASE: base mechanical speed for per-unit conversion (rad/s). Usually
+  set once from motor datasheet and not tuned.
+- I_BASE: base current for per-unit conversion (A). Usually set once from
+  motor datasheet and not tuned.
+
+Tuning bandwidths (the primary tuning knobs):
+
+- TARGET_WC: controller bandwidth (Hz). Determines tracking speed and
+  responsiveness. Higher values give faster rise time but may cause overshoot
+  or excite high-frequency noise. This is the LADRC analog of PID proportional
+  gain — increase for faster response, decrease for more damping.
+- TARGET_WO: observer bandwidth (Hz). Determines how quickly the Linear
+  Extended State Observer (LESO) estimates and compensates for total
+  disturbance (friction, load torque, unmodeled dynamics). Higher values
+  improve disturbance rejection but increase noise sensitivity.
+
+Limits (shared with other controller types):
+
+- CUR_LIMIT: maximum current/torque output (PU). Constrains the controller
+  output. If the controller seems to hit a ceiling during transients, consider
+  whether CUR_LIMIT is too restrictive.
+- SPEED_LIMIT: maximum speed reference (PU).
+- SPEED_SLOPE_LIMIT: maximum velocity slew rate (PU/s). Limits acceleration.
+
+Critical tuning rule — WO/WC ratio:
+
+TARGET_WO should TYPICALLY remain 3 to 5 times TARGET_WC. Do not tune them
+independently without considering this ratio:
+- WO/WC < 2: the observer is too slow to track disturbances in time, causing
+  sluggish disturbance rejection.
+- WO/WC > 8: the observer is very aggressive and may amplify measurement noise,
+  causing high-frequency ripple in the output.
+- When increasing TARGET_WC for faster response, consider also increasing
+  TARGET_WO proportionally to maintain the ratio.
+- When reducing TARGET_WO to suppress noise, consider whether TARGET_WC should
+  also be reduced to maintain stability margin.
+
+LADRC-specific tuning heuristics by symptom:
+
+- Overshoot too high:
+  Primary: reduce TARGET_WC by 10-20%.
+  Secondary: if the observer is lagging (WO/WC < 3), increase TARGET_WO.
+
+- Rise time too slow:
+  Primary: increase TARGET_WC by 10-20%.
+  Secondary: check CUR_LIMIT — the controller may be saturating.
+
+- Settling time too long (ringing after reaching target):
+  Reduce TARGET_WC slightly, or increase TARGET_WO to improve observer
+  tracking. Ringing often indicates the observer state (z1) is lagging behind
+  the real plant state.
+
+- Poor disturbance rejection (slow recovery after load change):
+  Primary: increase TARGET_WO by 20-30%. The LESO's disturbance estimate (z2_u
+  for speed, z3_u for position) converges faster with higher WO.
+  Secondary: verify INERTIA and TORQUE_CONST are reasonable — b0 mismatch
+  means the observer is estimating the wrong gain.
+
+- Steady-state error despite reasonable bandwidths:
+  LADRC's LESO should automatically compensate for constant disturbances via
+  the extended state. If steady-state error persists, the most likely cause is
+  inaccurate b0 (wrong INERTIA or TORQUE_CONST). Try adjusting INERTIA by
+  +/-10% and re-evaluating.
+
+- High-frequency noise or ripple in the output:
+  Reduce TARGET_WO. A very high observer bandwidth amplifies sensor noise
+  through the LESO's correction term. Also check if WO/WC exceeds 8.
+
+- Response shape looks fundamentally wrong (not just too fast/slow):
+  The system gain b0 = Kt / J may be significantly off. Adjust INERTIA first
+  (it is usually less precisely known than TORQUE_CONST). A b0 that is too
+  large makes the controller timid; too small makes it aggressive.
+
+Conservative update principles for LADRC:
+
+- Prefer adjusting TARGET_WC and TARGET_WO over physical parameters.
+- When adjusting bandwidths, change one at a time and re-evaluate.
+- Physical parameters (INERTIA, TORQUE_CONST) should rarely change by more
+  than 15% per iteration and only when bandwidth tuning alone cannot fix the
+  issue.
+- OMEGA_BASE and I_BASE are motor-characteristic constants and should almost
+  never be tuned unless you have strong evidence the datasheet values are wrong.
+
 Safety and scope:
 
 Do not claim parameters have changed unless a tool actually changed them.
