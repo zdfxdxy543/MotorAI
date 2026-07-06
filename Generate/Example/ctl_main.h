@@ -49,9 +49,18 @@ extern spwm_modulator_t spwm;
 
 // controller body: Current controller, Command dispatcher, motion controller
 extern mc_foc_core_t mtr_ctrl;
-extern ctl_mech_ctrl_t mech_ctrl;
+// Start PID Mech Extern
+// extern ctl_mech_ctrl_t mech_ctrl;
+// End PID Mech Extern
 
 // extern ctl_smc_mech_ctrl_t smc_ctrl;
+
+// Start LADRC Speed Extern
+// extern ctl_ladrc_spd_ctrl_t ladrc_spd_ctrl;
+// End LADRC Speed Extern
+// Start LADRC Position Extern
+// extern ctl_ladrc_pos_ctrl_t ladrc_pos_ctrl;
+// End LADRC Position Extern
 
 // Observer: SMO, FO, Speed measurement.
 extern ctl_slope_f_pu_controller rg;

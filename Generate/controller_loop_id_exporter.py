@@ -86,7 +86,7 @@ LOOP_PROPERTY_LIBRARY = {
 }
 
 MECH_TARGETS = {"speed", "position"}
-MECH_METHODS = {"pid", "mit", "smc"}
+MECH_METHODS = {"pid", "mit", "smc", "ladrc"}
 
 
 def default_settings_path() -> Path:
@@ -213,7 +213,7 @@ def build_user_prompt(requirement: str) -> str:
         "11) For position control scenarios, it is valid to return position_error_loop and torque_reference_loop when the requirement describes error-to-torque control.\n\n"
         "12) selected_loops must be ordered from inner loop to outer loop.\n"
         "13) properties must be a non-empty array of strings that names the key signals or variables used by that loop.\n"
-        "14) For mech_loop (or speed/position mechanical loops that will be normalized to mech_loop), properties must contain exactly two items in order: [speed|position, pid|mit|smc].\n"
+        "14) For mech_loop (or speed/position mechanical loops that will be normalized to mech_loop), properties must contain exactly two items in order: [speed|position, pid|mit|smc|ladrc].\n"
         "15) For non-mechanical loops, each loop must have exactly one property, and for known loop names it must come from the designed property library.\n"
         f"Natural-language requirement:\n{requirement.strip()}\n\n"
         "Output JSON template:\n"
@@ -293,6 +293,8 @@ def _infer_mech_method(requirement: str, raw_props: list[str]) -> str:
         return "smc"
     if " mit" in f" {low_req}" or " model-in-the-loop" in low_req or "模型在环" in requirement:
         return "mit"
+    if " ladrc" in f" {low_req}" or "adrc" in low_req or "自抗扰" in requirement or "线性自抗扰" in requirement:
+        return "ladrc"
     if " pid" in f" {low_req}" or "比例积分" in requirement:
         return "pid"
     return "pid"

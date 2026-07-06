@@ -23,11 +23,23 @@ spwm_modulator_t spwm;
 mc_foc_core_t mtr_ctrl;
 mc_foc_init_t mtr_ctrl_init;
 
-ctl_mech_ctrl_t mech_ctrl;
-ctl_mech_init_t mech_init;
+// Start PID Mech Var
+// ctl_mech_ctrl_t mech_ctrl;
+// ctl_mech_init_t mech_init;
+// End PID Mech Var
 
 // ctl_smc_mech_ctrl_t smc_ctrl;
 // ctl_smc_mech_init_t smc_init;
+
+// Start LADRC Speed Var
+// ctl_ladrc_spd_ctrl_t ladrc_spd_ctrl;
+// ctl_ladrc_spd_init_t ladrc_spd_init;
+// End LADRC Speed Var
+
+// Start LADRC Position Var
+// ctl_ladrc_pos_ctrl_t ladrc_pos_ctrl;
+// ctl_ladrc_pos_init_t ladrc_pos_init;
+// End LADRC Position Var
 
 // Observer: SMO, FO, Speed measurement.
 ctl_slope_f_pu_controller rg;
@@ -54,8 +66,16 @@ volatile fast_gt flag_enable_adc_calibrator = 1;
 volatile fast_gt index_adc_calibrator = 0;
 
 void Setup_Motor_Current();
-void Setup_Mechanical_Controller();
+// Start PID Mech Func Decl
+// void Setup_Mechanical_Controller();
+// End PID Mech Func Decl
 // void Setup_SMC_Mechanical_Controller();
+// Start LADRC Speed Func Decl
+// void Setup_LADRC_Speed_Controller();
+// End LADRC Speed Func Decl
+// Start LADRC Position Func Decl
+// void Setup_LADRC_Position_Controller();
+// End LADRC Position Func Decl
 
 //=================================================================================================
 // CTL initialize routine
@@ -208,7 +228,15 @@ void ctl_disable_pwm()
 void clear_all_controllers()
 {
     ctl_clear_foc_core(&mtr_ctrl);
-    ctl_clear_mech_ctrl(&mech_ctrl);
+    // Start PID Mech Clear
+    // ctl_clear_mech_ctrl(&mech_ctrl);
+    // End PID Mech Clear
+    // Start LADRC Speed Clear
+    // ctl_clear_ladrc_spd_ctrl(&ladrc_spd_ctrl);
+    // End LADRC Speed Clear
+    // Start LADRC Position Clear
+    // ctl_clear_ladrc_pos_ctrl(&ladrc_pos_ctrl);
+    // End LADRC Position Clear
     ctl_clear_slope_f_pu(&rg);
 
 #if defined USING_NPC_MODULATOR
@@ -351,24 +379,26 @@ void Setup_Motor_Current()
     ctl_init_foc_core(&mtr_ctrl, &mtr_ctrl_init);
 }
 
-void Setup_Mechanical_Controller()
-{
-    mech_init.fs = CONTROLLER_FREQUENCY;
-
-    mech_init.pos_kp = POS_KP;
-    mech_init.pos_ki = POS_KI;
-
-    mech_init.vel_kp = VEL_KP;
-    mech_init.vel_ki = VEL_KI;
-
-    mech_init.speed_limit = SPEED_LIMIT;
-    mech_init.speed_slope_limit = SPEED_SLOPE_LIMIT;
-    mech_init.cur_limit = CUR_LIMIT;
-
-    mech_init.mech_division = CTRL_MECH_DIV;
-
-    ctl_init_mech_ctrl(&mech_ctrl, &mech_init);
-}
+// Start PID Mech Setup
+// void Setup_Mechanical_Controller()
+// {
+//     mech_init.fs = CONTROLLER_FREQUENCY;
+//
+//     mech_init.pos_kp = POS_KP;
+//     mech_init.pos_ki = POS_KI;
+//
+//     mech_init.vel_kp = VEL_KP;
+//     mech_init.vel_ki = VEL_KI;
+//
+//     mech_init.speed_limit = SPEED_LIMIT;
+//     mech_init.speed_slope_limit = SPEED_SLOPE_LIMIT;
+//     mech_init.cur_limit = CUR_LIMIT;
+//
+//     mech_init.mech_division = CTRL_MECH_DIV;
+//
+//     ctl_init_mech_ctrl(&mech_ctrl, &mech_init);
+// }
+// End PID Mech Setup
 
 // void Setup_SMC_Mechanical_Controller()
 // {
@@ -387,3 +417,47 @@ void Setup_Mechanical_Controller()
 
 //     ctl_init_smc_mech_ctrl(&smc_ctrl, &smc_init);
 // }
+//
+// Start LADRC Speed Setup
+// void Setup_LADRC_Speed_Controller()
+// {
+//     ladrc_spd_init.fs = CONTROLLER_FREQUENCY;
+//     ladrc_spd_init.mech_division = CTRL_MECH_DIV;
+//
+//     ladrc_spd_init.inertia = INERTIA;
+//     ladrc_spd_init.torque_const = TORQUE_CONST;
+//
+//     ladrc_spd_init.omega_base = OMEGA_BASE;
+//     ladrc_spd_init.i_base = I_BASE;
+//
+//     ladrc_spd_init.speed_limit = SPEED_LIMIT;
+//     ladrc_spd_init.speed_slope_limit = SPEED_SLOPE_LIMIT;
+//     ladrc_spd_init.cur_limit = CUR_LIMIT;
+//
+//     ladrc_spd_init.target_wc = TARGET_WC;
+//     ladrc_spd_init.target_wo = TARGET_WO;
+//
+//     ctl_autotuning_ladrc_spd_ctrl(&ladrc_spd_init, &ladrc_spd_ctrl);
+// }
+// End LADRC Speed Setup
+//
+// Start LADRC Position Setup
+// void Setup_LADRC_Position_Controller()
+// {
+//     ladrc_pos_init.fs = CONTROLLER_FREQUENCY;
+//     ladrc_pos_init.mech_division = CTRL_MECH_DIV;
+//
+//     ladrc_pos_init.inertia = INERTIA;
+//     ladrc_pos_init.torque_const = TORQUE_CONST;
+//
+//     ladrc_pos_init.omega_base = OMEGA_BASE;
+//     ladrc_pos_init.i_base = I_BASE;
+//
+//     ladrc_pos_init.cur_limit = CUR_LIMIT;
+//
+//     ladrc_pos_init.target_wc = TARGET_WC;
+//     ladrc_pos_init.target_wo = TARGET_WO;
+//
+//     ctl_autotuning_ladrc_pos_ctrl(&ladrc_pos_init, &ladrc_pos_ctrl);
+// }
+// End LADRC Position Setup
