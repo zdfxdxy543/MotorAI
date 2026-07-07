@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from widgets.chat import TranslationWorker
+from styles.theme import current_theme
 
 
 class TuningResultPanel(QWidget):

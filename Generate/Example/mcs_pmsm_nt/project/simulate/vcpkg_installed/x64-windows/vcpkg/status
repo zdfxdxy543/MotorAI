@@ -1,0 +1,42 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 42e5ea02575a165f5de01be13ac784bf3e861df37615b065018d78b5c9e428de
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b11212209ec238227a648acaac1ac4380894120fb91e9850e69dcea8698f513e
+Status: install ok installed
+
+Package: asio
+Version: 1.32.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: e959d1a9a35e48558fabe0666f5b1951f0f33eb4e1ae4fb56aec3f5f1da476a9
+Description: Asio is a cross-platform C++ library for network and low-level I/O programming that provides developers with a consistent asynchronous model using a modern C++ approach.
+Status: install ok installed
+
+Package: fmt
+Version: 12.1.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: ffe0e8e1e0fff12a319085ea66ac14c676b31ff835dcbf3e230ba87deed6a0e5
+Description: {fmt} is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.
+Status: install ok installed
+
+Package: nlohmann-json
+Version: 3.12.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: a8f8843e58d72f3997308902dabf3f833fa38d6cc41996651a9a2dc857529d3e
+Description: JSON for Modern C++
+Status: install ok installed
+

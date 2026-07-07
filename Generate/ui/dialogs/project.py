@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import (
+    QComboBox,
     QDialog,
     QDialogButtonBox,
     QFileDialog,
@@ -79,7 +80,11 @@ class SettingsDialog(QDialog):
         self.model_url_edit = QLineEdit()
         self.model_url_edit.setPlaceholderText('请输入大模型网址')
 
+        self.theme_combo = QComboBox()
+        self.theme_combo.addItems(['浅色', '深色'])
+
         form_layout.addRow('GMP根目录', gmp_root_row)
+        form_layout.addRow('界面主题', self.theme_combo)
         form_layout.addRow('api-key', self.api_key_edit)
         form_layout.addRow('大模型名称', self.model_name_edit)
         form_layout.addRow('大模型网址', self.model_url_edit)
@@ -109,6 +114,11 @@ class SettingsDialog(QDialog):
             llm_data = get_llm_settings(settings)
 
             self.gmp_root_edit.setText(get_gmp_root(settings))
+
+            ui_cfg = settings.get('ui') if isinstance(settings.get('ui'), dict) else {}
+            theme = str(ui_cfg.get('theme', 'light')).lower()
+            self.theme_combo.setCurrentIndex(0 if theme == 'light' else 1)
+
             self.api_key_edit.setText(llm_data.get('api_key', ''))
             self.model_name_edit.setText(llm_data.get('model', ''))
             self.model_url_edit.setText(llm_data.get('base_url', ''))
@@ -124,6 +134,9 @@ class SettingsDialog(QDialog):
             settings = load_settings(self._settings_path)
             paths = settings.setdefault('paths', {})
             paths['gmp_root'] = self.gmp_root_edit.text().strip()
+
+            ui_cfg = settings.setdefault('ui', {})
+            ui_cfg['theme'] = 'light' if self.theme_combo.currentIndex() == 0 else 'dark'
 
             llm_data = settings.setdefault('llm', {})
             llm_data['api_key'] = api_key
@@ -201,10 +214,7 @@ class NewProjectDialog(QDialog):
             self.project_parent_edit.setText(folder)
 
     def _get_template_project_path(self):
-        gmp_root = self._read_gmp_root()
-        if not gmp_root:
-            return None
-        return Path(gmp_root) / 'ctl' / 'suite' / 'mcs_pmsm_nt'
+        return MOTORAI_ROOT / 'Generate' / 'Example' / 'mcs_pmsm_nt'
 
     def _save_output_root(self, project_parent: Path):
         settings = load_settings()

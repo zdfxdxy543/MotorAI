@@ -19,6 +19,7 @@ from pathlib import Path
 
 import core.paths  # ensures repository roots are on sys.path
 from Competition.competition_workspace import discover_candidate_dirs
+from styles.theme import current_theme
 
 
 class CurveCanvas(QFrame):
@@ -42,12 +43,13 @@ class CurveCanvas(QFrame):
         super().paintEvent(event)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
+        t = current_theme()
 
         rect = self.rect().adjusted(12, 12, -12, -12)
-        painter.fillRect(rect, QColor('#fbfbfb'))
+        painter.fillRect(rect, QColor(t.canvas_grid_bg))
 
         title_rect = QRectF(rect.left(), rect.top(), rect.width(), 24)
-        painter.setPen(QColor('#333333'))
+        painter.setPen(QColor(t.canvas_title))
         painter.drawText(title_rect, Qt.AlignLeft | Qt.AlignVCenter, self._title)
 
         plot_rect = QRectF(rect.left() + 44, rect.top() + 32, rect.width() - 58, rect.height() - 64)
@@ -55,7 +57,7 @@ class CurveCanvas(QFrame):
             return
 
         # grid and axes
-        painter.setPen(QPen(QColor('#d8d8d8'), 1))
+        painter.setPen(QPen(QColor(t.canvas_grid), 1))
         for i in range(6):
             y = plot_rect.top() + i * plot_rect.height() / 5.0
             painter.drawLine(int(plot_rect.left()), int(y), int(plot_rect.right()), int(y))
@@ -63,16 +65,16 @@ class CurveCanvas(QFrame):
             x = plot_rect.left() + i * plot_rect.width() / 5.0
             painter.drawLine(int(x), int(plot_rect.top()), int(x), int(plot_rect.bottom()))
 
-        painter.setPen(QPen(QColor('#666666'), 1.5))
+        painter.setPen(QPen(QColor(t.canvas_axis), 1.5))
         painter.drawLine(int(plot_rect.left()), int(plot_rect.bottom()), int(plot_rect.right()), int(plot_rect.bottom()))
         painter.drawLine(int(plot_rect.left()), int(plot_rect.top()), int(plot_rect.left()), int(plot_rect.bottom()))
 
-        painter.setPen(QColor('#666666'))
+        painter.setPen(QColor(t.canvas_axis))
         painter.drawText(QRectF(rect.left(), plot_rect.top() - 18, 38, 18), Qt.AlignRight | Qt.AlignVCenter, self._y_label)
         painter.drawText(QRectF(plot_rect.left(), rect.bottom() - 18, plot_rect.width(), 18), Qt.AlignCenter, self._x_label)
 
         if len(self._points) < 2:
-            painter.setPen(QColor('#888888'))
+            painter.setPen(QColor(t.muted))
             painter.drawText(plot_rect, Qt.AlignCenter, '暂无可绘制数据\n请在下方列表输入两列数值')
             return
 
@@ -87,7 +89,7 @@ class CurveCanvas(QFrame):
             max_y = min_y + 1.0
 
         num_ticks = 6
-        painter.setPen(QColor('#666666'))
+        painter.setPen(QColor(t.canvas_axis))
         f = painter.font()
         f.setPointSize(8)
         painter.setFont(f)
@@ -115,15 +117,15 @@ class CurveCanvas(QFrame):
             return QPointF(px, py)
 
         poly = QPolygonF([map_point(x, y) for x, y in self._points])
-        painter.setPen(QPen(QColor('#0f62fe'), 2.2))
+        painter.setPen(QPen(QColor(t.canvas_data_line), 2.2))
         painter.drawPolyline(poly)
 
-        painter.setPen(QPen(QColor('#0f62fe'), 1.2))
-        painter.setBrush(QColor('#ffffff'))
+        painter.setPen(QPen(QColor(t.canvas_data_line), 1.2))
+        painter.setBrush(QColor(t.canvas_data_point_bg))
         for point in poly:
             painter.drawEllipse(point, 3.8, 3.8)
 
-        painter.setPen(QColor('#444444'))
+        painter.setPen(QColor(t.canvas_label))
         painter.drawText(QRectF(plot_rect.right() - 140, plot_rect.top() + 6, 140, 18), Qt.AlignRight, f'点数: {len(self._points)}')
 
 

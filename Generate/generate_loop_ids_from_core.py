@@ -101,7 +101,9 @@ def main(requirement: str | None = None) -> int:
         # mech_loop uses dual-attribute properties: [speed|position, pid|mit|smc]
         prop = pick_property_from_original(original.get("blocks") or [], name)
         if lname == "mech_loop":
-            selected.append({"id": cid, "name": lname, "properties": [prop, mech_method]})
+            # SMC is position-only — force target to position.
+            target = "position" if mech_method == "smc" else prop
+            selected.append({"id": cid, "name": lname, "properties": [target, mech_method]})
         else:
             selected.append({"id": cid, "name": lname, "properties": [prop]})
 

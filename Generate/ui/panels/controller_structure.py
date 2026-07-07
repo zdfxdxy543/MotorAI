@@ -4,6 +4,8 @@ from PyQt5.QtGui import QColor, QFont, QFontMetrics, QLinearGradient, QPainter, 
 import json
 from pathlib import Path
 
+from styles.theme import current_theme
+
 
 class ControllerStructureCanvas(QFrame):
     def __init__(self, parent=None):
@@ -30,42 +32,46 @@ class ControllerStructureCanvas(QFrame):
         return [QPointF(end_x, end_y), QPointF(end_x - size * 1.4, end_y - size), QPointF(end_x - size * 1.4, end_y + size)]
 
     def _draw_arrow(self, painter: QPainter, start: QPointF, end: QPointF):
-        painter.setPen(QPen(QColor('#4d4d4d'), 3.2))
+        t = current_theme()
+        painter.setPen(QPen(QColor(t.canvas_arrow), 3.2))
         painter.drawLine(start, end)
         if end.y() >= start.y():
             head = self._arrow_head(end.x(), end.y(), 'down')
         else:
             head = self._arrow_head(end.x(), end.y(), 'right')
-        painter.setBrush(QColor('#4d4d4d'))
+        painter.setBrush(QColor(t.canvas_arrow))
         painter.drawPolygon(QPolygonF(head))
 
     def paintEvent(self, event):
         super().paintEvent(event)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
+        t = current_theme()
 
         rect = self.rect().adjusted(20, 20, -20, -20)
-        painter.fillRect(rect, QColor('#fcfcfd'))
+        painter.fillRect(rect, QColor(t.canvas_bg))
 
-        painter.setPen(QColor('#303030'))
+        painter.setPen(QColor(t.canvas_title))
         painter.drawText(QRectF(rect.left(), rect.top(), rect.width(), 36), Qt.AlignCenter, '控制器结构框图')
 
         items = self._model.get('items') or []
         if not items:
             gradient = QLinearGradient(rect.topLeft(), rect.bottomRight())
-            gradient.setColorAt(0, QColor(220, 220, 220, 60))
-            gradient.setColorAt(1, QColor(180, 180, 180, 90))
+            ps = t.canvas_placeholder_start
+            pe = t.canvas_placeholder_end
+            gradient.setColorAt(0, QColor(*ps))
+            gradient.setColorAt(1, QColor(*pe))
             painter.fillRect(rect, gradient)
-            
-            painter.setPen(QPen(QColor(150, 150, 150, 100), 1))
+
+            painter.setPen(QPen(QColor(t.muted), 1))
             painter.drawRect(rect)
-            
-            painter.setPen(QPen(QColor(180, 180, 180, 50), 2, Qt.DashLine))
+
+            painter.setPen(QPen(QColor(t.muted), 2, Qt.DashLine))
             painter.drawLine(rect.topLeft(), rect.bottomRight())
             painter.drawLine(rect.topRight(), rect.bottomLeft())
-            
-            painter.setPen(QColor('#7a7a7a'))
-            painter.drawText(rect, Qt.AlignCenter, '暂无控制器结构\n请先在“主程序生成”中生成并保存 loop-ids 结果')
+
+            painter.setPen(QColor(t.muted))
+            painter.drawText(rect, Qt.AlignCenter, '暂无控制器结构\n请先在”主程序生成”中生成并保存 loop-ids 结果')
             return
 
         box_w = 352
@@ -141,10 +147,10 @@ class ControllerStructureCanvas(QFrame):
                 first_rect.width() + 40,
                 (last_rect.bottom() - first_rect.top()) + 56,
             )
-            painter.setPen(QPen(QColor('#8c8c8c'), 3.2, Qt.DashLine))
+            painter.setPen(QPen(QColor(t.muted), 3.2, Qt.DashLine))
             painter.setBrush(Qt.NoBrush)
             painter.drawRoundedRect(wrapper, 20, 20)
-            painter.setPen(QColor('#666666'))
+            painter.setPen(QColor(t.subtle))
             mech_props = self._model.get('mech_props') or []
             mech_text = '机械环'
             if mech_props:
@@ -164,12 +170,12 @@ class ControllerStructureCanvas(QFrame):
             
             label_font = QFont(painter.font().family(), int(painter.font().pointSize() * 1.5))
             painter.setFont(label_font)
-            painter.setPen(QColor('#222222'))
+            painter.setPen(QColor(t.text_strong))
             painter.drawText(box.adjusted(20, 0, -20, 0), Qt.AlignCenter, label)
 
             prop_font = QFont(painter.font().family(), int(painter.font().pointSize() * 0.8))
             painter.setFont(prop_font)
-            painter.setPen(QColor('#4d4d4d'))
+            painter.setPen(QColor(t.muted))
             text_x = box.right() + 28
             prop_rect = QRectF(text_x, box.top() + 20, rect.right() - text_x, box.height() - 40)
             painter.drawText(prop_rect, Qt.AlignLeft | Qt.AlignVCenter, f'属性参数：{display_props}')
@@ -181,7 +187,7 @@ class ControllerStructurePanel(QWidget):
         self.project_json_getter = project_json_getter
         self.canvas = ControllerStructureCanvas()
         self.source_label = QLabel('来源：未加载项目')
-        self.source_label.setStyleSheet('color: #666666;')
+        self.source_label.setStyleSheet(f'color: {current_theme().subtle};')
         self.source_label.setWordWrap(True)
 
         layout = QVBoxLayout(self)

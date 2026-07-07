@@ -98,6 +98,25 @@ def activate_pid_in_h(htext: str, mech_mode: str) -> str:
     return htext
 
 
+def activate_smc_in_c(ctext: str, mech_mode: str) -> str:
+    """Activate the SMC mechanical blocks in the generated C file."""
+    if mech_mode != "smc":
+        return ctext
+    ctext = activate_commented_section(ctext, "// Start SMC Mech Var", "// End SMC Mech Var")
+    ctext = activate_commented_section(ctext, "// Start SMC Mech Func Decl", "// End SMC Mech Func Decl")
+    ctext = activate_commented_section(ctext, "// Start SMC Mech Clear", "// End SMC Mech Clear")
+    ctext = activate_commented_section(ctext, "// Start SMC Mech Setup", "// End SMC Mech Setup")
+    return ctext
+
+
+def activate_smc_in_h(htext: str, mech_mode: str) -> str:
+    """Activate the SMC extern declaration in the generated header file."""
+    if mech_mode != "smc":
+        return htext
+    htext = activate_commented_section(htext, "// Start SMC Mech Extern", "// End SMC Mech Extern")
+    return htext
+
+
 def ensure_include_line(text: str, include_line: str, after_include: str) -> str:
     if include_line in text:
         return text
@@ -291,9 +310,9 @@ def generate_header(template_text: str, loop_items: List[dict], mech_mode: str) 
     indent = "        "
     if has_mech(loop_items):
         if mech_mode == "smc":
-            lines.append(f"{indent}ctl_step_smc_mech_ctrl(&smc_ctrl);\n")
+            lines.append(f"{indent}ctl_step_smc_mech_ctrl(&smc_ctrl, smc_target_revs, smc_target_angle_pu, smc_vel_ref_pu, smc_acc_ref_pu);\n")
             lines.append("\n")
-            lines.append(f"{indent}ctl_set_foc_core_idq_ref(&mtr_ctrl, 0, ctl_get_mech_cmd(&smc_ctrl));\n")
+            lines.append(f"{indent}ctl_set_foc_core_idq_ref(&mtr_ctrl, 0, ctl_get_smc_mech_cmd(&smc_ctrl));\n")
             lines.append("\n")
         elif mech_mode == "ladrc_spd":
             lines.append(f"{indent}ctl_step_ladrc_spd_ctrl(&ladrc_spd_ctrl);\n")
@@ -325,18 +344,20 @@ def generate_header(template_text: str, loop_items: List[dict], mech_mode: str) 
 def generate_paras(template_text: str, mech_mode: str) -> str:
     insert_lines: List[str] = []
     if mech_mode == "smc":
-        # Example4 paras
+        # SMC autotuning paras: physical parameters + tuning targets + limits
         insert_lines = [
-            "#define ETA11 0.1f\n",
-            "#define ETA12 0.1f\n",
-            "#define ETA21 0.2f\n",
-            "#define ETA22 0.3f\n",
+            "// SMC physical parameters\n",
+            "#define INERTIA 0.0002f\n",
+            "#define TORQUE_CONST 0.5f\n",
+            "#define OMEGA_BASE 314.159f\n",
+            "#define I_BASE 20.0f\n",
             "\n",
-            "#define RHO 1.0f\n",
-            "#define LAMBDA 1.0f\n",
+            "// SMC tuning targets\n",
+            "#define TARGET_BW 30.0f\n",
+            "#define DIST_REJECT_TORQUE 2.0f\n",
             "\n",
+            "// Limits\n",
             "#define CUR_LIMIT 1.0f\n",
-            "#define K_FF 0.5f\n",
         ]
     elif mech_mode in ("ladrc_spd", "ladrc_pos"):
         # LADRC paras: physical parameters + tuning bandwidths + limits
@@ -405,6 +426,7 @@ def main(
 
     # Activate mode-specific blocks (un-comment them) before section replacements.
     ctext = activate_pid_in_c(ctext, mech_mode)
+    ctext = activate_smc_in_c(ctext, mech_mode)
     ctext = activate_ladrc_in_c(ctext, mech_mode)
 
     init_lines, bind_lines, enable_lines = build_c_sections(loops, mech_mode)
@@ -427,6 +449,7 @@ def main(
         htpl = header_template_path.read_text(encoding="utf-8")
         hout = generate_header(htpl, loops, mech_mode)
         hout = activate_pid_in_h(hout, mech_mode)
+        hout = activate_smc_in_h(hout, mech_mode)
         hout = activate_ladrc_in_h(hout, mech_mode)
         header_output_path.parent.mkdir(parents=True, exist_ok=True)
         header_output_path.write_text(hout, encoding="utf-8")

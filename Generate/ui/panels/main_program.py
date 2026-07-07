@@ -6,11 +6,8 @@ from pathlib import Path
 
 from core.paths import GENERATE_ROOT, MOTORAI_ROOT
 from styles.theme import (
-    COLOR_MUTED,
-    COLOR_SURFACE,
-    COLOR_TEXT,
-    COLOR_TEXT_STRONG,
     RADIUS_CARD,
+    current_theme,
     flat_button_qss,
     ghost_button_qss,
     primary_button_qss,
@@ -70,12 +67,12 @@ class IntentConfirmCard(QFrame):
         layout.setSpacing(10)
 
         title_label = QLabel(f'我理解你想：{intent_title}')
-        title_label.setStyleSheet(f'font-size:13pt;font-weight:700;color:{COLOR_TEXT_STRONG};')
+        title_label.setStyleSheet(f'font-size:13pt;font-weight:700;color:{current_theme().text_strong};')
         layout.addWidget(title_label)
 
         summary_label = QLabel(f'内容摘要：{summary}')
         summary_label.setWordWrap(True)
-        summary_label.setStyleSheet(f'color:{COLOR_MUTED};line-height:1.45;')
+        summary_label.setStyleSheet(f'color:{current_theme().muted};line-height:1.45;')
         layout.addWidget(summary_label)
 
         button_row = QWidget()
@@ -199,7 +196,7 @@ class MainProgramPanel(QWidget):
             QLabel {{
                 font-size: 32pt;
                 font-weight: 700;
-                color: {COLOR_TEXT};
+                color: {current_theme().text};
                 padding-bottom: 40px;
                 border: none;
                 background: transparent;
@@ -211,18 +208,18 @@ class MainProgramPanel(QWidget):
         self.welcome_input.setPlaceholderText('请输入需求描述...')
         self.welcome_input.setStyleSheet(f'''
             QLineEdit {{
-                background: {COLOR_SURFACE};
-                border: 1px solid #d1d5db;
+                background: {current_theme().surface};
+                border: 1px solid {current_theme().border};
                 border-radius: {RADIUS_CARD}px;
                 padding: 16px 24px;
                 font-size: 14pt;
-                color: {COLOR_TEXT};
+                color: {current_theme().text};
                 min-height: 56px;
                 min-width: 1200px;
                 max-width: 1400px;
             }}
             QLineEdit::placeholder {{
-                color: #9ca3af;
+                color: {current_theme().muted};
             }}
         ''')
         self.welcome_input.returnPressed.connect(self._on_welcome_input)
@@ -269,7 +266,7 @@ class MainProgramPanel(QWidget):
         self.welcome_layout.addWidget(self.welcome_input, 0, Qt.AlignCenter)
         self.welcome_layout.addWidget(self.quick_action_buttons, 0, Qt.AlignCenter)
         self.welcome_layout.addStretch(3)
-        self.welcome_overlay.setStyleSheet(f'background:{COLOR_SURFACE};')
+        self.welcome_overlay.setStyleSheet(f'background:{current_theme().surface};')
         
         self._load_chat_record()
         
@@ -353,10 +350,10 @@ class MainProgramPanel(QWidget):
         layout.setSpacing(10)
 
         title_label = QLabel(title)
-        title_label.setStyleSheet(f'font-size:13pt;font-weight:700;color:{COLOR_TEXT_STRONG};')
+        title_label.setStyleSheet(f'font-size:13pt;font-weight:700;color:{current_theme().text_strong};')
         subtitle_label = QLabel(subtitle)
         subtitle_label.setWordWrap(True)
-        subtitle_label.setStyleSheet(f'color:{COLOR_MUTED};')
+        subtitle_label.setStyleSheet(f'color:{current_theme().muted};')
         layout.addWidget(title_label)
         layout.addWidget(subtitle_label)
 
