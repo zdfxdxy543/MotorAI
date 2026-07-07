@@ -1,7 +1,0 @@
-<map id="component/motor_control/observer/bldc.hall.h" name="component/motor_control/observer/bldc.hall.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="110,5,278,48"/>
-<area shape="rect" id="Node000002" href="$motor__control_8h.html" title=" " alt="" coords="5,104,185,131"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,58,111,106,107,101,157,59"/>
-<area shape="rect" id="Node000003" href="$ctl__mc__observer_8c.html" title=" " alt="" coords="208,96,376,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,56,272,96,267,95,227,61"/>
-</map>

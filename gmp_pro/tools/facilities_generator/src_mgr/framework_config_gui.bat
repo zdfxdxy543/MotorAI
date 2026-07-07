@@ -1,1 +1,0 @@
-python framework_dev_gui_v12.py

@@ -1,5 +1,0 @@
-<map id="ctl_step_dpcc" name="ctl_step_dpcc">
-<area shape="rect" id="Node000001" title="Executes one step of the Dead&#45;beat Predictive Current Control algorithm." alt="" coords="5,5,108,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#ga2b93efaecc0acd47af549cccdb61b98a" title="Copies the contents of one 2D vector to another." alt="" coords="156,5,276,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,16,143,18,138,19,108,21"/>
-</map>

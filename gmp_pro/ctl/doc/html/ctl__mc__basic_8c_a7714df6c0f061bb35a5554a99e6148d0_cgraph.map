@@ -1,9 +1,0 @@
-<map id="ctl_dispatch_mtr_protect_slow" name="ctl_dispatch_mtr_protect_slow">
-<area shape="rect" id="Node000001" title="Main Loop Protection Dispatch. This calling frequency of this function should be less than 1kHz." alt="" coords="5,56,204,83"/>
-<area shape="rect" id="Node000002" href="$mtr__protection_8h.html#aea5e80571ccb57fe73873a00e5713017" title=" " alt="" coords="279,5,396,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,53,266,33,261,36,170,58"/>
-<area shape="rect" id="Node000003" href="$mtr__protection_8h.html#a92b526afb2e6067fde3e45dea3aa49b4" title=" " alt="" coords="296,56,379,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,67,283,69,278,70,204,72"/>
-<area shape="rect" id="Node000004" href="$mtr__protection_8h.html#aca867c91cd5ec57fdbb2b9b71fe3d839" title="Counter&#45;based Debounce Logic." alt="" coords="252,107,423,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,81,261,102,255,104,169,86"/>
-</map>

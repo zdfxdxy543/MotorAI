@@ -1,7 +1,0 @@
-<map id="ctl_step_adc_calibrator" name="ctl_step_adc_calibrator">
-<area shape="rect" id="Node000001" title="Executes one step of the calibration process. This should be called periodically (e...." alt="" coords="5,31,161,57"/>
-<area shape="rect" id="Node000002" href="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gad5c613871586f6c9c16cd6f0b7ba2f64" title="Checks if the ADC calibration period is complete." alt="" coords="209,5,385,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,32,196,30,191,32,162,37"/>
-<area shape="rect" id="Node000003" href="$group___b_i_q_u_a_d__filter__api.html#gac025fc72c24cab970daf906a12a45466" title="Executes one step of the 2nd&#45;order IIR filter." alt="" coords="225,56,369,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,51,212,59,207,59,161,56"/>
-</map>

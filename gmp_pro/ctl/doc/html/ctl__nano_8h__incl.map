@@ -1,9 +1,0 @@
-<map id="framework/ctl_nano.h" name="framework/ctl_nano.h">
-<area shape="rect" id="Node000001" title="Defines the state machine and core object for the CTL&#45;Nano framework." alt="" coords="150,5,296,32"/>
-<area shape="rect" id="Node000002" href="$divider_8h.html" title="Provides a simple counter&#45;based frequency divider." alt="" coords="5,80,158,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,32,132,74,130,70,198,33"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="182,88,264,115"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="225,31,225,74,221,71,221,34"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="288,88,377,115"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="241,30,306,79,300,79,239,35"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="Model Reference Adaptive Controller (MRAC)" name="Model Reference Adaptive Controller (MRAC)">
-<area shape="rect" id="Node000001" title="An adaptive controller for SISO systems with unknown or varying parameters." alt="" coords="204,5,378,48"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___i_n_t_r_i_n_s_i_c___a_d_v_a_n_c_e.html" title="Advance, reusable building blocks for control template library." alt="" coords="5,13,156,40"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="Motor Controller Suite" name="Motor Controller Suite">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___l_i_b.html" title="The whole Motor Control Library. The root module for the entire MC library." alt="" coords="5,107,149,133"/>
-<area shape="rect" id="Node000001" title="Pre&#45;configured controllers for motor control." alt="" coords="197,107,345,133"/>
-<area shape="rect" id="Node000007" href="$group___m_c___a_c_m___s_e_n_s_o_r_e_d___c_o_n_t_r_o_l_l_e_r.html" title="A complete Field&#45;Oriented Controller for AC Induction Motors." alt="" coords="398,5,600,32"/>
-<area shape="rect" id="Node000003" href="$group___m_c___p_m_s_m___s_e_n_s_o_r_e_d___c_o_n_t_r_o_l_l_e_r.html" title="A complete Field&#45;Oriented Controller for Permanent Magnet Synchronous Motors." alt="" coords="393,56,605,83"/>
-<area shape="rect" id="Node000004" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html" title="A module for controlling a PMSM using Field&#45;Oriented Control." alt="" coords="426,107,573,133"/>
-<area shape="rect" id="Node000005" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html" title="A module for controlling a PMSM using FOC with an MTPA strategy." alt="" coords="419,157,579,184"/>
-<area shape="rect" id="Node000006" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html" title="A module for sensorless FOC of a PMSM using a Sliding Mode Observer." alt="" coords="417,208,581,251"/>
-</map>

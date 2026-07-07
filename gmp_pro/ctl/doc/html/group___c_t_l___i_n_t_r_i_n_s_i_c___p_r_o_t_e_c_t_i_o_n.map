@@ -1,7 +1,0 @@
-<map id="Protection Components" name="Protection Components">
-<area shape="rect" id="Node000002" href="$group___c_t_l___i_n_t_r_i_n_s_i_c___l_i_b.html" title="The Basic modules in Control Template Library." alt="" coords="5,48,168,91"/>
-<area shape="rect" id="Node000001" title="Fundamental, reusable building protection blocks for control template library." alt="" coords="216,56,374,83"/>
-<area shape="rect" id="Node000003" href="$group__protection__monitor.html" title="A module for checking multiple variables against their boundaries." alt="" coords="449,5,576,32"/>
-<area shape="rect" id="Node000005" href="$group__trip__protector.html" title="An inverse&#45;time overcurrent protection module." alt="" coords="426,56,600,83"/>
-<area shape="rect" id="Node000004" href="$group__voltage__event__detector.html" title="A module for detecting voltage sag and swell power quality events." alt="" coords="422,107,603,133"/>
-</map>

@@ -1,8 +1,0 @@
-<map id="suite/pgs_1ph_dcac_dual_stage_rectifier" name="suite/pgs_1ph_dcac_dual_stage_rectifier">
-<area shape="rect" id="node2" href="dir_22b37e8a7eaa55ed203b7e5e49706dd1.html" title="implement" alt="" coords="237,72,318,99"/>
-<area shape="rect" id="node3" href="dir_8c1655269c560b24b19e8016dbb4f2ad.html" title="component" alt="" coords="235,155,320,181"/>
-<area shape="poly" id="edge1" href="dir_000065_000021.html" alt="" coords="279,97,280,141,275,138,275,101"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000065_000021.html" title="18" alt="" coords="279,128,293,144"/>
-<area shape="rect" id="clust2" href="dir_55dc7f27513356919dd8a835f4ba80e4.html" alt="" coords="27,53,329,117"/>
-<area shape="rect" id="clust1" href="dir_645d1e40535cf68ae895cabaf0d09e28.html" title="suite" alt="" coords="16,16,340,128"/>
-</map>

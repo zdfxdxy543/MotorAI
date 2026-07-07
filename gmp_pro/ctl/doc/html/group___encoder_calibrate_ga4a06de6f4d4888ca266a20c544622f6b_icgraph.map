@@ -1,5 +1,0 @@
-<map id="ctl_clear_position_encoder_calibrator" name="ctl_clear_position_encoder_calibrator">
-<area shape="rect" id="Node000001" title="Resets the state machine and clears motor commands." alt="" coords="226,5,360,48"/>
-<area shape="rect" id="Node000002" href="$group___encoder_calibrate.html#ga35b2a5ddfc19dd32bba47655e953ba94" title="Executes one step of the position encoder offset calibration state machine." alt="" coords="5,5,178,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,27,178,29,178,24,213,26"/>
-</map>

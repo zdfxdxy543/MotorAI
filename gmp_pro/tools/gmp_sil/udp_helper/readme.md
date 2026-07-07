@@ -1,1 +1,0 @@
-2rd generation communication toolkit

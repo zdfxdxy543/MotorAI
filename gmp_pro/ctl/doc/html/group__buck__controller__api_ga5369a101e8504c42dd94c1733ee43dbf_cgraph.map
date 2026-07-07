@@ -1,5 +1,0 @@
-<map id="ctl_clear_buck_ctrl" name="ctl_clear_buck_ctrl">
-<area shape="rect" id="Node000001" title="Clears the internal states and integral terms of the PID controllers." alt="" coords="5,5,136,32"/>
-<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="184,5,278,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,16,171,18,166,19,136,21"/>
-</map>

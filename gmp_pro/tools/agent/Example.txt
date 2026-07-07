@@ -1,7 +1,0 @@
-请创建一个python文件，实现以下几件事：
-1.该python文件运行时需要传入一个json文件的地址，在该json文件中包含sln_path，simulink_model_path，src_folder_path这三个键；
-2.运行该Python文件，修改agent_project.json文件的resources键下的project_src键的path的值为src_folder_path,automation键下的sim_model_path的值为simulink_model_path;
-3.修改build_sln.bat文件的第28行为"set "SLN_PATH=<sln_path>\GMP_Motor_Control_simulink.sln"",其中<sln_path>为传入的sln_path的值到文件夹为止（去掉最后的.slx文件部分）
-4.修改build_sln.bat文件的第29行为"set "SLN_DIR=<sln_path>"",含义同上
-5.修改build_sln.bat文件的第113行为"    if exist "<sln_path>\GMP_Motor_Control_simulink.sln" (",含义同上
-6.修改run_local_quick.bat的第14行为"set "DEFAULT_MODEL_PATH=<sln_path>\MCS_STD_PMSM_MODEL_2022b.slx"",含义同上

@@ -1,7 +1,0 @@
-<map id="ctl_set_mtr_current_ctrl_ref" name="ctl_set_mtr_current_ctrl_ref">
-<area shape="rect" id="Node000001" title="Sets the d&#45;q axis current reference (target)." alt="" coords="145,23,278,65"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,32,97,29,97,23,132,30"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="21,56,81,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,58,82,67,81,62,132,56"/>
-</map>

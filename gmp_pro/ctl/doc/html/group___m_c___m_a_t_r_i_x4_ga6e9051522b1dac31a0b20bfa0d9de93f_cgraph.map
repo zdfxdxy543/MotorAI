@@ -1,7 +1,0 @@
-<map id="ctl_matrix4_inv" name="ctl_matrix4_inv">
-<area shape="rect" id="Node000001" title="Calculates the inverse of a 4x4 matrix." alt="" coords="5,31,115,57"/>
-<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x4.html#gaf8875c08f70a0bd6da6eee33c1fd855b" title="Clears a 4x4 matrix, setting all its elements to zero." alt="" coords="163,5,283,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,33,150,30,145,31,116,38"/>
-<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x4.html#gae592aafbf73d3af9400eec85a96aceea" title="Calculates the determinant of a 4x4 matrix." alt="" coords="168,56,278,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="115,50,155,58,150,59,115,55"/>
-</map>

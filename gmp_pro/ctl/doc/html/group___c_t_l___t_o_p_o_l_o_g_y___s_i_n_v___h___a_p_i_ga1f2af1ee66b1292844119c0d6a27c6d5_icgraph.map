@@ -1,5 +1,0 @@
-<map id="ctl_set_sinv_voltage_closeloop_inverter" name="ctl_set_sinv_voltage_closeloop_inverter">
-<area shape="rect" id="Node000001" title="Sets the controller to voltage closed&#45;loop inverter mode." alt="" coords="113,5,253,48"/>
-<area shape="rect" id="Node000002" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,28,65,29,65,24,100,26"/>
-</map>

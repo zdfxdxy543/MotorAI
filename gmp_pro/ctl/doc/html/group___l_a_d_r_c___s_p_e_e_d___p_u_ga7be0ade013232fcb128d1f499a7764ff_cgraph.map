@@ -1,5 +1,0 @@
-<map id="ctl_init_ladrc_speed_pu" name="ctl_init_ladrc_speed_pu">
-<area shape="rect" id="Node000001" title="Initializes the LADRC per&#45;unit speed controller." alt="" coords="5,5,163,32"/>
-<area shape="rect" id="Node000002" href="$group___l_a_d_r_c___s_p_e_e_d___p_u.html#gaf356a2b9f0b9de2b3d47f6ad7906f37b" title="Resets the internal states of the LADRC controller." alt="" coords="211,5,379,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="163,16,198,19,192,19,163,21"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="ctl_init_const_slope_f_pu_controller" name="ctl_init_const_slope_f_pu_controller">
-<area shape="rect" id="Node000001" title="Initializes the Constant Slope Frequency Controller (PU)." alt="" coords="5,35,142,77"/>
-<area shape="rect" id="Node000002" href="$group__signal__generators.html#ga0c41edef79b75e6935cc0401dafa12ab" title="Initializes the ramp generator based on frequency and amplitude." alt="" coords="190,5,346,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="141,43,177,40,172,42,142,48"/>
-<area shape="rect" id="Node000003" href="$group__slope__limiter.html#gad45e36860962ffbce322d1a6645a1a06" title="Initializes the slope limiter module." alt="" coords="198,72,338,99"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="142,64,186,72,180,73,142,69"/>
-</map>

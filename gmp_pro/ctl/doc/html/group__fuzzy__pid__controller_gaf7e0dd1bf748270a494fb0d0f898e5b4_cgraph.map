@@ -1,5 +1,0 @@
-<map id="ctl_clear_fuzzy_pid" name="ctl_clear_fuzzy_pid">
-<area shape="rect" id="Node000001" title="Clears the internal states of the Fuzzy PID controller." alt="" coords="5,5,139,32"/>
-<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="187,5,281,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,16,174,18,169,19,139,21"/>
-</map>

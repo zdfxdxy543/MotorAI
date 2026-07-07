@@ -1,9 +1,0 @@
-<map id="ctl_init_pmsm_smo" name="ctl_init_pmsm_smo">
-<area shape="rect" id="Node000001" title="Initializes the SMO estimator module." alt="" coords="327,35,461,61"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="166,5,226,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="309,36,226,26,226,20,314,35"/>
-<area shape="rect" id="Node000003" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga5e436e10f3d56ce34a10471e7e23116a" title="Initializes the PMSM SMO Controller." alt="" coords="113,56,279,99"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="314,60,280,68,279,62,309,61"/>
-<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,64,65,91"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,78,65,80,65,75,100,76"/>
-</map>

@@ -1,9 +1,0 @@
-E:\Related_Github_Project\gmp_pro\csp/silan_spc6l64
-E:\Related_Github_Project\gmp_pro\third_party/fmt/include/fmt
-E:\Related_Github_Project\gmp_pro\csp/c28x_sys_cfg
-E:\Related_Github_Project\gmp_pro\third_party/asio/include
-E:\Related_Github_Project\gmp_pro\csp/stm32
-E:\Related_Github_Project\gmp_pro\csp/null
-E:\Related_Github_Project\gmp_pro\third_party/eigen/Eigen
-E:\Related_Github_Project\gmp_pro\csp/windows_simulink
-E:\Related_Github_Project\gmp_pro

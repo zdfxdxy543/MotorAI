@@ -1,9 +1,0 @@
-<map id="ctl_exec_dc_voltage_ready" name="ctl_exec_dc_voltage_ready">
-<area shape="rect" id="Node000001" title="检查直流母线电压是否在允许范围内" alt="" coords="522,5,663,48"/>
-<area shape="rect" id="Node000002" href="$ctl__cia402__state__machine_8c.html#a441857b14fa36ea1dcdfac39b3d45792" title=" " alt="" coords="336,5,474,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="504,27,475,29,475,24,509,27"/>
-<area shape="rect" id="Node000003" href="$ctl__cia402__state__machine_8c.html#ac410ae5ea0c4e4b53716e8532cd03353" title=" " alt="" coords="113,13,288,40"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="318,27,288,29,288,24,323,27"/>
-<area shape="rect" id="Node000004" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,28,65,29,65,24,100,26"/>
-</map>

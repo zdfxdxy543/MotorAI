@@ -1,9 +1,0 @@
-<map id="STEVAL&#45;IPMNG8Q Hardware Abstraction Layer" name="STEVAL&#45;IPMNG8Q Hardware Abstraction Layer">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___p_r_e_s_e_t.html" title="Motor &amp; Motor controller hardware preset." alt="" coords="5,115,165,157"/>
-<area shape="rect" id="Node000001" title="Parameters for the ST STEVAL&#45;IPMNG8Q motor driver board." alt="" coords="213,115,409,157"/>
-<area shape="rect" id="Node000006" href="$group__hal__steval__ipmng8q__circuits.html" title="This section defines the detailed electrical parameters of all sensing circuits." alt="" coords="457,5,638,32"/>
-<area shape="rect" id="Node000004" href="$group__hal__steval__ipmng8q__limits.html" title="This section defines the boundary conditions for the safe physical operation of the board." alt="" coords="482,56,613,99"/>
-<area shape="rect" id="Node000007" href="$group__hal__steval__ipmng8q__mapping.html" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="458,123,638,149"/>
-<area shape="rect" id="Node000003" href="$group__hal__steval__ipmng8q__nameplate.html" title="This section records the key hardware models of the board for identification and traceability." alt="" coords="506,173,590,200"/>
-<area shape="rect" id="Node000005" href="$group__hal__steval__ipmng8q__topology.html" title="This section describes the type and layout of the onboard sensors." alt="" coords="486,224,609,251"/>
-</map>

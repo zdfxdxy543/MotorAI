@@ -1,5 +1,0 @@
-<map id="ctl_init_sogi" name="ctl_init_sogi">
-<area shape="rect" id="Node000001" title="Initializes the continuous&#45;form SOGI controller." alt="" coords="5,5,96,32"/>
-<area shape="rect" id="Node000002" href="$group__continuous__sogi.html#ga7e19afe59becf3f137b96a6da6e36683" title="Clears the internal states of the SOGI controller." alt="" coords="144,5,245,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,16,131,18,126,19,96,21"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="ctl_step_current_distributor" name="ctl_step_current_distributor">
-<area shape="rect" id="Node000001" title="Executes one step of the current distribution calculation." alt="" coords="364,5,542,32"/>
-<area shape="rect" id="Node000002" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="145,5,316,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,19,316,21,316,16,351,19"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,19,97,21,97,16,132,18"/>
-</map>

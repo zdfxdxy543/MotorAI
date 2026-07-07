@@ -1,7 +1,0 @@
-<map id="suite/mcs_pmsm_mtpa/implement/simulate" name="suite/mcs_pmsm_mtpa/implement/simulate">
-<area shape="rect" id="node1" href="dir_18032f405f108b1d29de4ea73c88f64a.html" title="simulate" alt="" coords="26,53,96,80"/>
-<area shape="rect" id="node2" href="dir_8c1655269c560b24b19e8016dbb4f2ad.html" title="component" alt="" coords="19,128,104,155"/>
-<area shape="poly" id="edge1" href="dir_000100_000021.html" alt="" coords="63,78,64,113,59,112,60,83"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000100_000021.html" title="5" alt="" coords="66,101,73,117"/>
-<area shape="rect" id="clust1" href="dir_8b2a4136586a8873d8fb4137edd0eaf0.html" title="implement" alt="" coords="16,16,107,91"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="framework/src/ctl_cia402_state_machine.c" name="framework/src/ctl_cia402_state_machine.c">
-<area shape="rect" id="Node000001" title=" " alt="" coords="36,5,203,48"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,104,95,131"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,47,71,93,67,90,101,50"/>
-<area shape="rect" id="Node000003" href="$cia402__state__machine_8h.html" title=" " alt="" coords="119,96,261,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,46,167,84,162,84,135,51"/>
-</map>

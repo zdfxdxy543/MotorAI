@@ -1,7 +1,0 @@
-<map id="ctl_matrix2_congruent" name="ctl_matrix2_congruent">
-<area shape="rect" id="Node000001" title="Performs a congruent transformation on matrix A with matrix P." alt="" coords="5,31,155,57"/>
-<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga5fa5ed72f4980c19527682dd61a04ddb" title="Multiplies two 2x2 matrices." alt="" coords="207,5,320,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,31,194,28,189,29,155,36"/>
-<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x2.html#ga92d3023859c02278c6e9d53f024dcfef" title="Transposes a 2x2 matrix." alt="" coords="203,56,324,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="155,52,190,59,185,59,155,57"/>
-</map>

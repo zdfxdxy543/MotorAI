@@ -1,5 +1,0 @@
-<map id="ctl_enable_buck_ctrl" name="ctl_enable_buck_ctrl">
-<area shape="rect" id="Node000001" title="Enables the entire Buck controller system." alt="" coords="177,5,317,32"/>
-<area shape="rect" id="Node000002" href="$suite_2dps__buck_2implement_2simulate_2xplt_8ctl__interface_8h.html#a9a40c37fa2396bbfe55ad29bd391cba4" title=" " alt="" coords="5,5,129,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,19,129,21,129,16,164,18"/>
-</map>

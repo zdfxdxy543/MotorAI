@@ -1,4 +1,0 @@
-<map id="BLDC Hall Sensor Estimator" name="BLDC Hall Sensor Estimator">
-<area shape="rect" id="Node000001" title="A module for calculating smooth speed and position from Hall sensors." alt="" coords="225,13,414,40"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___o_b_s_e_r_v_e_r.html" title="Fundamental, reusable building blocks for motor control template library." alt="" coords="5,5,177,48"/>
-</map>

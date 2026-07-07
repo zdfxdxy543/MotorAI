@@ -1,7 +1,0 @@
-<map id="ctl_pmsm_ctrl_valphabeta_mode" name="ctl_pmsm_ctrl_valphabeta_mode">
-<area shape="rect" id="Node000001" title="Switches to V¦Á¦Ã‚ open&#45;loop mode." alt="" coords="323,5,535,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#ga3ea4e7af1685b9d25295a35bb4f1dd0b" title="Configures and initializes a PMSM controller instance based on provided parameters." alt="" coords="113,5,275,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,19,276,21,275,16,310,19"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,19,65,21,65,16,99,18"/>
-</map>

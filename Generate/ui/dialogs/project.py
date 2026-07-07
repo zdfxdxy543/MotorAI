@@ -214,10 +214,7 @@ class NewProjectDialog(QDialog):
             self.project_parent_edit.setText(folder)
 
     def _get_template_project_path(self):
-        gmp_root = self._read_gmp_root()
-        if not gmp_root:
-            return None
-        return Path(gmp_root) / 'ctl' / 'suite' / 'mcs_pmsm_nt'
+        return MOTORAI_ROOT / 'Generate' / 'Example' / 'mcs_pmsm_nt'
 
     def _save_output_root(self, project_parent: Path):
         settings = load_settings()

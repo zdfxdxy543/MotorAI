@@ -1,7 +1,0 @@
-<map id="CTL&#45;Nano Framework Core" name="CTL&#45;Nano Framework Core">
-<area shape="rect" id="Node000003" href="$group___c_t_l___f_m_i_f.html" title="A set of callback functions that the user must implement to integrate the framework with their specif..." alt="" coords="465,5,607,48"/>
-<area shape="rect" id="Node000004" href="$group___c_t_l___f_r_a_m_e_w_o_r_k___a_p_i.html" title="User&#45;defined function to enable PWM outputs." alt="" coords="480,72,592,99"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___f_r_a_m_e_w_o_r_k___c_o_r_e.html" title="The framework of GMP CTL dispatch logic." alt="" coords="5,72,187,99"/>
-<area shape="rect" id="Node000001" title="Core definitions for the Nano scheduling framework." alt="" coords="235,72,417,99"/>
-<area shape="rect" id="Node000005" href="$group___c_t_l___f_r_a_m_e_w_o_r_k___u_t_i_l_i_t_i_e_s.html" title="Helper functions for state management and debugging." alt="" coords="469,123,603,149"/>
-</map>

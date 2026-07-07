@@ -1,7 +1,0 @@
-<map id="ctl_step_dq_hcm" name="ctl_step_dq_hcm">
-<area shape="rect" id="Node000001" title="Executes one step of the Harmonic Compensation." alt="" coords="5,31,126,57"/>
-<area shape="rect" id="Node000002" href="$group__resonant__controllers.html#gad3c8a825e49a9451459c7933987cea52" title="Executes one step of the QR controller." alt="" coords="174,5,319,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,33,161,30,156,32,127,38"/>
-<area shape="rect" id="Node000003" href="$group__saturation__blocks.html#gab4293cc14e0a1a4aa61f7b8e1fee3d1d" title="Executes one step of the saturation block." alt="" coords="181,56,312,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="126,50,168,58,163,58,126,55"/>
-</map>

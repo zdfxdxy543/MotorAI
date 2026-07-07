@@ -1,5 +1,0 @@
-<map id="ctl_set_boost_ctrl_current" name="ctl_set_boost_ctrl_current">
-<area shape="rect" id="Node000001" title="Sets the target inductor current in Current mode." alt="" coords="113,5,237,48"/>
-<area shape="rect" id="Node000002" href="$suite_2dps__boost_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,28,65,29,65,24,100,26"/>
-</map>

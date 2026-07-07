@@ -1,5 +1,0 @@
-<map id="ctl_set_pmsm_mtpa_ctrl_vdq_ff" name="ctl_set_pmsm_mtpa_ctrl_vdq_ff">
-<area shape="rect" id="Node000001" title="Sets the d&#45;q voltage feedforward (or reference) values." alt="" coords="113,5,277,48"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,28,65,29,65,24,99,26"/>
-</map>

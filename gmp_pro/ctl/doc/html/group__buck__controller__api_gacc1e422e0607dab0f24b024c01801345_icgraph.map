@@ -1,5 +1,0 @@
-<map id="ctl_get_buck_ctrl_modulation" name="ctl_get_buck_ctrl_modulation">
-<area shape="rect" id="Node000001" title="Gets the last calculated PWM duty cycle." alt="" coords="187,5,377,32"/>
-<area shape="rect" id="Node000002" href="$suite_2dps__buck_2implement_2simulate_2xplt_8ctl__interface_8h.html#a961908a4644dc2b6b0b168d3f8136978" title=" " alt="" coords="5,5,139,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,19,139,21,139,16,173,18"/>
-</map>

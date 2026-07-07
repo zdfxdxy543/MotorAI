@@ -1,9 +1,0 @@
-<map id="ctl_step_slope_f" name="ctl_step_slope_f">
-<area shape="rect" id="Node000001" title="Executes one step of the slope frequency controller." alt="" coords="5,72,122,99"/>
-<area shape="rect" id="Node000002" href="$group__signal__generators.html#ga31ce49fec696a6da43872f44f9fb0708" title="Sets a new slope for the ramp generator." alt="" coords="173,5,330,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,69,169,52,164,55,110,74"/>
-<area shape="rect" id="Node000003" href="$group__signal__generators.html#ga6871b28be07a561ef49c53dc60e74526" title="Executes one step of the ramp generator." alt="" coords="170,72,334,99"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,83,157,84,152,86,123,88"/>
-<area shape="rect" id="Node000004" href="$group__slope__limiter.html#ga8def67ee9502a7d499cd4c131ef68bfe" title="Executes one step of the slope limiter." alt="" coords="178,123,326,149"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="116,97,187,117,183,119,116,102"/>
-</map>

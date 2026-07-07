@@ -1,5 +1,0 @@
-<map id="ctl_init_biquad_allpass" name="ctl_init_biquad_allpass">
-<area shape="rect" id="Node000001" title="Initializes the biquad filter as an All&#45;Pass Filter." alt="" coords="5,5,158,32"/>
-<area shape="rect" id="Node000002" href="$group___b_i_q_u_a_d__filter__api.html#ga764a46ad024f75f167ffee58ee60793c" title="Clears all internal states of the 2nd&#45;order IIR filter." alt="" coords="206,5,353,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,16,193,19,187,19,158,21"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="ctl_disable_three_phase_inverter" name="ctl_disable_three_phase_inverter">
-<area shape="rect" id="Node000001" title="Disables the main system controller, setting PWM to 50%." alt="" coords="180,5,341,48"/>
-<area shape="rect" id="Node000002" href="$suite_2pgs__3ph__grid__inverter_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a8412cb576d3e246f3097e69543fba9d2" title=" " alt="" coords="5,13,132,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,27,132,29,132,24,167,26"/>
-</map>

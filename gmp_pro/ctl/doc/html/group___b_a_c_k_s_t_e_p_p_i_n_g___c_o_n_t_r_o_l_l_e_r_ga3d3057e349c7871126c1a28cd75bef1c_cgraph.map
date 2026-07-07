@@ -1,5 +1,0 @@
-<map id="ctl_init_backstepping" name="ctl_init_backstepping">
-<area shape="rect" id="Node000001" title="Initializes the Backstepping controller module." alt="" coords="5,5,149,32"/>
-<area shape="rect" id="Node000002" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="197,5,235,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,16,184,19,179,19,149,21"/>
-</map>

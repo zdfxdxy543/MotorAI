@@ -1,5 +1,0 @@
-<map id="component/motor_control/basic/encoder_calibrate.h" name="component/motor_control/basic/encoder_calibrate.h">
-<area shape="rect" id="Node000001" title="Provides an algorithm to calibrate the offset of an absolute position encoder." alt="" coords="8,5,182,48"/>
-<area shape="rect" id="Node000002" href="$motor__control_8h.html" title=" " alt="" coords="5,96,185,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="97,62,97,96,93,94,93,66"/>
-</map>

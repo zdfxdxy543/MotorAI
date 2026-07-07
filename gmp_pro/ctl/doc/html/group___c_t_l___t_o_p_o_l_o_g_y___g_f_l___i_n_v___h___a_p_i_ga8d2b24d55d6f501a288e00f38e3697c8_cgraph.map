@@ -1,7 +1,0 @@
-<map id="ctl_init_gfl_pq" name="ctl_init_gfl_pq">
-<area shape="rect" id="Node000001" title="Initialize the PQ controller with parameters." alt="" coords="5,5,107,32"/>
-<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="155,5,238,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,16,142,18,137,19,107,21"/>
-<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="286,5,380,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="239,16,273,19,268,19,239,21"/>
-</map>

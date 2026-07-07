@@ -1,7 +1,0 @@
-<map id="ctl_ct_iclarke2" name="ctl_ct_iclarke2">
-<area shape="rect" id="Node000001" title="Performs the inverse Clarke transformation for 2D vectors (alpha&#45;beta to ABC), assuming zero sequence..." alt="" coords="309,5,414,32"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga5455882f5ce84cff0e238ceee146c93e" title="Executes one step of the three&#45;phase inverter control algorithm." alt="" coords="145,5,261,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="291,19,262,21,262,16,296,19"/>
-<area shape="rect" id="Node000003" href="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,19,97,21,97,16,132,18"/>
-</map>

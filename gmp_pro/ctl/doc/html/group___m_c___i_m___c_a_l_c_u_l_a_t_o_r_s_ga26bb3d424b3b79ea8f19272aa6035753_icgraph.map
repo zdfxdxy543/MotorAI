@@ -1,5 +1,0 @@
-<map id="ctl_acm_get_leakage_coefficient" name="ctl_acm_get_leakage_coefficient">
-<area shape="rect" id="Node000001" title="Calculates the total leakage coefficient (sigma)." alt="" coords="200,5,344,48"/>
-<area shape="rect" id="Node000002" href="$group___m_c___i_m___c_a_l_c_u_l_a_t_o_r_s.html#ga9b5f13187e98c1ee1da7efffbdb64730" title="Estimates PI controller parameters for the current loop." alt="" coords="5,5,152,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,27,152,29,152,24,187,26"/>
-</map>

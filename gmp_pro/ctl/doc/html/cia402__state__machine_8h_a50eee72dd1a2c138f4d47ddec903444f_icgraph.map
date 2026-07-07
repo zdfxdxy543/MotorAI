@@ -1,9 +1,0 @@
-<map id="cia402_send_cmd" name="cia402_send_cmd">
-<area shape="rect" id="Node000001" title=" " alt="" coords="211,56,337,83"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2common_2user__main_8c.html#a1b29799b7f856101a611961ab7ed9182" title=" " alt="" coords="30,5,138,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,52,137,35,137,30,209,50"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__nt_2implement_2f280039c__iris__node_2xplt_8peripheral_8c.html#a0e6990eb046a12a75ef6c46c5404cbf8" title=" " alt="" coords="5,56,163,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,70,163,72,163,67,198,69"/>
-<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2common_2user__main_8c.html#a136e9a3e1729ebde6726e36e639feb03" title=" " alt="" coords="24,107,144,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="209,87,137,109,136,103,204,88"/>
-</map>

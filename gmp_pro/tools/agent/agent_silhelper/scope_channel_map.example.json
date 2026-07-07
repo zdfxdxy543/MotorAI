@@ -1,5 +1,0 @@
-{
-  "ScopeData1": ["rotor_angle_rad"],
-  "ScopeData2": ["rotor_speed_rad_s", "electromagnetic_torque_nm"],
-  "ScopeData3": ["stator_iq_a", "stator_id_a"]
-}

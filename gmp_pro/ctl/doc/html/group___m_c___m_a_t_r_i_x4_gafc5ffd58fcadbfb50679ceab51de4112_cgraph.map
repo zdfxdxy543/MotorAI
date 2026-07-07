@@ -1,9 +1,0 @@
-<map id="ctl_matrix4_trans" name="ctl_matrix4_trans">
-<area shape="rect" id="Node000001" title="Transposes a 4x4 matrix." alt="" coords="5,31,127,57"/>
-<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x4.html#ga665a9088186ba24d916440da5257bcff" title="Gets an element from the matrix at the specified row and column." alt="" coords="175,5,285,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,32,162,29,157,30,127,37"/>
-<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x4.html#ga6770f7c506724589501d02aa7f2e8815" title="Sets an element in the matrix at the specified row and column." alt="" coords="175,56,285,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,51,162,58,157,59,127,56"/>
-<area shape="rect" id="Node000004" href="$generate__fuzzy__2d__src_8m.html#aa69ca3527648e65c6a63063cf554feaf" title=" " alt="" coords="333,56,385,83"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="286,67,320,69,315,69,286,72"/>
-</map>

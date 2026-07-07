@@ -1,7 +1,0 @@
-<map id="ctl_init_autoturn_pos_encoder" name="ctl_init_autoturn_pos_encoder">
-<area shape="rect" id="Node000001" title="Initializes the auto&#45;turn position encoder structure." alt="" coords="170,23,311,65"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="34,5,93,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,33,94,26,94,20,157,30"/>
-<area shape="rect" id="Node000003" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2xplt_8peripheral_8c.html#a88bc8e66490b2861a260395ae1c1b3bd" title=" " alt="" coords="5,56,122,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,57,122,64,121,58,157,56"/>
-</map>

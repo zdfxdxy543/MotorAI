@@ -1,8 +1,0 @@
-<map id="Basic Components" name="Basic Components">
-<area shape="rect" id="Node000001" title="Fundamental, reusable building blocks for control template library." alt="" coords="216,85,348,112"/>
-<area shape="rect" id="Node000003" href="$group__frequency__divider.html" title="A simple counter&#45;based module to divide a clock or event frequency." alt="" coords="404,5,532,32"/>
-<area shape="rect" id="Node000006" href="$group__hysteresis__controller.html" title="A nonlinear controller that switches output based on a hysteresis band." alt="" coords="396,56,540,83"/>
-<area shape="rect" id="Node000004" href="$group__saturation__blocks.html" title="A collection of signal limiting modules." alt="" coords="402,107,534,149"/>
-<area shape="rect" id="Node000005" href="$group__slope__limiter.html" title="A module to constrain the rate of change of a signal." alt="" coords="420,173,517,200"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___i_n_t_r_i_n_s_i_c___l_i_b.html" title="The Basic modules in Control Template Library." alt="" coords="5,77,168,120"/>
-</map>

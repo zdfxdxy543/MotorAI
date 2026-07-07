@@ -1,7 +1,0 @@
-<map id="Digital Power Control Library" name="Digital Power Control Library">
-<area shape="rect" id="Node000004" href="$group___c_t_l___b_a_s_i_c___v_i_r_t_u_a_l___i_m_p.html" title="Defines the data structures, control flags, and function interfaces for a comprehensive three&#45;phase i..." alt="" coords="201,5,374,48"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___c_o_m_p_o_n_e_n_t_s.html" title="Fundamental, reusable building blocks for digital power applications." alt="" coords="199,72,376,99"/>
-<area shape="rect" id="Node000001" title="The whole Digital Power Control Library. The root module for the entire DP library." alt="" coords="5,93,151,136"/>
-<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_i_e_s.html" title="Pre&#45;configured controllers for common power electronics topologies." alt="" coords="210,123,364,165"/>
-<area shape="rect" id="Node000005" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html" title="Defines the data structures, control flags, and function interfaces for a comprehensive three&#45;phase i..." alt="" coords="201,189,374,232"/>
-</map>

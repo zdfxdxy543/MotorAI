@@ -1,7 +1,0 @@
-<map id="ctl_set_buck_ctrl_voltage" name="ctl_set_buck_ctrl_voltage">
-<area shape="rect" id="Node000001" title="Sets the target output voltage in Voltage mode." alt="" coords="145,31,314,57"/>
-<area shape="rect" id="Node000002" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,31,97,28,97,22,132,29"/>
-<area shape="rect" id="Node000003" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="21,56,81,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,59,81,68,81,63,132,58"/>
-</map>

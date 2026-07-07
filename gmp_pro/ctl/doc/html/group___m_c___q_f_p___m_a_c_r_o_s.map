@@ -1,7 +1,0 @@
-<map id="QFP Floating&#45;Point Math Macros" name="QFP Floating&#45;Point Math Macros">
-<area shape="rect" id="Node000004" href="$group___m_c___a_r_i_t_h_m_e_t_i_c___q_f_p.html" title="Macros for basic arithmetic operations using QFP functions." alt="" coords="391,5,557,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___c_t_r_l___g_t___i_m_p_l.html" title="Different underlying numerical implementations for the ctrl_gt type." alt="" coords="5,64,163,91"/>
-<area shape="rect" id="Node000001" title="A collection of macros for floating&#45;point arithmetic based on a QFP library." alt="" coords="211,56,343,99"/>
-<area shape="rect" id="Node000005" href="$group___m_c___n_o_n_l_i_n_e_a_r___q_f_p.html" title="Macros for non&#45;linear mathematical functions using QFP." alt="" coords="407,56,541,99"/>
-<area shape="rect" id="Node000003" href="$group___m_c___t_y_p_e___c_o_n_v_e_r_s_i_o_n___q_f_p.html" title="Macros for converting between float and other data types using QFP functions." alt="" coords="391,123,557,165"/>
-</map>

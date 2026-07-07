@@ -1,5 +1,0 @@
-<map id="ctl_init_lp_filter" name="ctl_init_lp_filter">
-<area shape="rect" id="Node000001" title="Initializes a first&#45;order low&#45;pass filter object." alt="" coords="5,5,114,32"/>
-<area shape="rect" id="Node000002" href="$group__discrete__filter__api.html#ga14450919a7b473b9bf55db852ef574ef" title="Helper function to calculate the filter coefficient &#39;a&#39;." alt="" coords="162,5,288,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,16,149,18,143,19,114,21"/>
-</map>

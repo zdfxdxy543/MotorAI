@@ -1,5 +1,0 @@
-<map id="ctl_vector3_mag" name="ctl_vector3_mag">
-<area shape="rect" id="Node000001" title="Calculates the magnitude (length) of a 3D vector." alt="" coords="202,5,319,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r3.html#gad30d1a6b6fb8d352e355b5a75488f6c4" title="Normalizes a 3D vector to produce a unit vector (a vector with length 1)." alt="" coords="5,5,154,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,19,154,21,154,16,189,19"/>
-</map>

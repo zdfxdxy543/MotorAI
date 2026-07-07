@@ -1,7 +1,0 @@
-<map id="ctl_init_flc" name="ctl_init_flc">
-<area shape="rect" id="Node000001" title="Initializes the Fuzzy Logic Controller." alt="" coords="5,31,86,57"/>
-<area shape="rect" id="Node000002" href="$group__saturation__blocks.html#gaa27fe84a164eee93a01412e88a792e79" title="Initializes the standard saturation block." alt="" coords="144,5,268,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,35,131,30,126,32,87,40"/>
-<area shape="rect" id="Node000003" href="$group__lookup__tables.html#ga130714c9b21c1f273c063f4d4ea678d6" title="Initializes a 2D LUT with a uniform grid." alt="" coords="134,56,278,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="86,48,121,55,115,56,86,53"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="ctl_init_mrac" name="ctl_init_mrac">
-<area shape="rect" id="Node000001" title="Initializes the MRAC module." alt="" coords="5,31,101,57"/>
-<area shape="rect" id="Node000002" href="$group___a_d_a_p_t_i_v_e___c_o_n_t_r_o_l_l_e_r.html#gaa93420605f439a88e7d9606fb9b0b2fc" title="Resets the internal states of the MRAC controller." alt="" coords="149,5,255,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,33,136,29,131,31,102,38"/>
-<area shape="rect" id="Node000003" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="183,56,221,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="101,49,170,63,165,65,101,55"/>
-</map>

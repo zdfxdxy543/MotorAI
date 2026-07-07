@@ -1,7 +1,0 @@
-<map id="GMP CTL interface" name="GMP CTL interface">
-<area shape="rect" id="Node000004" href="$group___g_m_p___c_t_l___c_o_m_m_o_n___i_n_t_e_r_f_a_c_e_s.html" title="Basic data interface, DAC, ADC, PWM, CAP, for interfacing with control peripherals." alt="" coords="188,5,357,32"/>
-<area shape="rect" id="Node000001" title="Basic data structures for interfacing with control peripherals." alt="" coords="5,85,140,112"/>
-<area shape="rect" id="Node000005" href="$group___p_e_r_i_p_h_e_r_a_l___i_n_t_e_r_f_a_c_e_s.html" title="Basic data structures for interfacing with control peripherals." alt="" coords="188,56,356,83"/>
-<area shape="rect" id="Node000002" href="$group___s_i_l___i_n_t_e_r_f_a_c_e.html" title="Defines the standard data structure for SIL simulation environments." alt="" coords="202,107,343,149"/>
-<area shape="rect" id="Node000003" href="$group___s_t_d___i_n_t_e_r_f_a_c_e.html" title="Defines standard data structures for controller data exchange (Tx/Rx)." alt="" coords="206,173,339,216"/>
-</map>

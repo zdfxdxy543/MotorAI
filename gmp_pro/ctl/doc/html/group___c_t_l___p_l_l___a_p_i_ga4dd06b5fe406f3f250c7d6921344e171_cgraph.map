@@ -1,9 +1,0 @@
-<map id="ctl_clear_pll_3ph" name="ctl_clear_pll_3ph">
-<area shape="rect" id="Node000001" title="Clears the internal states of the three&#45;phase PLL controller." alt="" coords="5,64,124,91"/>
-<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="190,5,284,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,61,183,36,179,39,107,66"/>
-<area shape="rect" id="Node000003" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="172,56,302,99"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,75,159,76,154,78,125,80"/>
-<area shape="rect" id="Node000004" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="177,123,297,149"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="106,89,184,116,179,118,106,94"/>
-</map>

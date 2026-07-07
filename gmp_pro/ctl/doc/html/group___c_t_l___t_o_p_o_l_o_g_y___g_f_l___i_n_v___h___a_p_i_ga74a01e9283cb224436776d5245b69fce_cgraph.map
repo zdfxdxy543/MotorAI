@@ -1,5 +1,0 @@
-<map id="ctl_step_gfl_pq" name="ctl_step_gfl_pq">
-<area shape="rect" id="Node000001" title="Execute one step of the PQ control loop." alt="" coords="5,5,115,32"/>
-<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#gaacbe00aab5fac981355786302cffb287" title="Executes one step of the series&#45;form PID controller." alt="" coords="163,5,279,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,16,150,18,145,19,115,21"/>
-</map>

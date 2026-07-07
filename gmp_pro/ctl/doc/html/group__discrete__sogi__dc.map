@@ -1,4 +1,0 @@
-<map id="SOGI&#45;based Quadrature Signal Generator with DC Rejection" name="SOGI&#45;based Quadrature Signal Generator with DC Rejection">
-<area shape="rect" id="Node000002" href="$group__discrete__sogi.html" title="Implements a SOGI to generate in&#45;phase and quadrature&#45;phase signals." alt="" coords="5,13,167,56"/>
-<area shape="rect" id="Node000001" title="Implements a SOGI with an additional loop to reject DC offset." alt="" coords="215,5,376,64"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="CMP CTL Framework Core" name="CMP CTL Framework Core">
-<area shape="rect" id="Node000001" title="The framework of GMP CTL dispatch logic." alt="" coords="5,31,187,57"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___f_r_a_m_e_w_o_r_k___d_i_s_p_a_t_c_h_e_r.html" title="The core scheduler for the control loop execution." alt="" coords="235,5,417,32"/>
-<area shape="rect" id="Node000003" href="$group___c_t_l___n_a_n_o___f_r_a_m_e_w_o_r_k___c_o_r_e.html" title="Core definitions for the Nano scheduling framework." alt="" coords="235,56,417,83"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="ctl_init_sine_analyzer" name="ctl_init_sine_analyzer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="486,5,633,32"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#ga43fcf30c79672c191ef67a959ecea1d6" title=" " alt="" coords="276,5,438,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="468,19,439,21,439,16,473,19"/>
-<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gad409bb12fa407034f45f243e042f223f" title=" " alt="" coords="113,5,228,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,19,228,21,228,16,263,19"/>
-<area shape="rect" id="Node000004" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,19,65,21,65,16,100,18"/>
-</map>

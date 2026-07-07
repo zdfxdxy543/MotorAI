@@ -1,8 +1,0 @@
-<map id="step" name="step">
-<area shape="rect" id="Node000001" title=" " alt="" coords="106,31,152,57"/>
-<area shape="poly" id="edge3_Node000001_Node000001" title=" " alt="" coords="143,15,139,11,129,9,120,11,115,15,113,22,116,31,111,29,108,22,110,13,117,6,129,4,141,7,148,15"/>
-<area shape="rect" id="Node000002" href="$_trapezoidal__trajectory_8m.html#acb633723689c95e77aaab14adc9b288e" title=" " alt="" coords="5,5,58,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,35,58,28,58,23,93,33"/>
-<area shape="rect" id="Node000003" href="$_trapezoidal__trajectory_8m.html#a819f9282733c550c416272e2aeab6a12" title=" " alt="" coords="10,56,53,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="88,55,54,66,52,61,93,53"/>
-</map>

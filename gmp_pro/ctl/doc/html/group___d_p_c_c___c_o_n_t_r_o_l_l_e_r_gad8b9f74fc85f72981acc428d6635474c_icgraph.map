@@ -1,5 +1,0 @@
-<map id="ctl_clear_dpcc" name="ctl_clear_dpcc">
-<area shape="rect" id="Node000001" title="Clears the internal state variables of the DPCC module." alt="" coords="148,5,253,32"/>
-<area shape="rect" id="Node000002" href="$group___d_p_c_c___c_o_n_t_r_o_l_l_e_r.html#ga3b72824f233d154664ccb1b74bff2d67" title="Initializes the DPCC module with motor and system parameters." alt="" coords="5,5,100,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,19,100,21,100,16,135,18"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="ctl_step_pmsm_fo" name="ctl_step_pmsm_fo">
-<area shape="rect" id="Node000001" title="Executes one step of the flux and torque observation." alt="" coords="5,5,134,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#gafbee66017a932c4fcfcc814da32b2fc3" title="Calculates the magnitude (length) of a 2D vector." alt="" coords="182,5,299,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="134,16,168,18,163,19,134,21"/>
-<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r2.html#gac9b1c5a41292d8ee60de7ba400a8bb47" title="Calculates the squared magnitude (length) of a 2D vector. This is computationally cheaper than ctl_ve..." alt="" coords="347,5,485,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="299,16,334,19,329,19,299,21"/>
-</map>

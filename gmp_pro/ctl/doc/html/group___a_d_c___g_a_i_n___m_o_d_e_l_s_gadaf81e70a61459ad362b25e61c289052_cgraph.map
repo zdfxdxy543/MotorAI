@@ -1,5 +1,0 @@
-<map id="ctl_gain_calc_shunt_amp" name="ctl_gain_calc_shunt_amp">
-<area shape="rect" id="Node000001" title="Calculates gain for a current sensor using a shunt resistor and an operational amplifier." alt="" coords="5,5,174,32"/>
-<area shape="rect" id="Node000002" href="$group___a_d_c___g_a_i_n___m_o_d_e_l_s.html#ga3dfa408b511de5cd3c325ca6fd2f7d56" title="A generic function to calculate the required system gain." alt="" coords="222,5,368,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,16,209,19,204,19,174,21"/>
-</map>

@@ -7,10 +7,10 @@
     "timeout": 180
   },
   "paths": {
-    "gmp_root": "E:/Related_Github_Project/MotorAI/gmp_pro",
+    "gmp_root": "E:/Related_Github_Project/gmp_pro",
     "generate_root": "Generate",
     "optimize_root": "Optimize",
-    "output_root": "E:\\Related_Github_Project\\MotorAI\\gmp_pro\\ctl\\suite"
+    "output_root": "E:\\Related_Github_Project\\gmp_pro\\ctl\\suite"
   },
   "generate": {
     "max_kb_items": 120,

@@ -1,6 +1,0 @@
-<map id="Motor Control Definitions" name="Motor Control Definitions">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___c_o_m_p_o_n_e_n_t.html" title="Fundamental, reusable building blocks for motor control template library." alt="" coords="5,47,198,73"/>
-<area shape="rect" id="Node000001" title="A collection of common definitions, constants, and macros for motor control." alt="" coords="246,47,412,73"/>
-<area shape="rect" id="Node000004" href="$group___m_c___p_h_y_s_i_c_a_l___u_n_i_t_s.html" title="Defines physical constants and macros for unit and parameter calculations." alt="" coords="460,5,611,48"/>
-<area shape="rect" id="Node000003" href="$group___m_c___t_y_p_e_s.html" title="Defines unique identifiers for different types of motors and encoders." alt="" coords="460,72,611,115"/>
-</map>

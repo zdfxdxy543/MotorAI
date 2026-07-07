@@ -1,7 +1,0 @@
-<map id="Sensored ACM FOC Controller" name="Sensored ACM FOC Controller">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___s_u_i_t_e.html" title="Pre&#45;configured controllers for motor control." alt="" coords="5,56,154,83"/>
-<area shape="rect" id="Node000001" title="A complete Field&#45;Oriented Controller for AC Induction Motors." alt="" coords="202,56,403,83"/>
-<area shape="rect" id="Node000003" href="$group___m_c___a_c_m___c_o_n_f_i_g.html" title="Compile&#45;time configurations for the ACM controller." alt="" coords="451,5,596,32"/>
-<area shape="rect" id="Node000005" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html" title="API functions for controlling and configuring the ACM controller." alt="" coords="484,56,563,83"/>
-<area shape="rect" id="Node000004" href="$group___m_c___a_c_m___s_t_r_u_c_t_s.html" title="Data structures for the ACM controller and its initialization." alt="" coords="467,107,580,133"/>
-</map>

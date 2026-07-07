@@ -1,8 +1,0 @@
-<map id="plot" name="plot">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,43,48,69"/>
-<area shape="rect" id="Node000002" href="$fir32forc28x_8m.html#a5851b210f6a2526b70050cac20949443" title=" " alt="" coords="98,5,140,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="47,45,85,31,81,35,50,50"/>
-<area shape="rect" id="Node000003" href="$_trapezoidal__trajectory_8m.html#adc9d1386e0d2c13d6610b24d3d69d97f" title=" " alt="" coords="96,80,142,107"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="49,62,84,77,79,80,48,67"/>
-<area shape="poly" id="edge3_Node000003_Node000003" title=" " alt="" coords="102,78,99,71,101,62,108,56,119,53,131,56,138,65,132,64,128,61,119,59,110,60,105,65,104,71,107,81"/>
-</map>

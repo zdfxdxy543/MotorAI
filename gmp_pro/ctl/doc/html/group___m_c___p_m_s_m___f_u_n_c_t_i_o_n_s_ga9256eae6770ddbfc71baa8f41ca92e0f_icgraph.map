@@ -1,9 +1,0 @@
-<map id="ctl_clear_pmsm_ctrl" name="ctl_clear_pmsm_ctrl">
-<area shape="rect" id="Node000001" title="Clears the internal states and integral terms of all PID controllers." alt="" coords="354,31,492,57"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aaec5c36c55c6c2af00001e5ad785cbd9" title=" " alt="" coords="187,5,306,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="336,32,306,30,306,25,341,32"/>
-<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="199,56,294,83"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="341,56,294,65,293,60,336,56"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="5,5,139,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="169,19,140,21,139,16,174,18"/>
-</map>

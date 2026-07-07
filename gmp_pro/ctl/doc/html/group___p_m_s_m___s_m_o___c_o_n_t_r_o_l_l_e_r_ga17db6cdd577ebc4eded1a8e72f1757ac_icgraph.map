@@ -1,8 +1,0 @@
-<map id="ctl_set_pmsm_smo_ctrl_speed" name="ctl_set_pmsm_smo_ctrl_speed">
-<area shape="rect" id="Node000001" title="Sets the target speed for the velocity controller." alt="" coords="351,5,511,48"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="5,13,100,40"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="332,24,303,25,148,25,101,27,100,22,148,20,303,20,338,23"/>
-<area shape="rect" id="Node000003" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga2230c3854abf9704d3d5d0c9204fef1f" title="Switches the controller from open&#45;loop startup to closed&#45;loop SMO control." alt="" coords="148,35,303,77"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="338,40,304,48,303,42,333,41"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="130,41,100,37,100,32,135,40"/>
-</map>

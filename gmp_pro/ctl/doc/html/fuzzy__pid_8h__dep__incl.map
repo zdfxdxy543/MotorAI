@@ -1,7 +1,0 @@
-<map id="component/intrinsic/advance/fuzzy_pid.h" name="component/intrinsic/advance/fuzzy_pid.h">
-<area shape="rect" id="Node000001" title="Provides a Fuzzy Logic PID controller with LUT&#45;based parameter tuning." alt="" coords="103,5,248,48"/>
-<area shape="rect" id="Node000002" href="$intrinsic_8h.html" title=" " alt="" coords="5,104,151,131"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,58,93,106,90,101,139,59"/>
-<area shape="rect" id="Node000003" href="$ctl__component__advance_8c.html" title=" " alt="" coords="174,96,374,139"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,56,254,96,248,95,209,61"/>
-</map>

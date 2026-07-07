@@ -1,9 +1,0 @@
-<map id="ctl_step_pll_3ph" name="ctl_step_pll_3ph">
-<area shape="rect" id="Node000001" title="Executes one step of the three&#45;phase PLL algorithm." alt="" coords="5,64,121,91"/>
-<area shape="rect" id="Node000002" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#gacda829724344363425dce7b1d264b455" title="Performs the Park transformation for 2D vectors (alpha&#45;beta to dq)." alt="" coords="188,5,280,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,61,180,36,177,39,105,66"/>
-<area shape="rect" id="Node000003" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="169,56,299,99"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="121,75,156,76,151,78,122,80"/>
-<area shape="rect" id="Node000004" href="$group__continuous__pid__controllers.html#ga6643ab7636f063fd148aaef61451d4a6" title="Executes one step of the parallel&#45;form PID controller." alt="" coords="176,123,292,149"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="105,89,181,116,176,118,104,94"/>
-</map>

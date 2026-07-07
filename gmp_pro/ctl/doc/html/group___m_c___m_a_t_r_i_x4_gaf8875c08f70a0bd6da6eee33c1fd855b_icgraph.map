@@ -1,7 +1,0 @@
-<map id="ctl_matrix4_clear" name="ctl_matrix4_clear">
-<area shape="rect" id="Node000001" title="Clears a 4x4 matrix, setting all its elements to zero." alt="" coords="213,31,333,57"/>
-<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x4.html#ga6e9051522b1dac31a0b20bfa0d9de93f" title="Calculates the inverse of a 4x4 matrix." alt="" coords="30,5,140,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,35,140,29,140,23,200,33"/>
-<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x4.html#ga85ffc2752528c811d24f15cbeb0610dc" title="Sets a 4x4 matrix to the identity matrix." alt="" coords="5,56,165,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,55,166,61,165,56,200,54"/>
-</map>

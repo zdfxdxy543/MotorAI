@@ -1,1 +1,0 @@
-You may run this Power Shell script to register GMP product.

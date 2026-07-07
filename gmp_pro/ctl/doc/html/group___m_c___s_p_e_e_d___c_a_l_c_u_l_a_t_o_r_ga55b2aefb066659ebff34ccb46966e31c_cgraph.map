@@ -1,9 +1,0 @@
-<map id="ctl_step_spd_calc" name="ctl_step_spd_calc">
-<area shape="rect" id="Node000001" title="Executes one step of the speed calculation." alt="" coords="5,56,132,83"/>
-<area shape="rect" id="Node000002" href="$group___m_c___r_o_t_a_t_i_o_n___i_f.html#gabe53f0a670e81c016cfa84019f18c300" title="Gets the mechanical position from a rotation interface." alt="" coords="180,5,345,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,53,196,35,192,38,123,58"/>
-<area shape="rect" id="Node000003" href="$group__frequency__divider.html#ga440482fa4859c76cd2b25a884ea84458" title="Executes one step of the frequency divider." alt="" coords="206,56,318,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,67,193,68,188,70,132,72"/>
-<area shape="rect" id="Node000004" href="$group__discrete__filter__api.html#gacbd67d6fc3fee1d088725e78dc01a1ce" title="Executes one step of the low&#45;pass filter calculation." alt="" coords="185,107,340,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="123,81,197,101,192,103,122,86"/>
-</map>

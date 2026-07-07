@@ -1,7 +1,0 @@
-<map id="ctl_qnormalize" name="ctl_qnormalize">
-<area shape="rect" id="Node000001" title="Normalizes a quaternion to produce a unit quaternion. A unit quaternion has a norm of 1 and is used t..." alt="" coords="5,5,111,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___q_u_a_t_e_r_n_i_o_n.html#ga98dffd4279b520c21d3bc801c1963f0b" title="Computes the norm (magnitude) of a quaternion." alt="" coords="159,5,237,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,16,146,18,140,19,111,21"/>
-<area shape="rect" id="Node000003" href="$group___m_c___q_u_a_t_e_r_n_i_o_n.html#ga23e70ac0e537f930f57e0e660fe0e9c7" title="Computes the squared norm (magnitude) of a quaternion. This is computationally cheaper than ctl_qnorm..." alt="" coords="285,5,384,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="238,16,272,19,267,19,238,21"/>
-</map>

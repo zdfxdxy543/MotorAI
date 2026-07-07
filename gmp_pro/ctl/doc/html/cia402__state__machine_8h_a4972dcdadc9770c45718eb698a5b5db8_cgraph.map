@@ -1,7 +1,0 @@
-<map id="ctl_check_pll_locked" name="ctl_check_pll_locked">
-<area shape="rect" id="Node000001" title="启动/复位锁相环 (PLL)" alt="" coords="5,31,148,57"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga187018f89e12e1b10763d40e7a3b73e2" title="Get PLL error." alt="" coords="213,5,347,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,33,200,28,195,30,149,38"/>
-<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga6e4410a9bc42e243a8302227a5adf0ac" title="GFL preparing to connect to grid." alt="" coords="196,56,364,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,50,183,57,177,57,148,56"/>
-</map>

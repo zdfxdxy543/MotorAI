@@ -1,7 +1,0 @@
-<map id="ctl_matrix2_eigenvalues_complex" name="ctl_matrix2_eigenvalues_complex">
-<area shape="rect" id="Node000001" title="Calculates the eigenvalues of a 2x2 matrix." alt="" coords="5,23,167,65"/>
-<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga80ad642e99377917f60f0366d39b7bb6" title="Calculates the determinant of a 2x2 matrix." alt="" coords="220,5,330,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,31,207,27,202,29,168,36"/>
-<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x2.html#gae1454ec576b70c9dc9af6d35cb1d08a5" title="Calculates the trace of a 2x2 matrix (sum of diagonal elements)." alt="" coords="215,56,336,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,52,202,59,196,59,167,57"/>
-</map>

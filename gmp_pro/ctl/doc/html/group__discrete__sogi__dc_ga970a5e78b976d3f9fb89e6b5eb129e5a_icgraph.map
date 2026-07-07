@@ -1,5 +1,0 @@
-<map id="ctl_get_discrete_sogi_dc_alpha" name="ctl_get_discrete_sogi_dc_alpha">
-<area shape="rect" id="Node000001" title="Gets the latest direct (alpha) output (DC&#45;free)." alt="" coords="204,5,348,48"/>
-<area shape="rect" id="Node000002" href="$group__spll__dc__api.html#ga2a7edfdfd8cd08cf8b26b916bd326f55" title="Executes one step of the Single&#45;Phase SOGI&#45;DC PLL algorithm." alt="" coords="5,5,156,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,27,156,29,156,24,191,26"/>
-</map>

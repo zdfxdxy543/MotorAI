@@ -1,5 +1,0 @@
-<map id="ctl_init_df11" name="ctl_init_df11">
-<area shape="rect" id="Node000001" title="Initializes the DF11 controller." alt="" coords="5,5,96,32"/>
-<area shape="rect" id="Node000002" href="$group__df__controllers.html#ga6ac33c20993a52ce094ae1381168f56c" title="Clears the internal state variables of the DF11 controller." alt="" coords="144,5,245,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,16,131,18,126,19,96,21"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="ctl_init_biquad_lpf" name="ctl_init_biquad_lpf">
-<area shape="rect" id="Node000001" title="Initializes the biquad filter as a Low&#45;Pass Filter (LPF)." alt="" coords="308,31,433,57"/>
-<area shape="rect" id="Node000002" href="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gab54e69dcf6099820f3ca6f82083a4471" title=" " alt="" coords="113,5,260,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,33,260,31,260,26,296,33"/>
-<area shape="rect" id="Node000004" href="$group___p_m_s_m___h_f_i.html#ga401dfc7a4fbd9047d31199d4582149e5" title="Initializes the HFI estimator module." alt="" coords="125,56,248,83"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="295,54,249,63,248,58,290,55"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,20,66,21,64,16,99,17"/>
-</map>

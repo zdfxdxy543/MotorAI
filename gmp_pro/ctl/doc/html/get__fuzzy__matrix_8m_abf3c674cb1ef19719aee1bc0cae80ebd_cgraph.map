@@ -1,8 +1,0 @@
-<map id="range" name="range">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,59,57"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="12,31,9,22,11,13,19,6,32,4,46,7,54,14,49,16,43,11,32,9,21,11,15,16,14,22,17,30"/>
-<area shape="rect" id="Node000002" href="$generate__fuzzy__2d__src_8m.html#aa69ca3527648e65c6a63063cf554feaf" title=" " alt="" coords="117,5,170,32"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="58,35,104,26,100,30,60,41"/>
-<area shape="rect" id="Node000003" href="$generate__fuzzy__2d__src_8m.html#a0e712ec6ede0da49757f5ef8a63d4bbd" title=" " alt="" coords="107,56,180,83"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="59,47,94,56,89,59,59,53"/>
-</map>

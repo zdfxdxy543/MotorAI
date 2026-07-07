@@ -1,9 +1,0 @@
-<map id="ctl_init_biquad_bpf" name="ctl_init_biquad_bpf">
-<area shape="rect" id="Node000001" title="Initializes the biquad filter as a Band&#45;Pass Filter (BPF)." alt="" coords="439,13,569,40"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gaad37ff3a95825d39dcee5ff225e5796b" title="update GFL inverter controller parameters by init structure." alt="" coords="265,5,391,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="421,27,392,29,391,24,426,27"/>
-<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gad2cd1f7524fc26c61a5f120b8c1858a2" title="Init GFL inverter parameters." alt="" coords="113,13,217,40"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="247,27,217,29,217,24,252,27"/>
-<area shape="rect" id="Node000004" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,28,65,29,65,24,99,26"/>
-</map>

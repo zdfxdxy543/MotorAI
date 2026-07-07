@@ -1,5 +1,0 @@
-<map id="ctl_pmsm_get_Ke_Vrms_per_krpm" name="ctl_pmsm_get_Ke_Vrms_per_krpm">
-<area shape="rect" id="Node000001" title="Calculates the PMSM back&#45;EMF constant (Ke) in V_RMS / kRPM." alt="" coords="5,5,169,48"/>
-<area shape="rect" id="Node000002" href="$group___m_c___p_m_s_m___c_a_l_c_u_l_a_t_o_r_s.html#gacd400466437c23d4ce7a0ce788576f0f" title="Calculates the PMSM torque constant (Kt)." alt="" coords="217,5,387,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,24,204,26,198,27,169,29"/>
-</map>

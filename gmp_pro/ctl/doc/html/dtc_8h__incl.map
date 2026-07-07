@@ -1,5 +1,0 @@
-<map id="component/motor_control/current_loop/dtc.h" name="component/motor_control/current_loop/dtc.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="17,5,185,48"/>
-<area shape="rect" id="Node000002" href="$hysteresis__controller_8h.html" title="Provides a hysteresis (bang&#45;bang) controller." alt="" coords="5,96,197,139"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,46,104,81,98,80,99,51"/>
-</map>

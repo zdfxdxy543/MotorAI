@@ -1,5 +1,0 @@
-<map id="ctl_clear_dpcc" name="ctl_clear_dpcc">
-<area shape="rect" id="Node000001" title="Clears the internal state variables of the DPCC module." alt="" coords="5,5,111,32"/>
-<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="159,5,279,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,16,146,18,141,19,111,21"/>
-</map>

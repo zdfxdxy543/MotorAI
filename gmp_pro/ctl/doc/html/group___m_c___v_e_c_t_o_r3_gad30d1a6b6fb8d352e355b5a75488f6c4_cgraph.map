@@ -1,9 +1,0 @@
-<map id="ctl_vector3_normalize" name="ctl_vector3_normalize">
-<area shape="rect" id="Node000001" title="Normalizes a 3D vector to produce a unit vector (a vector with length 1)." alt="" coords="5,31,154,57"/>
-<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="202,5,322,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,31,189,28,184,30,154,36"/>
-<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r3.html#gaacd9d870756d569738f190fed74f7f35" title="Calculates the magnitude (length) of a 3D vector." alt="" coords="203,56,320,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,52,191,59,185,59,154,57"/>
-<area shape="rect" id="Node000004" href="$group___m_c___v_e_c_t_o_r3.html#ga276e5952492bb129ba6cc4d2065177f2" title="Calculates the squared magnitude (length) of a 3D vector. This is computationally cheaper than ctl_ve..." alt="" coords="370,56,508,83"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="321,67,358,69,352,69,321,72"/>
-</map>

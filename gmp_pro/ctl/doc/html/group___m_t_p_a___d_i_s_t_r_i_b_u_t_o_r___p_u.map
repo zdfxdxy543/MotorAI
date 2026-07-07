@@ -1,6 +1,0 @@
-<map id="MTPA Current Distributor (Per Unit)" name="MTPA Current Distributor (Per Unit)">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___c_o_m_p_o_n_e_n_t.html" title="Fundamental, reusable building blocks for motor control template library." alt="" coords="5,31,198,57"/>
-<area shape="rect" id="Node000001" title="Calculates optimal Id and Iq references for salient&#45;pole PMSMs." alt="" coords="246,23,413,65"/>
-<area shape="rect" id="Node000004" href="$group___m_t_p_a___p_u.html" title="MTPA functions operating with per&#45;unit (p.u.) values." alt="" coords="461,5,623,32"/>
-<area shape="rect" id="Node000003" href="$group___m_t_p_a___s_i.html" title="MTPA functions operating with standard SI units." alt="" coords="464,56,620,83"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="ADC Bias Calculation Models" name="ADC Bias Calculation Models">
-<area shape="rect" id="Node000001" title="A collection of functions to determine ADC bias values from circuit parameters." alt="" coords="223,5,372,48"/>
-<area shape="rect" id="Node000002" href="$group___g_m_p___c_t_l___c_o_m_m_o_n___i_n_t_e_r_f_a_c_e_s.html" title="Basic data interface, DAC, ADC, PWM, CAP, for interfacing with control peripherals." alt="" coords="5,13,175,40"/>
-</map>

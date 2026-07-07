@@ -1,9 +1,0 @@
-<map id="default_cb_fn_switched_on" name="default_cb_fn_switched_on">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,56,185,83"/>
-<area shape="rect" id="Node000002" href="$ctl__cia402__callback__fn_8c.html#a3f89f0595defab8684157843b3af0756" title="交流并网继电器/断路器控制" alt="" coords="249,5,392,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,53,246,35,241,37,159,58"/>
-<area shape="rect" id="Node000003" href="$ctl__cia402__callback__fn_8c.html#acbe9119883bdbe0514df74f64cf529d7" title="主接触器/直流继电器控制" alt="" coords="233,56,409,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="185,67,219,69,214,70,186,72"/>
-<area shape="rect" id="Node000004" href="$ctl__cia402__callback__fn_8c.html#a8507eb5777da4426949ffe9c8266b6c4" title="启动转子初始位置检测 (IPD / Alignment)" alt="" coords="238,107,404,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="158,81,246,102,241,103,158,86"/>
-</map>

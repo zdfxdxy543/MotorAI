@@ -1,8 +1,0 @@
-<map id="Encoder Interface" name="Encoder Interface">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___c_o_m_p_o_n_e_n_t.html" title="Fundamental, reusable building blocks for motor control template library." alt="" coords="5,109,198,136"/>
-<area shape="rect" id="Node000001" title="This module contains interfaces for various position and speed encoders." alt="" coords="246,109,370,136"/>
-<area shape="rect" id="Node000005" href="$group___m_c___a_u_t_o_t_u_r_n___e_n_c_o_d_e_r.html" title="Handles single&#45;turn encoders and automatically tracks full revolutions." alt="" coords="440,5,571,48"/>
-<area shape="rect" id="Node000004" href="$group___m_c___m_u_l_t_i_t_u_r_n___e_n_c_o_d_e_r.html" title="Handles multi&#45;turn absolute position encoders where the turn count is provided externally." alt="" coords="442,72,569,115"/>
-<area shape="rect" id="Node000003" href="$group___m_c___p_o_s___e_n_c_o_d_e_r.html" title="Handles single&#45;turn absolute position encoders." alt="" coords="418,139,593,165"/>
-<area shape="rect" id="Node000006" href="$group___m_c___s_p_e_e_d___c_a_l_c_u_l_a_t_o_r.html" title="Calculates motor speed by differentiating position over time." alt="" coords="445,189,566,216"/>
-</map>

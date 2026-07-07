@@ -1,4 +1,0 @@
-<map id="Speed Calculator" name="Speed Calculator">
-<area shape="rect" id="Node000002" href="$group___m_c___e_n_c_o_d_e_r.html" title="This module contains interfaces for various position and speed encoders." alt="" coords="5,5,130,32"/>
-<area shape="rect" id="Node000001" title="Calculates motor speed by differentiating position over time." alt="" coords="178,5,299,32"/>
-</map>

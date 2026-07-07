@@ -1,5 +1,0 @@
-<map id="cia402_fault_request" name="cia402_fault_request">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,147,32"/>
-<area shape="rect" id="Node000002" href="$ctl__cia402__state__machine_8c.html#a05075df50a8762ae8194eff8d24bef76" title=" " alt="" coords="195,5,378,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="147,16,182,19,176,19,147,21"/>
-</map>

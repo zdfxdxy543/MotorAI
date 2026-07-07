@@ -1,2 +1,0 @@
-doxygen doxyfile.config
-@pause

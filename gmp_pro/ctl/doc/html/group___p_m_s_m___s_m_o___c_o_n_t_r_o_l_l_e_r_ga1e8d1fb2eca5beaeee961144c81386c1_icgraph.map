@@ -1,5 +1,0 @@
-<map id="ctl_enable_pmsm_smo" name="ctl_enable_pmsm_smo">
-<area shape="rect" id="Node000001" title="Enables the SMO observer calculations." alt="" coords="113,5,268,32"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="94,19,65,21,65,16,100,18"/>
-</map>

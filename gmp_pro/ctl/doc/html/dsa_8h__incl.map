@@ -1,9 +1,0 @@
-<map id="component/dsa.h" name="component/dsa.h">
-<area shape="rect" id="Node000001" title=" " alt="" coords="200,5,321,32"/>
-<area shape="rect" id="Node000002" href="$dsa__trigger_8h.html" title="Provides a basic data acquisition trigger for logging data based on a signal event." alt="" coords="5,80,159,123"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,32,143,76,141,71,230,33"/>
-<area shape="rect" id="Node000003" href="$sine__analyzer_8h.html" title="Provides a module to analyze a sine wave signal, calculating its RMS, average value,..." alt="" coords="182,80,339,123"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="262,31,263,66,258,63,259,34"/>
-<area shape="rect" id="Node000004" href="$dlog__4ch__f_8h.html" title="Header file for a 4&#45;channel data logging module (floating&#45;point)." alt="" coords="363,80,502,123"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="288,30,377,73,372,73,287,35"/>
-</map>

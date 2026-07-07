@@ -1,7 +1,0 @@
-<map id="ctl_step_discrete_sogi_dc" name="ctl_step_discrete_sogi_dc">
-<area shape="rect" id="Node000001" title="Executes one step of the SOGI&#45;DC calculation." alt="" coords="5,31,178,57"/>
-<area shape="rect" id="Node000002" href="$group__discrete__sogi.html#ga0ab818cbc3a57d670d767b3fb76faa24" title="Gets the latest direct (in&#45;phase) output." alt="" coords="226,5,391,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,31,213,30,208,31,179,37"/>
-<area shape="rect" id="Node000003" href="$group__discrete__sogi.html#ga3c63ad0fdbe57dca28ef5e88dbbab330" title="Executes one step of the SOGI calculation." alt="" coords="233,56,384,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,51,220,59,214,59,178,57"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="ctl_clear_fir_filter" name="ctl_clear_fir_filter">
-<area shape="rect" id="Node000001" title="Clears the internal state buffer of the FIR filter." alt="" coords="163,5,283,32"/>
-<area shape="rect" id="Node000002" href="$group__fir__filter.html#gaee627819f9648ed5e4ac221559de9b6a" title="Initializes the generic FIR filter." alt="" coords="5,5,115,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,19,115,21,115,16,150,18"/>
-</map>

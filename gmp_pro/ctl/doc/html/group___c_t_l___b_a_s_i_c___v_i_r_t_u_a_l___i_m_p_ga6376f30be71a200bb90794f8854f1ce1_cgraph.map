@@ -1,5 +1,0 @@
-<map id="ctl_step_vir_imp" name="ctl_step_vir_imp">
-<area shape="rect" id="Node000001" title="Executes one step of the Virtual Impedance simulation." alt="" coords="5,5,122,32"/>
-<area shape="rect" id="Node000002" href="$group___b_i_q_u_a_d__filter__api.html#gac025fc72c24cab970daf906a12a45466" title="Executes one step of the 2nd&#45;order IIR filter." alt="" coords="170,5,314,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="122,16,157,18,152,19,122,21"/>
-</map>

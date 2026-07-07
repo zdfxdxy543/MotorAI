@@ -1,9 +1,0 @@
-<map id="ctl_init_biquad_notch" name="ctl_init_biquad_notch">
-<area shape="rect" id="Node000001" title="Initializes the biquad filter as a Notch Filter." alt="" coords="453,13,597,40"/>
-<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga70a49cb924085625423adec882408865" title="Update Negative Sequence Controller coefficients." alt="" coords="272,5,405,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="435,27,406,29,406,24,441,27"/>
-<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gacdaaff164b0b207468a0151ccf598f2b" title="Initialize Negative Sequence Controller." alt="" coords="113,13,224,40"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="254,27,225,29,224,24,259,27"/>
-<area shape="rect" id="Node000004" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="94,28,65,29,65,24,100,26"/>
-</map>

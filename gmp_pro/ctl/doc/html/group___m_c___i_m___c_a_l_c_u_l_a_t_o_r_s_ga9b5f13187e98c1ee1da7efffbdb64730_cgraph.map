@@ -1,5 +1,0 @@
-<map id="ctl_acm_tune_current_pi_params" name="ctl_acm_tune_current_pi_params">
-<area shape="rect" id="Node000001" title="Estimates PI controller parameters for the current loop." alt="" coords="5,5,152,48"/>
-<area shape="rect" id="Node000002" href="$group___m_c___i_m___c_a_l_c_u_l_a_t_o_r_s.html#ga26bb3d424b3b79ea8f19272aa6035753" title="Calculates the total leakage coefficient (sigma)." alt="" coords="200,5,344,48"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,24,187,26,182,27,152,29"/>
-</map>

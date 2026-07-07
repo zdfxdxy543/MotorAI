@@ -1,5 +1,0 @@
-<map id="ctl_init_current_distributor" name="ctl_init_current_distributor">
-<area shape="rect" id="Node000001" title="Initializes the current distributor." alt="" coords="5,5,176,32"/>
-<area shape="rect" id="Node000002" href="$group__lookup__tables.html#ga7cc738f5efd8df480693998741714b83" title="Initializes a 1D Look&#45;Up Table." alt="" coords="224,5,318,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="176,16,211,19,205,19,176,21"/>
-</map>

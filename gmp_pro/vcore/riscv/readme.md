@@ -1,1 +1,0 @@
-This folder reserved for a RISC-V soft-core.

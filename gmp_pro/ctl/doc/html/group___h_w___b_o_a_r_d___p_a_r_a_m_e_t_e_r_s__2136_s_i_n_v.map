@@ -1,5 +1,0 @@
-<map id="2136SINV Inverter Hardware Parameters" name="2136SINV Inverter Hardware Parameters">
-<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___p_r_e_s_e_t.html" title="Motor &amp; Motor controller hardware preset." alt="" coords="5,5,165,48"/>
-<area shape="rect" id="Node000001" title="Contains definitions specific to the GMP 3PH 2136SINV DUAL hardware." alt="" coords="213,5,402,48"/>
-<area shape="rect" id="Node000003" href="$group___h_w___a_d_c___s_c_a_l_i_n_g__2136_s_i_n_v.html" title="Defines the scaling factors and reference voltages for ADC conversion." alt="" coords="450,5,636,48"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="ctl_matrix3_clear" name="ctl_matrix3_clear">
-<area shape="rect" id="Node000001" title="Clears a 3x3 matrix, setting all its elements to zero." alt="" coords="213,31,333,57"/>
-<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x3.html#gaf24f83592ae3f15efeb9f98c76cedd5b" title="Calculates the inverse of a 3x3 matrix." alt="" coords="30,5,140,32"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,35,140,29,140,23,200,33"/>
-<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x3.html#gae86df0c2619cdf85a3dcf1ffd782499b" title="Sets a 3x3 matrix to the identity matrix." alt="" coords="5,56,165,83"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,55,166,61,165,56,200,54"/>
-</map>

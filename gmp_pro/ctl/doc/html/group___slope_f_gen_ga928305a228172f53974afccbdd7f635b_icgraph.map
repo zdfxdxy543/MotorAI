@@ -1,9 +1,0 @@
-<map id="ctl_clear_slope_f_pu" name="ctl_clear_slope_f_pu">
-<area shape="rect" id="Node000001" title="Resets the internal state of the frequency slope limiter." alt="" coords="402,31,542,57"/>
-<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#ac6f35eac7dd51b1eab502ed5c84439af" title=" " alt="" coords="218,31,354,57"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="384,44,354,47,354,41,389,44"/>
-<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a827985f34c4e1205aea32cbe9f5b1d00" title="执行ADC偏置校准" alt="" coords="5,5,170,32"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="199,34,170,32,170,27,205,33"/>
-<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2f280049c_2xplt_8ctl__interface_8h.html#a9754cc2fe80af11975a0979f252def91" title=" " alt="" coords="11,56,164,83"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="199,55,164,62,164,57,205,54"/>
-</map>
