@@ -375,6 +375,13 @@ def current_qss() -> str:
                 background: {t.menu_hover_bg};
                 color: {t.menu_hover_text};
             }}
+            QMessageBox {{
+                background: {t.surface};
+            }}
+            QMessageBox QLabel {{
+                color: {t.text};
+                background: transparent;
+            }}
             QDialog {{
                 background: {t.background};
             }}

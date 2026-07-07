@@ -27,7 +27,7 @@ from motorai_config import get_output_root, load_settings
 from dialogs.project import NewProjectDialog, SettingsDialog
 from panels.controller_structure import ControllerStructurePanel
 from panels.cosim_config import CandidateNetworkPanel
-from panels.history import HistoryPanel
+from panels.history import HistoryPanel, add_to_history
 from panels.tuning_result import TuningResultPanel
 from panels.workspace import Design3RightPanel
 from styles.theme import (
@@ -227,6 +227,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, '已加载项目', f'当前项目：{self.current_project_json_path}')
             self._refresh_project_panels()
             self._load_panel_data()
+            add_to_history(self.current_project_json_path)
             self.history_panel.refresh()
 
     def get_current_project_json_path(self):
@@ -335,6 +336,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, '已加载项目', f'当前项目：{self.current_project_json_path}')
             self._refresh_project_panels()
             self._load_panel_data()
+            add_to_history(self.current_project_json_path)
             self.history_panel.refresh()
         except Exception as exc:
             QMessageBox.critical(self, '错误', f'加载项目 JSON 失败：{exc}')
@@ -353,6 +355,8 @@ class MainWindow(QMainWindow):
             self.action_network_config.setEnabled(True)
             self._refresh_project_panels()
             self._load_panel_data()
+            add_to_history(json_path)
+            self.history_panel.refresh()
         except Exception as exc:
             QMessageBox.critical(self, '错误', f'加载项目 JSON 失败：{exc}')
 
