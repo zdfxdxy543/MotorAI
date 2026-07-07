@@ -1,0 +1,7 @@
+<map id="ctl_vector2_normalize" name="ctl_vector2_normalize">
+<area shape="rect" id="Node000001" title="Normalizes a 2D vector to produce a unit vector (a vector with length 1)." alt="" coords="5,5,154,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#gafbee66017a932c4fcfcc814da32b2fc3" title="Calculates the magnitude (length) of a 2D vector." alt="" coords="202,5,319,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,16,189,19,184,19,154,21"/>
+<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r2.html#gac9b1c5a41292d8ee60de7ba400a8bb47" title="Calculates the squared magnitude (length) of a 2D vector. This is computationally cheaper than ctl_ve..." alt="" coords="367,5,505,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="319,16,354,19,349,19,319,21"/>
+</map>

@@ -1,0 +1,13 @@
+<map id="ctl_step_neg_inv_ctrl" name="ctl_step_neg_inv_ctrl">
+<area shape="rect" id="Node000001" title="Executes one step of the Negative Sequence Controller." alt="" coords="5,107,150,133"/>
+<area shape="rect" id="Node000002" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#gaa8af188a8f9312472039a0c4a0cd88cd" title="Performs the negative sequence inverse Park transformation for 2D vectors." alt="" coords="208,5,332,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,104,141,74,196,42,213,37,208,40,199,46,143,78,99,108"/>
+<area shape="rect" id="Node000003" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga32ec04346768fe62501f9c5e4bf88345" title="Performs the negative sequence Park transformation for 2D vectors." alt="" coords="210,56,330,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,104,204,86,200,89,132,108"/>
+<area shape="rect" id="Node000004" href="$group___b_i_q_u_a_d__filter__api.html#gac025fc72c24cab970daf906a12a45466" title="Executes one step of the 2nd&#45;order IIR filter." alt="" coords="198,107,342,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="149,117,185,119,180,121,151,123"/>
+<area shape="rect" id="Node000005" href="$group__continuous__pid__controllers.html#gaacbe00aab5fac981355786302cffb287" title="Executes one step of the series&#45;form PID controller." alt="" coords="212,157,328,184"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="131,131,204,152,199,154,131,137"/>
+<area shape="rect" id="Node000006" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="210,208,330,235"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="98,131,143,162,199,194,213,202,208,202,196,198,141,166,97,136"/>
+</map>

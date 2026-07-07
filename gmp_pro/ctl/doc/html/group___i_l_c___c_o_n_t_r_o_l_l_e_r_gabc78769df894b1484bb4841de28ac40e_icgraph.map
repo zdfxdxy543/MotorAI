@@ -1,0 +1,5 @@
+<map id="ctl_clear_ilc" name="ctl_clear_ilc">
+<area shape="rect" id="Node000001" title="Resets the ILC controller to its initial state." alt="" coords="133,5,223,32"/>
+<area shape="rect" id="Node000002" href="$group___i_l_c___c_o_n_t_r_o_l_l_e_r.html#ga2d0fa6272b72a4d833c3f9624f242433" title="Initializes the ILC module." alt="" coords="5,5,85,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,19,85,21,85,16,120,18"/>
+</map>

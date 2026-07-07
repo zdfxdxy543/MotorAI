@@ -1,0 +1,63 @@
+<map id="ctl_set_pid_limit" name="ctl_set_pid_limit">
+<area shape="rect" id="Node000001" title="Set PID controller PID limit." alt="" coords="598,417,714,444"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga3aab0014cd0232c544eea5856e0a5ae5" title="Initializes the sensored ACM controller." alt="" coords="129,5,280,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="648,401,635,324,613,223,584,129,567,93,549,70,519,49,487,34,452,23,416,16,345,12,282,16,279,12,345,7,417,11,453,18,489,29,522,45,552,66,571,90,589,127,618,222,640,323,653,403"/>
+<area shape="rect" id="Node000004" href="$group___f_l_u_x___w_e_a_k_e_n_i_n_g___c_o_n_t_r_o_l_l_e_r.html#ga46f363576b8e2225269b25c645411ea3" title="Initializes the Flux Weakening Controller." alt="" coords="394,468,500,495"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="581,450,501,471,499,466,585,447"/>
+<area shape="rect" id="Node000005" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#ga03ba56dada0d048473f8751a91aade25" title="Sets up the parameters for the d&#45;q axis PI controllers." alt="" coords="368,417,526,444"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="580,432,527,433,526,428,585,430"/>
+<area shape="rect" id="Node000007" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#ga3ea4e7af1685b9d25295a35bb4f1dd0b" title="Configures and initializes a PMSM controller instance based on provided parameters." alt="" coords="123,73,286,100"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="653,401,649,340,634,260,621,219,603,180,579,144,549,114,516,94,481,79,443,70,405,66,330,67,267,75,264,71,330,61,405,61,444,65,483,74,519,89,552,110,583,141,608,177,626,217,639,259,654,339,658,403"/>
+<area shape="rect" id="Node000009" href="$group___p_m_s_m___h_f_i.html#ga401dfc7a4fbd9047d31199d4582149e5" title="Initializes the HFI estimator module." alt="" coords="386,519,509,545"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="631,453,594,484,551,509,510,523,508,519,549,504,591,480,626,456"/>
+<area shape="rect" id="Node000010" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga6397684aabd5437d7342987b3cb5b8a8" title="Initializes the PMSM HFI Controller." alt="" coords="113,127,296,153"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="651,401,645,347,629,278,616,243,598,209,576,179,549,154,514,134,477,121,437,114,397,112,320,117,257,128,253,124,319,111,397,106,438,109,478,116,517,130,552,150,580,176,603,207,621,241,634,277,650,346,656,403"/>
+<area shape="rect" id="Node000011" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga87dd21e60e259f01f167fb069845b4ef" title="Initializes the PMSM MTPA Controller." alt="" coords="135,181,274,224"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="643,402,629,371,609,334,582,297,549,268,528,257,500,248,428,232,275,211,273,206,429,226,502,243,530,252,552,263,586,294,613,331,634,369,648,403"/>
+<area shape="rect" id="Node000013" href="$group___p_m_s_m___s_m_o.html#gaedd2fd72cde2db547013f8451618f92a" title="Initializes the SMO estimator module." alt="" coords="380,316,514,343"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="626,407,591,382,549,357,515,345,514,339,551,352,594,377,631,407"/>
+<area shape="rect" id="Node000014" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga5e436e10f3d56ce34a10471e7e23116a" title="Initializes the PMSM SMO Controller." alt="" coords="121,257,288,300"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="638,403,603,352,578,327,549,306,518,293,484,282,416,270,348,267,289,270,287,265,348,262,416,265,486,277,520,288,552,302,582,323,607,349,644,404"/>
+<area shape="rect" id="Node000016" href="$group__tracking__continuous__pid.html#ga2f63a484d692b96e7412057bdb0f81a9" title="Initializes the tracking continuous PID controller." alt="" coords="344,164,550,191"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="646,402,635,361,616,309,587,256,569,232,549,211,520,194,519,189,552,207,573,229,592,254,621,307,640,359,652,403"/>
+<area shape="rect" id="Node000017" href="$group___v_e_l_o_c_i_t_y___p_o_s_i_t_i_o_n___c_o_n_t_r_o_l_l_e_r.html#ga0821269bed12b37c12608a4a7d11def1" title="Initializes the velocity and position controller structure to safe defaults." alt="" coords="379,367,515,393"/>
+<area shape="poly" id="edge23_Node000001_Node000017" title=" " alt="" coords="581,414,506,397,505,391,586,412"/>
+<area shape="rect" id="Node000018" href="$group___f_l_u_x___w_e_a_k_e_n_i_n_g___c_o_n_t_r_o_l_l_e_r.html#gaea494f3d655c8354f21b83a5b8051c71" title="Executes one step of Flux Weakening Control." alt="" coords="390,569,504,596"/>
+<area shape="poly" id="edge25_Node000001_Node000018" title=" " alt="" coords="642,456,605,511,580,537,552,560,529,571,506,578,503,573,527,566,549,555,577,533,601,507,638,460"/>
+<area shape="rect" id="Node000019" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#gac3fbcb82aa2d1898276e80e65ef99606" title="Executes one step of the PMSM controller calculation." alt="" coords="380,620,515,647"/>
+<area shape="poly" id="edge26_Node000001_Node000019" title=" " alt="" coords="648,457,635,494,615,535,587,576,552,610,517,627,514,622,549,606,583,572,610,532,630,492,644,461"/>
+<area shape="rect" id="Node000021" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga81e9dd88e588e565364de4fc07772945" title="Executes one step of the PMSM FOC HFI control loop." alt="" coords="369,671,525,697"/>
+<area shape="poly" id="edge28_Node000001_Node000021" title=" " alt="" coords="651,457,642,505,622,559,593,614,574,639,552,661,527,675,524,671,549,657,570,635,589,611,618,557,636,503,648,462"/>
+<area shape="rect" id="Node000022" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="362,721,533,748"/>
+<area shape="poly" id="edge29_Node000001_Node000022" title=" " alt="" coords="654,457,647,513,630,581,617,617,599,651,578,683,552,711,534,723,532,718,549,707,574,680,595,649,612,615,625,580,642,512,651,461"/>
+<area shape="rect" id="Node000024" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga70a49cb924085625423adec882408865" title="Update Negative Sequence Controller coefficients." alt="" coords="380,772,514,815"/>
+<area shape="poly" id="edge31_Node000001_Node000024" title=" " alt="" coords="655,457,651,522,635,602,622,645,604,687,581,727,552,762,535,775,515,784,513,779,532,771,548,758,577,724,599,685,617,643,630,601,646,521,652,462"/>
+<area shape="rect" id="Node000027" href="$class_p_i_d___parallel___test.html#a13e204c293f7681d99603cc88a2017d3" title=" " alt="" coords="380,839,514,881"/>
+<area shape="poly" id="edge34_Node000001_Node000027" title=" " alt="" coords="657,457,657,532,644,631,630,684,612,736,586,785,552,829,535,842,516,851,514,846,533,837,548,825,581,782,607,734,625,682,638,630,651,532,654,462"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="112,29,67,29,63,25,115,25"/>
+<area shape="rect" id="Node000006" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="175,367,234,393"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="362,415,235,389,233,383,367,412"/>
+<area shape="rect" id="Node000008" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,73,65,100"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="106,89,67,89,63,85,110,85"/>
+<area shape="rect" id="Node000012" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,189,65,216"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="118,205,67,205,64,201,122,201"/>
+<area shape="poly" id="edge13_Node000013_Node000006" title=" " alt="" coords="363,348,235,376,233,372,366,345"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="362,314,289,299,287,294,367,311"/>
+<area shape="rect" id="Node000015" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,265,65,292"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="104,281,67,281,63,277,108,277"/>
+<area shape="poly" id="edge18_Node000016_Node000002" title=" " alt="" coords="417,154,363,110,295,64,271,51,269,46,297,59,366,106,422,153"/>
+<area shape="poly" id="edge19_Node000016_Node000007" title=" " alt="" coords="399,159,295,117,255,103,253,98,297,112,404,156"/>
+<area shape="poly" id="edge20_Node000016_Node000010" title=" " alt="" coords="339,162,297,156,295,152,343,160"/>
+<area shape="poly" id="edge21_Node000016_Node000011" title=" " alt="" coords="327,191,276,198,273,193,331,188"/>
+<area shape="poly" id="edge22_Node000016_Node000014" title=" " alt="" coords="397,199,259,259,256,255,401,195"/>
+<area shape="poly" id="edge24_Node000017_Node000006" title=" " alt="" coords="362,382,236,382,234,378,366,378"/>
+<area shape="rect" id="Node000020" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="159,620,250,647"/>
+<area shape="poly" id="edge27_Node000019_Node000020" title=" " alt="" coords="361,635,251,636,250,631,366,632"/>
+<area shape="rect" id="Node000023" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="159,721,250,748"/>
+<area shape="poly" id="edge30_Node000022_Node000023" title=" " alt="" coords="344,736,251,737,250,732,349,734"/>
+<area shape="rect" id="Node000025" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gacdaaff164b0b207468a0151ccf598f2b" title="Initialize Negative Sequence Controller." alt="" coords="149,780,260,807"/>
+<area shape="poly" id="edge32_Node000024_Node000025" title=" " alt="" coords="363,794,261,796,260,791,368,793"/>
+<area shape="rect" id="Node000026" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,780,65,807"/>
+<area shape="poly" id="edge33_Node000025_Node000026" title=" " alt="" coords="131,795,66,796,65,791,135,791"/>
+</map>

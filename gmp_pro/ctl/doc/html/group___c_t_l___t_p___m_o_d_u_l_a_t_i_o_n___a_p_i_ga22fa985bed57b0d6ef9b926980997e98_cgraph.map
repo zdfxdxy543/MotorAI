@@ -1,0 +1,7 @@
+<map id="ctl_init_spwm_modulator" name="ctl_init_spwm_modulator">
+<area shape="rect" id="Node000001" title="Initializes the three&#45;phase bridge modulation module." alt="" coords="5,5,171,32"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___t_p___m_o_d_u_l_a_t_i_o_n___a_p_i.html#ga39917d2544323e28982edbb2701d99f5" title="Clears the internal states of the modulation module." alt="" coords="219,5,395,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,16,206,19,200,19,171,21"/>
+<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="443,5,563,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="395,16,430,19,425,19,395,21"/>
+</map>

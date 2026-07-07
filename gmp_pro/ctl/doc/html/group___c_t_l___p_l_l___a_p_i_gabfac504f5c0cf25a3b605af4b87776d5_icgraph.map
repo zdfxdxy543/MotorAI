@@ -1,0 +1,16 @@
+<map id="ctl_clear_dsogi_pll" name="ctl_clear_dsogi_pll">
+<area shape="rect" id="Node000001" title="Clears the internal states of the DSOGI&#45;PLL controller." alt="" coords="965,43,1093,69"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga27f91fd6b8017d32183e85bf77e7a990" title="Auto&#45;tuning GFL inverter parameters." alt="" coords="741,43,917,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="947,56,918,59,917,53,952,56"/>
+<area shape="rect" id="Node000003" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a827985f34c4e1205aea32cbe9f5b1d00" title="执行ADC偏置校准" alt="" coords="528,16,693,43"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="723,43,693,42,693,37,728,43"/>
+<area shape="rect" id="Node000007" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gad2cd1f7524fc26c61a5f120b8c1858a2" title="Init GFL inverter parameters." alt="" coords="356,72,460,99"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="728,63,461,84,461,79,722,63"/>
+<area shape="rect" id="Node000004" href="$ctl__cia402__state__machine_8c.html#a8af641589fb779b94c77b85200f3b4ee" title=" " alt="" coords="336,5,480,48"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="510,28,481,30,480,25,515,28"/>
+<area shape="rect" id="Node000005" href="$ctl__cia402__state__machine_8c.html#ac410ae5ea0c4e4b53716e8532cd03353" title=" " alt="" coords="113,16,288,43"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="318,28,289,31,288,26,323,27"/>
+<area shape="rect" id="Node000006" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,43,65,69"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="97,47,66,54,64,49,101,44"/>
+<area shape="poly" id="edge7_Node000007_Node000006" title=" " alt="" coords="340,83,65,61,65,56,341,77"/>
+</map>

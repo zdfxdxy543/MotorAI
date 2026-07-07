@@ -1,0 +1,5 @@
+<map id="ctl_init_filter_iir1_apf" name="ctl_init_filter_iir1_apf">
+<area shape="rect" id="Node000001" title="Initializes the filter as a 1st&#45;order All&#45;Pass Filter." alt="" coords="5,5,146,32"/>
+<area shape="rect" id="Node000002" href="$group__discrete__filter__api.html#gab8b865801ae1e4dd4014b4f3b3a54250" title="Clears all internal states of the 1st&#45;order IIR filter." alt="" coords="194,5,320,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,16,180,19,175,19,146,21"/>
+</map>

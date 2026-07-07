@@ -1,0 +1,5 @@
+<map id="component/hardware_preset/inverter_3ph/TI_BOOSTXL_DRV8323RS.h" name="component/hardware_preset/inverter_3ph/TI_BOOSTXL_DRV8323RS.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,205,64"/>
+<area shape="rect" id="Node000002" href="$inverter__3ph__general_8h.html" title=" " alt="" coords="12,112,198,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,62,108,97,102,96,104,67"/>
+</map>

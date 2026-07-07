@@ -1,0 +1,21 @@
+digraph "ctl_step_mppt_PnO_algo"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="ctl_step_mppt_PnO_algo",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Executes one step of the P&O MPPT algorithm."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl_dispatch",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2dps__boost_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15",tooltip=" "];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="gmp_base_ctl_step",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___f_r_a_m_e_w_o_r_k___d_i_s_p_a_t_c_h_e_r.html#ga478b5eb11dd712ebe285b7ac85cc3ef6",tooltip="The main kernel step function for the GMP CTL module."];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="HAL_ADC_ConvCpltCallback",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2dps__buck_2implement_2stm32f407_2xplt_8peripheral_8c.html#af20a88180db1113be1e89266917d148b",tooltip=" "];
+  Node3 -> Node5 [id="edge4_Node000003_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="HAL_ADCEx_InjectedConvCplt\lCallback",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2mcs__pmsm_2implement_2stm32f405_2xplt_8peripheral_8c.html#aed7815e8b636ff1c1f456ecbaffe1942",tooltip="Injected conversion complete callback in non blocking mode."];
+  Node3 -> Node6 [id="edge5_Node000003_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="HAL_TIM_PeriodElapsedCallback",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2pgs__1ph__dcac__inv_2implement_2stm32f407_2xplt_8peripheral_8c.html#a8a3b0ad512a6e6c6157440b68d395eac",tooltip=" "];
+  Node3 -> Node7 [id="edge6_Node000003_Node000007",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="MainISR",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2mcs__acm_2implement_2f280049c_2xplt_8peripheral_8c.html#abf8f7c98b52c47d6404b22e1a56e93df",tooltip=" "];
+}

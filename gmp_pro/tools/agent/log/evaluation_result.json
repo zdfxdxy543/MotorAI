@@ -1,0 +1,137 @@
+{
+  "status": "partial",
+  "task_type": "constant_speed_control",
+  "objective": "速度环超调量小于5%，稳态误差小于5%。",
+  "processed_json_path": "E:\\Related_Github_Project\\gmp_pro\\tools\\agent\\log\\simulation\\processed.json",
+  "evaluation_config_path": "E:\\Related_Github_Project\\gmp_pro\\tools\\agent\\log\\evaluation_config.json",
+  "configured_signal_count": 1,
+  "configured_metric_count": 3,
+  "signals": {
+    "rotor_speed_rad_s": {
+      "name": "rotor_speed_rad_s",
+      "source_name": "rotor_speed_rad_s",
+      "sample_count": 401,
+      "source_scope": "ScopeData2",
+      "source_channel": "<Rotor speed wm (rad/s)>",
+      "time_start": 0.0,
+      "time_end": 2.0,
+      "value_first": 0.0,
+      "value_last": 91.93054271250224,
+      "value_min": 0.0,
+      "value_max": 91.93054271250224
+    }
+  },
+  "derived_signals": {},
+  "metrics": {
+    "speed_overshoot": {
+      "status": "ok",
+      "metric_name": "overshoot",
+      "resolved_metric_name": "overshoot",
+      "metric_index": 0,
+      "signal": "rotor_speed_rad_s",
+      "target_signal": null,
+      "target_value": 100.0,
+      "weight": 0.25,
+      "optimization_direction": "minimize",
+      "unit": "ratio",
+      "extra": {
+        "result_name": "speed_overshoot",
+        "normalize": true,
+        "good_threshold": 0.1,
+        "bad_threshold": 0.3,
+        "description": "超调量，归一化后 0.10 表示 10%"
+      },
+      "value": 0.0,
+      "target_summary": {
+        "type": "scalar",
+        "value": 100.0
+      },
+      "score_status": "scored",
+      "score": 100.0,
+      "score_weight": 0.25,
+      "score_good_threshold": 0.1,
+      "score_bad_threshold": 0.3,
+      "score_optimization_direction": "minimize",
+      "score_skip_reason": null,
+      "score_error": null
+    },
+    "speed_settling_time": {
+      "status": "error",
+      "metric_name": "settling_time",
+      "resolved_metric_name": "settling_time",
+      "metric_index": 1,
+      "signal": "rotor_speed_rad_s",
+      "target_signal": null,
+      "target_value": 100.0,
+      "weight": 0.5,
+      "optimization_direction": "minimize",
+      "unit": "s",
+      "extra": {
+        "result_name": "speed_settling_time",
+        "good_threshold": 0.2,
+        "bad_threshold": 0.5,
+        "description": "调节时间，目标<200ms"
+      },
+      "error": "MetricComputationError: settling_time cannot be computed because the signal never remains within +/-2.0.",
+      "score_status": "skipped",
+      "score": null,
+      "score_weight": null,
+      "score_good_threshold": null,
+      "score_bad_threshold": null,
+      "score_optimization_direction": null,
+      "score_skip_reason": "metric status is not ok",
+      "score_error": null
+    },
+    "speed_steady_state_error": {
+      "status": "ok",
+      "metric_name": "steady_state_error",
+      "resolved_metric_name": "steady_state_error",
+      "metric_index": 2,
+      "signal": "rotor_speed_rad_s",
+      "target_signal": null,
+      "target_value": 100.0,
+      "weight": 0.25,
+      "optimization_direction": "minimize",
+      "unit": "value",
+      "extra": {
+        "result_name": "speed_steady_state_error",
+        "good_threshold": 15.708,
+        "bad_threshold": 62.832,
+        "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+      },
+      "value": 8.33918336846891,
+      "target_summary": {
+        "type": "scalar",
+        "value": 100.0
+      },
+      "score_status": "scored",
+      "score": 100.0,
+      "score_weight": 0.25,
+      "score_good_threshold": 15.708,
+      "score_bad_threshold": 62.832,
+      "score_optimization_direction": "minimize",
+      "score_skip_reason": null,
+      "score_error": null
+    }
+  },
+  "metric_ok_count": 2,
+  "metric_error_count": 1,
+  "warnings": [
+    "metric 'speed_settling_time' skipped from overall_score: metric status is not ok"
+  ],
+  "errors": [
+    {
+      "stage": "metric",
+      "metric_key": "speed_settling_time",
+      "metric_name": "settling_time",
+      "message": "MetricComputationError: settling_time cannot be computed because the signal never remains within +/-2.0."
+    }
+  ],
+  "overall_score": 100.0,
+  "scoring_summary": {
+    "overall_score": 100.0,
+    "scored_metric_count": 2,
+    "skipped_metric_count": 1,
+    "total_score_weight": 0.5
+  }
+}

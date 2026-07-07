@@ -1,0 +1,7 @@
+<map id="ctl_clear_dq_hcm" name="ctl_clear_dq_hcm">
+<area shape="rect" id="Node000001" title="Clears internal states of all resonators." alt="" coords="5,31,129,57"/>
+<area shape="rect" id="Node000002" href="$group__resonant__controllers.html#gae5a6a9ba24dee6aa214c36df0e952e73" title="Clears the internal states of the QR controller." alt="" coords="177,5,325,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,33,164,30,159,32,130,38"/>
+<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="191,56,311,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="129,50,178,59,173,59,129,55"/>
+</map>

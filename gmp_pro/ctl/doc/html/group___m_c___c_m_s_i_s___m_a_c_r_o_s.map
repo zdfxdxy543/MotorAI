@@ -1,0 +1,7 @@
+<map id="CMSIS&#45;DSP Math Macros" name="CMSIS&#45;DSP Math Macros">
+<area shape="rect" id="Node000004" href="$group___m_c___a_r_i_t_h_m_e_t_i_c___c_m_s_i_s.html" title="Macros for basic arithmetic operations using CMSIS&#45;DSP functions where available." alt="" coords="452,5,584,48"/>
+<area shape="rect" id="Node000001" title="A collection of macros for hardware&#45;accelerated arithmetic using CMSIS&#45;DSP." alt="" coords="211,80,387,107"/>
+<area shape="rect" id="Node000005" href="$group___m_c___n_o_n_l_i_n_e_a_r___c_m_s_i_s.html" title="Macros for non&#45;linear mathematical functions using CMSIS&#45;DSP." alt="" coords="440,72,596,115"/>
+<area shape="rect" id="Node000003" href="$group___m_c___t_y_p_e___c_o_n_v_e_r_s_i_o_n___c_m_s_i_s.html" title="Macros for converting between float32_t and other data types." alt="" coords="435,139,601,181"/>
+<area shape="rect" id="Node000002" href="$group___m_c___c_t_r_l___g_t___i_m_p_l.html" title="Different underlying numerical implementations for the ctrl_gt type." alt="" coords="5,80,163,107"/>
+</map>

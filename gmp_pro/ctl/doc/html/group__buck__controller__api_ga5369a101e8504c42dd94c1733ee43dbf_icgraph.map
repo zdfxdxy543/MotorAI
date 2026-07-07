@@ -1,0 +1,11 @@
+<map id="ctl_clear_buck_ctrl" name="ctl_clear_buck_ctrl">
+<area shape="rect" id="Node000001" title="Clears the internal states and integral terms of the PID controllers." alt="" coords="329,31,459,57"/>
+<area shape="rect" id="Node000002" href="$group__buck__controller__api.html#ga90d2c266b08efaa9751c23bf89ef85c7" title="Initializes the Buck controller with specified PID and filter parameters." alt="" coords="155,5,274,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="311,33,274,30,275,24,316,32"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="148,56,281,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="316,55,282,63,281,57,311,56"/>
+<area shape="rect" id="Node000003" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="23,5,82,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="137,20,83,21,82,16,141,17"/>
+<area shape="rect" id="Node000005" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="5,56,100,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="130,70,100,72,100,67,135,69"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="ctl_enable_pmsm_ctrl" name="ctl_enable_pmsm_ctrl">
+<area shape="rect" id="Node000001" title="Enables the master switch for the controller." alt="" coords="148,31,296,57"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__hfi_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="23,5,82,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,32,83,26,82,20,135,29"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="5,56,100,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,58,100,65,100,60,135,57"/>
+</map>

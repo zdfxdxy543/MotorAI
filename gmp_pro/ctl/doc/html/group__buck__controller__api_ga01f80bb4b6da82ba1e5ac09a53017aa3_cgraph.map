@@ -1,0 +1,9 @@
+<map id="ctl_step_buck_ctrl" name="ctl_step_buck_ctrl">
+<area shape="rect" id="Node000001" title="Executes one step of the Buck control logic." alt="" coords="5,56,133,83"/>
+<area shape="rect" id="Node000002" href="$group__discrete__filter__api.html#gacbd67d6fc3fee1d088725e78dc01a1ce" title="Executes one step of the low&#45;pass filter calculation." alt="" coords="181,5,335,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,53,193,35,189,38,123,58"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#gaacbe00aab5fac981355786302cffb287" title="Executes one step of the series&#45;form PID controller." alt="" coords="200,56,316,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="132,67,187,68,182,70,133,72"/>
+<area shape="rect" id="Node000004" href="$group__saturation__blocks.html#gab4293cc14e0a1a4aa61f7b8e1fee3d1d" title="Executes one step of the saturation block." alt="" coords="192,107,324,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="122,81,193,101,188,103,121,86"/>
+</map>

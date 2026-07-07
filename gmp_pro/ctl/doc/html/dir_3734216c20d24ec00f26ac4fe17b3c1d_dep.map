@@ -1,0 +1,13 @@
+<map id="component/motor_control/basic" name="component/motor_control/basic">
+<area shape="rect" id="node1" href="dir_fb1b3426122517a5502d0081343f1c4d.html" title="current_loop" alt="" coords="27,128,120,155"/>
+<area shape="rect" id="node2" href="dir_3734216c20d24ec00f26ac4fe17b3c1d.html" title="basic" alt="" coords="67,53,120,80"/>
+<area shape="poly" id="edge3" href="dir_000005_000027.html" alt="" coords="92,79,83,114,78,112,88,83"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000005_000027.html" title="1" alt="" coords="86,104,93,120"/>
+<area shape="rect" id="node3" href="dir_60ca4780c5df36d8dc519db85772cbde.html" title="intrinsic" alt="" coords="144,128,210,155"/>
+<area shape="poly" id="edge1" href="dir_000005_000070.html" alt="" coords="109,78,154,117,149,118,107,83"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000005_000070.html" title="7" alt="" coords="151,101,158,117"/>
+<area shape="rect" id="node4" href="dir_689436b89019651601a1c37c53d7cd92.html" title="interface" alt="" coords="235,128,306,155"/>
+<area shape="poly" id="edge2" href="dir_000005_000069.html" alt="" coords="120,76,228,120,223,123,119,81"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000005_000069.html" title="1" alt="" coords="223,105,230,121"/>
+<area shape="rect" id="clust1" href="dir_9ec0a058b7d9e7853257ed5eaaefd457.html" title="motor_control" alt="" coords="16,16,131,165"/>
+</map>

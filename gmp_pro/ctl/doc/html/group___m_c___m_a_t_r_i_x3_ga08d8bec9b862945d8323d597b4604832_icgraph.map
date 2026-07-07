@@ -1,0 +1,5 @@
+<map id="ctl_matrix3_det" name="ctl_matrix3_det">
+<area shape="rect" id="Node000001" title="Calculates the determinant of a 3x3 matrix." alt="" coords="163,5,273,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x3.html#gaf24f83592ae3f15efeb9f98c76cedd5b" title="Calculates the inverse of a 3x3 matrix." alt="" coords="5,5,115,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,19,115,21,115,16,150,18"/>
+</map>

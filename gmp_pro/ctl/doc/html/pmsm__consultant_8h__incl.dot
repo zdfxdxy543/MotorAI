@@ -1,0 +1,12 @@
+digraph "component/motor_control/consultant/pmsm_consultant.h"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  Node1 [id="Node000001",label="component/motor_control\l/consultant/pmsm_consultant.h",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Defines data structures and utility functions for PMSM motor parameters."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl/component/motor\l_control/consultant\l/motor_per_unit_consultant.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$motor__per__unit__consultant_8h.html",tooltip="Defines a consultant module to calculate base values for a motor's per-unit system."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ctl/component/motor\l_control/consultant\l/motor_unit_calculator.h",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$motor__unit__calculator_8h.html",tooltip="Defines constants and macros for motor parameter and unit conversions."];
+}

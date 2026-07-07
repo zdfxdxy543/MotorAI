@@ -1,0 +1,5 @@
+<map id="ctl_qnorm" name="ctl_qnorm">
+<area shape="rect" id="Node000001" title="Computes the norm (magnitude) of a quaternion." alt="" coords="159,5,237,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___q_u_a_t_e_r_n_i_o_n.html#ga641d1b8ae84788d424ca64ea3c940a17" title="Normalizes a quaternion to produce a unit quaternion. A unit quaternion has a norm of 1 and is used t..." alt="" coords="5,5,111,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,19,111,21,111,16,146,18"/>
+</map>

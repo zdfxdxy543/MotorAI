@@ -1,0 +1,5 @@
+<map id="ctl_matrix3_set_identity" name="ctl_matrix3_set_identity">
+<area shape="rect" id="Node000001" title="Sets a 3x3 matrix to the identity matrix." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x3.html#gaada23d31af921b5d4342a5887274ce10" title="Clears a 3x3 matrix, setting all its elements to zero." alt="" coords="213,5,333,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,16,200,19,195,19,165,21"/>
+</map>

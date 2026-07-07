@@ -1,0 +1,11 @@
+digraph "Signal Generators"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir=LR;
+  Node2 [id="Node000002",label="Discrete Components",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___i_n_t_r_i_n_s_i_c___d_i_s_c_r_e_t_e.html",tooltip="Fundamental, reusable building discrete blocks for control template library."];
+  Node1 [id="Node000001",label="Signal Generators",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="A library of modules for generating standard test waveforms."];
+  Node2->Node1 [shape=plaintext, dir="back", style="solid"];
+}

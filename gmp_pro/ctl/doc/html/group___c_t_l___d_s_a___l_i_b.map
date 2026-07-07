@@ -1,0 +1,6 @@
+<map id="Dynamic Signal Analysis" name="Dynamic Signal Analysis">
+<area shape="rect" id="Node000001" title="The whole Dynamic Signal Analysis Library. The root module for the entire DSA library." alt="" coords="5,56,172,83"/>
+<area shape="rect" id="Node000004" href="$group___d_a_t_a___l_o_g_g_e_r__4_c_h.html" title="[TI Module] A module for triggered, multi&#45;channel data acquisition." alt="" coords="222,5,377,32"/>
+<area shape="rect" id="Node000002" href="$group___d_s_a___t_r_i_g_g_e_r.html" title="A module for event&#45;based data logging." alt="" coords="220,56,379,83"/>
+<area shape="rect" id="Node000003" href="$group___s_i_n_e___a_n_a_l_y_z_e_r.html" title="A module for real&#45;time analysis of sinusoidal signals." alt="" coords="230,107,368,133"/>
+</map>

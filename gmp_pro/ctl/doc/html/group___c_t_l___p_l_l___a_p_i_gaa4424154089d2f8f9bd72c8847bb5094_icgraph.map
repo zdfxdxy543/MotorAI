@@ -1,0 +1,14 @@
+<map id="ctl_step_pll_3ph" name="ctl_step_pll_3ph">
+<area shape="rect" id="Node000001" title="Executes one step of the three&#45;phase PLL algorithm." alt="" coords="503,56,619,83"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___p_l_l___a_p_i.html#ga71cb5bcaf7b04c745ac7adb022505a91" title="Executes one step of the DSOGI&#45;PLL algorithm." alt="" coords="330,5,455,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="497,51,439,35,440,30,502,51"/>
+<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga19267becce7654434381af34d0553ad6" title="Executes one step of the GFL three&#45;phase inverter control algorithm." alt="" coords="145,31,282,57"/>
+<area shape="poly" id="edge4_Node000001_Node000003" title=" " alt="" coords="485,65,282,52,282,46,490,63"/>
+<area shape="rect" id="Node000005" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga5455882f5ce84cff0e238ceee146c93e" title="Executes one step of the three&#45;phase inverter control algorithm." alt="" coords="334,107,451,133"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="502,87,440,109,439,103,497,88"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="312,30,283,37,282,32,317,29"/>
+<area shape="rect" id="Node000004" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,31,97,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,45,98,47,96,41,132,43"/>
+<area shape="rect" id="Node000006" href="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="168,107,259,133"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="316,120,259,123,259,117,322,120"/>
+</map>

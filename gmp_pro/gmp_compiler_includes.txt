@@ -1,0 +1,4 @@
+========== GMP Compiler Include Paths Summary ==========
+1. Local mirror base path:
+.\gmp_inc
+

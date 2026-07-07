@@ -1,0 +1,20 @@
+<map id="value" name="value">
+<area shape="rect" id="Node000001" title=" " alt="" coords="333,119,385,145"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga65593511d60e2f0e364d9907769e9130" title="Sets an element in the matrix at the specified row and column." alt="" coords="175,43,285,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="325,109,284,84,263,73,263,67,286,79,330,109"/>
+<area shape="rect" id="Node000005" href="$group___m_c___m_a_t_r_i_x3.html#gab764d3b335d00f38667516f051fc0f45" title="Sets an element in the matrix at the specified row and column." alt="" coords="175,93,285,120"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="315,124,286,120,285,115,321,124"/>
+<area shape="rect" id="Node000006" href="$group___m_c___m_a_t_r_i_x4.html#ga6770f7c506724589501d02aa7f2e8815" title="Sets an element in the matrix at the specified row and column." alt="" coords="175,144,285,171"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="315,141,286,149,285,144,321,139"/>
+<area shape="rect" id="Node000009" href="$get__fuzzy__matrix_8m.html#abf3c674cb1ef19719aee1bc0cae80ebd" title=" " alt="" coords="203,219,256,245"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="331,155,250,221,247,216,326,156"/>
+<area shape="rect" id="Node000003" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga8963a2b94465a39fb00c08f7e85e63bc" title="Initializes the MPC module with motor and system parameters." alt="" coords="20,5,112,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="157,41,113,32,111,26,162,39"/>
+<area shape="rect" id="Node000004" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga6ee5cbff99aaf165b45fdee95f3e02f9" title="Executes one step of the FCS&#45;MPC algorithm." alt="" coords="16,56,116,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="157,63,117,68,115,63,162,60"/>
+<area shape="rect" id="Node000007" href="$group___m_c___m_a_t_r_i_x4.html#ga9a962471896351652ef52b328a0c372b" title="Multiplies two 4x4 matrices." alt="" coords="9,119,123,145"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="157,147,124,143,123,138,162,145"/>
+<area shape="rect" id="Node000008" href="$group___m_c___m_a_t_r_i_x4.html#gafc5ffd58fcadbfb50679ceab51de4112" title="Transposes a 4x4 matrix." alt="" coords="5,169,127,196"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="157,169,128,176,126,171,162,167"/>
+<area shape="poly" id="edge9_Node000009_Node000009" title=" " alt="" coords="250,203,244,200,230,197,217,199,210,204,208,210,212,219,207,217,203,210,206,201,215,194,230,192,246,195,255,204"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ctl_step_buck_ctrl" name="ctl_step_buck_ctrl">
+<area shape="rect" id="Node000001" title="Executes one step of the Buck control logic." alt="" coords="145,5,272,32"/>
+<area shape="rect" id="Node000002" href="$suite_2dps__buck_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,19,97,21,97,16,131,18"/>
+</map>

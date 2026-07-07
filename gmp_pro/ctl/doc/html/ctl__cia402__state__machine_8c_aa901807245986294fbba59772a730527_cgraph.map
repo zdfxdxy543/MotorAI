@@ -1,0 +1,13 @@
+<map id="cia402_dispatch" name="cia402_dispatch">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,121,108"/>
+<area shape="rect" id="Node000002" href="$ctl__cia402__state__machine_8c.html#a9364b5ddc6aeffae532b885287eee37d" title=" " alt="" coords="179,5,320,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,79,168,48,202,37,197,40,170,53,98,83"/>
+<area shape="rect" id="Node000003" href="$ctl__cia402__state__machine_8c.html#a05075df50a8762ae8194eff8d24bef76" title=" " alt="" coords="379,56,562,83"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="121,88,364,73,363,79,121,94"/>
+<area shape="rect" id="Node000004" href="$ctl__cia402__state__machine_8c.html#ad38585a38d1c1d7b5120cfa78b0a571c" title=" " alt="" coords="199,107,301,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="121,100,186,110,181,112,121,105"/>
+<area shape="rect" id="Node000005" href="$ctl__cia402__state__machine_8c.html#a6c8f0792b054bd9b734f42f99a9e3705" title="解析控制字 (0x6040) 并返回对应的命令枚举 基于 CiA 402 State Transition 逻辑表" alt="" coords="169,157,331,184"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="91,106,170,143,189,152,184,152,168,148,90,111"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="311,30,397,51,392,53,311,35"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="301,106,397,86,392,87,302,111"/>
+</map>

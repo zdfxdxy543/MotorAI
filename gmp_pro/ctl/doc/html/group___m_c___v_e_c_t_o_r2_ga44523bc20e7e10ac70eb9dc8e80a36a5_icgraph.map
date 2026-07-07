@@ -1,0 +1,11 @@
+<map id="ctl_vector2_add" name="ctl_vector2_add">
+<area shape="rect" id="Node000001" title="Adds two 2D vectors." alt="" coords="367,56,480,83"/>
+<area shape="rect" id="Node000002" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r___a_c_m.html#ga3724306bee7ec8d8789a0ceaa9cc1253" title="Executes one step of the ACM FCS&#45;MPC algorithm." alt="" coords="166,5,298,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="353,52,285,35,285,30,358,51"/>
+<area shape="rect" id="Node000003" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#gabf69f10fbfa4389d0b083d2f42a067e3" title="Executes one step of the FOC current control loop." alt="" coords="145,56,319,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="349,70,320,72,319,67,354,69"/>
+<area shape="rect" id="Node000005" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga6ee5cbff99aaf165b45fdee95f3e02f9" title="Executes one step of the FCS&#45;MPC algorithm." alt="" coords="182,107,282,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="358,87,282,110,281,104,353,88"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,56,97,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,70,97,72,96,67,131,68"/>
+</map>

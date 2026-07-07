@@ -1,0 +1,5 @@
+<map id="ctl_clear_pmsm_hfi_ctrl" name="ctl_clear_pmsm_hfi_ctrl">
+<area shape="rect" id="Node000001" title="Resets all internal states and integrators of the PID controllers." alt="" coords="210,5,369,32"/>
+<area shape="rect" id="Node000002" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga81e9dd88e588e565364de4fc07772945" title="Executes one step of the PMSM FOC HFI control loop." alt="" coords="5,5,162,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,19,162,21,162,16,197,19"/>
+</map>

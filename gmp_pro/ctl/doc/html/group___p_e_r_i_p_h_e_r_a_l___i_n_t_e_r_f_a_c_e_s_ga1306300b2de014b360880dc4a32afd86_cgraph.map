@@ -1,0 +1,5 @@
+<map id="ctl_get_dual_adc_result_vec" name="ctl_get_dual_adc_result_vec">
+<area shape="rect" id="Node000001" title="Gets the result from a dual ADC interface as a 2D vector." alt="" coords="5,5,192,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#ga2b93efaecc0acd47af549cccdb61b98a" title="Copies the contents of one 2D vector to another." alt="" coords="240,5,360,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,16,227,19,222,19,192,21"/>
+</map>

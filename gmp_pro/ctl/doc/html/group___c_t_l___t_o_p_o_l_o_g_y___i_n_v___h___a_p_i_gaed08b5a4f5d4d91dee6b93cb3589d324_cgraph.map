@@ -1,0 +1,9 @@
+<map id="ctl_clear_gfm_droop_ctrl" name="ctl_clear_gfm_droop_ctrl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,56,169,83"/>
+<area shape="rect" id="Node000002" href="$group__discrete__filter__api.html#gab8b865801ae1e4dd4014b4f3b3a54250" title="Clears all internal states of the 1st&#45;order IIR filter." alt="" coords="217,5,343,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,53,214,35,209,38,142,58"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="233,56,327,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="169,67,220,69,215,70,169,72"/>
+<area shape="rect" id="Node000004" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="220,107,340,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="141,81,214,101,209,103,141,86"/>
+</map>

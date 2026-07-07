@@ -1,0 +1,7 @@
+<map id="Sensored PMSM FOC Controller" name="Sensored PMSM FOC Controller">
+<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___s_u_i_t_e.html" title="Pre&#45;configured controllers for motor control." alt="" coords="5,56,154,83"/>
+<area shape="rect" id="Node000001" title="A complete Field&#45;Oriented Controller for Permanent Magnet Synchronous Motors." alt="" coords="202,56,414,83"/>
+<area shape="rect" id="Node000003" href="$group___m_c___p_m_s_m___c_o_n_f_i_g.html" title="Compile&#45;time configurations for the PMSM controller." alt="" coords="462,5,607,32"/>
+<area shape="rect" id="Node000005" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html" title="API functions for controlling and configuring the PMSM controller." alt="" coords="496,56,574,83"/>
+<area shape="rect" id="Node000004" href="$group___m_c___p_m_s_m___s_t_r_u_c_t_s.html" title="Data structures for the PMSM controller and its initialization." alt="" coords="478,107,591,133"/>
+</map>

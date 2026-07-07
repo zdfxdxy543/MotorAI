@@ -1,0 +1,13 @@
+<map id="ctl_get_encoder_position" name="ctl_get_encoder_position">
+<area shape="rect" id="Node000001" title="Gets the mechanical position from a rotation interface." alt="" coords="597,60,763,87"/>
+<area shape="rect" id="Node000002" href="$group___m_c___s_p_e_e_d___c_a_l_c_u_l_a_t_o_r.html#ga55b2aefb066659ebff34ccb46966e31c" title="Executes one step of the speed calculation." alt="" coords="400,31,526,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="580,60,527,55,527,50,585,60"/>
+<area shape="rect" id="Node000006" href="$group___encoder_calibrate.html#ga35b2a5ddfc19dd32bba47655e953ba94" title="Executes one step of the position encoder offset calibration state machine." alt="" coords="377,81,549,124"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="585,86,550,94,549,88,579,87"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="191,5,282,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="382,36,283,26,283,21,387,35"/>
+<area shape="rect" id="Node000004" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="145,56,329,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="382,53,330,62,329,56,387,52"/>
+<area shape="rect" id="Node000005" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,56,97,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="127,70,97,72,97,67,132,68"/>
+</map>

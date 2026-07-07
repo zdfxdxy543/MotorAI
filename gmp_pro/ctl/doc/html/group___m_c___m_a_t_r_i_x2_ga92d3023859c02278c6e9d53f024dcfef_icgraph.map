@@ -1,0 +1,5 @@
+<map id="ctl_matrix2_trans" name="ctl_matrix2_trans">
+<area shape="rect" id="Node000001" title="Transposes a 2x2 matrix." alt="" coords="203,5,324,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga4155933e10e3a24d68d60724cbc36cdc" title="Performs a congruent transformation on matrix A with matrix P." alt="" coords="5,5,155,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,19,155,21,155,16,190,19"/>
+</map>

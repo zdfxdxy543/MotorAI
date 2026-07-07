@@ -1,0 +1,7 @@
+<map id="ctl_matrix2_set" name="ctl_matrix2_set">
+<area shape="rect" id="Node000001" title="Sets an element in the matrix at the specified row and column." alt="" coords="153,31,263,57"/>
+<area shape="rect" id="Node000002" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga8963a2b94465a39fb00c08f7e85e63bc" title="Initializes the MPC module with motor and system parameters." alt="" coords="9,5,101,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="135,33,101,29,101,24,140,32"/>
+<area shape="rect" id="Node000003" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga6ee5cbff99aaf165b45fdee95f3e02f9" title="Executes one step of the FCS&#45;MPC algorithm." alt="" coords="5,56,105,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,56,105,64,105,59,140,55"/>
+</map>

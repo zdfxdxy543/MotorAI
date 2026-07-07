@@ -1,0 +1,5 @@
+<map id="ctl_clear_slope_f" name="ctl_clear_slope_f">
+<area shape="rect" id="Node000001" title="Resets the internal state of the frequency slope limiter." alt="" coords="5,5,125,32"/>
+<area shape="rect" id="Node000002" href="$group__slope__limiter.html#ga0ef418eab50c0b9f388ae6c02a2b0d86" title="Clears the output of the slope limiter." alt="" coords="173,5,323,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,16,160,18,154,19,125,21"/>
+</map>

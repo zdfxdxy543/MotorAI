@@ -1,0 +1,5 @@
+<map id="ctl_is_three_phase_inverter_mode" name="ctl_is_three_phase_inverter_mode">
+<area shape="rect" id="Node000001" title="Judge if the converter is inverter mode.ctl_is_three_phase_inverter_mode." alt="" coords="187,5,317,48"/>
+<area shape="rect" id="Node000002" href="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="5,13,139,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,27,139,29,139,24,173,26"/>
+</map>

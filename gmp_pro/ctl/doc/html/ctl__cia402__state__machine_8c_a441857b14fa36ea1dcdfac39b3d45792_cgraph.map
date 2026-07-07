@@ -1,0 +1,49 @@
+<map id="default_cb_fn_ready_to_switch_on" name="default_cb_fn_ready_to_switch_on">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,236,144,279"/>
+<area shape="rect" id="Node000002" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a4972dcdadc9770c45718eb698a5b5db8" title="启动/复位锁相环 (PLL)" alt="" coords="210,56,352,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="87,234,129,176,158,143,190,113,233,88,229,92,193,117,162,146,133,179,92,237"/>
+<area shape="rect" id="Node000005" href="$ctl__cia402__callback__fn_8c.html#ab8dd491aa4e63f4c2587ca7b4b5dfba0" title=" " alt="" coords="192,127,371,153"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="96,234,138,197,190,163,207,157,203,161,193,168,141,202,100,237"/>
+<area shape="rect" id="Node000006" href="$ctl__cia402__callback__fn_8c.html#afa82a9c6c536f43d15491f9cb9ba16b8" title=" " alt="" coords="208,177,355,220"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="142,236,194,222,190,226,145,240"/>
+<area shape="rect" id="Node000007" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#ae8a9635dcf55a62807ef972f33f4a05e" title=" " alt="" coords="222,244,340,271"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="143,255,209,256,204,259,145,260"/>
+<area shape="rect" id="Node000020" href="$ctl__cia402__callback__fn_8c.html#acbe9119883bdbe0514df74f64cf529d7" title="主接触器/直流继电器控制" alt="" coords="193,295,370,321"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="143,272,212,289,207,292,144,277"/>
+<area shape="rect" id="Node000021" href="$ctl__cia402__callback__fn_8c.html#a6490e98a228b0072b971b9795b6e9ea1" title="预充电继电器控制" alt="" coords="209,345,354,388"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="105,277,147,304,193,331,206,339,201,339,190,336,144,309,105,282"/>
+<area shape="rect" id="Node000022" href="$ctl__cia402__callback__fn_8c.html#ad08a8c07cc059b7c8beb233633eee09c" title="检查直流母线电压是否在允许范围内" alt="" coords="211,412,352,455"/>
+<area shape="poly" id="edge25_Node000001_Node000022" title=" " alt="" coords="89,277,132,337,161,369,193,398,201,405,195,404,190,402,157,373,128,340,88,282"/>
+<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga187018f89e12e1b10763d40e7a3b73e2" title="Get PLL error." alt="" coords="436,5,570,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="342,53,429,35,425,38,344,58"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga6e4410a9bc42e243a8302227a5adf0ac" title="GFL preparing to connect to grid." alt="" coords="419,56,587,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="352,67,406,68,401,71,354,72"/>
+<area shape="rect" id="Node000008" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gab8bb7ccdfdb73f38b89245a61be19f5c" title="Clear GFL inverter parameters, without PLL." alt="" coords="446,244,561,271"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="340,255,432,256,427,258,341,260"/>
+<area shape="rect" id="Node000015" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga9b85241e0b6bbf2ed68f33b0c0094c22" title="Reset the PQ controller (clear integrators)." alt="" coords="447,383,559,409"/>
+<area shape="poly" id="edge14_Node000007_Node000015" title=" " alt="" coords="341,265,373,281,390,300,398,319,406,338,421,357,448,376,442,375,417,361,401,340,393,321,385,302,369,285,341,270"/>
+<area shape="rect" id="Node000016" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga6506e2971e0badc905a3f7a665efa97d" title="Clears all internal states of the negative sequence controller." alt="" coords="442,320,564,347"/>
+<area shape="poly" id="edge16_Node000007_Node000016" title=" " alt="" coords="334,269,372,280,457,313,452,314,370,285,334,274"/>
+<area shape="rect" id="Node000017" href="$suite_2mcs__pmsm__nt_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a91dde83c035936c159c01dadc2945581" title=" " alt="" coords="426,107,581,133"/>
+<area shape="poly" id="edge20_Node000007_Node000017" title=" " alt="" coords="340,242,370,230,401,210,430,187,477,146,481,143,434,191,404,214,372,234,342,247"/>
+<area shape="rect" id="Node000009" href="$group___b_i_q_u_a_d__filter__api.html#ga764a46ad024f75f167ffee58ee60793c" title="Clears all internal states of the 2nd&#45;order IIR filter." alt="" coords="635,288,783,315"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="561,267,631,284,626,284,561,272"/>
+<area shape="rect" id="Node000010" href="$group__discrete__filter__api.html#gab8b865801ae1e4dd4014b4f3b3a54250" title="Clears all internal states of the 1st&#45;order IIR filter." alt="" coords="646,136,772,163"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="522,241,571,208,634,172,646,170,651,168,637,177,574,212,525,246"/>
+<area shape="rect" id="Node000011" href="$group__lead__lag__compensators.html#ga6f2431613cc43e38d9763f8545f4f01f" title="Clears the internal states of the lead compensator." alt="" coords="658,187,760,213"/>
+<area shape="poly" id="edge10_Node000008_Node000011" title=" " alt="" coords="553,241,646,217,641,219,554,246"/>
+<area shape="rect" id="Node000012" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="662,389,756,416"/>
+<area shape="poly" id="edge11_Node000008_Node000012" title=" " alt="" coords="534,268,562,285,589,306,604,325,613,343,621,359,637,375,650,386,645,385,634,379,617,362,608,345,600,328,585,310,559,289,533,274"/>
+<area shape="rect" id="Node000013" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="649,339,769,365"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="528,269,578,296,636,324,653,333,648,333,634,329,576,301,528,274"/>
+<area shape="rect" id="Node000014" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="649,237,769,264"/>
+<area shape="poly" id="edge13_Node000008_Node000014" title=" " alt="" coords="561,253,636,253,630,254,562,258"/>
+<area shape="poly" id="edge15_Node000015_Node000012" title=" " alt="" coords="559,395,649,401,643,401,560,400"/>
+<area shape="poly" id="edge17_Node000016_Node000009" title=" " alt="" coords="564,321,623,315,618,316,565,326"/>
+<area shape="poly" id="edge18_Node000016_Node000012" title=" " alt="" coords="546,345,655,384,650,384,545,350"/>
+<area shape="poly" id="edge19_Node000016_Node000013" title=" " alt="" coords="565,336,636,345,630,345,565,342"/>
+<area shape="rect" id="Node000018" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga2211d0b642a823055e80adc0e619f41c" title="Disable GFL controller." alt="" coords="645,85,773,112"/>
+<area shape="poly" id="edge21_Node000017_Node000018" title=" " alt="" coords="581,109,632,106,627,108,582,114"/>
+<area shape="rect" id="Node000019" href="$suite_2mcs__pmsm_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a181370011baab3adb8e1fbb57d27fb5e" title=" " alt="" coords="654,35,764,61"/>
+<area shape="poly" id="edge22_Node000017_Node000019" title=" " alt="" coords="552,104,586,92,634,71,655,66,650,68,636,76,588,97,555,109"/>
+</map>

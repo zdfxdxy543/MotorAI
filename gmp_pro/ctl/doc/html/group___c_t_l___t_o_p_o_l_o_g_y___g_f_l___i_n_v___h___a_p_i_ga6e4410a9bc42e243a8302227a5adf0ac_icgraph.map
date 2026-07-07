@@ -1,0 +1,11 @@
+<map id="ctl_is_gfl_grid_connected" name="ctl_is_gfl_grid_connected">
+<area shape="rect" id="Node000001" title="GFL preparing to connect to grid." alt="" coords="713,13,881,40"/>
+<area shape="rect" id="Node000002" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a4972dcdadc9770c45718eb698a5b5db8" title="启动/复位锁相环 (PLL)" alt="" coords="522,13,665,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="694,27,665,29,665,24,700,27"/>
+<area shape="rect" id="Node000003" href="$ctl__cia402__state__machine_8c.html#a441857b14fa36ea1dcdfac39b3d45792" title=" " alt="" coords="336,5,474,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="504,27,475,29,475,24,510,27"/>
+<area shape="rect" id="Node000004" href="$ctl__cia402__state__machine_8c.html#ac410ae5ea0c4e4b53716e8532cd03353" title=" " alt="" coords="113,13,288,40"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="318,27,288,29,288,24,323,27"/>
+<area shape="rect" id="Node000005" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="95,28,65,29,65,24,100,26"/>
+</map>

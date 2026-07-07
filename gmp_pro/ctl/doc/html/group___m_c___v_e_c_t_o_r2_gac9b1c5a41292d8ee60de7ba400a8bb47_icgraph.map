@@ -1,0 +1,16 @@
+<map id="ctl_vector2_mag_sq" name="ctl_vector2_mag_sq">
+<area shape="rect" id="Node000001" title="Calculates the squared magnitude (length) of a 2D vector. This is computationally cheaper than ctl_ve..." alt="" coords="609,31,748,57"/>
+<area shape="rect" id="Node000002" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r___a_c_m.html#ga3724306bee7ec8d8789a0ceaa9cc1253" title="Executes one step of the ACM FCS&#45;MPC algorithm." alt="" coords="37,5,168,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="608,27,561,21,454,14,346,12,169,17,168,12,346,6,454,8,562,16,613,27"/>
+<area shape="rect" id="Node000003" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga6ee5cbff99aaf165b45fdee95f3e02f9" title="Executes one step of the FCS&#45;MPC algorithm." alt="" coords="453,31,552,57"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="591,44,553,47,553,41,596,44"/>
+<area shape="rect" id="Node000004" href="$group___m_c___v_e_c_t_o_r2.html#gafbee66017a932c4fcfcc814da32b2fc3" title="Calculates the magnitude (length) of a 2D vector." alt="" coords="444,81,561,108"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="617,62,552,83,551,78,612,63"/>
+<area shape="rect" id="Node000005" href="$group___p_m_s_m___f_l_u_x___o_b_s_e_r_v_e_r.html#ga27a30493b5e4c285f0d929f95981065c" title="Executes one step of the flux and torque observation." alt="" coords="258,31,386,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="435,76,372,61,372,55,440,77"/>
+<area shape="rect" id="Node000006" href="$group___m_c___v_e_c_t_o_r2.html#gae829052fc6de7b8d10db8b3263c2372c" title="Normalizes a 2D vector to produce a unit vector (a vector with length 1)." alt="" coords="248,81,396,108"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="426,95,396,97,396,92,431,95"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="263,76,247,72,142,35,143,30,249,67,269,76"/>
+<area shape="rect" id="Node000007" href="$group___m_c___m_a_t_r_i_x2.html#ga65f2cf2b6cb431fe97ac679c78bb1f95" title="Calculates the real eigenvectors of a 2x2 matrix for given real eigenvalues." alt="" coords="5,81,200,108"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="229,95,200,97,200,92,235,95"/>
+</map>

@@ -1,0 +1,27 @@
+<map id="ctl_init_discrete_sogi" name="ctl_init_discrete_sogi">
+<area shape="rect" id="Node000001" title="Initializes the discrete SOGI module." alt="" coords="699,131,842,157"/>
+<area shape="rect" id="Node000002" href="$group__discrete__sogi__dc.html#ga60c006f7cf4ef84826085bb086533c50" title="Initializes the SOGI&#45;DC module." alt="" coords="486,21,651,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="735,121,649,70,607,51,608,46,652,66,740,122"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___p_l_l___a_p_i.html#gaa8908dcef4a7f626cf9a91a0e5943bb4" title="Initializes the DSOGI&#45;PLL controller." alt="" coords="510,80,627,107"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="697,126,625,110,625,105,702,126"/>
+<area shape="rect" id="Node000008" href="$group__spll__api.html#gad32add2f7e32a00fca7701020f8c9ba7" title="Initializes the Single&#45;Phase PLL module." alt="" coords="487,131,650,157"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="680,144,650,147,650,141,686,144"/>
+<area shape="rect" id="Node000012" href="$group__spll__api.html#ga66a64b2391640ef794372b7fa4a7c590" title="Initializes the Single&#45;Phase PLL module." alt="" coords="497,181,640,224"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="710,162,641,185,639,179,705,163"/>
+<area shape="rect" id="Node000013" href="$group__voltage__event__detector.html#ga8fd82dfd0cdbeb92fbdd99225b11e6b3" title="Initializes the voltage sag/swell detector." alt="" coords="495,248,642,291"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="745,167,703,204,652,238,629,250,627,245,649,234,699,200,741,169"/>
+<area shape="rect" id="Node000003" href="$group__spll__dc__api.html#gae58abab4581376fe0c8b33c2c9046f8b" title="Initializes the Single&#45;Phase SOGI&#45;DC PLL module." alt="" coords="286,5,428,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="468,32,429,32,428,27,473,30"/>
+<area shape="rect" id="Node000005" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gaad37ff3a95825d39dcee5ff225e5796b" title="update GFL inverter controller parameters by init structure." alt="" coords="294,72,420,115"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="492,94,421,96,420,91,497,93"/>
+<area shape="rect" id="Node000006" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gad2cd1f7524fc26c61a5f120b8c1858a2" title="Init GFL inverter parameters." alt="" coords="118,80,222,107"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="276,94,224,96,222,91,281,92"/>
+<area shape="rect" id="Node000007" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,80,65,107"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="100,95,67,96,64,91,104,92"/>
+<area shape="rect" id="Node000009" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#ga43fcf30c79672c191ef67a959ecea1d6" title=" " alt="" coords="276,139,438,165"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="469,148,439,152,438,146,475,147"/>
+<area shape="rect" id="Node000010" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gad409bb12fa407034f45f243e042f223f" title=" " alt="" coords="113,139,228,165"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="258,153,229,155,228,149,263,151"/>
+<area shape="rect" id="Node000011" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,139,65,165"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="95,154,66,154,64,150,99,150"/>
+</map>

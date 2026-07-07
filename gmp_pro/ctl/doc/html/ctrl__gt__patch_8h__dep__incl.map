@@ -1,0 +1,152 @@
+<map id="math_block/ctrl_gt/ctrl_gt_patch.h" name="math_block/ctrl_gt/ctrl_gt_patch.h">
+<area shape="rect" id="Node000001" title="Provides a common header patch for the ctrl_gt type and related macros." alt="" coords="1864,5,1992,48"/>
+<area shape="rect" id="Node000002" href="$gmp__math_8h.html" title="Master include file for the GMP Control Math Library." alt="" coords="1846,96,2010,123"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1929,62,1930,97,1926,94,1926,66"/>
+<area shape="rect" id="Node000003" href="$lms__filter_8h.html" title="Provides a Least Mean Squares (LMS) adaptive FIR filter." alt="" coords="34,269,176,312"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1827,113,1034,134,614,151,462,162,372,173,306,193,242,219,141,271,138,266,240,214,304,188,371,168,462,156,614,146,1034,129,1832,111"/>
+<area shape="rect" id="Node000006" href="$surf__search_8h.html" title=" " alt="" coords="384,171,541,213"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="1827,115,1346,138,703,173,542,186,541,181,702,168,1345,132,1833,114"/>
+<area shape="rect" id="Node000015" href="$saturation_8h.html" title="Provides standard and bipolar saturation (limiter) blocks." alt="" coords="1947,171,2082,213"/>
+<area shape="poly" id="edge14_Node000002_Node000015" title=" " alt="" coords="1953,131,1995,171,1990,169,1951,136"/>
+<area shape="rect" id="Node000071" href="$continuous__pid_8h.html" title="Provides implementations for continuous&#45;form discrete PID controllers." alt="" coords="4004,171,4195,213"/>
+<area shape="poly" id="edge29_Node000002_Node000071" title=" " alt="" coords="2025,112,4006,185,4002,189,2025,117"/>
+<area shape="rect" id="Node000086" href="$pmsm_8smo_8h.html" title="Provides a sensorless position estimator for PMSM using a Sliding Mode Observer (SMO)." alt="" coords="5478,376,5646,419"/>
+<area shape="poly" id="edge100_Node000002_Node000086" title=" " alt="" coords="2025,108,2672,109,3664,115,4193,122,4693,133,5125,148,5450,168,5542,170,5625,164,5772,148,5838,149,5871,155,5903,165,5934,179,5965,200,5997,226,6028,260,6038,275,6042,291,6038,306,6028,322,6003,341,5965,357,5918,370,5864,380,5751,392,5647,397,5647,392,5750,387,5864,374,5917,365,5963,352,6000,337,6024,318,6033,304,6036,291,6033,277,6024,263,5993,230,5962,204,5931,184,5901,170,5869,160,5838,155,5772,153,5626,169,5542,176,5450,173,5125,153,4693,139,4193,128,3664,120,2672,114,2026,113"/>
+<area shape="rect" id="Node000094" href="$s__function_8h.html" title=" " alt="" coords="2129,269,2292,312"/>
+<area shape="poly" id="edge60_Node000002_Node000094" title=" " alt="" coords="1995,125,2045,143,2094,168,2126,192,2154,218,2197,270,2193,268,2150,222,2122,196,2092,173,2043,148,1994,130"/>
+<area shape="rect" id="Node000095" href="$biquad__filter_8h.html" title="Provides a library of common discrete filters, focusing on Biquad implementations." alt="" coords="1320,171,1476,213"/>
+<area shape="poly" id="edge63_Node000002_Node000095" title=" " alt="" coords="1828,126,1477,181,1477,176,1833,125"/>
+<area shape="rect" id="Node000100" href="$discrete__filter_8h.html" title="Provides a library of common discrete IIR and FIR filters." alt="" coords="5274,171,5438,213"/>
+<area shape="poly" id="edge71_Node000002_Node000100" title=" " alt="" coords="2025,110,5273,186,5272,191,2025,116"/>
+<area shape="rect" id="Node000184" href="$discrete__pid_8h.html" title="Provides a discrete PID controller implementation." alt="" coords="1100,171,1256,213"/>
+<area shape="poly" id="edge85_Node000002_Node000184" title=" " alt="" coords="1827,119,1592,142,1308,173,1257,180,1256,175,1307,168,1592,137,1833,118"/>
+<area shape="rect" id="Node000186" href="$discrete__sogi_8h.html" title="Provides a discrete Second&#45;Order Generalized Integrator (SOGI)." alt="" coords="1759,171,1923,213"/>
+<area shape="poly" id="edge88_Node000002_Node000186" title=" " alt="" coords="1905,132,1864,173,1862,168,1901,134"/>
+<area shape="rect" id="Node000189" href="$fir__filter_8h.html" title="Provides a generic Finite Impulse Response (FIR) filter module." alt="" coords="942,171,1076,213"/>
+<area shape="poly" id="edge93_Node000002_Node000189" title=" " alt="" coords="1827,112,1685,119,1500,129,1294,147,1088,173,1077,175,1076,170,1087,168,1293,141,1499,124,1685,114,1832,112"/>
+<area shape="rect" id="Node000190" href="$itoc__protection_8h.html" title=" " alt="" coords="714,171,896,213"/>
+<area shape="poly" id="edge96_Node000002_Node000190" title=" " alt="" coords="1828,114,1437,133,1185,150,931,173,897,178,896,172,930,168,1184,145,1436,128,1833,113"/>
+<area shape="rect" id="Node000191" href="$_p_m_s_m___d_p_c_c_8h.html" title="Implements a Dead&#45;beat Predictive Current Controller (DPCC) for PMSM." alt="" coords="6110,171,6308,213"/>
+<area shape="poly" id="edge98_Node000002_Node000191" title=" " alt="" coords="2025,109,4123,125,5363,143,5822,155,6092,168,6113,173,6107,173,6091,173,5821,160,5363,148,4123,130,2025,114"/>
+<area shape="rect" id="Node000192" href="$nladrc__spd__ctrl_8h.html" title=" " alt="" coords="6332,171,6500,213"/>
+<area shape="poly" id="edge99_Node000002_Node000192" title=" " alt="" coords="2026,108,2891,111,4236,121,5549,138,6034,152,6206,159,6320,168,6334,172,6328,172,6319,173,6206,165,6034,157,5549,144,4236,126,2891,117,2026,114"/>
+<area shape="rect" id="Node000004" href="$intrinsic_8h.html" title=" " alt="" coords="839,384,984,411"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="175,314,190,317,371,349,552,371,715,384,841,394,836,394,714,389,552,376,370,355,188,323,176,319"/>
+<area shape="rect" id="Node000005" href="$ctl__component__advance_8c.html" title=" " alt="" coords="5,376,205,419"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="107,326,108,376,102,375,103,329"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="442,225,432,251,425,275,425,298,435,318,462,338,502,354,553,367,610,377,732,388,841,395,836,396,731,394,609,382,551,372,500,359,459,343,431,322,420,299,420,274,427,249,438,229"/>
+<area shape="poly" id="edge12_Node000006_Node000005" title=" " alt="" coords="366,195,272,201,169,212,121,221,79,232,46,246,24,263,16,276,15,289,25,319,46,350,74,374,69,376,42,353,20,321,9,289,11,275,20,260,44,242,78,227,120,216,168,207,271,196,371,193"/>
+<area shape="rect" id="Node000007" href="$flc_8h.html" title="A complete Fuzzy Logic Controller (FLC) using a look&#45;up table." alt="" coords="614,269,748,312"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="524,217,637,269,632,269,523,223"/>
+<area shape="rect" id="Node000008" href="$fuzzy__pid_8h.html" title="Provides a Fuzzy Logic PID controller with LUT&#45;based parameter tuning." alt="" coords="444,269,590,312"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="483,224,508,270,503,268,480,229"/>
+<area shape="rect" id="Node000009" href="$current__distributor_8h.html" title="Implements a current distributor using a look&#45;up table (LUT)." alt="" coords="201,261,369,320"/>
+<area shape="poly" id="edge13_Node000006_Node000009" title=" " alt="" coords="414,220,339,263,337,258,409,222"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="741,316,886,384,881,383,740,321"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="593,314,603,317,739,353,858,384,852,383,737,358,602,323,592,320"/>
+<area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="430,317,187,378,186,373,428,312"/>
+<area shape="poly" id="edge24_Node000015_Node000004" title=" " alt="" coords="1935,213,1870,225,1820,230,1774,239,1721,264,1706,277,1697,293,1688,308,1670,322,1613,343,1536,360,1445,373,1345,383,1145,394,985,398,985,393,1145,389,1345,377,1444,368,1535,355,1612,338,1668,318,1684,305,1692,290,1702,274,1718,259,1772,234,1819,224,1869,220,1929,214"/>
+<area shape="poly" id="edge25_Node000015_Node000007" title=" " alt="" coords="1935,213,1785,235,1660,245,1550,250,1447,251,1234,252,1109,255,963,264,749,284,748,279,962,259,1109,250,1234,247,1447,246,1549,245,1660,240,1785,229,1930,214"/>
+<area shape="rect" id="Node000016" href="$boost_8h.html" title="Provides a generic cascaded PID controller for a Boost converter." alt="" coords="4422,269,4588,312"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="2097,191,2434,196,2953,207,3572,227,4208,259,4424,280,4419,280,4207,264,3572,232,2953,212,2433,201,2097,197"/>
+<area shape="rect" id="Node000024" href="$buck_8h.html" title="Provides a generic cascaded PID controller for a Buck converter." alt="" coords="3052,269,3217,312"/>
+<area shape="poly" id="edge19_Node000015_Node000024" title=" " alt="" coords="2097,191,2268,193,2501,203,2766,224,2901,239,3033,259,3070,269,3065,269,3033,264,2901,244,2766,229,2501,208,2268,199,2097,196"/>
+<area shape="rect" id="Node000029" href="$three__phase___g_f_l_8h.html" title="Header&#45;only library for a preset three&#45;phase DC/AC grid following inverter controller." alt="" coords="3164,376,3379,419"/>
+<area shape="poly" id="edge21_Node000015_Node000029" title=" " alt="" coords="2097,192,2290,197,2533,209,2769,229,2866,242,2939,259,2970,272,2991,286,3012,302,3041,318,3120,349,3198,376,3193,375,3118,354,3039,322,3009,306,2988,291,2967,276,2938,264,2865,247,2769,234,2533,214,2290,203,2097,197"/>
+<area shape="rect" id="Node000034" href="$three__phase__additional_8h.html" title="Header&#45;only library for a preset three&#45;phase DC/AC inverter additional controller." alt="" coords="1486,261,1657,320"/>
+<area shape="poly" id="edge22_Node000015_Node000034" title=" " alt="" coords="1935,213,1802,240,1676,264,1658,268,1657,263,1675,259,1801,235,1929,214"/>
+<area shape="rect" id="Node000035" href="$three__phase__dc__ac_8h.html" title="Header&#45;only library for a preset three&#45;phase DC/AC inverter controller." alt="" coords="2818,368,2989,427"/>
+<area shape="poly" id="edge23_Node000015_Node000035" title=" " alt="" coords="2097,191,2244,195,2419,206,2584,226,2650,241,2700,259,2717,272,2727,287,2736,303,2751,318,2790,344,2833,368,2828,367,2787,348,2747,322,2732,306,2723,290,2713,276,2697,264,2649,246,2583,231,2418,211,2243,201,2097,197"/>
+<area shape="rect" id="Node000049" href="$ctl__component__basic_8c.html" title=" " alt="" coords="1924,269,2105,312"/>
+<area shape="poly" id="edge26_Node000015_Node000049" title=" " alt="" coords="2016,227,2016,271,2012,267,2013,231"/>
+<area shape="rect" id="Node000050" href="$vf__generator_8h.html" title="Provides open&#45;loop V/F (Voltage/Frequency) profile generators for motor control." alt="" coords="1732,269,1900,312"/>
+<area shape="poly" id="edge27_Node000015_Node000050" title=" " alt="" coords="1961,220,1859,271,1857,266,1956,221"/>
+<area shape="rect" id="Node000018" href="$suite_2dps__boost_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="4611,376,4788,419"/>
+<area shape="poly" id="edge16_Node000016_Node000018" title=" " alt="" coords="4558,317,4664,376,4659,375,4556,322"/>
+<area shape="rect" id="Node000020" href="$suite_2dps__dcac__rectifier__spfc_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="4227,368,4399,427"/>
+<area shape="poly" id="edge17_Node000016_Node000020" title=" " alt="" coords="4456,319,4366,370,4365,365,4451,320"/>
+<area shape="rect" id="Node000022" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8c.html" title=" " alt="" coords="4423,376,4587,419"/>
+<area shape="poly" id="edge18_Node000016_Node000022" title=" " alt="" coords="4507,326,4507,377,4503,374,4503,329"/>
+<area shape="rect" id="Node000025" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="3821,376,3994,419"/>
+<area shape="poly" id="edge20_Node000024_Node000025" title=" " alt="" coords="3214,314,3230,317,3392,345,3555,366,3823,391,3818,391,3555,371,3391,351,3228,323,3213,319"/>
+<area shape="rect" id="Node000062" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="1723,376,1908,419"/>
+<area shape="poly" id="edge28_Node000050_Node000062" title=" " alt="" coords="1818,326,1818,377,1814,374,1814,329"/>
+<area shape="poly" id="edge42_Node000071_Node000004" title=" " alt="" coords="3987,193,3602,195,3092,202,2841,211,2621,223,2452,241,2394,251,2356,264,2340,276,2331,292,2322,308,2305,322,2242,334,2112,345,1726,367,985,396,985,391,1726,362,2111,340,2241,329,2303,318,2318,305,2327,289,2336,273,2353,259,2392,246,2452,235,2621,218,2841,205,3092,197,3602,190,3992,192"/>
+<area shape="poly" id="edge43_Node000071_Node000008" title=" " alt="" coords="3986,195,2143,222,1122,242,773,253,603,264,572,271,571,266,602,259,773,248,1122,237,2143,217,3991,194"/>
+<area shape="poly" id="edge30_Node000071_Node000016" title=" " alt="" coords="4210,214,4404,259,4435,269,4429,268,4403,264,4210,219"/>
+<area shape="poly" id="edge55_Node000071_Node000018" title=" " alt="" coords="4211,194,4322,200,4443,212,4551,231,4594,244,4625,259,4653,285,4673,316,4688,348,4697,377,4692,374,4683,350,4669,319,4649,288,4622,264,4592,249,4550,236,4442,217,4322,205,4210,199"/>
+<area shape="poly" id="edge57_Node000071_Node000020" title=" " alt="" coords="4210,196,4243,205,4275,217,4304,235,4329,260,4340,286,4342,315,4337,344,4328,370,4324,366,4332,342,4336,315,4335,287,4324,263,4301,239,4273,222,4242,210,4210,202"/>
+<area shape="poly" id="edge59_Node000071_Node000022" title=" " alt="" coords="4210,190,4320,193,4436,203,4490,212,4537,224,4575,240,4602,260,4611,275,4613,289,4602,321,4577,354,4545,378,4544,373,4574,350,4597,319,4608,289,4606,276,4598,263,4573,244,4536,229,4489,217,4436,209,4320,198,4211,195"/>
+<area shape="poly" id="edge31_Node000071_Node000024" title=" " alt="" coords="3986,195,3838,202,3648,213,3439,233,3229,264,3197,271,3197,266,3229,259,3438,228,3648,208,3838,197,3992,194"/>
+<area shape="poly" id="edge56_Node000071_Node000025" title=" " alt="" coords="4210,202,4262,223,4285,239,4304,260,4314,276,4317,291,4314,306,4304,322,4284,338,4254,352,4174,373,4082,387,3995,394,3995,389,4081,381,4173,368,4252,347,4281,334,4300,318,4309,304,4312,291,4309,278,4300,263,4282,243,4260,228,4209,207"/>
+<area shape="poly" id="edge39_Node000071_Node000029" title=" " alt="" coords="4204,218,4232,236,4254,260,4263,276,4266,292,4264,307,4253,322,4221,330,4145,338,3905,358,3379,392,3379,387,3904,352,4144,333,4220,324,4250,318,4259,305,4261,292,4258,278,4249,263,4228,240,4202,223"/>
+<area shape="poly" id="edge40_Node000071_Node000034" title=" " alt="" coords="3986,194,3525,202,2869,214,2206,234,1929,247,1720,264,1658,273,1657,268,1719,259,1929,242,2206,228,2869,208,3525,197,3991,194"/>
+<area shape="poly" id="edge41_Node000071_Node000035" title=" " alt="" coords="3986,196,3745,206,3451,220,3188,239,3095,250,3041,264,3005,285,2972,313,2924,370,2921,365,2969,309,3001,281,3039,259,3094,245,3188,233,3451,214,3745,201,3992,196"/>
+<area shape="rect" id="Node000072" href="$single__phase__dc__ac_8h.html" title="Header&#45;only library for a preset single&#45;phase DC/AC inverter controller." alt="" coords="4813,368,4994,427"/>
+<area shape="poly" id="edge32_Node000071_Node000072" title=" " alt="" coords="4210,198,4461,221,4581,238,4667,259,4695,272,4715,286,4760,318,4849,368,4844,367,4757,322,4712,290,4693,276,4665,264,4580,244,4460,227,4210,203"/>
+<area shape="rect" id="Node000074" href="$spfc_8h.html" title="Implements a single&#45;phase Power Factor Correction (PFC) controller." alt="" coords="3430,269,3596,312"/>
+<area shape="poly" id="edge33_Node000071_Node000074" title=" " alt="" coords="3992,204,3810,229,3608,264,3578,271,3577,266,3607,259,3809,223,3986,204"/>
+<area shape="rect" id="Node000076" href="$spll_8h.html" title="Implements a Single&#45;Phase Phase&#45;Locked Loop (SPLL) using a Second&#45;Order Generalized Integrator (SOGI)..." alt="" coords="3241,269,3406,312"/>
+<area shape="poly" id="edge34_Node000071_Node000076" title=" " alt="" coords="3991,198,3728,220,3573,239,3419,264,3388,271,3387,266,3418,259,3572,233,3727,215,3986,198"/>
+<area shape="rect" id="Node000077" href="$pll_8h.html" title="Header&#45;only library for a three&#45;phase Synchronous Reference Frame PLL (SRF&#45;PLL)." alt="" coords="2761,269,2926,312"/>
+<area shape="poly" id="edge36_Node000071_Node000077" title=" " alt="" coords="3986,192,3792,197,3532,206,3239,227,3091,243,2945,264,2911,271,2910,266,2945,259,3090,238,3239,221,3531,200,3792,191,3991,192"/>
+<area shape="rect" id="Node000078" href="$track__pid_8h.html" title=" " alt="" coords="2530,269,2686,312"/>
+<area shape="poly" id="edge44_Node000071_Node000078" title=" " alt="" coords="3986,194,3762,199,3454,209,3103,230,2924,245,2749,264,2687,274,2686,269,2749,259,2924,240,3103,224,3454,204,3762,194,3991,193"/>
+<area shape="rect" id="Node000079" href="$ctl__component__continuous_8c.html" title=" " alt="" coords="2501,376,2714,419"/>
+<area shape="poly" id="edge47_Node000071_Node000079" title=" " alt="" coords="4168,219,4192,237,4210,260,4222,292,4220,307,4209,322,4185,332,4135,341,3977,353,3761,361,3516,365,3050,368,2807,371,2715,381,2714,376,2806,365,3050,363,3516,360,3761,355,3977,348,4135,335,4183,327,4206,318,4215,305,4217,292,4205,263,4188,241,4166,224"/>
+<area shape="rect" id="Node000084" href="$motor__current__ctrl_8h.html" title="Implements a generic FOC (Field&#45;Oriented Control) current controller." alt="" coords="5007,261,5187,320"/>
+<area shape="poly" id="edge48_Node000071_Node000084" title=" " alt="" coords="4210,192,4365,198,4561,209,4778,228,4995,259,5009,264,5004,263,4994,264,4777,234,4561,214,4365,203,4210,198"/>
+<area shape="poly" id="edge53_Node000071_Node000086" title=" " alt="" coords="4210,195,4345,202,4495,215,4634,233,4690,245,4733,259,4755,273,4769,289,4782,304,4803,318,4859,335,4935,349,5121,371,5317,384,5480,394,5475,394,5316,390,5120,376,4934,355,4858,340,4801,322,4779,308,4765,292,4752,277,4731,264,4689,250,4633,239,4495,220,4344,208,4210,200"/>
+<area shape="rect" id="Node000088" href="$vel__pos__loop_8h.html" title="Implements a velocity and position controller." alt="" coords="3620,269,3788,312"/>
+<area shape="poly" id="edge50_Node000071_Node000088" title=" " alt="" coords="3992,216,3800,264,3773,271,3772,266,3799,259,3987,217"/>
+<area shape="rect" id="Node000090" href="$acm_8smo_8h.html" title=" " alt="" coords="5212,269,5380,312"/>
+<area shape="poly" id="edge51_Node000071_Node000090" title=" " alt="" coords="4210,189,4399,191,4646,200,4922,221,5063,238,5200,259,5235,269,5230,269,5199,264,5062,243,4922,227,4646,206,4399,197,4211,195"/>
+<area shape="rect" id="Node000091" href="$pmsm_8hfi_8h.html" title="Provides a sensorless position estimator for PMSM using High&#45;Frequency Injection (HFI)." alt="" coords="4814,269,4982,312"/>
+<area shape="poly" id="edge52_Node000071_Node000091" title=" " alt="" coords="4210,196,4478,216,4637,234,4796,259,4832,269,4826,269,4795,264,4637,239,4477,221,4210,201"/>
+<area shape="rect" id="Node000092" href="$pmsm__online__est___rs_8h.html" title=" " alt="" coords="3812,261,3980,320"/>
+<area shape="poly" id="edge54_Node000071_Node000092" title=" " alt="" coords="4045,220,3957,263,3956,258,4039,221"/>
+<area shape="rect" id="Node000093" href="$continuous__pid__test_8cpp.html" title=" " alt="" coords="4004,261,4195,320"/>
+<area shape="poly" id="edge58_Node000071_Node000093" title=" " alt="" coords="4102,227,4102,263,4098,259,4098,231"/>
+<area shape="poly" id="edge35_Node000076_Node000072" title=" " alt="" coords="3400,314,3419,317,3627,344,3805,353,3962,352,4109,344,4256,336,4414,333,4592,341,4801,365,4815,370,4810,370,4801,371,4592,346,4414,338,4256,341,4109,349,3962,357,3805,359,3627,349,3418,323,3400,319"/>
+<area shape="poly" id="edge37_Node000077_Node000029" title=" " alt="" coords="2942,313,3189,376,3184,375,2941,318"/>
+<area shape="poly" id="edge38_Node000077_Node000035" title=" " alt="" coords="2864,323,2890,369,2885,366,2862,328"/>
+<area shape="poly" id="edge45_Node000078_Node000004" title=" " alt="" coords="2537,316,2517,323,2420,333,2255,344,1804,366,985,396,985,391,1804,360,2255,339,2419,328,2517,317,2532,317"/>
+<area shape="poly" id="edge46_Node000078_Node000079" title=" " alt="" coords="2610,326,2610,377,2606,374,2606,329"/>
+<area shape="poly" id="edge49_Node000084_Node000086" title=" " alt="" coords="5202,318,5480,380,5475,380,5202,323"/>
+<area shape="poly" id="edge61_Node000094_Node000004" title=" " alt="" coords="2137,316,2117,323,2015,337,1880,350,1554,371,985,396,985,391,1553,366,1879,344,2014,331,2117,317,2132,317"/>
+<area shape="poly" id="edge62_Node000094_Node000079" title=" " alt="" coords="2304,314,2532,376,2526,375,2303,319"/>
+<area shape="poly" id="edge68_Node000095_Node000004" title=" " alt="" coords="1302,208,964,264,941,291,926,325,918,358,914,386,910,382,913,357,921,323,936,288,961,259,1307,207"/>
+<area shape="poly" id="edge65_Node000095_Node000034" title=" " alt="" coords="1449,219,1523,261,1517,260,1448,224"/>
+<area shape="poly" id="edge70_Node000095_Node000062" title=" " alt="" coords="1411,225,1437,275,1455,298,1476,318,1534,351,1599,372,1663,386,1725,395,1720,395,1662,391,1597,378,1532,355,1473,322,1451,302,1432,277,1409,230"/>
+<area shape="rect" id="Node000096" href="$virtual__imp_8h.html" title="Header&#45;only library for a virtual RL impedance." alt="" coords="1196,269,1361,312"/>
+<area shape="poly" id="edge64_Node000095_Node000096" title=" " alt="" coords="1364,222,1305,271,1303,266,1359,224"/>
+<area shape="rect" id="Node000097" href="$adc__channel_8h.html" title=" " alt="" coords="2366,269,2505,312"/>
+<area shape="poly" id="edge66_Node000095_Node000097" title=" " alt="" coords="1492,196,1914,224,2140,241,2304,259,2368,273,2363,272,2303,264,2139,247,1914,229,1492,201"/>
+<area shape="rect" id="Node000099" href="$ctl__component__discrete_8c.html" title=" " alt="" coords="975,269,1171,312"/>
+<area shape="poly" id="edge69_Node000095_Node000099" title=" " alt="" coords="1317,218,1143,271,1142,266,1311,219"/>
+<area shape="poly" id="edge67_Node000097_Node000062" title=" " alt="" coords="2364,316,2348,323,2231,346,2112,365,1909,390,1909,385,2111,360,2230,341,2347,317,2358,317"/>
+<area shape="poly" id="edge79_Node000100_Node000004" title=" " alt="" coords="5382,224,5396,248,5405,274,5405,299,5393,322,5345,329,5225,335,4809,345,3557,360,1712,371,1301,383,985,396,985,390,1301,378,1712,365,3557,355,4809,340,5225,330,5345,324,5390,318,5400,298,5399,275,5391,251,5379,229"/>
+<area shape="poly" id="edge72_Node000100_Node000016" title=" " alt="" coords="5261,204,4588,283,4588,277,5255,205"/>
+<area shape="poly" id="edge76_Node000100_Node000029" title=" " alt="" coords="5441,218,5468,236,5489,260,5497,276,5501,292,5498,307,5488,322,5463,329,5407,334,5217,344,4653,358,3809,371,3379,392,3379,387,3809,365,4653,353,5217,339,5407,329,5462,323,5485,318,5493,305,5496,292,5492,278,5484,263,5465,240,5440,223"/>
+<area shape="poly" id="edge77_Node000100_Node000035" title=" " alt="" coords="5405,221,5424,239,5438,260,5449,292,5447,307,5437,322,5404,331,5328,338,5069,349,4301,362,3153,371,2990,387,2989,382,3153,365,4301,357,5069,343,5327,332,5403,325,5434,318,5442,305,5444,293,5433,263,5420,242,5403,226"/>
+<area shape="poly" id="edge75_Node000100_Node000072" title=" " alt="" coords="5453,204,5501,225,5522,240,5539,260,5548,276,5552,291,5549,307,5539,322,5511,337,5461,349,5315,370,5145,385,4995,394,4995,389,5145,380,5315,365,5460,344,5509,332,5535,318,5544,305,5546,291,5543,278,5535,263,5518,244,5498,230,5452,210"/>
+<area shape="poly" id="edge81_Node000100_Node000084" title=" " alt="" coords="5288,219,5175,263,5173,258,5283,220"/>
+<area shape="poly" id="edge84_Node000100_Node000086" title=" " alt="" coords="5453,194,5605,201,5776,214,5921,233,5971,245,5999,259,6014,280,6020,299,6018,317,6009,332,5993,345,5972,356,5918,373,5852,385,5781,393,5647,399,5647,393,5780,387,5852,380,5917,368,5970,351,5990,340,6005,328,6013,315,6015,300,6009,283,5995,263,5969,250,5920,238,5775,219,5605,207,5453,199"/>
+<area shape="poly" id="edge82_Node000100_Node000090" title=" " alt="" coords="5337,225,5310,271,5307,267,5333,228"/>
+<area shape="poly" id="edge83_Node000100_Node000091" title=" " alt="" coords="5261,209,5132,235,4995,264,4966,271,4965,266,4994,259,5131,229,5255,209"/>
+<area shape="poly" id="edge78_Node000100_Node000097" title=" " alt="" coords="5255,195,3729,230,2905,250,2517,264,2488,271,2488,266,2517,259,2905,244,3729,225,5261,195"/>
+<area shape="poly" id="edge80_Node000100_Node000099" title=" " alt="" coords="5255,195,4206,216,2694,226,1749,239,1396,249,1184,264,1144,271,1144,266,1183,259,1395,244,1749,233,2694,220,4206,211,5261,195"/>
+<area shape="rect" id="Node000101" href="$protectoion__strategy_8h.html" title=" " alt="" coords="5607,269,5795,312"/>
+<area shape="poly" id="edge73_Node000100_Node000101" title=" " alt="" coords="5445,215,5630,269,5624,268,5444,221"/>
+<area shape="rect" id="Node000102" href="$_pn_o__algorithm_8h.html" title="Implements the Perturb and Observe (P&amp;O) MPPT algorithm with adaptive step size." alt="" coords="5820,269,5985,312"/>
+<area shape="poly" id="edge74_Node000100_Node000102" title=" " alt="" coords="5453,201,5620,224,5808,259,5840,269,5834,268,5807,264,5619,229,5453,207"/>
+<area shape="poly" id="edge86_Node000184_Node000004" title=" " alt="" coords="1088,214,977,245,920,263,906,293,902,326,905,358,910,385,906,382,900,359,897,326,901,291,917,259,976,240,1082,216"/>
+<area shape="poly" id="edge87_Node000184_Node000099" title=" " alt="" coords="1147,223,1097,271,1094,266,1142,225"/>
+<area shape="poly" id="edge91_Node000186_Node000004" title=" " alt="" coords="1746,202,1614,226,1544,242,1475,264,1446,278,1425,293,1404,308,1374,322,1270,353,1165,374,1066,387,985,395,985,389,1066,382,1164,369,1269,348,1372,318,1401,304,1422,289,1443,273,1473,259,1542,237,1613,220,1741,203"/>
+<area shape="poly" id="edge89_Node000186_Node000076" title=" " alt="" coords="1938,211,2134,229,2302,234,2449,232,2587,226,2724,221,2870,222,3036,233,3229,259,3265,269,3259,268,3229,264,3035,238,2870,227,2724,226,2587,231,2449,237,2301,239,2134,234,1938,216"/>
+<area shape="poly" id="edge90_Node000186_Node000077" title=" " alt="" coords="1938,211,2054,224,2152,231,2320,236,2487,240,2584,246,2699,259,2763,272,2758,271,2698,264,2584,252,2487,245,2320,241,2152,236,2054,229,1938,216"/>
+<area shape="poly" id="edge92_Node000186_Node000099" title=" " alt="" coords="1741,199,1490,223,1337,241,1184,264,1149,271,1148,266,1183,259,1336,235,1489,218,1746,199"/>
+<area shape="poly" id="edge94_Node000189_Node000004" title=" " alt="" coords="930,213,896,236,870,263,864,278,862,294,870,327,886,358,903,385,899,383,882,361,865,329,857,294,858,277,865,260,892,231,925,215"/>
+<area shape="poly" id="edge95_Node000189_Node000099" title=" " alt="" coords="1032,224,1062,270,1057,268,1030,228"/>
+<area shape="poly" id="edge97_Node000190_Node000004" title=" " alt="" coords="817,226,835,272,857,319,880,354,903,385,898,383,876,357,852,321,830,274,814,231"/>
+</map>

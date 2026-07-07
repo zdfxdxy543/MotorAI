@@ -1,0 +1,32 @@
+<map id="ctl_init_mtr_current_ctrl" name="ctl_init_mtr_current_ctrl">
+<area shape="rect" id="Node000001" title="Sets up the parameters for the d&#45;q axis PI controllers." alt="" coords="5,245,163,272"/>
+<area shape="rect" id="Node000002" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#ga70007141c851210d7ae0bfc226647789" title="Initializes the current controller structure to safe defaults." alt="" coords="211,132,379,159"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,243,209,180,248,164,244,167,212,185,108,247"/>
+<area shape="rect" id="Node000008" href="$group__discrete__filter__api.html#gaebd1bc972a74140bfff570e5bb93b43f" title="Initializes the filter as a 1st&#45;order Low&#45;Pass Filter (LPF)." alt="" coords="227,43,363,69"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="94,243,142,187,209,118,263,77,260,81,212,122,146,190,98,247"/>
+<area shape="rect" id="Node000009" href="$group__lead__lag__compensators.html#ga335be1df38f1324f9eb371dbf31ca2c0" title="Initializes a lead compensator from its continuous&#45;time parameters." alt="" coords="230,245,360,272"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="162,256,217,257,212,260,164,261"/>
+<area shape="rect" id="Node000011" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="253,195,336,221"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="142,242,240,220,236,223,144,247"/>
+<area shape="rect" id="Node000012" href="$group__continuous__pid__controllers.html#ga3a6c57bdff42beae734a633f3e37ffde" title="Set PID controller PID integral limit." alt="" coords="227,296,363,323"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="143,270,224,291,219,293,143,275"/>
+<area shape="rect" id="Node000013" href="$group__continuous__pid__controllers.html#ga2cad6d004ee85199dc18464416141d4a" title="Set PID controller PID limit." alt="" coords="237,347,352,373"/>
+<area shape="poly" id="edge15_Node000001_Node000013" title=" " alt="" coords="105,270,153,301,212,332,229,341,224,341,210,337,151,306,105,275"/>
+<area shape="rect" id="Node000014" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="276,397,314,424"/>
+<area shape="poly" id="edge16_Node000001_Node000014" title=" " alt="" coords="96,270,143,325,175,356,212,383,236,394,263,405,258,404,234,399,209,388,172,360,139,329,94,275"/>
+<area shape="rect" id="Node000003" href="$group__discrete__filter__api.html#gab8b865801ae1e4dd4014b4f3b3a54250" title="Clears all internal states of the 1st&#45;order IIR filter." alt="" coords="429,5,555,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="312,129,362,91,426,48,450,37,446,41,428,53,365,96,315,134"/>
+<area shape="rect" id="Node000004" href="$group__lead__lag__compensators.html#ga6f2431613cc43e38d9763f8545f4f01f" title="Clears the internal states of the lead compensator." alt="" coords="605,157,707,184"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="321,129,367,109,426,91,492,82,526,84,558,92,601,115,635,147,630,146,598,120,556,97,525,90,492,88,427,96,368,114,324,134"/>
+<area shape="rect" id="Node000005" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="445,208,539,235"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="332,157,444,201,439,203,332,162"/>
+<area shape="rect" id="Node000006" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="432,107,552,133"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="378,132,419,129,414,131,380,137"/>
+<area shape="rect" id="Node000007" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="432,157,552,184"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="379,154,419,160,414,162,380,159"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="362,41,417,32,412,35,364,46"/>
+<area shape="rect" id="Node000010" href="$group__lead__lag__compensators.html#gae555ec4ad57e53e1dcf5d197458c9768" title="Initializes a lead compensator from its continuous&#45;time parameters." alt="" coords="427,259,557,285"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="360,260,414,266,409,267,361,266"/>
+<area shape="poly" id="edge11_Node000010_Node000004" title=" " alt="" coords="533,256,556,244,594,219,626,196,631,193,597,223,559,249,535,260"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="337,208,432,216,427,218,337,213"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="ctl_step_biquad_filter" name="ctl_step_biquad_filter">
+<area shape="rect" id="Node000001" title="Executes one step of the 2nd&#45;order IIR filter." alt="" coords="348,107,492,133"/>
+<area shape="rect" id="Node000002" href="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gaf15226f9d76b5660d0ff0ac6aee6f52d" title="Executes one step of the calibration process. This should be called periodically (e...." alt="" coords="145,5,300,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="386,98,346,73,299,46,272,35,271,30,301,42,349,68,391,98"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga19267becce7654434381af34d0553ad6" title="Executes one step of the GFL three&#45;phase inverter control algorithm." alt="" coords="154,56,291,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="348,103,277,86,277,81,353,102"/>
+<area shape="rect" id="Node000006" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga21d59118f84cfeb25322dbf2e5c8bad9" title="Executes one step of the Negative Sequence Controller." alt="" coords="150,107,294,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="330,121,295,123,295,117,335,119"/>
+<area shape="rect" id="Node000007" href="$group___p_m_s_m___h_f_i.html#gaf25837ee99499af229b474643f52e034" title="Executes one step of the HFI position and speed estimation." alt="" coords="157,157,288,184"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="348,138,278,159,277,154,353,137"/>
+<area shape="rect" id="Node000008" href="$group___c_t_l___b_a_s_i_c___v_i_r_t_u_a_l___i_m_p.html#ga6376f30be71a200bb90794f8854f1ce1" title="Executes one step of the Virtual Impedance simulation." alt="" coords="164,208,280,235"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="391,141,349,172,301,198,272,210,271,205,299,194,346,167,386,143"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,20,98,21,96,16,131,17"/>
+<area shape="rect" id="Node000005" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,81,97,108"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="137,83,98,90,96,86,141,80"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="133,108,97,104,96,99,137,106"/>
+</map>

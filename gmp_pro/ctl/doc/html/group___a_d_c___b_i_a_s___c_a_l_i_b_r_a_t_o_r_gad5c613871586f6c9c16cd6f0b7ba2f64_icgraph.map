@@ -1,0 +1,15 @@
+<map id="ctl_is_adc_calibrator_cmpt" name="ctl_is_adc_calibrator_cmpt">
+<area shape="rect" id="Node000001" title="Checks if the ADC calibration period is complete." alt="" coords="399,81,575,108"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aaec5c36c55c6c2af00001e5ad785cbd9" title=" " alt="" coords="209,5,328,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,76,350,47,316,35,316,30,352,41,439,75"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a827985f34c4e1205aea32cbe9f5b1d00" title="执行ADC偏置校准" alt="" coords="187,56,351,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="381,83,352,82,352,76,386,82"/>
+<area shape="rect" id="Node000005" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="222,107,316,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="381,107,317,117,316,112,386,106"/>
+<area shape="rect" id="Node000006" href="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gaf15226f9d76b5660d0ff0ac6aee6f52d" title="Executes one step of the calibration process. This should be called periodically (e...." alt="" coords="191,157,346,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="439,114,352,148,317,159,315,154,350,143,434,115"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="5,5,139,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="192,20,140,21,138,16,196,17"/>
+<area shape="rect" id="Node000007" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="26,157,118,184"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="173,171,118,173,118,168,178,170"/>
+</map>

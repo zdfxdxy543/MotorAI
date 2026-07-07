@@ -1,0 +1,5 @@
+<map id="ctl_gain_calc_hall_sensor" name="ctl_gain_calc_hall_sensor">
+<area shape="rect" id="Node000001" title="Calculates gain for a Hall&#45;effect current sensor." alt="" coords="5,5,130,48"/>
+<area shape="rect" id="Node000002" href="$group___a_d_c___g_a_i_n___m_o_d_e_l_s.html#ga3dfa408b511de5cd3c325ca6fd2f7d56" title="A generic function to calculate the required system gain." alt="" coords="178,13,324,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,24,165,26,159,27,130,29"/>
+</map>

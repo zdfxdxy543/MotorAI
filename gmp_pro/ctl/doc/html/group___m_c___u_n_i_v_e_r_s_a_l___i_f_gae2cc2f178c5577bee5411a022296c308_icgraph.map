@@ -1,0 +1,23 @@
+<map id="ctl_get_mtr_elec_theta" name="ctl_get_mtr_elec_theta">
+<area shape="rect" id="Node000001" title="Gets the motor&#39;s electrical angle (theta)." alt="" coords="377,132,530,159"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm_2implement_2stm32f405__new_2xplt_8ctl__interface_8h.html#a961908a4644dc2b6b0b168d3f8136978" title=" " alt="" coords="170,5,304,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="426,121,383,84,328,46,302,35,301,30,330,42,387,79,432,121"/>
+<area shape="rect" id="Node000003" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="145,56,329,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="405,126,328,97,292,86,292,81,330,92,410,125"/>
+<area shape="rect" id="Node000005" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#gac3fbcb82aa2d1898276e80e65ef99606" title="Executes one step of the PMSM controller calculation." alt="" coords="169,107,304,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="359,135,305,131,305,125,364,134"/>
+<area shape="rect" id="Node000007" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga81e9dd88e588e565364de4fc07772945" title="Executes one step of the PMSM FOC HFI control loop." alt="" coords="159,157,315,184"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="359,157,316,164,315,159,364,155"/>
+<area shape="rect" id="Node000008" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="151,208,322,235"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="410,164,330,199,293,210,292,205,328,193,405,166"/>
+<area shape="rect" id="Node000010" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga25f7a72c6cb251cbf93dc32374f53ccd" title="Executes one step of the sensorless PMSM FOC control loop." alt="" coords="153,259,320,285"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="432,168,387,211,330,249,302,261,301,255,328,244,383,207,427,171"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,56,97,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,71,98,72,96,67,132,68"/>
+<area shape="rect" id="Node000006" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,107,97,133"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="152,122,98,123,96,117,156,118"/>
+<area shape="rect" id="Node000009" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,208,97,235"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="133,222,98,224,97,219,138,220"/>
+<area shape="rect" id="Node000011" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,259,97,285"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="135,272,97,275,97,269,140,272"/>
+</map>

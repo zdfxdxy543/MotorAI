@@ -1,0 +1,31 @@
+<map id="Motor &#45; Motor Controller Preset" name="Motor &#45; Motor Controller Preset">
+<area shape="rect" id="Node000003" href="$group___a_c_m__4_p24_v___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified AC Induction Motor." alt="" coords="444,5,607,48"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___l_i_b.html" title="The whole Motor Control Library. The root module for the entire MC library." alt="" coords="5,864,149,891"/>
+<area shape="rect" id="Node000001" title="Motor &amp; Motor controller hardware preset." alt="" coords="197,856,356,899"/>
+<area shape="rect" id="Node000005" href="$group___h_w___b_o_a_r_d___p_a_r_a_m_e_t_e_r_s__2136_s_i_n_v.html" title="Contains definitions specific to the GMP 3PH 2136SINV DUAL hardware." alt="" coords="431,72,620,115"/>
+<area shape="rect" id="Node000024" href="$group___p_m_s_m___g_b_m2804_h___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified PMSM." alt="" coords="430,139,621,181"/>
+<area shape="rect" id="Node000025" href="$group___p_m_s_m___h_b_l48_z_l400330_k___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified PMSM." alt="" coords="404,205,647,232"/>
+<area shape="rect" id="Node000027" href="$group___p_m_s_m___s_m060_r20_b30_m_n_a_d___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified PMSM." alt="" coords="426,256,625,299"/>
+<area shape="rect" id="Node000028" href="$group___p_m_s_m___t_y_i5008___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified PMSM." alt="" coords="448,323,603,365"/>
+<area shape="rect" id="Node000029" href="$group___p_m_s_m___t_y_i5010___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified PMSM." alt="" coords="448,389,603,432"/>
+<area shape="rect" id="Node000026" href="$group___p_m_s_r_m__4_p__15_k_w___p_a_r_a_m_e_t_e_r_s.html" title="Contains all parameter definitions for the specified PMSRM." alt="" coords="434,456,617,499"/>
+<area shape="rect" id="Node000007" href="$group___s_e_n_s_o_r___e_n_u_m_s.html" title="These enumerations are defined for documentation purposes only and are not compiled...." alt="" coords="454,523,597,565"/>
+<area shape="rect" id="Node000008" href="$group__hal__b__g431b__esc1.html" title="Parameters for the ST B&#45;G431B&#45;ESC1 motor driver board." alt="" coords="432,589,619,632"/>
+<area shape="rect" id="Node000017" href="$group__hal__boostxl__3phganinv.html" title="Parameters for the TI BOOSTXL&#45;3PhGaNInv motor driver board." alt="" coords="418,656,633,699"/>
+<area shape="rect" id="Node000018" href="$group__hal__boostxl__drv8301.html" title="Parameters for the TI BOOSTXL&#45;DRV8301 motor driver board." alt="" coords="424,723,627,765"/>
+<area shape="rect" id="Node000019" href="$group__hal__boostxl__drv8304h.html" title="Parameters for the TI BOOSTXL&#45;DRV8304H motor driver board." alt="" coords="419,789,632,832"/>
+<area shape="rect" id="Node000020" href="$group__hal__boostxl__drv8305.html" title="Parameters for the TI BOOSTXL&#45;DRV8305EVM motor driver board." alt="" coords="432,856,619,899"/>
+<area shape="rect" id="Node000021" href="$group__hal__boostxl__drv8320rs.html" title="Parameters for the TI BOOSTXL&#45;DRV8320RS motor driver board." alt="" coords="414,923,637,965"/>
+<area shape="rect" id="Node000022" href="$group__hal__boostxl__drv8323rx.html" title="Parameters for the TI BOOSTXL&#45;DRV8323Rx motor driver board." alt="" coords="416,989,636,1032"/>
+<area shape="rect" id="Node000009" href="$group__hal__evlservo1.html" title="Parameters for the ST EVLSERVO1 servo motor driver board." alt="" coords="446,1056,605,1099"/>
+<area shape="rect" id="Node000006" href="$group__hal__gmp__inn__lv3phgan.html" title="Parameters for the GMP INN&#45;LV3PHGAN motor driver board." alt="" coords="419,1123,632,1165"/>
+<area shape="rect" id="Node000004" href="$group__hal__harmonia__3ph__lc__filter.html" title="Parameters for the Harmonia 3&#45;Phase Grid&#45;Tied LC Filter Board." alt="" coords="432,1189,620,1216"/>
+<area shape="rect" id="Node000013" href="$group__hal__steval__ihm023v3.html" title="Parameters for the ST STEVAL&#45;IHM023V3 motor driver board." alt="" coords="427,1240,624,1283"/>
+<area shape="rect" id="Node000014" href="$group__hal__steval__ihm032v1.html" title="Parameters for the ST STEVAL&#45;IHM032V1 motor driver board." alt="" coords="427,1307,624,1349"/>
+<area shape="rect" id="Node000015" href="$group__hal__steval__ipm20b.html" title="Parameters for the ST STEVAL&#45;IPM20B motor driver board." alt="" coords="434,1373,617,1416"/>
+<area shape="rect" id="Node000016" href="$group__hal__steval__ipmng8q.html" title="Parameters for the ST STEVAL&#45;IPMNG8Q motor driver board." alt="" coords="428,1440,624,1483"/>
+<area shape="rect" id="Node000012" href="$group__hal__x__nucleo__ihm07m1.html" title="Parameters for the ST X&#45;NUCLEO&#45;IHM07M1 motor driver board." alt="" coords="420,1507,631,1549"/>
+<area shape="rect" id="Node000011" href="$group__hal__x__nucleo__ihm08m1.html" title="Parameters for the ST X&#45;NUCLEO&#45;IHM08M1 motor driver board." alt="" coords="420,1573,631,1616"/>
+<area shape="rect" id="Node000010" href="$group__hal__x__nucleo__ihm11m1.html" title="Parameters for the ST X&#45;NUCLEO&#45;IHM11M1 motor driver board." alt="" coords="420,1640,631,1683"/>
+<area shape="rect" id="Node000023" href="$group__hal__zonri__drv8301.html" title="Parameters for the ZonRi DRV8301 motor driver module." alt="" coords="432,1707,619,1749"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ctl_clear_mrac" name="ctl_clear_mrac">
+<area shape="rect" id="Node000001" title="Resets the internal states of the MRAC controller." alt="" coords="149,5,255,32"/>
+<area shape="rect" id="Node000002" href="$group___a_d_a_p_t_i_v_e___c_o_n_t_r_o_l_l_e_r.html#ga3b8f17bc3fbf4b9e965d788e5ab99263" title="Initializes the MRAC module." alt="" coords="5,5,101,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,19,101,21,101,16,136,18"/>
+</map>

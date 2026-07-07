@@ -1,0 +1,8 @@
+<map id="Continuous Components" name="Continuous Components">
+<area shape="rect" id="Node000001" title="Fundamental, reusable building continuous blocks for control template library." alt="" coords="216,101,381,128"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html" title="A library of discrete PID controllers based on the continuous&#45;time formula." alt="" coords="444,5,593,48"/>
+<area shape="rect" id="Node000005" href="$group__continuous__sogi.html" title="A SOGI implementation based on discretized continuous&#45;time state equations." alt="" coords="440,72,598,99"/>
+<area shape="rect" id="Node000006" href="$group__s__transfer__function.html" title="An IIR filter module designed from S&#45;domain pole&#45;zero locations." alt="" coords="429,123,608,165"/>
+<area shape="rect" id="Node000004" href="$group__tracking__continuous__pid.html" title="A composite PID controller for smooth setpoint tracking using a continuous&#45;form PID." alt="" coords="448,189,589,232"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___i_n_t_r_i_n_s_i_c___l_i_b.html" title="The Basic modules in Control Template Library." alt="" coords="5,93,168,136"/>
+</map>

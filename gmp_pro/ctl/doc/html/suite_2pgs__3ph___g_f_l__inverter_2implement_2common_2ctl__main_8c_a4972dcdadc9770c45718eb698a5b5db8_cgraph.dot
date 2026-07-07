@@ -1,0 +1,13 @@
+digraph "ctl_check_pll_locked"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="ctl_check_pll_locked",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="启动/复位锁相环 (PLL)"];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl_get_gfl_pll_error",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga187018f89e12e1b10763d40e7a3b73e2",tooltip="Get PLL error."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ctl_is_gfl_grid_connected",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga6e4410a9bc42e243a8302227a5adf0ac",tooltip="GFL preparing to connect to grid."];
+}

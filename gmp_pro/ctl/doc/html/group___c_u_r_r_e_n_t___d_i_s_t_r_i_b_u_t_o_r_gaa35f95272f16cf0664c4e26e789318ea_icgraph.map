@@ -1,0 +1,7 @@
+<map id="ctl_get_distributor_id_ref" name="ctl_get_distributor_id_ref">
+<area shape="rect" id="Node000001" title="Gets the calculated d&#45;axis current reference." alt="" coords="364,5,488,48"/>
+<area shape="rect" id="Node000002" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="145,13,316,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,27,316,29,316,24,351,27"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,13,97,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,27,97,29,97,24,132,26"/>
+</map>

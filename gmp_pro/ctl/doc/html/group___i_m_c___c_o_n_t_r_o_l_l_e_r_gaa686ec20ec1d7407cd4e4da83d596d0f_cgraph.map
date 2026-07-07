@@ -1,0 +1,7 @@
+<map id="ctl_init_imc" name="ctl_init_imc">
+<area shape="rect" id="Node000001" title="Initializes the IMC module." alt="" coords="5,31,93,57"/>
+<area shape="rect" id="Node000002" href="$group___i_m_c___c_o_n_t_r_o_l_l_e_r.html#gaba3e8dce9a068d894989b3a3aeaba030" title="Resets the internal states of the IMC controller." alt="" coords="141,5,239,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,34,128,29,123,31,94,39"/>
+<area shape="rect" id="Node000003" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="171,56,209,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="93,49,158,62,153,64,93,55"/>
+</map>

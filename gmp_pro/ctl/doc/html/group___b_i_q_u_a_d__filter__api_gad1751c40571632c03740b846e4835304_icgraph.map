@@ -1,0 +1,13 @@
+<map id="ctl_get_biquad_filter_output" name="ctl_get_biquad_filter_output">
+<area shape="rect" id="Node000001" title="Gets the last calculated output from the IIR filter." alt="" coords="595,48,733,91"/>
+<area shape="rect" id="Node000002" href="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#ga4ce3a873727946a93f563527af74dde7" title="Gets the calculated ADC bias result from the filter." alt="" coords="399,48,547,91"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="577,69,548,72,547,67,582,69"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aaec5c36c55c6c2af00001e5ad785cbd9" title=" " alt="" coords="209,5,328,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="381,48,325,35,326,30,387,47"/>
+<area shape="rect" id="Node000005" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a827985f34c4e1205aea32cbe9f5b1d00" title="执行ADC偏置校准" alt="" coords="187,56,351,83"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="380,70,352,72,351,67,386,69"/>
+<area shape="rect" id="Node000006" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="222,107,316,133"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="387,91,317,111,316,106,381,92"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="5,5,139,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="192,20,140,21,138,16,196,17"/>
+</map>

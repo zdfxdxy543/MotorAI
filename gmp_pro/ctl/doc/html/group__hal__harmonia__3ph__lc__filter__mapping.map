@@ -1,0 +1,4 @@
+<map id="Default Parameter Mapping" name="Default Parameter Mapping">
+<area shape="rect" id="Node000002" href="$group__hal__harmonia__3ph__lc__filter.html" title="Parameters for the Harmonia 3&#45;Phase Grid&#45;Tied LC Filter Board." alt="" coords="5,5,194,32"/>
+<area shape="rect" id="Node000001" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="242,5,422,32"/>
+</map>

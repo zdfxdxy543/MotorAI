@@ -1,0 +1,15 @@
+digraph "setup_peripheral"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="setup_peripheral",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl_attach_boost_ctrl\l_input",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group__boost__controller__api.html#gaab2b332fbe2e9374bd13c26188149218",tooltip="Attaches the controller to the physical ADC input interfaces."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ctl_init_ptr_adc_channel",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___a_d_c___p_t_r___s_i_n_g_l_e___c_h_a_n_n_e_l.html#ga2d28e5428a832b5e3a145fcb3f52c028",tooltip=" "];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="ctl_init_pwm_channel",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___p_w_m___c_h_a_n_n_e_l___s_i_n_g_l_e.html#gad1ef1afcb682b09ccfbf0bf133d467a6",tooltip=" "];
+}

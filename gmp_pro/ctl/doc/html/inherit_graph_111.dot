@@ -1,0 +1,9 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node0 [id="Node000000",label="ctrl_1p1z_t",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$structctrl__1p1z__t.html",tooltip="Data structure for a 1-Pole-1-Zero compensator."];
+}

@@ -1,0 +1,7 @@
+<map id="ctl_task_position_encoder_offset_calibrate" name="ctl_task_position_encoder_offset_calibrate">
+<area shape="rect" id="Node000001" title="Executes one step of the position encoder offset calibration state machine." alt="" coords="5,35,178,77"/>
+<area shape="rect" id="Node000002" href="$group___encoder_calibrate.html#ga4a06de6f4d4888ca266a20c544622f6b" title="Resets the state machine and clears motor commands." alt="" coords="241,5,376,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,42,228,37,223,39,179,47"/>
+<area shape="rect" id="Node000003" href="$group___m_c___r_o_t_a_t_i_o_n___i_f.html#gabe53f0a670e81c016cfa84019f18c300" title="Gets the mechanical position from a rotation interface." alt="" coords="226,72,391,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="178,65,213,72,208,72,178,70"/>
+</map>

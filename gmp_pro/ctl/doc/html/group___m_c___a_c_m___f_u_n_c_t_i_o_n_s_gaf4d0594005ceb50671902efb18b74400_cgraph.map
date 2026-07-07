@@ -1,0 +1,19 @@
+<map id="ctl_clear_acm_sensored_ctrl" name="ctl_clear_acm_sensored_ctrl">
+<area shape="rect" id="Node000001" title="Resets the internal states of the PID controllers." alt="" coords="5,84,193,111"/>
+<area shape="rect" id="Node000002" href="$group__discrete__pid__controller.html#ga0bee52109be7861b847e8f8798f16b8d" title="Clears the historical states of the PID controller." alt="" coords="438,5,585,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,81,179,59,240,40,333,25,424,19,419,21,334,30,241,45,181,64,130,86"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="464,164,558,191"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="125,109,178,135,241,157,295,168,350,174,451,179,446,180,350,179,294,173,240,163,175,140,124,114"/>
+<area shape="rect" id="Node000004" href="$group__tracking__continuous__pid.html#ga9d3287eb8c2ebae114e81c6b01eafcbd" title="Clears the internal states of the tracking continuous PID controller." alt="" coords="253,105,376,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,107,240,116,235,117,193,113"/>
+<area shape="rect" id="Node000007" href="$group__tracking__pid.html#ga0284adac0fb3f0bb2df087d7d14daeb9" title="Clears the internal states of the tracking PID controller." alt="" coords="241,55,388,81"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="192,82,228,79,223,81,194,87"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="377,140,452,162,447,161,376,145"/>
+<area shape="rect" id="Node000005" href="$group__frequency__divider.html#ga9fa7c9d311a8673674c7a8e2066f54df" title="Clears the internal counter of the divider." alt="" coords="454,57,569,84"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="376,107,444,89,450,88,377,112"/>
+<area shape="rect" id="Node000006" href="$group__slope__limiter.html#ga0ef418eab50c0b9f388ae6c02a2b0d86" title="Clears the output of the slope limiter." alt="" coords="436,109,586,136"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="376,123,423,124,418,125,377,128"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="370,52,443,36,438,37,371,57"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="388,66,441,69,435,70,389,72"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="365,79,449,104,443,105,365,85"/>
+</map>

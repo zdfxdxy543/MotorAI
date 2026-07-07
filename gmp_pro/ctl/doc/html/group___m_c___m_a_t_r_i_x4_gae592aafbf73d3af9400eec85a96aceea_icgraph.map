@@ -1,0 +1,5 @@
+<map id="ctl_matrix4_det" name="ctl_matrix4_det">
+<area shape="rect" id="Node000001" title="Calculates the determinant of a 4x4 matrix." alt="" coords="163,5,273,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x4.html#ga6e9051522b1dac31a0b20bfa0d9de93f" title="Calculates the inverse of a 4x4 matrix." alt="" coords="5,5,115,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,19,115,21,115,16,150,18"/>
+</map>

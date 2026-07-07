@@ -1,0 +1,4 @@
+<map id="Default Parameter Mapping" name="Default Parameter Mapping">
+<area shape="rect" id="Node000002" href="$group__hal__steval__ipmng8q.html" title="Parameters for the ST STEVAL&#45;IPMNG8Q motor driver board." alt="" coords="5,5,202,48"/>
+<area shape="rect" id="Node000001" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="250,13,430,40"/>
+</map>

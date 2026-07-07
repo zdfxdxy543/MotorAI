@@ -1,0 +1,5 @@
+<map id="ctl_dispatch_mtr_protect_slow" name="ctl_dispatch_mtr_protect_slow">
+<area shape="rect" id="Node000001" title="Main Loop Protection Dispatch. This calling frequency of this function should be less than 1kHz." alt="" coords="140,5,338,32"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a7b85d0e401bebeedb51ac162fdfed0c1" title=" " alt="" coords="5,5,92,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,19,92,21,92,16,127,18"/>
+</map>

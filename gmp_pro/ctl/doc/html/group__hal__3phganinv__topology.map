@@ -1,0 +1,4 @@
+<map id="Sensing Topology" name="Sensing Topology">
+<area shape="rect" id="Node000001" title="This section describes the type and layout of the onboard sensors." alt="" coords="269,13,392,40"/>
+<area shape="rect" id="Node000002" href="$group__hal__boostxl__3phganinv.html" title="Parameters for the TI BOOSTXL&#45;3PhGaNInv motor driver board." alt="" coords="5,5,221,48"/>
+</map>

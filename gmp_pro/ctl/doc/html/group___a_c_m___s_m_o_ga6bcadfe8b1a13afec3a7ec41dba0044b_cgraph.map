@@ -1,0 +1,15 @@
+<map id="ctl_init_acm_smo" name="ctl_init_acm_smo">
+<area shape="rect" id="Node000001" title="Initializes the ACM SMO estimator module." alt="" coords="5,81,129,108"/>
+<area shape="rect" id="Node000002" href="$group__discrete__filter__api.html#ga2a5bf712c8e3957ff75b7b81da8b0406" title="Initializes a first&#45;order low&#45;pass filter object." alt="" coords="188,5,296,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,79,176,42,193,37,188,40,178,46,98,83"/>
+<area shape="rect" id="Node000004" href="$group__continuous__pid__controllers.html#gafb8c5b18ed5d7177498c7709474969ef" title="Initializes a parallel&#45;form PID controller." alt="" coords="177,56,307,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="128,83,164,80,159,82,130,88"/>
+<area shape="rect" id="Node000006" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="182,107,302,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="129,101,169,108,164,110,129,106"/>
+<area shape="rect" id="Node000007" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="223,157,261,184"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="97,106,178,143,211,158,206,158,176,148,96,111"/>
+<area shape="rect" id="Node000003" href="$group__discrete__filter__api.html#ga14450919a7b473b9bf55db852ef574ef" title="Helper function to calculate the filter coefficient &#39;a&#39;." alt="" coords="355,5,481,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="296,16,342,18,337,19,297,21"/>
+<area shape="rect" id="Node000005" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="371,56,465,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="307,67,358,69,353,70,308,72"/>
+</map>

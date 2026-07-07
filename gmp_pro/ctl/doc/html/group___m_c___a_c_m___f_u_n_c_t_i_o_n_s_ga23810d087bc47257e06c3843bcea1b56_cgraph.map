@@ -1,0 +1,77 @@
+<map id="ctl_step_acm_sensored_ctrl" name="ctl_step_acm_sensored_ctrl">
+<area shape="rect" id="Node000001" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="5,556,190,583"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#gaf4d0594005ceb50671902efb18b74400" title="Resets the internal states of the PID controllers." alt="" coords="251,84,438,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,555,99,479,105,424,116,362,133,297,158,233,191,173,236,121,243,117,240,122,240,125,196,176,162,235,138,299,121,363,110,425,104,480,101,556"/>
+<area shape="rect" id="Node000009" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#gae015cde93736df7bf844083390ba1d2a" title="Performs the Clarke transformation from a 3&#45;phase (ABC) to a 2&#45;phase stationary (alpha&#45;beta) referenc..." alt="" coords="297,135,392,161"/>
+<area shape="poly" id="edge12_Node000001_Node000009" title=" " alt="" coords="97,555,102,487,122,383,139,326,163,269,195,217,236,171,257,158,283,150,280,154,259,162,239,175,200,220,168,272,144,328,127,384,108,488,102,556"/>
+<area shape="rect" id="Node000010" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga4d219095f4ded30ee0f8f07f0bca4fb4" title="Performs the Clarke transformation from 2&#45;phase currents (A, B) assuming a balanced three&#45;phase syste..." alt="" coords="283,185,406,212"/>
+<area shape="poly" id="edge13_Node000001_Node000010" title=" " alt="" coords="97,555,106,494,128,404,146,355,169,306,199,261,236,222,270,205,266,209,239,226,203,264,174,309,151,357,133,406,111,495,103,556"/>
+<area shape="rect" id="Node000011" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga016643c69a1e5530c52135c4f73659e5" title="Performs the inverse Park transformation from a rotating (dq) to a stationary (alpha&#45;beta) reference ..." alt="" coords="301,236,389,263"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="98,555,110,502,134,425,153,384,175,343,203,305,236,273,259,259,288,252,284,255,262,264,239,277,207,309,180,346,157,386,139,427,115,503,104,556"/>
+<area shape="rect" id="Node000012" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga7080b6ec8a627dfea17243ee685095b5" title="Performs the Park transformation from a stationary (alpha&#45;beta) to a rotating (dq) reference frame." alt="" coords="302,287,388,313"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="100,555,114,510,141,447,181,380,207,349,236,323,260,310,289,303,285,307,262,315,239,328,211,353,185,383,146,449,119,512,105,556"/>
+<area shape="rect" id="Node000013" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga4e07764e33b09f884459ce6676aec923" title="Calculates SVPWM duty cycles from alpha&#45;beta reference voltages using the common&#45;mode injection metho..." alt="" coords="278,337,412,364"/>
+<area shape="poly" id="edge16_Node000001_Node000013" title=" " alt="" coords="102,555,120,518,148,469,187,417,211,394,236,374,265,361,262,365,239,378,214,398,191,421,153,472,124,520,107,556"/>
+<area shape="rect" id="Node000014" href="$group___m_c___u_n_i_v_e_r_s_a_l___i_f.html#gae2cc2f178c5577bee5411a022296c308" title="Gets the motor&#39;s electrical angle (theta)." alt="" coords="268,388,422,415"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="106,554,156,491,194,455,236,424,256,417,252,421,239,429,197,459,160,495,110,557"/>
+<area shape="rect" id="Node000015" href="$group___m_c___u_n_i_v_e_r_s_a_l___i_f.html#gae041b32cde3aacf9b7ca9a729f024ec3" title="Gets the motor&#39;s velocity." alt="" coords="276,439,414,465"/>
+<area shape="poly" id="edge18_Node000001_Node000015" title=" " alt="" coords="113,554,166,515,200,493,237,475,263,467,259,471,239,480,203,498,169,519,117,557"/>
+<area shape="rect" id="Node000016" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="280,489,410,532"/>
+<area shape="poly" id="edge19_Node000001_Node000016" title=" " alt="" coords="155,553,266,528,263,532,158,558"/>
+<area shape="rect" id="Node000017" href="$group__discrete__pid__controller.html#ga822a30a6badd9ea5555070a09595522d" title="Executes one calculation step of the PID controller." alt="" coords="510,548,655,575"/>
+<area shape="poly" id="edge20_Node000001_Node000017" title=" " alt="" coords="161,581,238,592,345,600,452,592,526,578,522,581,452,597,345,605,237,597,163,586"/>
+<area shape="rect" id="Node000018" href="$group___a_c_m___p_o_s___c_a_l_c.html#ga6a990b3cb15b3937bd33c2e71a8fdeda" title="Executes one step of the slip and angle calculation." alt="" coords="271,860,418,887"/>
+<area shape="poly" id="edge21_Node000001_Node000018" title=" " alt="" coords="101,580,116,633,141,704,159,743,182,781,208,816,239,846,259,859,254,860,236,850,204,819,177,784,155,746,136,706,111,634,101,586"/>
+<area shape="rect" id="Node000019" href="$group__continuous__pid__controllers.html#gaacbe00aab5fac981355786302cffb287" title="Executes one step of the series&#45;form PID controller." alt="" coords="524,767,641,793"/>
+<area shape="poly" id="edge22_Node000001_Node000019" title=" " alt="" coords="105,580,125,616,153,662,191,708,214,728,239,744,272,760,306,771,378,785,448,788,512,788,507,790,448,794,378,790,305,776,270,765,236,749,211,732,188,712,149,665,120,619,105,586"/>
+<area shape="rect" id="Node000020" href="$group___slope_f_gen.html#ga1458a6f97ae7b697b15b3294dd6fc751" title="Executes one step of the slope frequency controller." alt="" coords="287,556,403,583"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="189,567,273,568,269,571,191,572"/>
+<area shape="rect" id="Node000024" href="$group___m_c___s_p_e_e_d___c_a_l_c_u_l_a_t_o_r.html#ga55b2aefb066659ebff34ccb46966e31c" title="Executes one step of the speed calculation." alt="" coords="282,809,408,836"/>
+<area shape="poly" id="edge27_Node000001_Node000024" title=" " alt="" coords="103,580,122,623,150,679,189,738,213,765,239,788,269,806,264,807,236,793,209,769,185,741,145,681,117,625,104,586"/>
+<area shape="rect" id="Node000028" href="$group__tracking__continuous__pid.html#ga3dff066ccdd3bca4553846d204f319f4" title="Executes one step of the tracking continuous PID controller." alt="" coords="238,708,452,735"/>
+<area shape="poly" id="edge31_Node000001_Node000028" title=" " alt="" coords="110,581,163,636,199,668,239,694,254,702,249,703,236,698,196,672,159,640,110,586"/>
+<area shape="rect" id="Node000029" href="$group__tracking__pid.html#gae8f86b1fb0ca91745e4aeca9f30a6569" title="Executes one step of the tracking PID controller." alt="" coords="273,657,417,684"/>
+<area shape="poly" id="edge35_Node000001_Node000029" title=" " alt="" coords="123,581,176,608,239,636,279,651,274,653,237,641,174,613,124,586"/>
+<area shape="rect" id="Node000031" href="$group___m_c___v_e_c_t_o_r2.html#ga2b93efaecc0acd47af549cccdb61b98a" title="Copies the contents of one 2D vector to another." alt="" coords="285,911,405,937"/>
+<area shape="poly" id="edge40_Node000001_Node000031" title=" " alt="" coords="101,581,112,641,135,726,153,773,176,818,204,860,239,897,272,915,267,916,236,901,200,864,171,821,148,775,130,728,107,642,100,586"/>
+<area shape="rect" id="Node000032" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="285,961,405,988"/>
+<area shape="poly" id="edge41_Node000001_Node000032" title=" " alt="" coords="100,581,109,649,129,748,146,802,170,855,201,905,239,947,254,957,272,967,267,967,251,962,236,951,197,908,165,858,141,804,124,749,103,650,99,586"/>
+<area shape="rect" id="Node000033" href="$group___m_c___v_e_c_t_o_r3.html#gaaa179fa5afeaea39fe3f32070cb543f2" title="Sets all components of a 3D vector to a single scalar value." alt="" coords="290,1012,400,1039"/>
+<area shape="poly" id="edge42_Node000001_Node000033" title=" " alt="" coords="99,580,105,656,112,709,123,769,140,831,164,892,197,949,239,998,256,1010,277,1020,272,1019,254,1014,236,1002,193,952,159,894,135,832,118,770,106,710,100,657,98,586"/>
+<area shape="rect" id="Node000003" href="$group__discrete__pid__controller.html#ga0bee52109be7861b847e8f8798f16b8d" title="Clears the historical states of the PID controller." alt="" coords="715,5,862,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="376,81,433,59,499,40,602,24,701,19,697,22,603,30,501,45,435,64,380,85"/>
+<area shape="rect" id="Node000004" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="741,164,836,191"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="421,109,453,120,468,130,478,140,487,150,501,158,559,173,619,181,676,183,728,183,724,185,676,188,618,187,558,179,499,162,484,154,474,144,464,134,451,125,423,114"/>
+<area shape="rect" id="Node000005" href="$group__tracking__continuous__pid.html#ga9d3287eb8c2ebae114e81c6b01eafcbd" title="Clears the internal states of the tracking continuous PID controller." alt="" coords="521,105,644,148"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="438,107,508,116,503,119,440,111"/>
+<area shape="rect" id="Node000008" href="$group__tracking__pid.html#ga0284adac0fb3f0bb2df087d7d14daeb9" title="Clears the internal states of the tracking PID controller." alt="" coords="509,55,656,81"/>
+<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="438,84,496,77,492,81,441,88"/>
+<area shape="poly" id="edge6_Node000005_Node000004" title=" " alt="" coords="644,139,729,161,724,163,646,144"/>
+<area shape="rect" id="Node000006" href="$group__frequency__divider.html#ga9fa7c9d311a8673674c7a8e2066f54df" title="Clears the internal counter of the divider." alt="" coords="731,57,846,84"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="644,108,724,87,720,90,646,112"/>
+<area shape="rect" id="Node000007" href="$group__slope__limiter.html#ga0ef418eab50c0b9f388ae6c02a2b0d86" title="Clears the output of the slope limiter." alt="" coords="713,109,864,136"/>
+<area shape="poly" id="edge7_Node000005_Node000007" title=" " alt="" coords="644,123,700,123,696,126,646,128"/>
+<area shape="poly" id="edge9_Node000008_Node000003" title=" " alt="" coords="640,52,717,35,713,38,643,56"/>
+<area shape="poly" id="edge10_Node000008_Node000006" title=" " alt="" coords="656,67,718,68,713,71,658,71"/>
+<area shape="poly" id="edge11_Node000008_Node000007" title=" " alt="" coords="635,79,723,104,719,106,637,84"/>
+<area shape="rect" id="Node000021" href="$group__signal__generators.html#ga31ce49fec696a6da43872f44f9fb0708" title="Sets a new slope for the ramp generator." alt="" coords="504,431,661,473"/>
+<area shape="poly" id="edge24_Node000020_Node000021" title=" " alt="" coords="402,560,427,553,451,542,466,528,474,514,483,499,498,483,508,480,504,483,502,487,487,502,479,517,470,532,453,546,429,558,405,565"/>
+<area shape="rect" id="Node000022" href="$group__signal__generators.html#ga6871b28be07a561ef49c53dc60e74526" title="Executes one step of the ramp generator." alt="" coords="500,497,665,524"/>
+<area shape="poly" id="edge25_Node000020_Node000022" title=" " alt="" coords="402,554,451,541,515,527,511,530,453,547,405,558"/>
+<area shape="rect" id="Node000023" href="$group__slope__limiter.html#ga8def67ee9502a7d499cd4c131ef68bfe" title="Executes one step of the slope limiter." alt="" coords="509,599,656,625"/>
+<area shape="poly" id="edge26_Node000020_Node000023" title=" " alt="" coords="402,577,496,595,491,597,404,582"/>
+<area shape="rect" id="Node000025" href="$group___m_c___r_o_t_a_t_i_o_n___i_f.html#gabe53f0a670e81c016cfa84019f18c300" title="Gets the mechanical position from a rotation interface." alt="" coords="500,817,665,844"/>
+<area shape="poly" id="edge28_Node000024_Node000025" title=" " alt="" coords="408,822,487,827,482,828,409,827"/>
+<area shape="rect" id="Node000026" href="$group__frequency__divider.html#ga440482fa4859c76cd2b25a884ea84458" title="Executes one step of the frequency divider." alt="" coords="526,716,639,743"/>
+<area shape="poly" id="edge29_Node000024_Node000026" title=" " alt="" coords="374,806,499,752,522,747,517,749,501,757,376,811"/>
+<area shape="rect" id="Node000027" href="$group__discrete__filter__api.html#gacbd67d6fc3fee1d088725e78dc01a1ce" title="Executes one step of the low&#45;pass filter calculation." alt="" coords="506,868,660,895"/>
+<area shape="poly" id="edge30_Node000024_Node000027" title=" " alt="" coords="405,834,453,845,516,863,511,864,451,851,405,839"/>
+<area shape="poly" id="edge33_Node000028_Node000019" title=" " alt="" coords="402,733,514,762,509,763,402,738"/>
+<area shape="poly" id="edge34_Node000028_Node000023" title=" " alt="" coords="427,705,451,694,466,680,474,666,483,650,498,635,510,631,506,634,502,639,487,654,479,668,470,684,453,698,429,710"/>
+<area shape="poly" id="edge32_Node000028_Node000026" title=" " alt="" coords="452,722,514,726,509,728,453,728"/>
+<area shape="poly" id="edge37_Node000029_Node000017" title=" " alt="" coords="410,655,451,636,465,624,474,611,483,598,498,584,512,580,507,583,502,589,487,601,478,614,469,628,453,641,413,659"/>
+<area shape="poly" id="edge39_Node000029_Node000023" title=" " alt="" coords="401,654,513,628,509,631,403,659"/>
+<area shape="poly" id="edge38_Node000029_Node000026" title=" " alt="" coords="405,682,453,693,516,711,511,712,451,699,405,687"/>
+<area shape="rect" id="Node000030" href="$group__discrete__pid__controller.html#ga880bb44cbfaac1d8bbff6eac1c8e5795" title="Gets the most recent output value from the PID controller." alt="" coords="514,649,651,692"/>
+<area shape="poly" id="edge36_Node000029_Node000030" title=" " alt="" coords="417,668,501,670,496,672,418,673"/>
+</map>

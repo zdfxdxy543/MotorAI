@@ -1,0 +1,19 @@
+<map id="ctl_step_mpc" name="ctl_step_mpc">
+<area shape="rect" id="Node000001" title="Executes one step of the FCS&#45;MPC algorithm." alt="" coords="5,157,105,184"/>
+<area shape="rect" id="Node000002" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#gacda829724344363425dce7b1d264b455" title="Performs the Park transformation for 2D vectors (alpha&#45;beta to dq)." alt="" coords="185,5,277,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="61,156,94,101,120,69,151,42,172,32,169,36,154,46,124,73,99,104,65,158"/>
+<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x2.html#ga0d6f30c0ef63baccef96de9c7dd283bd" title="Multiplies a 2x2 matrix by a 2D column vector." alt="" coords="153,56,309,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="68,155,104,124,151,92,167,87,163,91,154,97,108,128,72,159"/>
+<area shape="rect" id="Node000004" href="$group___m_c___m_a_t_r_i_x2.html#ga65593511d60e2f0e364d9907769e9130" title="Sets an element in the matrix at the specified row and column." alt="" coords="176,107,286,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="103,154,169,136,165,140,105,159"/>
+<area shape="rect" id="Node000006" href="$group___m_c___v_e_c_t_o_r2.html#ga44523bc20e7e10ac70eb9dc8e80a36a5" title="Adds two 2D vectors." alt="" coords="174,157,288,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="104,168,161,169,157,172,106,173"/>
+<area shape="rect" id="Node000007" href="$group___m_c___v_e_c_t_o_r2.html#gac9b1c5a41292d8ee60de7ba400a8bb47" title="Calculates the squared magnitude (length) of a 2D vector. This is computationally cheaper than ctl_ve..." alt="" coords="162,208,300,235"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="104,182,169,202,165,204,104,187"/>
+<area shape="rect" id="Node000008" href="$group___m_c___v_e_c_t_o_r2.html#ga2bf75b093dd8e4ac5cd90af222db3918" title="Multiplies a 2D vector by a scalar value." alt="" coords="169,259,292,285"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="70,182,108,213,154,244,167,252,162,253,151,249,104,217,70,187"/>
+<area shape="rect" id="Node000009" href="$group___m_c___v_e_c_t_o_r2.html#ga90424e53070a47a1da6739be73ef6fb5" title="Subtracts one 2D vector from another." alt="" coords="174,309,288,336"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="64,182,99,237,124,268,154,295,163,303,158,302,151,299,120,272,94,240,62,187"/>
+<area shape="rect" id="Node000005" href="$generate__fuzzy__2d__src_8m.html#aa69ca3527648e65c6a63063cf554feaf" title=" " alt="" coords="357,107,409,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="286,117,344,119,339,121,287,123"/>
+</map>

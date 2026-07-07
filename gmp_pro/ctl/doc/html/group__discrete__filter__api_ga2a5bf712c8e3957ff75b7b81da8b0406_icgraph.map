@@ -1,0 +1,58 @@
+<map id="ctl_init_lp_filter" name="ctl_init_lp_filter">
+<area shape="rect" id="Node000001" title="Initializes a first&#45;order low&#45;pass filter object." alt="" coords="729,347,837,373"/>
+<area shape="rect" id="Node000002" href="$group___a_c_m___s_m_o.html#ga6bcadfe8b1a13afec3a7ec41dba0044b" title="Initializes the ACM SMO estimator module." alt="" coords="524,5,647,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="779,330,773,272,758,195,746,154,728,115,706,78,679,46,664,35,648,28,647,23,667,31,682,42,711,75,733,112,751,152,763,193,778,271,783,332"/>
+<area shape="rect" id="Node000003" href="$group__boost__controller__api.html#ga56ed84db82dde1e8829c0d4cda784f6d" title="Initializes the Boost controller with specified PID and filter parameters." alt="" coords="524,56,647,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="777,330,768,281,751,217,722,152,703,123,679,97,664,86,648,79,647,74,666,82,682,93,707,119,727,150,756,215,773,279,781,332"/>
+<area shape="rect" id="Node000005" href="$group__buck__controller__api.html#ga90d2c266b08efaa9751c23bf89ef85c7" title="Initializes the Buck controller with specified PID and filter parameters." alt="" coords="526,107,645,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="774,331,763,291,744,241,717,190,699,167,679,147,663,137,646,130,645,125,665,132,682,143,703,164,721,187,749,239,768,289,779,333"/>
+<area shape="rect" id="Node000007" href="$group__protection__strategy__api.html#ga0326c66d0ecb399939449f74fafcad9e" title="Initializes the foldback protection module." alt="" coords="496,157,675,184"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="769,331,756,301,736,265,711,229,679,198,661,187,660,182,682,194,715,225,741,262,760,299,774,332"/>
+<area shape="rect" id="Node000008" href="$group__mppt__api.html#gade67293d432ee8580424c6ca5816c7cf" title="Initializes the P&amp;O MPPT algorithm module." alt="" coords="506,208,665,235"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="762,333,728,290,705,268,679,249,657,238,656,233,682,244,708,264,732,287,767,334"/>
+<area shape="rect" id="Node000010" href="$group___p_m_s_m___s_m_o.html#gaedd2fd72cde2db547013f8451618f92a" title="Initializes the SMO estimator module." alt="" coords="518,259,653,285"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="748,338,717,319,680,300,649,289,649,283,682,295,719,314,754,338"/>
+<area shape="rect" id="Node000014" href="$group__spll__dc__api.html#gae58abab4581376fe0c8b33c2c9046f8b" title="Initializes the Single&#45;Phase SOGI&#45;DC PLL module." alt="" coords="514,309,657,352"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="711,350,658,344,657,339,716,349"/>
+<area shape="rect" id="Node000015" href="$group__spll__api.html#gad32add2f7e32a00fca7701020f8c9ba7" title="Initializes the Single&#45;Phase PLL module." alt="" coords="504,376,667,403"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="711,371,668,380,666,375,716,369"/>
+<area shape="rect" id="Node000016" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#ga43fcf30c79672c191ef67a959ecea1d6" title=" " alt="" coords="278,401,440,428"/>
+<area shape="poly" id="edge25_Node000001_Node000016" title=" " alt="" coords="752,381,719,403,681,417,619,428,555,433,441,428,440,423,555,427,618,423,680,412,716,398,748,384"/>
+<area shape="rect" id="Node000019" href="$group__spll__api.html#ga66a64b2391640ef794372b7fa4a7c590" title="Initializes the Single&#45;Phase PLL module." alt="" coords="514,477,657,520"/>
+<area shape="poly" id="edge18_Node000001_Node000019" title=" " alt="" coords="763,384,727,424,682,461,649,479,646,474,679,456,723,420,758,387"/>
+<area shape="rect" id="Node000020" href="$group___m_c___s_p_e_e_d___c_a_l_c_u_l_a_t_o_r.html#ga92b657d41e8bf1c59f433760a68e772c" title="Initializes the speed calculator." alt="" coords="510,544,661,571"/>
+<area shape="poly" id="edge19_Node000001_Node000020" title=" " alt="" coords="775,386,762,423,742,462,716,501,682,534,662,546,660,541,679,530,712,497,738,459,757,420,771,390"/>
+<area shape="rect" id="Node000024" href="$group___m_c___s_p_e_e_d___c_a_l_c_u_l_a_t_o_r.html#gaf6f30f53ffb797dd1b60491f7646e021" title="Initializes the speed calculator." alt="" coords="510,595,661,637"/>
+<area shape="poly" id="edge23_Node000001_Node000024" title=" " alt="" coords="778,386,768,432,749,484,721,538,703,563,682,585,662,599,660,594,679,581,699,559,717,535,744,482,763,430,774,390"/>
+<area shape="rect" id="Node000025" href="$group__protection__strategy__api.html#ga02fa279d4af2288ba98215bd70a73f67" title="Initializes the VIP protection module." alt="" coords="512,661,659,688"/>
+<area shape="poly" id="edge24_Node000001_Node000025" title=" " alt="" coords="782,387,776,445,760,515,747,552,730,588,709,622,682,651,661,665,659,660,679,647,704,619,725,586,742,550,755,514,771,444,778,391"/>
+<area shape="rect" id="Node000026" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga6d13a7a39cc732f568f03c1fa42536c8" title=" " alt="" coords="490,712,681,739"/>
+<area shape="poly" id="edge26_Node000001_Node000026" title=" " alt="" coords="783,387,781,453,767,537,754,582,736,625,713,666,682,702,666,714,664,709,679,698,708,663,731,623,749,580,761,536,775,452,780,391"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__boost_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="330,56,389,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="506,71,390,72,388,67,511,68"/>
+<area shape="rect" id="Node000006" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="330,107,389,133"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="508,121,390,122,388,118,513,119"/>
+<area shape="rect" id="Node000009" href="$suite_2dps__dcac__rectifier__spfc_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="330,208,389,235"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="488,223,390,224,388,219,492,220"/>
+<area shape="rect" id="Node000011" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="330,259,389,285"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="501,273,390,275,389,269,506,271"/>
+<area shape="rect" id="Node000012" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga5e436e10f3d56ce34a10471e7e23116a" title="Initializes the PMSM SMO Controller." alt="" coords="276,309,442,352"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="514,291,444,311,442,307,519,288"/>
+<area shape="rect" id="Node000013" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="141,317,200,344"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="258,332,202,333,199,328,263,329"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="486,401,442,408,440,403,491,399"/>
+<area shape="rect" id="Node000017" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gad409bb12fa407034f45f243e042f223f" title=" " alt="" coords="113,401,228,428"/>
+<area shape="poly" id="edge16_Node000016_Node000017" title=" " alt="" coords="260,416,230,417,228,412,265,413"/>
+<area shape="rect" id="Node000018" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,401,65,428"/>
+<area shape="poly" id="edge17_Node000017_Node000018" title=" " alt="" coords="95,416,67,417,64,412,99,413"/>
+<area shape="rect" id="Node000021" href="$suite_2mcs__pmsm__hfi_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="330,515,389,541"/>
+<area shape="poly" id="edge20_Node000020_Node000021" title=" " alt="" coords="492,546,390,534,389,529,498,545"/>
+<area shape="rect" id="Node000022" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga3aab0014cd0232c544eea5856e0a5ae5" title="Initializes the sensored ACM controller." alt="" coords="284,565,435,608"/>
+<area shape="poly" id="edge21_Node000020_Node000022" title=" " alt="" coords="492,570,436,579,435,574,497,568"/>
+<area shape="rect" id="Node000023" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="141,573,200,600"/>
+<area shape="poly" id="edge22_Node000022_Node000023" title=" " alt="" coords="266,588,201,589,200,584,270,586"/>
+<area shape="rect" id="Node000027" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga7e1ef3de5d1db353eb64269d363937a1" title=" " alt="" coords="278,712,440,739"/>
+<area shape="poly" id="edge27_Node000026_Node000027" title=" " alt="" coords="472,725,440,728,440,723,477,725"/>
+<area shape="rect" id="Node000028" href="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="141,712,200,739"/>
+<area shape="poly" id="edge28_Node000027_Node000028" title=" " alt="" coords="261,725,201,728,200,723,266,725"/>
+</map>

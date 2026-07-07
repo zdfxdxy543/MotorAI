@@ -1,0 +1,15 @@
+<map id="ctl_switch_pmsm_smo_ctrl_using_smo" name="ctl_switch_pmsm_smo_ctrl_using_smo">
+<area shape="rect" id="Node000001" title="Switches the controller from open&#45;loop startup to closed&#45;loop SMO control." alt="" coords="5,128,161,171"/>
+<area shape="rect" id="Node000002" href="$group___m_c___u_n_i_v_e_r_s_a_l___i_f.html#gaa0f5dc6886c0773f04032574fd802e95" title="Attaches a position encoder interface to the universal motor interface." alt="" coords="244,5,400,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,126,147,83,176,60,207,42,231,34,227,37,210,46,179,65,151,87,106,129"/>
+<area shape="rect" id="Node000003" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga7080b6ec8a627dfea17243ee685095b5" title="Performs the Park transformation from a stationary (alpha&#45;beta) to a rotating (dq) reference frame." alt="" coords="279,56,364,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="127,125,208,92,266,78,262,81,210,97,130,130"/>
+<area shape="rect" id="Node000004" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga4c47bfcf4fc9148bd6c7bf101e858c14" title="Sets the controller to velocity mode." alt="" coords="209,107,435,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="160,137,195,134,191,137,162,142"/>
+<area shape="rect" id="Node000005" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="257,157,387,200"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="161,156,243,167,239,170,161,161"/>
+<area shape="rect" id="Node000006" href="$group__continuous__pid__controllers.html#gae7285cfb018033276760c4eae4c83178" title="Set PID controller PID integrator item." alt="" coords="249,224,394,251"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="122,169,164,190,210,209,237,220,231,220,208,215,162,195,122,174"/>
+<area shape="rect" id="Node000007" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga17db6cdd577ebc4eded1a8e72f1757ac" title="Sets the target speed for the velocity controller." alt="" coords="242,275,402,317"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="103,169,150,215,179,240,210,260,230,272,224,271,207,265,176,244,146,219,102,174"/>
+</map>

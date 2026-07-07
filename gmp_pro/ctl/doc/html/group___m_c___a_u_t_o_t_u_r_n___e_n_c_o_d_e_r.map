@@ -1,0 +1,4 @@
+<map id="Auto&#45;turn Counting Position Encoder" name="Auto&#45;turn Counting Position Encoder">
+<area shape="rect" id="Node000001" title="Handles single&#45;turn encoders and automatically tracks full revolutions." alt="" coords="178,5,308,48"/>
+<area shape="rect" id="Node000002" href="$group___m_c___e_n_c_o_d_e_r.html" title="This module contains interfaces for various position and speed encoders." alt="" coords="5,13,130,40"/>
+</map>

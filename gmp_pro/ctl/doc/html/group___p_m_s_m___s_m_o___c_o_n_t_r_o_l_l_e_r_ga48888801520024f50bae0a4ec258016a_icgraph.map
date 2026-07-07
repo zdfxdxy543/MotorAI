@@ -1,0 +1,7 @@
+<map id="ctl_disable_pmsm_smo_ctrl" name="ctl_disable_pmsm_smo_ctrl">
+<area shape="rect" id="Node000001" title="Disables the entire PMSM controller." alt="" coords="327,13,510,40"/>
+<area shape="rect" id="Node000002" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga5e436e10f3d56ce34a10471e7e23116a" title="Initializes the PMSM SMO Controller." alt="" coords="113,5,279,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="309,27,280,29,280,24,314,27"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,28,65,29,65,24,100,26"/>
+</map>

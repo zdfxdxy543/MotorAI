@@ -1,0 +1,5 @@
+<map id="ctl_set_gfl_inv_openloop_mode" name="ctl_set_gfl_inv_openloop_mode">
+<area shape="rect" id="Node000001" title="Sets the controller to open&#45;loop mode." alt="" coords="113,5,316,32"/>
+<area shape="rect" id="Node000002" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,19,65,21,65,16,100,18"/>
+</map>

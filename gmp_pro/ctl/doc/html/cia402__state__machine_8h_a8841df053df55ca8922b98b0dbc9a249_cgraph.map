@@ -1,0 +1,9 @@
+<map id="ctl_enable_pwm" name="ctl_enable_pwm">
+<area shape="rect" id="Node000001" title="硬件PWM输出使能/禁止" alt="" coords="5,31,121,57"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a9754cc2fe80af11975a0979f252def91" title=" " alt="" coords="169,31,321,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="121,41,155,43,150,45,121,47"/>
+<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gad04f84e7f3fb15104d4926d857279353" title="Enable GFL controller." alt="" coords="369,5,494,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="321,31,357,29,351,30,322,36"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a181370011baab3adb8e1fbb57d27fb5e" title=" " alt="" coords="376,56,487,83"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="322,52,364,60,359,60,321,57"/>
+</map>

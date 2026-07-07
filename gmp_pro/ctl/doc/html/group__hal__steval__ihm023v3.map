@@ -1,0 +1,9 @@
+<map id="STEVAL&#45;IHM023V3 Hardware Abstraction Layer" name="STEVAL&#45;IHM023V3 Hardware Abstraction Layer">
+<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___p_r_e_s_e_t.html" title="Motor &amp; Motor controller hardware preset." alt="" coords="5,115,165,157"/>
+<area shape="rect" id="Node000001" title="Parameters for the ST STEVAL&#45;IHM023V3 motor driver board." alt="" coords="213,115,410,157"/>
+<area shape="rect" id="Node000006" href="$group__hal__steval__ihm023v3__circuits.html" title="This section defines the detailed electrical parameters of all sensing circuits." alt="" coords="458,5,639,32"/>
+<area shape="rect" id="Node000004" href="$group__hal__steval__ihm023v3__limits.html" title="This section defines the boundary conditions for the safe physical operation of the board." alt="" coords="483,56,614,99"/>
+<area shape="rect" id="Node000007" href="$group__hal__steval__ihm023v3__mapping.html" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="458,123,639,149"/>
+<area shape="rect" id="Node000003" href="$group__hal__steval__ihm023v3__nameplate.html" title="This section records the key hardware models of the board for identification and traceability." alt="" coords="506,173,591,200"/>
+<area shape="rect" id="Node000005" href="$group__hal__steval__ihm023v3__topology.html" title="This section describes the type and layout of the onboard sensors." alt="" coords="487,224,610,251"/>
+</map>

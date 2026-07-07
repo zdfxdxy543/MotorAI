@@ -1,0 +1,9 @@
+<map id="component/dsa/dsa_trigger.h" name="component/dsa/dsa_trigger.h">
+<area shape="rect" id="Node000001" title="Provides a basic data acquisition trigger for logging data based on a signal event." alt="" coords="135,5,325,32"/>
+<area shape="rect" id="Node000002" href="$dsa_8h.html" title=" " alt="" coords="5,88,127,115"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,41,93,90,90,85,189,37"/>
+<area shape="rect" id="Node000003" href="$dsa__trigger_8c.html" title=" " alt="" coords="151,80,309,123"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="232,46,232,81,228,78,228,50"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2f280049c_2xplt_8peripheral_8c.html" title=" " alt="" coords="332,80,536,123"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="276,35,384,79,379,80,275,41"/>
+</map>

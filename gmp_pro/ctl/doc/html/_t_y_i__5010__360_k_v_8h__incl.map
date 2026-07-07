@@ -1,0 +1,5 @@
+<map id="component/hardware_preset/pmsm_motor/TYI_5010_360KV.h" name="component/hardware_preset/pmsm_motor/TYI_5010_360KV.h">
+<area shape="rect" id="Node000001" title="Defines the parameters for the TYI&#45;5010 KV360 Brushless Motor (PMSM)." alt="" coords="5,5,175,64"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="20,112,160,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,62,93,97,87,96,89,67"/>
+</map>

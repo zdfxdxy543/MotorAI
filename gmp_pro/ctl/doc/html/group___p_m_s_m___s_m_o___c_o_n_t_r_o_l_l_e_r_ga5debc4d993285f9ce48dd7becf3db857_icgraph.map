@@ -1,0 +1,5 @@
+<map id="ctl_attach_pmsm_smo_bare_output" name="ctl_attach_pmsm_smo_bare_output">
+<area shape="rect" id="Node000001" title="Attaches the controller to a three&#45;phase PWM output interface." alt="" coords="170,5,323,48"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__smo_2implement_2f280049c_2xplt_8peripheral_8c.html#a88bc8e66490b2861a260395ae1c1b3bd" title=" " alt="" coords="5,13,122,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,27,122,29,122,24,156,26"/>
+</map>

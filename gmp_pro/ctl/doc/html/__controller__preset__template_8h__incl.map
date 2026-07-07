@@ -1,0 +1,5 @@
+<map id="component/hardware_preset/inverter_3ph/_controller_preset_template.h" name="component/hardware_preset/inverter_3ph/_controller_preset_template.h">
+<area shape="rect" id="Node000001" title="A generic Hardware Abstraction Layer (HAL) template for motor driver boards." alt="" coords="5,5,202,64"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="21,112,186,187"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,62,106,97,101,96,102,67"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ctl_matrix2_eigenvectors_real" name="ctl_matrix2_eigenvectors_real">
+<area shape="rect" id="Node000001" title="Calculates the real eigenvectors of a 2x2 matrix for given real eigenvalues." alt="" coords="5,5,200,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#gae829052fc6de7b8d10db8b3263c2372c" title="Normalizes a 2D vector to produce a unit vector (a vector with length 1)." alt="" coords="248,5,396,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,16,235,19,229,19,200,21"/>
+<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r2.html#gafbee66017a932c4fcfcc814da32b2fc3" title="Calculates the magnitude (length) of a 2D vector." alt="" coords="444,5,561,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="397,16,431,19,426,19,397,21"/>
+<area shape="rect" id="Node000004" href="$group___m_c___v_e_c_t_o_r2.html#gac9b1c5a41292d8ee60de7ba400a8bb47" title="Calculates the squared magnitude (length) of a 2D vector. This is computationally cheaper than ctl_ve..." alt="" coords="609,5,748,32"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="562,16,596,19,591,19,562,21"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Multi&#45;turn Position Encoder" name="Multi&#45;turn Position Encoder">
+<area shape="rect" id="Node000002" href="$group___m_c___e_n_c_o_d_e_r.html" title="This module contains interfaces for various position and speed encoders." alt="" coords="5,13,130,40"/>
+<area shape="rect" id="Node000001" title="Handles multi&#45;turn absolute position encoders where the turn count is provided externally." alt="" coords="178,5,304,48"/>
+</map>

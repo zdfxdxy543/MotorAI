@@ -1,0 +1,7 @@
+<map id="component/dsa/ti_dlog/dlog_4ch_f.h" name="component/dsa/ti_dlog/dlog_4ch_f.h">
+<area shape="rect" id="Node000001" title="Header file for a 4&#45;channel data logging module (floating&#45;point)." alt="" coords="79,5,232,48"/>
+<area shape="rect" id="Node000002" href="$dsa_8h.html" title=" " alt="" coords="5,104,127,131"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,58,80,106,77,102,121,60"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2f280049c_2xplt_8ctl__interface_8h.html" title=" " alt="" coords="151,96,341,139"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="188,57,228,96,222,96,186,62"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ctl_matrix2_trace" name="ctl_matrix2_trace">
+<area shape="rect" id="Node000001" title="Calculates the trace of a 2x2 matrix (sum of diagonal elements)." alt="" coords="215,13,336,40"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga0dad1d730774b37379d093db39e3d79d" title="Calculates the eigenvalues of a 2x2 matrix." alt="" coords="5,5,167,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,27,167,29,167,24,202,26"/>
+</map>

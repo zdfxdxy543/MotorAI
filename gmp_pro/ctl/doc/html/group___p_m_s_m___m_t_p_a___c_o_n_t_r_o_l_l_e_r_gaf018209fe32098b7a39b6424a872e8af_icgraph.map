@@ -1,0 +1,7 @@
+<map id="ctl_disable_pmsm_mtpa_ctrl" name="ctl_disable_pmsm_mtpa_ctrl">
+<area shape="rect" id="Node000001" title="Disables the entire PMSM controller." alt="" coords="299,13,486,40"/>
+<area shape="rect" id="Node000002" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga87dd21e60e259f01f167fb069845b4ef" title="Initializes the PMSM MTPA Controller." alt="" coords="113,5,251,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="281,27,252,29,252,24,286,27"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,28,65,29,65,24,100,26"/>
+</map>

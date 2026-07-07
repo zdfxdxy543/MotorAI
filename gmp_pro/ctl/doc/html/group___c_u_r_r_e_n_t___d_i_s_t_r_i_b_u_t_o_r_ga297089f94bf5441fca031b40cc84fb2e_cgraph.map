@@ -1,0 +1,7 @@
+<map id="ctl_step_current_distributor" name="ctl_step_current_distributor">
+<area shape="rect" id="Node000001" title="Executes one step of the current distribution calculation." alt="" coords="5,13,184,40"/>
+<area shape="rect" id="Node000002" href="$group__lookup__tables.html#ga0bac112af3870312874c4b69b5a6a56c" title="Performs 1D linear interpolation." alt="" coords="232,5,366,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,24,219,26,214,27,184,29"/>
+<area shape="rect" id="Node000003" href="$group__lookup__tables.html#gaa98c1f4a3979d9de21759bfbc19ee421" title="Performs a binary search to find the index of the lower bound for a target value." alt="" coords="414,13,568,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="366,24,401,27,396,27,367,29"/>
+</map>

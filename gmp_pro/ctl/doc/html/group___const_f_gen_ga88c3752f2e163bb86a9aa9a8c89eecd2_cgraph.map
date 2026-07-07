@@ -1,0 +1,5 @@
+<map id="ctl_step_const_f_controller" name="ctl_step_const_f_controller">
+<area shape="rect" id="Node000001" title="Executes one step of the constant frequency controller." alt="" coords="5,5,183,32"/>
+<area shape="rect" id="Node000002" href="$group__signal__generators.html#ga6871b28be07a561ef49c53dc60e74526" title="Executes one step of the ramp generator." alt="" coords="231,5,395,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,16,218,19,212,19,183,21"/>
+</map>

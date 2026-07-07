@@ -1,0 +1,7 @@
+<map id="ctl_enable_acm_sensored_ctrl_flux_est" name="ctl_enable_acm_sensored_ctrl_flux_est">
+<area shape="rect" id="Node000001" title="Enables the flux estimator." alt="" coords="312,5,484,48"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga3aab0014cd0232c544eea5856e0a5ae5" title="Initializes the sensored ACM controller." alt="" coords="113,5,264,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="294,27,264,29,264,24,299,27"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,13,65,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="94,28,65,29,65,24,99,26"/>
+</map>

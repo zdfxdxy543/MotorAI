@@ -1,0 +1,11 @@
+<map id="Digital Power Topology Presets" name="Digital Power Topology Presets">
+<area shape="rect" id="Node000005" href="$group___c_t_l___b_u_c_k_b_o_o_s_t___a_p_i.html" title="Provides a duty cycle calculation strategy for a 4&#45;switch Buck&#45;Boost converter, covering four distinc..." alt="" coords="402,5,571,32"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___d_p___l_i_b.html" title="The whole Digital Power Control Library. The root module for the entire DP library." alt="" coords="5,181,151,224"/>
+<area shape="rect" id="Node000001" title="Pre&#45;configured controllers for common power electronics topologies." alt="" coords="199,181,353,224"/>
+<area shape="rect" id="Node000008" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html" title="Defines the data structures, control flags, and function interfaces for a comprehensive three&#45;phase i..." alt="" coords="414,56,558,99"/>
+<area shape="rect" id="Node000006" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html" title="Defines the data structures, control flags, and function interfaces for a comprehensive single&#45;phase ..." alt="" coords="413,123,559,165"/>
+<area shape="rect" id="Node000009" href="$group___c_t_l___v_i_e_n_n_a___p_f_c___a_p_i.html" title="Control functions and data structures for a three&#45;phase Vienna PFC." alt="" coords="401,189,571,216"/>
+<area shape="rect" id="Node000004" href="$group__boost__controller__api.html" title="Functions and data structures for Boost converter control." alt="" coords="416,240,556,267"/>
+<area shape="rect" id="Node000003" href="$group__buck__controller__api.html" title="Functions and data structures for Buck converter control." alt="" coords="418,291,554,317"/>
+<area shape="rect" id="Node000007" href="$group__spfc__api.html" title="Controller for single&#45;phase Power Factor Correction." alt="" coords="409,341,563,368"/>
+</map>

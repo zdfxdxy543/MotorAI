@@ -1,0 +1,5 @@
+<map id="ctl_pmsm_hfi_ctrl_valphabeta_mode" name="ctl_pmsm_hfi_ctrl_valphabeta_mode">
+<area shape="rect" id="Node000001" title="Sets the controller to V_alpha_beta mode." alt="" coords="237,5,470,32"/>
+<area shape="rect" id="Node000002" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga6397684aabd5437d7342987b3cb5b8a8" title="Initializes the PMSM HFI Controller." alt="" coords="5,5,189,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,19,189,21,189,16,224,19"/>
+</map>

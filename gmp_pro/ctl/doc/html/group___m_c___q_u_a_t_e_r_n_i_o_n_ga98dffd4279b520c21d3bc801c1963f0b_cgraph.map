@@ -1,0 +1,5 @@
+<map id="ctl_qnorm" name="ctl_qnorm">
+<area shape="rect" id="Node000001" title="Computes the norm (magnitude) of a quaternion." alt="" coords="5,5,84,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___q_u_a_t_e_r_n_i_o_n.html#ga23e70ac0e537f930f57e0e660fe0e9c7" title="Computes the squared norm (magnitude) of a quaternion. This is computationally cheaper than ctl_qnorm..." alt="" coords="132,5,231,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,16,119,18,113,19,84,21"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ctl_init_mpc" name="ctl_init_mpc">
+<area shape="rect" id="Node000001" title="Initializes the MPC module with motor and system parameters." alt="" coords="5,31,97,57"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga65593511d60e2f0e364d9907769e9130" title="Sets an element in the matrix at the specified row and column." alt="" coords="145,5,255,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,34,132,30,127,32,98,39"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="181,56,219,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="97,49,168,62,163,65,97,54"/>
+<area shape="rect" id="Node000003" href="$generate__fuzzy__2d__src_8m.html#aa69ca3527648e65c6a63063cf554feaf" title=" " alt="" coords="303,5,355,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="255,16,290,18,285,19,256,21"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="ctl_clear_boost_ctrl" name="ctl_clear_boost_ctrl">
+<area shape="rect" id="Node000001" title="Clears the internal states and integral terms of the PID controllers." alt="" coords="294,31,428,57"/>
+<area shape="rect" id="Node000002" href="$group__boost__controller__api.html#ga56ed84db82dde1e8829c0d4cda784f6d" title="Initializes the Boost controller with specified PID and filter parameters." alt="" coords="118,5,241,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,33,241,30,241,25,281,32"/>
+<area shape="rect" id="Node000004" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="113,56,246,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="281,55,247,63,246,57,276,56"/>
+<area shape="rect" id="Node000003" href="$suite_2dps__boost_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,20,66,21,65,16,104,17"/>
+</map>

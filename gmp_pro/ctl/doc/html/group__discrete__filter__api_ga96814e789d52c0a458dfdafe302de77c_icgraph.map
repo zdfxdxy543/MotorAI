@@ -1,0 +1,11 @@
+<map id="ctl_get_filter_iir1_phase_lag" name="ctl_get_filter_iir1_phase_lag">
+<area shape="rect" id="Node000001" title="Calculates the phase lag of the 1st&#45;order filter at a specific frequency." alt="" coords="315,27,431,69"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga70e1ae03a0fde60e4909a4e9fd4f3b06" title="Auto&#45;tuning GFL inverter parameters." alt="" coords="113,5,267,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,36,267,34,267,28,302,36"/>
+<area shape="rect" id="Node000004" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#ga2a51c29e675fd1e40032ff71b35f5e32" title="Auto&#45;tuning motor driver parameters." alt="" coords="122,56,258,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="302,59,258,69,258,64,297,60"/>
+<area shape="rect" id="Node000003" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,5,65,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,20,66,21,65,16,99,17"/>
+<area shape="rect" id="Node000005" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,64,65,91"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="104,78,65,80,65,75,109,76"/>
+</map>

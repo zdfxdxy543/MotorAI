@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['phase_5f0_0',['phase_0',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggae3bd6f3f22e821d4c608e320ac7ce570a1cc2a3594f8589887e6e7538463aa588',1,'coord_trans.h']]],
+  ['phase_5fa_1',['phase_A',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggae000814146d8dce19ae4ca0633444b26ae6029c931fb9d6a147b4786f3c99a530',1,'coord_trans.h']]],
+  ['phase_5falpha_2',['phase_alpha',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#gga0c1b1d6494a5bf6b02b0d87fe23b15dda03e6bb4e198137e9933e9bf8aaceee79',1,'coord_trans.h']]],
+  ['phase_5fb_3',['phase_B',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggae000814146d8dce19ae4ca0633444b26afdb4c60f48c507e091bb4f4ee0f31ca2',1,'coord_trans.h']]],
+  ['phase_5fbeta_4',['phase_beta',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#gga0c1b1d6494a5bf6b02b0d87fe23b15dda90aabe6880b32cf60cece6f854b7e80d',1,'coord_trans.h']]],
+  ['phase_5fc_5',['phase_C',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggae000814146d8dce19ae4ca0633444b26a8caa58e19917270bf9df84fedcfcd65a',1,'coord_trans.h']]],
+  ['phase_5fd_6',['phase_d',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggae3bd6f3f22e821d4c608e320ac7ce570a6d2892dfe7f6c515bf2840881b47f5e9',1,'coord_trans.h']]],
+  ['phase_5fl_7',['PHASE_L',['../group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gga0d9b6ef06556e29c1a1a00b96ace2cbca2da5dd410320ed2a90679b6936c4fb25',1,'single_phase_dc_ac.h']]],
+  ['phase_5fn_8',['PHASE_N',['../group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gga0d9b6ef06556e29c1a1a00b96ace2cbca03e4a0959a4c3fbf35ec8cd46181fbc9',1,'single_phase_dc_ac.h']]],
+  ['phase_5fq_9',['phase_q',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggae3bd6f3f22e821d4c608e320ac7ce570a7510bec79e1e371c5ac7a40e4a59cfc7',1,'coord_trans.h']]],
+  ['phase_5fu_10',['phase_U',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#gga7ef78aafafb1c07bd665503bb6d54770a704a13d988fd1195dc03633edce6448f',1,'coord_trans.h']]],
+  ['phase_5fuab_11',['phase_UAB',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggaaa02afed28c21d824cad3b6fd6e3f3d8a01c7998420acaafad1c2a6bed12ade70',1,'coord_trans.h']]],
+  ['phase_5fubc_12',['phase_UBC',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggaaa02afed28c21d824cad3b6fd6e3f3d8ad663c2cfd17ce5746bd4d844a4fad6a2',1,'coord_trans.h']]],
+  ['phase_5fv_13',['phase_V',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#gga7ef78aafafb1c07bd665503bb6d54770a234f53c36ba48930c656b019b61011b4',1,'coord_trans.h']]],
+  ['phase_5fw_14',['phase_W',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#gga7ef78aafafb1c07bd665503bb6d54770ae092aafeb70d0b3435c30bb7b1029d9d',1,'coord_trans.h']]],
+  ['phasor_5fcos_15',['phasor_cos',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggaeedd8218d94ac05f72179183a0358160a71a3937eda8ddced7fd21e1e45c383e6',1,'coord_trans.h']]],
+  ['phasor_5fsin_16',['phasor_sin',['../group___m_c___c_o_o_r_d___a_x_i_s___d_e_f_i_n_e_s.html#ggaeedd8218d94ac05f72179183a0358160ac1d82c4b16812903c7f89d5d84de0f0d',1,'coord_trans.h']]]
+];

@@ -1,0 +1,5 @@
+<map id="ctl_init_discrete_sogi" name="ctl_init_discrete_sogi">
+<area shape="rect" id="Node000001" title="Initializes the discrete SOGI module." alt="" coords="5,5,149,32"/>
+<area shape="rect" id="Node000002" href="$group__discrete__sogi.html#ga8edc414988bb0d07d82f63e4f4fdb09c" title="Clears the internal states of the SOGI module." alt="" coords="197,5,351,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="149,16,184,19,179,19,149,21"/>
+</map>

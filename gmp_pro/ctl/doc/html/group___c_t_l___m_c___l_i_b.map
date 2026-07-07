@@ -1,0 +1,7 @@
+<map id="Motor Control Library" name="Motor Control Library">
+<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___c_o_m_p_o_n_e_n_t.html" title="Fundamental, reusable building blocks for motor control template library." alt="" coords="197,5,389,32"/>
+<area shape="rect" id="Node000001" title="The whole Motor Control Library. The root module for the entire MC library." alt="" coords="5,97,149,124"/>
+<area shape="rect" id="Node000003" href="$group___c_t_l___m_c___o_b_s_e_r_v_e_r.html" title="Fundamental, reusable building blocks for motor control template library." alt="" coords="207,56,378,99"/>
+<area shape="rect" id="Node000005" href="$group___c_t_l___m_c___p_r_e_s_e_t.html" title="Motor &amp; Motor controller hardware preset." alt="" coords="213,123,372,165"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___m_c___s_u_i_t_e.html" title="Pre&#45;configured controllers for motor control." alt="" coords="219,189,367,216"/>
+</map>

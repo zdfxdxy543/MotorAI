@@ -1,0 +1,5 @@
+<map id="component/hardware_preset/pmsm_motor/GBM2804H_100T.h" name="component/hardware_preset/pmsm_motor/GBM2804H_100T.h">
+<area shape="rect" id="Node000001" title="Defines the parameters for the GBM2804H&#45;100T Brushless Gimbal Motor (PMSM)." alt="" coords="5,5,212,64"/>
+<area shape="rect" id="Node000002" href="$motor__unit__calculator_8h.html" title="Defines constants and macros for motor parameter and unit conversions." alt="" coords="28,112,189,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,62,111,97,106,96,107,67"/>
+</map>

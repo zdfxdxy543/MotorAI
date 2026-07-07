@@ -1,0 +1,7 @@
+<map id="ctl_init_ilc" name="ctl_init_ilc">
+<area shape="rect" id="Node000001" title="Initializes the ILC module." alt="" coords="5,31,85,57"/>
+<area shape="rect" id="Node000002" href="$group___i_l_c___c_o_n_t_r_o_l_l_e_r.html#gabc78769df894b1484bb4841de28ac40e" title="Resets the ILC controller to its initial state." alt="" coords="133,5,223,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,34,120,29,115,31,86,39"/>
+<area shape="rect" id="Node000003" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="159,56,197,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="85,49,146,62,141,64,85,54"/>
+</map>

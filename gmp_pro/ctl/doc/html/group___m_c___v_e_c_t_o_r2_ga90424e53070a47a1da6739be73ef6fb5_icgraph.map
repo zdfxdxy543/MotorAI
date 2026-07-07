@@ -1,0 +1,7 @@
+<map id="ctl_vector2_sub" name="ctl_vector2_sub">
+<area shape="rect" id="Node000001" title="Subtracts one 2D vector from another." alt="" coords="185,31,298,57"/>
+<area shape="rect" id="Node000002" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r___a_c_m.html#ga3724306bee7ec8d8789a0ceaa9cc1253" title="Executes one step of the ACM FCS&#45;MPC algorithm." alt="" coords="5,5,137,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,34,137,31,137,26,172,33"/>
+<area shape="rect" id="Node000003" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r.html#ga6ee5cbff99aaf165b45fdee95f3e02f9" title="Executes one step of the FCS&#45;MPC algorithm." alt="" coords="21,56,121,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,55,122,65,121,59,172,54"/>
+</map>

@@ -1,0 +1,7 @@
+<map id="component/motor_control/consultant/acm_consultant.h" name="component/motor_control/consultant/acm_consultant.h">
+<area shape="rect" id="Node000001" title="Defines a data structure and utility functions for AC induction motor parameters." alt="" coords="102,5,295,48"/>
+<area shape="rect" id="Node000002" href="$motor__per__unit__consultant_8h.html" title="Defines a consultant module to calculate base values for a motor&#39;s per&#45;unit system." alt="" coords="5,96,195,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,47,141,87,138,83,175,50"/>
+<area shape="rect" id="Node000003" href="$motor__unit__calculator_8h.html" title="Defines constants and macros for motor parameter and unit conversions." alt="" coords="218,96,379,155"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,46,261,85,256,85,219,51"/>
+</map>

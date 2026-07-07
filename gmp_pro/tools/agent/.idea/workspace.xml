@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d5303396-d508-474d-ac70-78b46e95b233" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/.launches/CTL_MC_PMSM_NT_280049C_Sensored.launch" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../gmp_compiler_includes.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../gmp_framework_config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/280049C_LaunchPad.syscfg" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/280049C_LaunchPad.syscfg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/targetConfigs/TMS320F280049C.ccxml" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/targetConfigs/TMS320F280049C.ccxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/target_config/TMS320F280049C.ccxml" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/target_config/TMS320F280049C.ccxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/xplt/ctrl_settings.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/xplt/ctrl_settings.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/xplt/xplt.ctl_interface.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/xplt/xplt.ctl_interface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/xplt/xplt.peripheral.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/f280049c/xplt/xplt.peripheral.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/MCS_STD_PMSM_MODEL.slx" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/MCS_STD_PMSM_MODEL.slx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/MCS_STD_PMSM_MODEL_2022b.slx" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/MCS_STD_PMSM_MODEL_2022b.slx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/xplt/ctrl_settings.h" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/xplt/ctrl_settings.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/xplt/xplt.peripheral.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/project/simulate/xplt/xplt.peripheral.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/src/user_main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../../ctl/suite/mcs_pmsm_nt/src/user_main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gmp_pil_server/gmp_debugger_v2/install_env.bat" beforeDir="false" afterPath="$PROJECT_DIR$/../gmp_pil_server/gmp_debugger_v2/install_env.bat" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="3DZT7sh7ErGzAoN6ri3z6usxGOP" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.agent_modified.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;developping&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-14705d77f0bb-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.25659.43" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="默认任务">
+      <changelist id="d5303396-d508-474d-ac70-78b46e95b233" name="更改" comment="" />
+      <created>1778488428138</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1778488428138</updated>
+    </task>
+    <servers />
+  </component>
+</project>

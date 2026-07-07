@@ -1,0 +1,5 @@
+<map id="ctl_step_s_curve" name="ctl_step_s_curve">
+<area shape="rect" id="Node000001" title="Generates the next output value in the S&#45;curve trajectory." alt="" coords="5,5,126,32"/>
+<area shape="rect" id="Node000002" href="$group___s___c_u_r_v_e___p_l_a_n_n_e_r.html#ga6918b1834948485ec53b2aef8382288c" title="Plans a new trajectory when the target changes." alt="" coords="174,5,311,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,16,161,18,156,19,126,21"/>
+</map>

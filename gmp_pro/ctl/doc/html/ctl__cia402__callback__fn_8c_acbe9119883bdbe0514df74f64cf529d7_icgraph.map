@@ -1,0 +1,12 @@
+<map id="ctl_enable_main_contactor" name="ctl_enable_main_contactor">
+<area shape="rect" id="Node000001" title="主接触器/直流继电器控制" alt="" coords="563,43,740,69"/>
+<area shape="rect" id="Node000002" href="$ctl__cia402__state__machine_8c.html#a441857b14fa36ea1dcdfac39b3d45792" title=" " alt="" coords="356,5,495,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="546,43,495,38,495,33,551,43"/>
+<area shape="rect" id="Node000005" href="$ctl__cia402__state__machine_8c.html#aa59d1ccb6fb1b17b1814bac8d9fbaf14" title=" " alt="" coords="336,72,515,99"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="551,69,516,76,516,71,545,70"/>
+<area shape="rect" id="Node000003" href="$ctl__cia402__state__machine_8c.html#ac410ae5ea0c4e4b53716e8532cd03353" title=" " alt="" coords="113,43,288,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,38,289,47,288,42,344,37"/>
+<area shape="rect" id="Node000004" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,43,65,69"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,57,65,59,65,53,100,55"/>
+<area shape="poly" id="edge5_Node000005_Node000003" title=" " alt="" coords="318,72,288,70,289,65,323,72"/>
+</map>

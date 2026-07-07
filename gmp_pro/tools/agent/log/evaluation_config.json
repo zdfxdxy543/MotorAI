@@ -1,0 +1,35 @@
+{
+  "task_type": "constant_speed_control",
+  "objective": "速度环超调量小于5%，稳态误差小于5%",
+  "signals": {
+    "rotor_speed_rad_s": "rotor_speed_rad_s",
+    "rotor_angle_rad": "rotor_angle_rad",
+    "electromagnetic_torque_nm": "electromagnetic_torque_nm"
+  },
+  "metrics": [
+    {
+      "metric_name": "overshoot",
+      "signal": "rotor_speed_rad_s",
+      "weight": 0.5,
+      "optimization_direction": "minimize",
+      "target_value": 100.0,
+      "result_name": "speed_overshoot",
+      "normalize": true,
+      "good_threshold": 0.1,
+      "bad_threshold": 0.3,
+      "description": "超调量，归一化后 0.10 表示 10%"
+    },
+    {
+      "metric_name": "steady_state_error",
+      "signal": "rotor_speed_rad_s",
+      "weight": 0.5,
+      "optimization_direction": "minimize",
+      "target_value": 100.0,
+      "window": 0.1,
+      "result_name": "speed_steady_state_error",
+      "good_threshold": 15.708,
+      "bad_threshold": 62.832,
+      "description": "稳态误差，末尾 10% 数据窗口内的平均绝对误差"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+<map id="ctl_clear_discrete_sogi_dc" name="ctl_clear_discrete_sogi_dc">
+<area shape="rect" id="Node000001" title="Clears the internal states of the SOGI&#45;DC module." alt="" coords="5,5,129,48"/>
+<area shape="rect" id="Node000002" href="$group__discrete__sogi.html#ga8edc414988bb0d07d82f63e4f4fdb09c" title="Clears the internal states of the SOGI module." alt="" coords="177,13,331,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="129,24,164,26,158,27,129,29"/>
+</map>

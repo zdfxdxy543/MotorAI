@@ -1,0 +1,13 @@
+<map id="ctl_update_neg_inv_coeff" name="ctl_update_neg_inv_coeff">
+<area shape="rect" id="Node000001" title="Update Negative Sequence Controller coefficients." alt="" coords="5,48,139,91"/>
+<area shape="rect" id="Node000002" href="$group___b_i_q_u_a_d__filter__api.html#ga13939f4b901bca325ac3f429652286df" title="Initializes the biquad filter as a Notch Filter." alt="" coords="187,5,330,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="138,49,194,35,190,38,140,54"/>
+<area shape="rect" id="Node000004" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="217,56,300,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="139,67,204,68,199,70,139,72"/>
+<area shape="rect" id="Node000006" href="$group__continuous__pid__controllers.html#ga2cad6d004ee85199dc18464416141d4a" title="Set PID controller PID limit." alt="" coords="201,107,316,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="139,85,195,102,189,103,139,90"/>
+<area shape="rect" id="Node000003" href="$group___b_i_q_u_a_d__filter__api.html#ga764a46ad024f75f167ffee58ee60793c" title="Clears all internal states of the 2nd&#45;order IIR filter." alt="" coords="378,5,525,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="330,16,365,18,359,19,331,21"/>
+<area shape="rect" id="Node000005" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="404,56,499,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="300,67,392,69,386,70,301,72"/>
+</map>

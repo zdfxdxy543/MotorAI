@@ -1,0 +1,45 @@
+<map id="ctl_update_gfl_inv_coeff" name="ctl_update_gfl_inv_coeff">
+<area shape="rect" id="Node000001" title="update GFL inverter controller parameters by init structure." alt="" coords="5,225,132,268"/>
+<area shape="rect" id="Node000002" href="$group___b_i_q_u_a_d__filter__api.html#gafb11d9c2ec3539d3591df057b2640570" title="Initializes the biquad filter as a Band&#45;Pass Filter (BPF)." alt="" coords="193,31,322,57"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="80,224,120,162,147,126,178,93,219,64,216,68,181,97,151,129,124,165,84,226"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___p_l_l___a_p_i.html#gaa8908dcef4a7f626cf9a91a0e5943bb4" title="Initializes the DSOGI&#45;PLL controller." alt="" coords="199,107,316,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="89,223,129,186,178,150,204,138,200,142,181,154,132,191,93,226"/>
+<area shape="rect" id="Node000007" href="$group___c_t_l___p_l_l___a_p_i.html#gab811bc24f9977ca89cb0aadc966e20f5" title="根据带宽和阻尼比自动计算 PI 参数并初始化 SRF&#45;PLL" alt="" coords="384,157,549,184"/>
+<area shape="poly" id="edge22_Node000001_Node000007" title=" " alt="" coords="115,223,179,200,276,182,371,174,366,176,277,187,180,205,118,227"/>
+<area shape="rect" id="Node000013" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="817,208,900,235"/>
+<area shape="poly" id="edge20_Node000001_Node000013" title=" " alt="" coords="132,242,802,220,801,226,133,247"/>
+<area shape="rect" id="Node000014" href="$group__discrete__filter__api.html#gaebd1bc972a74140bfff570e5bb93b43f" title="Initializes the filter as a 1st&#45;order Low&#45;Pass Filter (LPF)." alt="" coords="190,259,326,285"/>
+<area shape="poly" id="edge15_Node000001_Node000014" title=" " alt="" coords="131,253,177,260,172,262,133,258"/>
+<area shape="rect" id="Node000016" href="$group__lead__lag__compensators.html#ga335be1df38f1324f9eb371dbf31ca2c0" title="Initializes a lead compensator from its continuous&#45;time parameters." alt="" coords="193,309,323,336"/>
+<area shape="poly" id="edge17_Node000001_Node000016" title=" " alt="" coords="114,266,181,295,200,303,195,305,179,300,114,271"/>
+<area shape="rect" id="Node000019" href="$group__signal__generators.html#ga0c41edef79b75e6935cc0401dafa12ab" title="Initializes the ramp generator based on frequency and amplitude." alt="" coords="180,360,336,403"/>
+<area shape="poly" id="edge21_Node000001_Node000019" title=" " alt="" coords="89,266,131,306,181,346,190,352,184,353,178,350,127,310,89,271"/>
+<area shape="rect" id="Node000020" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="239,427,277,453"/>
+<area shape="poly" id="edge23_Node000001_Node000020" title=" " alt="" coords="80,266,118,339,146,378,181,413,202,424,226,434,221,434,200,429,178,417,142,382,113,342,77,271"/>
+<area shape="rect" id="Node000003" href="$group___b_i_q_u_a_d__filter__api.html#ga764a46ad024f75f167ffee58ee60793c" title="Clears all internal states of the 2nd&#45;order IIR filter." alt="" coords="393,5,540,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="322,34,380,28,375,31,324,39"/>
+<area shape="rect" id="Node000005" href="$group__discrete__sogi.html#ga7508b87bcacc8a60b67878481f08bd4d" title="Initializes the discrete SOGI module." alt="" coords="395,107,538,133"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="316,117,382,119,377,121,318,123"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="316,131,397,152,392,154,316,137"/>
+<area shape="rect" id="Node000012" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="971,73,1091,100"/>
+<area shape="poly" id="edge14_Node000004_Node000012" title=" " alt="" coords="315,104,384,92,543,80,702,76,958,82,953,84,702,81,543,86,384,97,317,109"/>
+<area shape="rect" id="Node000006" href="$group__discrete__sogi.html#ga8edc414988bb0d07d82f63e4f4fdb09c" title="Clears the internal states of the SOGI module." alt="" coords="597,107,752,133"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="538,117,584,119,579,121,539,123"/>
+<area shape="rect" id="Node000008" href="$group___c_t_l___p_l_l___a_p_i.html#gae490fe7914e450936d2764b1070dddb7" title="Initializes the three&#45;phase PLL controller." alt="" coords="624,157,725,184"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="549,168,611,170,606,171,550,173"/>
+<area shape="rect" id="Node000009" href="$group___c_t_l___p_l_l___a_p_i.html#ga4dd06b5fe406f3f250c7d6921344e171" title="Clears the internal states of the three&#45;phase PLL controller." alt="" coords="800,153,918,180"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="725,167,787,168,782,169,726,172"/>
+<area shape="poly" id="edge12_Node000008_Node000013" title=" " alt="" coords="725,182,805,206,799,206,725,187"/>
+<area shape="rect" id="Node000010" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="984,208,1078,235"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="904,178,975,203,970,203,903,183"/>
+<area shape="rect" id="Node000011" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="966,141,1096,184"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="918,163,953,164,948,165,919,168"/>
+<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="889,150,985,108,989,106,891,155"/>
+<area shape="poly" id="edge13_Node000013_Node000010" title=" " alt="" coords="901,219,971,221,966,222,901,224"/>
+<area shape="rect" id="Node000015" href="$group__discrete__filter__api.html#gab8b865801ae1e4dd4014b4f3b3a54250" title="Clears all internal states of the 1st&#45;order IIR filter." alt="" coords="404,259,530,285"/>
+<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="326,269,390,271,385,273,327,275"/>
+<area shape="rect" id="Node000017" href="$group__lead__lag__compensators.html#gae555ec4ad57e53e1dcf5d197458c9768" title="Initializes a lead compensator from its continuous&#45;time parameters." alt="" coords="402,309,532,336"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="323,320,389,322,383,323,324,325"/>
+<area shape="rect" id="Node000018" href="$group__lead__lag__compensators.html#ga6f2431613cc43e38d9763f8545f4f01f" title="Clears the internal states of the lead compensator." alt="" coords="624,309,725,336"/>
+<area shape="poly" id="edge19_Node000017_Node000018" title=" " alt="" coords="532,320,611,322,606,323,533,325"/>
+</map>

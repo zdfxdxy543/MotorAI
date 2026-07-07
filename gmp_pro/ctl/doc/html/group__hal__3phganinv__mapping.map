@@ -1,0 +1,4 @@
+<map id="Default Parameter Mapping" name="Default Parameter Mapping">
+<area shape="rect" id="Node000001" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="269,13,449,40"/>
+<area shape="rect" id="Node000002" href="$group__hal__boostxl__3phganinv.html" title="Parameters for the TI BOOSTXL&#45;3PhGaNInv motor driver board." alt="" coords="5,5,221,48"/>
+</map>

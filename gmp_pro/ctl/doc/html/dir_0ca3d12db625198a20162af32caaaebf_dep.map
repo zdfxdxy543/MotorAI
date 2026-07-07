@@ -1,0 +1,17 @@
+<map id="suite/mcs_pmsm_smo/implement" name="suite/mcs_pmsm_smo/implement">
+<area shape="rect" id="node2" href="dir_3db989d424ffa8052928d140a4454da8.html" title="common" alt="" coords="143,64,214,91"/>
+<area shape="rect" id="node6" href="dir_8c1655269c560b24b19e8016dbb4f2ad.html" title="component" alt="" coords="281,139,367,165"/>
+<area shape="poly" id="edge1" href="dir_000014_000021.html" alt="" coords="195,88,228,110,275,133,270,133,225,114,194,94"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000014_000021.html" title="5" alt="" coords="269,116,276,132"/>
+<area shape="rect" id="node3" href="dir_60127e689dbbb71d0fe66d6d4d47397b.html" title="f280049c" alt="" coords="239,64,313,91"/>
+<area shape="poly" id="edge2" href="dir_000046_000021.html" alt="" coords="286,89,310,126,305,125,283,94"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000046_000021.html" title="7" alt="" coords="309,110,316,126"/>
+<area shape="rect" id="node4" href="dir_069c1db87dafd0f2be55e18412e3951c.html" title="simulate" alt="" coords="337,64,407,91"/>
+<area shape="poly" id="edge3" href="dir_000102_000021.html" alt="" coords="366,90,342,128,339,124,361,92"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000102_000021.html" title="5" alt="" coords="346,120,353,136"/>
+<area shape="rect" id="node5" href="dir_25d95fc4a8e264829cbd14ac7c4557c0.html" title="stm32g431" alt="" coords="431,64,516,91"/>
+<area shape="poly" id="edge4" href="dir_000127_000021.html" alt="" coords="457,90,420,114,373,135,372,130,417,110,452,92"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000127_000021.html" title="5" alt="" coords="375,131,382,147"/>
+<area shape="rect" id="clust2" href="dir_0ca3d12db625198a20162af32caaaebf.html" alt="" coords="27,53,527,101"/>
+<area shape="rect" id="clust1" href="dir_c5159b14b52faa83e80577f9b8d5402d.html" title="mcs_pmsm_smo" alt="" coords="16,16,537,112"/>
+</map>

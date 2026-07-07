@@ -1,0 +1,30 @@
+<map id="gmp_base_ctl_step" name="gmp_base_ctl_step">
+<area shape="rect" id="Node000001" title="The main kernel step function for the GMP CTL module." alt="" coords="5,189,140,216"/>
+<area shape="rect" id="Node000002" href="$suite_2dps__boost_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="209,97,300,124"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,186,214,129,212,134,102,191"/>
+<area shape="rect" id="Node000010" href="$suite_2dps__boost_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a35d37bd8b6bfd8ed9815ad7cee7c988c" title=" " alt="" coords="192,189,317,216"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="139,200,179,202,174,204,141,205"/>
+<area shape="rect" id="Node000013" href="$suite_2dps__boost_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a961908a4644dc2b6b0b168d3f8136978" title=" " alt="" coords="188,273,321,300"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="104,214,212,265,207,268,103,219"/>
+<area shape="rect" id="Node000003" href="$group__boost__controller__api.html#gae786f6503cb17032d4ed1f2840e54964" title="Sets the target intermediate voltage command in open&#45;loop mode." alt="" coords="390,5,519,48"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="285,94,368,58,385,53,381,56,370,62,287,99"/>
+<area shape="rect" id="Node000004" href="$group__boost__controller__api.html#gab0b238c04b3e43a46384722f72a714a3" title="Executes one step of the Boost control logic." alt="" coords="389,72,520,99"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="300,102,376,94,371,97,301,107"/>
+<area shape="rect" id="Node000008" href="$group__mppt__api.html#ga5746ca39effec24c88bbdf3552229b30" title="Executes one step of the P&amp;O MPPT algorithm." alt="" coords="371,123,538,149"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="300,114,358,123,353,124,301,119"/>
+<area shape="rect" id="Node000005" href="$group__discrete__filter__api.html#gacbd67d6fc3fee1d088725e78dc01a1ce" title="Executes one step of the low&#45;pass filter calculation." alt="" coords="588,123,743,149"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="513,97,595,118,590,119,513,102"/>
+<area shape="rect" id="Node000006" href="$group__continuous__pid__controllers.html#gaacbe00aab5fac981355786302cffb287" title="Executes one step of the series&#45;form PID controller." alt="" coords="607,21,724,48"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="513,69,595,51,590,53,514,74"/>
+<area shape="rect" id="Node000007" href="$group__saturation__blocks.html#gab4293cc14e0a1a4aa61f7b8e1fee3d1d" title="Executes one step of the saturation block." alt="" coords="600,72,731,99"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="520,83,587,85,582,86,521,88"/>
+<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="538,133,575,136,570,136,539,139"/>
+<area shape="rect" id="Node000009" href="$group__frequency__divider.html#ga440482fa4859c76cd2b25a884ea84458" title="Executes one step of the frequency divider." alt="" coords="609,173,722,200"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="513,147,597,169,591,170,513,153"/>
+<area shape="rect" id="Node000011" href="$group___a_d_c___p_t_r___s_i_n_g_l_e___c_h_a_n_n_e_l.html#ga14115b8ee0bf9d50afab1fbdcde4e001" title="Processes the raw ADC input (via pointer) and computes the final scaled value." alt="" coords="370,173,539,200"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="317,195,357,194,352,195,318,200"/>
+<area shape="rect" id="Node000012" href="$group___a_d_c___p_t_r___t_r_i___c_h_a_n_n_e_l.html#gada97e891a0e1ab50d951b08cbf4a06ce" title="Processes the raw inputs for all three ADC channels from the pointer source." alt="" coords="387,224,522,267"/>
+<area shape="poly" id="edge12_Node000010_Node000012" title=" " alt="" coords="317,213,375,227,369,228,317,219"/>
+<area shape="rect" id="Node000014" href="$group___p_w_m___c_h_a_n_n_e_l___t_r_i.html#ga6b17bda9cc072671d093cbd73e2b2a00" title="Calculates the compare values for a three&#45;phase PWM channel, without input raw." alt="" coords="369,291,540,317"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="322,290,356,295,351,295,321,295"/>
+</map>

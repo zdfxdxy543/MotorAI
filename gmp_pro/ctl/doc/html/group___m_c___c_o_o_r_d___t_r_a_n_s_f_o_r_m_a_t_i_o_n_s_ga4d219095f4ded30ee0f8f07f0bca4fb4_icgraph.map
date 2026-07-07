@@ -1,0 +1,33 @@
+<map id="ctl_ct_clarke_2ph" name="ctl_ct_clarke_2ph">
+<area shape="rect" id="Node000001" title="Performs the Clarke transformation from 2&#45;phase currents (A, B) assuming a balanced three&#45;phase syste..." alt="" coords="377,183,500,209"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="145,5,329,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="422,168,386,107,359,74,327,46,308,35,307,30,331,42,363,70,390,104,428,169"/>
+<area shape="rect" id="Node000004" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#gabf69f10fbfa4389d0b083d2f42a067e3" title="Executes one step of the FOC current control loop." alt="" coords="150,56,324,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="414,171,377,133,328,97,303,86,302,81,330,92,380,129,419,171"/>
+<area shape="rect" id="Node000006" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga19267becce7654434381af34d0553ad6" title="Executes one step of the GFL three&#45;phase inverter control algorithm." alt="" coords="168,107,306,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="394,176,328,148,294,137,294,131,330,143,400,175"/>
+<area shape="rect" id="Node000008" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga5455882f5ce84cff0e238ceee146c93e" title="Executes one step of the three&#45;phase inverter control algorithm." alt="" coords="179,157,295,184"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="359,187,296,181,295,175,364,186"/>
+<area shape="rect" id="Node000010" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#gac3fbcb82aa2d1898276e80e65ef99606" title="Executes one step of the PMSM controller calculation." alt="" coords="169,208,304,235"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="359,207,306,215,304,210,364,205"/>
+<area shape="rect" id="Node000012" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga81e9dd88e588e565364de4fc07772945" title="Executes one step of the PMSM FOC HFI control loop." alt="" coords="159,259,315,285"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="399,216,330,249,295,261,293,256,328,244,395,218"/>
+<area shape="rect" id="Node000013" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="151,309,322,336"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="419,220,380,263,330,300,304,311,302,306,328,295,377,259,414,223"/>
+<area shape="rect" id="Node000015" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga25f7a72c6cb251cbf93dc32374f53ccd" title="Executes one step of the sensorless PMSM FOC control loop." alt="" coords="153,360,320,387"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="427,222,390,288,363,322,331,350,308,362,307,357,327,346,359,318,386,285,423,225"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,20,98,21,96,16,131,17"/>
+<area shape="rect" id="Node000005" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,56,97,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="132,71,99,72,96,67,136,68"/>
+<area shape="rect" id="Node000007" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,107,97,133"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="151,122,98,122,96,118,155,118"/>
+<area shape="rect" id="Node000009" href="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,157,97,184"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="161,172,98,173,96,168,165,169"/>
+<area shape="rect" id="Node000011" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,208,97,235"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="152,223,98,224,96,219,156,220"/>
+<area shape="rect" id="Node000014" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,309,97,336"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="133,324,98,325,97,320,138,322"/>
+<area shape="rect" id="Node000016" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,360,97,387"/>
+<area shape="poly" id="edge15_Node000015_Node000016" title=" " alt="" coords="135,374,97,376,97,371,140,373"/>
+</map>

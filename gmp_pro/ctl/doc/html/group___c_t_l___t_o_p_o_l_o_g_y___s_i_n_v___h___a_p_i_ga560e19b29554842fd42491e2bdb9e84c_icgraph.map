@@ -1,0 +1,5 @@
+<map id="ctl_is_sinv_inverter_mode" name="ctl_is_sinv_inverter_mode">
+<area shape="rect" id="Node000001" title="Checks if the controller is in inverter mode." alt="" coords="187,5,359,32"/>
+<area shape="rect" id="Node000002" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="5,5,139,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,19,139,21,139,16,174,18"/>
+</map>

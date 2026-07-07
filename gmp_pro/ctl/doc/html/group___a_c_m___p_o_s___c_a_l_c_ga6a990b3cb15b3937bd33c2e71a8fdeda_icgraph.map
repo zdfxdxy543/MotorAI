@@ -1,0 +1,7 @@
+<map id="ctl_step_im_spd_calc" name="ctl_step_im_spd_calc">
+<area shape="rect" id="Node000001" title="Executes one step of the slip and angle calculation." alt="" coords="377,5,524,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="145,5,329,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,19,330,21,330,16,364,19"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,19,97,21,97,16,132,18"/>
+</map>

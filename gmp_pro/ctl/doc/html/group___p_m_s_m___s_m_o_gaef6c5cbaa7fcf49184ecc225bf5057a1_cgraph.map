@@ -1,0 +1,9 @@
+<map id="ctl_step_pmsm_smo" name="ctl_step_pmsm_smo">
+<area shape="rect" id="Node000001" title="Executes one step of the SMO position and speed estimation." alt="" coords="5,72,148,99"/>
+<area shape="rect" id="Node000002" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="208,5,338,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,69,195,49,191,52,125,74"/>
+<area shape="rect" id="Node000003" href="$group__discrete__filter__api.html#gacbd67d6fc3fee1d088725e78dc01a1ce" title="Executes one step of the low&#45;pass filter calculation." alt="" coords="196,72,350,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="148,83,183,85,178,86,149,88"/>
+<area shape="rect" id="Node000004" href="$group__continuous__pid__controllers.html#ga6643ab7636f063fd148aaef61451d4a6" title="Executes one step of the parallel&#45;form PID controller." alt="" coords="215,123,331,149"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="132,97,206,117,201,119,131,102"/>
+</map>

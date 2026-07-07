@@ -1,0 +1,23 @@
+<map id="ctl_init_dsogi_pll" name="ctl_init_dsogi_pll">
+<area shape="rect" id="Node000001" title="Initializes the DSOGI&#45;PLL controller." alt="" coords="5,64,123,91"/>
+<area shape="rect" id="Node000002" href="$group__discrete__sogi.html#ga7508b87bcacc8a60b67878481f08bd4d" title="Initializes the discrete SOGI module." alt="" coords="182,13,325,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,61,188,43,184,46,118,66"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___p_l_l___a_p_i.html#gab811bc24f9977ca89cb0aadc966e20f5" title="根据带宽和阻尼比自动计算 PI 参数并初始化 SRF&#45;PLL" alt="" coords="171,64,336,91"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="122,75,158,76,153,78,123,80"/>
+<area shape="rect" id="Node000009" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="758,123,878,149"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="115,89,171,100,330,118,488,128,745,136,740,137,488,133,329,123,170,105,115,94"/>
+<area shape="rect" id="Node000003" href="$group__discrete__sogi.html#ga8edc414988bb0d07d82f63e4f4fdb09c" title="Clears the internal states of the SOGI module." alt="" coords="384,13,538,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="325,24,371,26,366,27,326,29"/>
+<area shape="rect" id="Node000005" href="$group___c_t_l___p_l_l___a_p_i.html#gae490fe7914e450936d2764b1070dddb7" title="Initializes the three&#45;phase PLL controller." alt="" coords="410,64,512,91"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="336,75,398,77,393,78,337,80"/>
+<area shape="rect" id="Node000006" href="$group___c_t_l___p_l_l___a_p_i.html#ga4dd06b5fe406f3f250c7d6921344e171" title="Clears the internal states of the three&#45;phase PLL controller." alt="" coords="586,64,705,91"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="512,75,574,77,569,78,512,80"/>
+<area shape="rect" id="Node000010" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="604,9,687,36"/>
+<area shape="poly" id="edge9_Node000005_Node000010" title=" " alt="" coords="508,61,586,40,592,39,509,66"/>
+<area shape="rect" id="Node000007" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="771,5,865,32"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="686,61,760,38,765,37,688,66"/>
+<area shape="rect" id="Node000008" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="753,56,883,99"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="705,75,740,77,734,77,705,80"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="687,89,765,118,760,117,687,94"/>
+<area shape="poly" id="edge10_Node000010_Node000007" title=" " alt="" coords="687,19,758,20,752,20,688,24"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="Physical Operating Limits" name="Physical Operating Limits">
+<area shape="rect" id="Node000002" href="$group__hal__evlservo1.html" title="Parameters for the ST EVLSERVO1 servo motor driver board." alt="" coords="5,5,165,48"/>
+<area shape="rect" id="Node000001" title="This section defines the boundary conditions for the safe physical operation of the board." alt="" coords="213,5,344,48"/>
+</map>

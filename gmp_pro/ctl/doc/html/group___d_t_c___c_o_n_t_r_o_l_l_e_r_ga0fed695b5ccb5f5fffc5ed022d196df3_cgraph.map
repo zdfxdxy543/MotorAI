@@ -1,0 +1,5 @@
+<map id="ctl_step_dtc" name="ctl_step_dtc">
+<area shape="rect" id="Node000001" title="Executes one step of the Direct Torque Control algorithm." alt="" coords="5,13,98,40"/>
+<area shape="rect" id="Node000002" href="$group__hysteresis__controller.html#ga5b5c7a3ccd629d7ac30e6d0e65f5552c" title="Executes one step of the hysteresis controller." alt="" coords="146,5,280,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,24,133,26,127,27,98,29"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="ctl_set_pid_int_limit" name="ctl_set_pid_int_limit">
+<area shape="rect" id="Node000001" title="Set PID controller PID integral limit." alt="" coords="318,56,454,83"/>
+<area shape="rect" id="Node000002" href="$group___f_l_u_x___w_e_a_k_e_n_i_n_g___c_o_n_t_r_o_l_l_e_r.html#ga46f363576b8e2225269b25c645411ea3" title="Initializes the Flux Weakening Controller." alt="" coords="139,5,244,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="315,52,244,35,244,30,320,51"/>
+<area shape="rect" id="Node000003" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#ga03ba56dada0d048473f8751a91aade25" title="Sets up the parameters for the d&#45;q axis PI controllers." alt="" coords="113,56,270,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="300,70,270,72,270,67,305,69"/>
+<area shape="rect" id="Node000005" href="$group___f_l_u_x___w_e_a_k_e_n_i_n_g___c_o_n_t_r_o_l_l_e_r.html#gaea494f3d655c8354f21b83a5b8051c71" title="Executes one step of Flux Weakening Control." alt="" coords="135,107,248,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="320,87,246,109,245,103,315,88"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,56,65,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="95,71,66,72,65,67,99,68"/>
+</map>

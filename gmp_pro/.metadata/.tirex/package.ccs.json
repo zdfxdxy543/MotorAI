@@ -1,0 +1,11 @@
+[
+    {
+        "rootMacroName": "COM_GMP_CORE_C28X_SDK_INSTALL_DIR",
+        "compilerIncludePath": [
+            "E:\\Related_Github_Project\\gmp_pro",
+            "E:\\Related_Github_Project\\gmp_pro\\csp/c28x_syscfg/"
+        ],
+        "compilerSymbols": [],
+        "linkerSearchPath": []
+    }
+]

@@ -1,0 +1,5 @@
+<map id="dsa_step_trigger" name="dsa_step_trigger">
+<area shape="rect" id="Node000001" title="Executes one step of the trigger logic." alt="" coords="126,5,243,32"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__nt_2implement_2f280049c_2xplt_8peripheral_8c.html#abf8f7c98b52c47d6404b22e1a56e93df" title=" " alt="" coords="5,5,78,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,19,78,21,78,16,113,18"/>
+</map>

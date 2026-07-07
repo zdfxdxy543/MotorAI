@@ -1,0 +1,5 @@
+<map id="ctl_init_pid" name="ctl_init_pid">
+<area shape="rect" id="Node000001" title="Initializes a parallel&#45;form PID controller." alt="" coords="5,5,89,32"/>
+<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="137,5,231,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,16,124,18,118,19,89,21"/>
+</map>

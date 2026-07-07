@@ -1,0 +1,24 @@
+digraph "ctl_init_qr_controller"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="ctl_init_qr_controller",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Initializes a quasi-resonant controller using Standard Tustin."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl_init_qpr_controller",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group__resonant__controllers.html#ga1edbe6abcdca3eb81f4c7bcca8a408d9",tooltip="Initializes a QPR controller using Standard Tustin."];
+  Node2 -> Node3 [id="edge2_Node000002_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ctl_upgrade_sinv_param",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#ga43fcf30c79672c191ef67a959ecea1d6",tooltip=" "];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="ctl_init_sinv_ctrl",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gad409bb12fa407034f45f243e042f223f",tooltip=" "];
+  Node4 -> Node5 [id="edge4_Node000004_Node000005",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="ctl_init",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c",tooltip=" "];
+  Node1 -> Node3 [id="edge5_Node000001_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node1 -> Node6 [id="edge6_Node000001_Node000006",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="ctl_upgrade_three_phase_inv",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga6d13a7a39cc732f568f03c1fa42536c8",tooltip=" "];
+  Node6 -> Node7 [id="edge7_Node000006_Node000007",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="ctl_init_three_phase_inv",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga7e1ef3de5d1db353eb64269d363937a1",tooltip=" "];
+  Node7 -> Node8 [id="edge8_Node000007_Node000008",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="ctl_init",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c",tooltip=" "];
+}

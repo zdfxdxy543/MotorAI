@@ -1,0 +1,9 @@
+<map id="ctl_init_dpcc" name="ctl_init_dpcc">
+<area shape="rect" id="Node000001" title="Initializes the DPCC module with motor and system parameters." alt="" coords="5,31,100,57"/>
+<area shape="rect" id="Node000002" href="$group___d_p_c_c___c_o_n_t_r_o_l_l_e_r.html#gad8b9f74fc85f72981acc428d6635474c" title="Clears the internal state variables of the DPCC module." alt="" coords="148,5,253,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,33,135,29,130,31,101,38"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="181,56,220,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="100,49,168,63,163,65,100,55"/>
+<area shape="rect" id="Node000003" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="301,5,421,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="253,16,288,18,283,19,254,21"/>
+</map>

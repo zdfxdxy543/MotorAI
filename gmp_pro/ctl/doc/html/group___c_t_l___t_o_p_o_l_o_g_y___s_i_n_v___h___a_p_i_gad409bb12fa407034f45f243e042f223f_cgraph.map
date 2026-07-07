@@ -1,0 +1,50 @@
+<map id="ctl_init_sinv_ctrl" name="ctl_init_sinv_ctrl">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,288,121,315"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gae39d68eb242371326f2e2798714fef40" title="Clears the states of the main controllers (PID, QPR, QR)." alt="" coords="410,56,511,83"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,285,422,88,423,93,89,290"/>
+<area shape="rect" id="Node000006" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#ga43fcf30c79672c191ef67a959ecea1d6" title=" " alt="" coords="169,288,331,315"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="120,299,155,300,151,303,122,304"/>
+<area shape="rect" id="Node000020" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="441,477,479,504"/>
+<area shape="poly" id="edge28_Node000001_Node000020" title=" " alt="" coords="94,313,429,473,425,477,93,318"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="842,149,936,176"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="511,78,830,148,825,151,511,83"/>
+<area shape="rect" id="Node000004" href="$group__resonant__controllers.html#ga9ca6dad2128c01f52ba33e5de3a7fdd3" title="Clears the internal states of the QPR controller." alt="" coords="598,5,754,32"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="510,55,604,35,599,37,513,60"/>
+<area shape="rect" id="Node000005" href="$group__resonant__controllers.html#gae5a6a9ba24dee6aa214c36df0e952e73" title="Clears the internal states of the QR controller." alt="" coords="815,56,964,83"/>
+<area shape="poly" id="edge5_Node000002_Node000005" title=" " alt="" coords="511,67,802,68,797,71,512,72"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="735,30,818,51,813,52,736,35"/>
+<area shape="rect" id="Node000007" href="$group__discrete__filter__api.html#ga2a5bf712c8e3957ff75b7b81da8b0406" title="Initializes a first&#45;order low&#45;pass filter object." alt="" coords="622,369,730,396"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="262,313,309,365,342,392,380,412,411,421,444,426,510,425,572,414,623,402,628,401,574,419,511,430,444,431,410,426,378,417,339,396,306,369,260,318"/>
+<area shape="rect" id="Node000009" href="$group__continuous__pid__controllers.html#gafb8c5b18ed5d7177498c7709474969ef" title="Initializes a parallel&#45;form PID controller." alt="" coords="611,208,741,235"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="275,285,322,263,378,244,434,233,491,225,598,220,593,222,492,231,435,238,380,249,324,268,278,290"/>
+<area shape="rect" id="Node000010" href="$group__resonant__controllers.html#ga1edbe6abcdca3eb81f4c7bcca8a408d9" title="Initializes a QPR controller using Standard Tustin." alt="" coords="388,157,532,184"/>
+<area shape="poly" id="edge11_Node000006_Node000010" title=" " alt="" coords="265,285,313,245,378,200,406,189,402,192,380,205,316,249,268,289"/>
+<area shape="rect" id="Node000011" href="$group__resonant__controllers.html#ga82a2217f1e5a3d76094aacb040c048ec" title="Initializes a quasi&#45;resonant controller using Standard Tustin." alt="" coords="607,157,745,184"/>
+<area shape="poly" id="edge14_Node000006_Node000011" title=" " alt="" coords="255,286,271,255,298,214,333,174,355,157,378,143,409,131,442,125,509,124,573,134,628,151,623,152,572,140,509,130,443,130,411,137,380,148,358,161,337,178,302,217,276,257,259,289"/>
+<area shape="rect" id="Node000012" href="$group__signal__generators.html#ga0c41edef79b75e6935cc0401dafa12ab" title="Initializes the ramp generator based on frequency and amplitude." alt="" coords="382,309,538,352"/>
+<area shape="poly" id="edge15_Node000006_Node000012" title=" " alt="" coords="331,310,369,317,364,318,332,315"/>
+<area shape="rect" id="Node000013" href="$group___s_i_n_e___a_n_a_l_y_z_e_r.html#ga0b918871a5fea6ff99f9c7f3095de663" title=" " alt="" coords="387,376,533,403"/>
+<area shape="poly" id="edge16_Node000006_Node000013" title=" " alt="" coords="277,313,380,362,399,370,394,370,378,366,276,318"/>
+<area shape="rect" id="Node000014" href="$group__spll__api.html#gad32add2f7e32a00fca7701020f8c9ba7" title="Initializes the Single&#45;Phase PLL module." alt="" coords="379,259,541,285"/>
+<area shape="poly" id="edge17_Node000006_Node000014" title=" " alt="" coords="331,287,366,284,361,286,332,293"/>
+<area shape="poly" id="edge27_Node000006_Node000020" title=" " alt="" coords="266,312,333,386,347,407,355,424,364,440,381,457,403,470,429,483,424,482,401,475,377,461,360,443,350,427,342,410,329,390,264,317"/>
+<area shape="rect" id="Node000008" href="$group__discrete__filter__api.html#ga14450919a7b473b9bf55db852ef574ef" title="Helper function to calculate the filter coefficient &#39;a&#39;." alt="" coords="826,369,952,396"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="730,380,813,382,808,383,731,385"/>
+<area shape="poly" id="edge10_Node000009_Node000003" title=" " alt="" coords="726,205,830,179,825,180,728,210"/>
+<area shape="poly" id="edge12_Node000010_Node000011" title=" " alt="" coords="532,168,595,170,590,171,533,173"/>
+<area shape="poly" id="edge13_Node000011_Node000005" title=" " alt="" coords="705,154,848,89,843,91,707,159"/>
+<area shape="poly" id="edge25_Node000014_Node000007" title=" " alt="" coords="519,283,543,295,559,309,568,324,576,338,591,351,610,364,605,363,588,355,572,341,563,327,555,313,540,300,519,289"/>
+<area shape="poly" id="edge26_Node000014_Node000009" title=" " alt="" coords="519,255,604,238,599,240,521,261"/>
+<area shape="rect" id="Node000015" href="$group__spll__api.html#gaee5e9764986eb3547bd39b58827b3d97" title="Clears the internal states of the PLL." alt="" coords="589,259,763,285"/>
+<area shape="poly" id="edge18_Node000014_Node000015" title=" " alt="" coords="541,269,576,271,571,273,542,275"/>
+<area shape="rect" id="Node000019" href="$group__discrete__sogi.html#ga7508b87bcacc8a60b67878481f08bd4d" title="Initializes the discrete SOGI module." alt="" coords="604,315,748,341"/>
+<area shape="poly" id="edge23_Node000014_Node000019" title=" " alt="" coords="515,283,610,310,604,311,515,289"/>
+<area shape="poly" id="edge21_Node000015_Node000003" title=" " alt="" coords="739,256,761,244,776,231,784,216,793,201,809,186,825,180,830,177,812,190,797,204,789,219,780,234,764,249,741,260"/>
+<area shape="rect" id="Node000016" href="$group__discrete__sogi.html#ga8edc414988bb0d07d82f63e4f4fdb09c" title="Clears the internal states of the SOGI module." alt="" coords="812,317,966,344"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="727,283,826,313,821,313,727,289"/>
+<area shape="rect" id="Node000017" href="$group__discrete__filter__api.html#ga204ce56245eb29e178da065a89098a94" title="Clears the internal state of the low&#45;pass filter." alt="" coords="811,200,968,227"/>
+<area shape="poly" id="edge20_Node000015_Node000017" title=" " alt="" coords="726,256,826,231,821,232,728,261"/>
+<area shape="rect" id="Node000018" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="824,251,954,293"/>
+<area shape="poly" id="edge22_Node000015_Node000018" title=" " alt="" coords="763,269,811,272,806,272,763,275"/>
+<area shape="poly" id="edge24_Node000019_Node000016" title=" " alt="" coords="748,326,799,329,794,330,748,332"/>
+</map>

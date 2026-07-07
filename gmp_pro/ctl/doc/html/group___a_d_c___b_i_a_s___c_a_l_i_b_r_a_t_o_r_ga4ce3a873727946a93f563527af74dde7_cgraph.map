@@ -1,0 +1,5 @@
+<map id="ctl_get_adc_calibrator_result" name="ctl_get_adc_calibrator_result">
+<area shape="rect" id="Node000001" title="Gets the calculated ADC bias result from the filter." alt="" coords="5,5,154,48"/>
+<area shape="rect" id="Node000002" href="$group___b_i_q_u_a_d__filter__api.html#gad1751c40571632c03740b846e4835304" title="Gets the last calculated output from the IIR filter." alt="" coords="202,5,339,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,24,189,26,183,27,154,29"/>
+</map>

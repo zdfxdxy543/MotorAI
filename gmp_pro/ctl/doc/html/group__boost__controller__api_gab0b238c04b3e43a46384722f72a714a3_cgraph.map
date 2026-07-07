@@ -1,0 +1,9 @@
+<map id="ctl_step_boost_ctrl" name="ctl_step_boost_ctrl">
+<area shape="rect" id="Node000001" title="Executes one step of the Boost control logic." alt="" coords="5,56,137,83"/>
+<area shape="rect" id="Node000002" href="$group__discrete__filter__api.html#gacbd67d6fc3fee1d088725e78dc01a1ce" title="Executes one step of the low&#45;pass filter calculation." alt="" coords="185,5,339,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,53,196,35,192,38,125,58"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#gaacbe00aab5fac981355786302cffb287" title="Executes one step of the series&#45;form PID controller." alt="" coords="204,56,320,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="137,67,191,68,186,70,137,72"/>
+<area shape="rect" id="Node000004" href="$group__saturation__blocks.html#gab4293cc14e0a1a4aa61f7b8e1fee3d1d" title="Executes one step of the saturation block." alt="" coords="196,107,328,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="125,81,197,101,192,103,124,86"/>
+</map>

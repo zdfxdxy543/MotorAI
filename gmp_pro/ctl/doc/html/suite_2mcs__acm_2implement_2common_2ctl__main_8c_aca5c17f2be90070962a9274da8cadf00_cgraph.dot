@@ -1,0 +1,33 @@
+digraph "ctl_mainloop"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="LR";
+  Node1 [id="Node000001",label="ctl_mainloop",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl_acm_sensored_ctrl\l_velocity_mode",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga8c7b3207c5355e4e91c78960c8823e49",tooltip="Sets the controller to closed-loop velocity mode."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ctl_clear_adc_calibrator",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#ga61f79e4a35f55b94ec08fd855cb2e00b",tooltip="Resets the calibrator to prepare for a new calibration sequence."];
+  Node1 -> Node4 [id="edge3_Node000001_Node000004",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="ctl_disable_output",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2dps__boost_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a8412cb576d3e246f3097e69543fba9d2",tooltip=" "];
+  Node1 -> Node5 [id="edge4_Node000001_Node000005",color="steelblue1",style="solid",tooltip=" "];
+  Node5 [id="Node000005",label="ctl_enable_acm_sensored\l_ctrl_output",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga4bfb445d9910ed72871987852c9e887d",tooltip="Enables the PWM output."];
+  Node1 -> Node6 [id="edge5_Node000001_Node000006",color="steelblue1",style="solid",tooltip=" "];
+  Node6 [id="Node000006",label="ctl_enable_adc_calibrator",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gae5a40af26e6bf1b839f9f8efa9273249",tooltip="Enables the ADC bias calibration process."];
+  Node6 -> Node7 [id="edge6_Node000006_Node000007",color="steelblue1",style="solid",tooltip=" "];
+  Node7 [id="Node000007",label="ctl_clear_biquad_filter",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___b_i_q_u_a_d__filter__api.html#ga764a46ad024f75f167ffee58ee60793c",tooltip="Clears all internal states of the 2nd-order IIR filter."];
+  Node1 -> Node8 [id="edge7_Node000001_Node000008",color="steelblue1",style="solid",tooltip=" "];
+  Node8 [id="Node000008",label="ctl_enable_output",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$suite_2dps__boost_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a9a40c37fa2396bbfe55ad29bd391cba4",tooltip=" "];
+  Node1 -> Node9 [id="edge8_Node000001_Node000009",color="steelblue1",style="solid",tooltip=" "];
+  Node9 [id="Node000009",label="ctl_get_adc_calibrator\l_result",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#ga4ce3a873727946a93f563527af74dde7",tooltip="Gets the calculated ADC bias result from the filter."];
+  Node9 -> Node10 [id="edge9_Node000009_Node000010",color="steelblue1",style="solid",tooltip=" "];
+  Node10 [id="Node000010",label="ctl_get_biquad_filter\l_output",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___b_i_q_u_a_d__filter__api.html#gad1751c40571632c03740b846e4835304",tooltip="Gets the last calculated output from the IIR filter."];
+  Node1 -> Node11 [id="edge10_Node000001_Node000011",color="steelblue1",style="solid",tooltip=" "];
+  Node11 [id="Node000011",label="ctl_get_mtr_velocity",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___m_c___u_n_i_v_e_r_s_a_l___i_f.html#gae041b32cde3aacf9b7ca9a729f024ec3",tooltip="Gets the motor's velocity."];
+  Node1 -> Node12 [id="edge11_Node000001_Node000012",color="steelblue1",style="solid",tooltip=" "];
+  Node12 [id="Node000012",label="ctl_is_adc_calibrator_cmpt",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gad5c613871586f6c9c16cd6f0b7ba2f64",tooltip="Checks if the ADC calibration period is complete."];
+  Node1 -> Node13 [id="edge12_Node000001_Node000013",color="steelblue1",style="solid",tooltip=" "];
+  Node13 [id="Node000013",label="ctl_is_adc_calibrator\l_result_valid",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___a_d_c___b_i_a_s___c_a_l_i_b_r_a_t_o_r.html#gab17d4e2815d8cf858fdc07767d3096ce",tooltip="Checks if the calibration result is valid."];
+}

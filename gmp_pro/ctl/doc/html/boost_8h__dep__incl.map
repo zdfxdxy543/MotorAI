@@ -1,0 +1,20 @@
+<map id="component/digital_power/basic/boost.h" name="component/digital_power/basic/boost.h">
+<area shape="rect" id="Node000001" title="Provides a generic cascaded PID controller for a Boost converter." alt="" coords="379,5,544,48"/>
+<area shape="rect" id="Node000002" href="$ctl__dp__basic_8c.html" title="Implementation file for basic digital power controller modules." alt="" coords="5,104,171,147"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="362,54,190,99,163,106,160,101,189,93,366,50"/>
+<area shape="rect" id="Node000003" href="$suite_2dps__boost_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="197,211,374,253"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="361,46,285,69,254,83,235,98,229,111,227,125,233,155,249,184,269,211,263,210,245,187,228,157,221,125,224,109,231,94,252,78,283,64,366,44"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__boost_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="246,104,423,147"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="425,56,363,106,360,101,420,59"/>
+<area shape="rect" id="Node000005" href="$suite_2dps__dcac__rectifier__spfc_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="425,203,596,261"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="469,61,489,154,503,203,498,201,484,155,466,65"/>
+<area shape="rect" id="Node000006" href="$suite_2dps__dcac__rectifier__spfc_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="498,96,670,155"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="500,55,550,96,545,95,499,60"/>
+<area shape="rect" id="Node000007" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8c.html" title=" " alt="" coords="684,211,849,253"/>
+<area shape="poly" id="edge8_Node000001_Node000007" title=" " alt="" coords="559,40,623,61,654,75,683,94,711,121,733,152,761,211,757,209,728,155,706,124,680,98,652,80,621,66,559,45"/>
+<area shape="rect" id="Node000008" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8h.html" title=" " alt="" coords="744,104,909,147"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="558,50,726,93,755,103,750,103,725,99,557,55"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="321,159,297,212,293,208,316,162"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="558,166,532,205,529,200,553,169"/>
+<area shape="poly" id="edge10_Node000008_Node000007" title=" " alt="" coords="810,159,780,212,777,208,805,162"/>
+</map>

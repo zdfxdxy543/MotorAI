@@ -1,0 +1,5 @@
+<map id="ctl_clear_spwm_modulator" name="ctl_clear_spwm_modulator">
+<area shape="rect" id="Node000001" title="Clears the internal states of the modulation module." alt="" coords="5,5,182,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="230,5,350,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,16,217,19,212,19,182,21"/>
+</map>

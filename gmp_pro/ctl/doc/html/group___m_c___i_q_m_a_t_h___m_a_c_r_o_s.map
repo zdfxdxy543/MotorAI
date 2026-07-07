@@ -1,0 +1,7 @@
+<map id="IQmath Fixed&#45;Point Math Macros" name="IQmath Fixed&#45;Point Math Macros">
+<area shape="rect" id="Node000004" href="$group___m_c___a_r_i_t_h_m_e_t_i_c___i_q.html" title="Macros for basic arithmetic operations." alt="" coords="410,5,542,48"/>
+<area shape="rect" id="Node000002" href="$group___m_c___c_t_r_l___g_t___i_m_p_l.html" title="Different underlying numerical implementations for the ctrl_gt type." alt="" coords="5,80,163,107"/>
+<area shape="rect" id="Node000001" title="A collection of macros for fixed&#45;point arithmetic based on IQmath." alt="" coords="211,72,345,115"/>
+<area shape="rect" id="Node000005" href="$group___m_c___n_o_n_l_i_n_e_a_r___i_q.html" title="Macros for non&#45;linear mathematical functions." alt="" coords="409,72,543,115"/>
+<area shape="rect" id="Node000003" href="$group___m_c___t_y_p_e___c_o_n_v_e_r_s_i_o_n___i_q.html" title="Macros for converting between _iq and other data types." alt="" coords="393,139,559,181"/>
+</map>

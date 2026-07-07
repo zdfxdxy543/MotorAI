@@ -1,0 +1,15 @@
+<map id="ctl_vector3_set" name="ctl_vector3_set">
+<area shape="rect" id="Node000001" title="Sets all components of a 3D vector to a single scalar value." alt="" coords="377,56,487,83"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="145,5,329,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="360,52,291,35,291,30,366,51"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#ga5455882f5ce84cff0e238ceee146c93e" title="Executes one step of the three&#45;phase inverter control algorithm." alt="" coords="179,56,295,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="359,70,296,72,295,67,364,69"/>
+<area shape="rect" id="Node000006" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#gac3fbcb82aa2d1898276e80e65ef99606" title="Executes one step of the PMSM controller calculation." alt="" coords="169,107,304,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="366,87,292,109,291,103,360,88"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,5,97,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="127,20,98,21,96,16,132,17"/>
+<area shape="rect" id="Node000005" href="$suite_2pgs__3ph__grid__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,56,97,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="161,71,97,72,96,67,165,68"/>
+<area shape="rect" id="Node000007" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,107,97,133"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="151,120,97,123,97,117,157,120"/>
+</map>

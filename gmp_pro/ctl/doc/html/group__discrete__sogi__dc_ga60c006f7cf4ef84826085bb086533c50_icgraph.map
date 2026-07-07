@@ -1,0 +1,5 @@
+<map id="ctl_init_discrete_sogi_dc" name="ctl_init_discrete_sogi_dc">
+<area shape="rect" id="Node000001" title="Initializes the SOGI&#45;DC module." alt="" coords="196,13,360,40"/>
+<area shape="rect" id="Node000002" href="$group__spll__dc__api.html#gae58abab4581376fe0c8b33c2c9046f8b" title="Initializes the Single&#45;Phase SOGI&#45;DC PLL module." alt="" coords="5,5,148,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,27,148,29,148,24,183,26"/>
+</map>

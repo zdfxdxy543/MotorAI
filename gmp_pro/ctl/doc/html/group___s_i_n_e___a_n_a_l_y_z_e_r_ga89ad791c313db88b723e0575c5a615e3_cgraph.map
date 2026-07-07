@@ -1,0 +1,5 @@
+<map id="ctl_step_sine_analyzer" name="ctl_step_sine_analyzer">
+<area shape="rect" id="Node000001" title="Executes one step of the sine wave analysis." alt="" coords="5,5,160,32"/>
+<area shape="rect" id="Node000002" href="$group___s_i_n_e___a_n_a_l_y_z_e_r.html#gadc73c1c2dbfd366ebd987504ff97cb0f" title="Resets the sine analyzer&#39;s accumulators and output values." alt="" coords="208,5,365,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="160,16,195,19,189,19,160,21"/>
+</map>

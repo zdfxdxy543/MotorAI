@@ -1,0 +1,9 @@
+<map id="ctl_matrix4_get" name="ctl_matrix4_get">
+<area shape="rect" id="Node000001" title="Gets an element from the matrix at the specified row and column." alt="" coords="210,56,320,83"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x4.html#ga9a962471896351652ef52b328a0c372b" title="Multiplies two 4x4 matrices." alt="" coords="27,5,140,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,52,134,35,134,30,202,50"/>
+<area shape="rect" id="Node000003" href="$group___m_c___m_a_t_r_i_x4.html#ga5166adf078680a81afede949da2ce058" title="Multiplies a 4x4 matrix by a 4D column vector." alt="" coords="5,56,162,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="192,70,162,72,161,67,197,69"/>
+<area shape="rect" id="Node000004" href="$group___m_c___m_a_t_r_i_x4.html#gafc5ffd58fcadbfb50679ceab51de4112" title="Transposes a 4x4 matrix." alt="" coords="23,107,144,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="202,87,135,109,133,103,197,88"/>
+</map>

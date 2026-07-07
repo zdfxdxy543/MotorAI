@@ -1,0 +1,9 @@
+<map id="BOOSTXL&#45;DRV8304H Hardware Abstraction Layer" name="BOOSTXL&#45;DRV8304H Hardware Abstraction Layer">
+<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___p_r_e_s_e_t.html" title="Motor &amp; Motor controller hardware preset." alt="" coords="5,115,165,157"/>
+<area shape="rect" id="Node000001" title="Parameters for the TI BOOSTXL&#45;DRV8304H motor driver board." alt="" coords="213,115,426,157"/>
+<area shape="rect" id="Node000006" href="$group__hal__drv8304h__circuits.html" title="This section defines the detailed electrical parameters of all sensing circuits." alt="" coords="474,5,655,32"/>
+<area shape="rect" id="Node000004" href="$group__hal__drv8304h__limits.html" title="This section defines the boundary conditions for the safe physical operation of the board." alt="" coords="499,56,630,99"/>
+<area shape="rect" id="Node000007" href="$group__hal__drv8304h__mapping.html" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="474,123,655,149"/>
+<area shape="rect" id="Node000003" href="$group__hal__drv8304h__nameplate.html" title="This section records the key hardware models of the board for identification and traceability." alt="" coords="522,173,607,200"/>
+<area shape="rect" id="Node000005" href="$group__hal__drv8304h__topology.html" title="This section describes the type and layout of the onboard sensors." alt="" coords="503,224,626,251"/>
+</map>

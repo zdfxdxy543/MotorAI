@@ -1,0 +1,10 @@
+<map id="ctl_ct_iclarke" name="ctl_ct_iclarke">
+<area shape="rect" id="Node000001" title="Performs the inverse Clarke transformation from a 2&#45;phase stationary (alpha&#45;beta) to a 3&#45;phase (ABC) ..." alt="" coords="366,31,464,57"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___t_p___m_o_d_u_l_a_t_i_o_n___a_p_i.html#gac32505b01e127cab9b2710231f43731d" title="Step to execute the modulator." alt="" coords="152,5,311,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="348,35,311,32,311,27,353,35"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___t_p___m_o_d_u_l_a_t_i_o_n___a_p_i.html#ga76145e0bd8f372bbcaf343c474447cc3" title="Executes one step of the three&#45;phase modulation algorithm." alt="" coords="145,56,318,83"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="354,53,319,60,318,55,348,53"/>
+<area shape="rect" id="Node000003" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,31,97,57"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="134,33,98,40,96,35,139,31"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="127,56,97,53,97,48,132,54"/>
+</map>

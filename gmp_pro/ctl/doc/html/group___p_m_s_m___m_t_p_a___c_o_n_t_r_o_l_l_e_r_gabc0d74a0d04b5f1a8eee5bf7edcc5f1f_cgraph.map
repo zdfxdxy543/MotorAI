@@ -1,0 +1,19 @@
+<map id="ctl_clear_pmsm_mtpa_ctrl" name="ctl_clear_pmsm_mtpa_ctrl">
+<area shape="rect" id="Node000001" title="Resets all internal states and integrators of the PID controllers." alt="" coords="5,84,180,111"/>
+<area shape="rect" id="Node000002" href="$group__discrete__pid__controller.html#ga0bee52109be7861b847e8f8798f16b8d" title="Clears the historical states of the PID controller." alt="" coords="424,5,572,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,81,169,59,227,40,320,24,411,19,406,21,321,29,228,45,171,64,122,86"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="451,164,545,191"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="117,109,167,135,228,157,282,168,337,174,438,180,433,180,337,180,281,173,227,163,165,140,116,114"/>
+<area shape="rect" id="Node000004" href="$group__tracking__continuous__pid.html#ga9d3287eb8c2ebae114e81c6b01eafcbd" title="Clears the internal states of the tracking continuous PID controller." alt="" coords="240,105,363,148"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="180,107,227,115,221,116,180,112"/>
+<area shape="rect" id="Node000007" href="$group__tracking__pid.html#ga0284adac0fb3f0bb2df087d7d14daeb9" title="Clears the internal states of the tracking PID controller." alt="" coords="228,55,375,81"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="179,83,215,79,210,81,181,88"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="364,140,439,162,434,161,363,145"/>
+<area shape="rect" id="Node000005" href="$group__frequency__divider.html#ga9fa7c9d311a8673674c7a8e2066f54df" title="Clears the internal counter of the divider." alt="" coords="440,57,556,84"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="363,107,431,89,437,88,364,112"/>
+<area shape="rect" id="Node000006" href="$group__slope__limiter.html#ga0ef418eab50c0b9f388ae6c02a2b0d86" title="Clears the output of the slope limiter." alt="" coords="423,109,573,136"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="363,123,410,124,405,125,364,128"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="357,52,430,36,425,37,358,57"/>
+<area shape="poly" id="edge9_Node000007_Node000005" title=" " alt="" coords="375,66,428,69,422,70,376,72"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="352,79,436,104,430,105,352,85"/>
+</map>

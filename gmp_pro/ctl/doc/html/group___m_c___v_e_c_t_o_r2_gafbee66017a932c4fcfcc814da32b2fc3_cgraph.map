@@ -1,0 +1,5 @@
+<map id="ctl_vector2_mag" name="ctl_vector2_mag">
+<area shape="rect" id="Node000001" title="Calculates the magnitude (length) of a 2D vector." alt="" coords="5,5,123,32"/>
+<area shape="rect" id="Node000002" href="$group___m_c___v_e_c_t_o_r2.html#gac9b1c5a41292d8ee60de7ba400a8bb47" title="Calculates the squared magnitude (length) of a 2D vector. This is computationally cheaper than ctl_ve..." alt="" coords="171,5,309,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,16,158,18,152,19,123,21"/>
+</map>

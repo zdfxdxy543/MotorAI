@@ -1,0 +1,7 @@
+<map id="ctl_pid_clamping_correction_using_real_output" name="ctl_pid_clamping_correction_using_real_output">
+<area shape="rect" id="Node000001" title="Corrects the PID integrator state based on the actual limited output. Used for anti&#45;windup when the o..." alt="" coords="367,5,549,48"/>
+<area shape="rect" id="Node000002" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#gabf69f10fbfa4389d0b083d2f42a067e3" title="Executes one step of the FOC current control loop." alt="" coords="145,13,319,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="349,27,320,29,319,24,354,27"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,13,97,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,27,97,29,97,24,131,26"/>
+</map>

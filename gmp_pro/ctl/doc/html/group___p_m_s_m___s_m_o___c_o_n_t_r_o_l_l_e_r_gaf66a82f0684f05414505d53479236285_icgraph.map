@@ -1,0 +1,7 @@
+<map id="ctl_set_pmsm_smo_ctrl_vdq_ff" name="ctl_set_pmsm_smo_ctrl_vdq_ff">
+<area shape="rect" id="Node000001" title="Sets the d&#45;q voltage feedforward (or reference) values." alt="" coords="179,23,339,65"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="38,5,98,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,33,98,25,98,20,165,30"/>
+<area shape="rect" id="Node000003" href="$suite_2mcs__pmsm__smo_2implement_2simulate_2xplt_8ctl__interface_8h.html#a35d37bd8b6bfd8ed9815ad7cee7c988c" title=" " alt="" coords="5,56,131,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,57,131,64,130,58,166,56"/>
+</map>

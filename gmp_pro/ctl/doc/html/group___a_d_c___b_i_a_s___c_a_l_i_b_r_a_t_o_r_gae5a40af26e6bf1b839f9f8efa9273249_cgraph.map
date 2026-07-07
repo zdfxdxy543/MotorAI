@@ -1,0 +1,5 @@
+<map id="ctl_enable_adc_calibrator" name="ctl_enable_adc_calibrator">
+<area shape="rect" id="Node000001" title="Enables the ADC bias calibration process." alt="" coords="5,5,174,32"/>
+<area shape="rect" id="Node000002" href="$group___b_i_q_u_a_d__filter__api.html#ga764a46ad024f75f167ffee58ee60793c" title="Clears all internal states of the 2nd&#45;order IIR filter." alt="" coords="222,5,369,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,16,209,19,204,19,174,21"/>
+</map>

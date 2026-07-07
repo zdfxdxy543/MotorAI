@@ -1,0 +1,56 @@
+<map id="ctl_step_divider" name="ctl_step_divider">
+<area shape="rect" id="Node000001" title="Executes one step of the frequency divider." alt="" coords="950,195,1062,221"/>
+<area shape="rect" id="Node000002" href="$group___k_n_o_b___p_o_s_i_t_i_o_n___l_o_o_p.html#ga5708fb496dcab3f8fe1050a85be85815" title="Executes one step of the haptic knob control logic." alt="" coords="714,43,875,69"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="987,180,952,131,928,105,900,84,876,72,876,66,903,79,932,101,956,128,992,182"/>
+<area shape="rect" id="Node000003" href="$group__mppt__api.html#ga5746ca39effec24c88bbdf3552229b30" title="Executes one step of the P&amp;O MPPT algorithm." alt="" coords="711,93,878,120"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="976,184,942,159,901,134,871,123,871,118,903,130,945,155,981,185"/>
+<area shape="rect" id="Node000010" href="$group___p_o_s_i_t_i_o_n___c_o_n_t_r_o_l_l_e_r.html#ga074bcb4d114ba90bfa39bb125224cbbe" title="Executes one step of the position control loop." alt="" coords="717,144,872,171"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="932,191,901,185,854,174,854,169,902,180,937,191"/>
+<area shape="rect" id="Node000011" href="$group___m_c___s_p_e_e_d___c_a_l_c_u_l_a_t_o_r.html#ga55b2aefb066659ebff34ccb46966e31c" title="Executes one step of the speed calculation." alt="" coords="731,195,858,221"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="931,208,858,211,858,205,936,208"/>
+<area shape="rect" id="Node000015" href="$group__tracking__continuous__pid.html#ga3dff066ccdd3bca4553846d204f319f4" title="Executes one step of the tracking continuous PID controller." alt="" coords="687,245,902,272"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="932,226,902,236,855,247,853,242,901,231,937,225"/>
+<area shape="rect" id="Node000022" href="$group__tracking__pid.html#gae8f86b1fb0ca91745e4aeca9f30a6569" title="Executes one step of the tracking PID controller." alt="" coords="722,296,867,323"/>
+<area shape="poly" id="edge23_Node000001_Node000022" title=" " alt="" coords="981,231,945,261,903,286,868,299,866,294,901,282,942,257,976,233"/>
+<area shape="rect" id="Node000023" href="$group___v_e_l_o_c_i_t_y___p_o_s_i_t_i_o_n___c_o_n_t_r_o_l_l_e_r.html#gab1b9373815d666495e9719408a443e51" title="Executes one step of the velocity and position control loop." alt="" coords="722,397,867,424"/>
+<area shape="poly" id="edge29_Node000001_Node000023" title=" " alt="" coords="989,233,951,285,903,337,860,372,820,399,818,394,857,368,900,333,947,281,984,236"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__boost_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="502,93,593,120"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="693,108,594,109,593,104,698,106"/>
+<area shape="rect" id="Node000005" href="$group___c_t_l___f_r_a_m_e_w_o_r_k___d_i_s_p_a_t_c_h_e_r.html#ga478b5eb11dd712ebe285b7ac85cc3ef6" title="The main kernel step function for the GMP CTL module." alt="" coords="273,93,407,120"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="483,108,408,109,407,104,488,106"/>
+<area shape="rect" id="Node000006" href="$suite_2dps__buck_2implement_2stm32f407_2xplt_8peripheral_8c.html#af20a88180db1113be1e89266917d148b" title=" " alt="" coords="17,5,213,32"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="302,86,266,66,224,46,189,35,187,30,226,42,268,61,307,84"/>
+<area shape="rect" id="Node000007" href="$suite_2mcs__pmsm_2implement_2stm32f405_2xplt_8peripheral_8c.html#aed7815e8b636ff1c1f456ecbaffe1942" title="Injected conversion complete callback in non blocking mode." alt="" coords="11,56,219,99"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="255,97,220,93,218,88,260,95"/>
+<area shape="rect" id="Node000008" href="$suite_2pgs__1ph__dcac__inv_2implement_2stm32f407_2xplt_8peripheral_8c.html#a8a3b0ad512a6e6c6157440b68d395eac" title=" " alt="" coords="5,123,225,149"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="255,119,223,124,221,120,260,116"/>
+<area shape="rect" id="Node000009" href="$suite_2mcs__acm_2implement_2f280049c_2xplt_8peripheral_8c.html#abf8f7c98b52c47d6404b22e1a56e93df" title=" " alt="" coords="79,173,151,200"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="283,128,274,134,250,150,226,164,188,176,153,184,150,179,187,171,224,159,248,145,271,130,287,125"/>
+<area shape="rect" id="Node000012" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="294,144,386,171"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="713,195,639,185,501,171,386,163,385,157,501,166,640,180,719,194"/>
+<area shape="rect" id="Node000013" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="455,195,639,221"/>
+<area shape="poly" id="edge12_Node000011_Node000013" title=" " alt="" coords="713,209,640,211,639,205,718,207"/>
+<area shape="rect" id="Node000014" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="294,195,386,221"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="437,209,387,211,385,205,442,207"/>
+<area shape="poly" id="edge15_Node000015_Node000013" title=" " alt="" coords="708,242,616,225,616,219,713,241"/>
+<area shape="rect" id="Node000016" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#gac3fbcb82aa2d1898276e80e65ef99606" title="Executes one step of the PMSM controller calculation." alt="" coords="480,296,615,323"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="708,276,616,298,615,293,713,275"/>
+<area shape="rect" id="Node000017" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga81e9dd88e588e565364de4fc07772945" title="Executes one step of the PMSM FOC HFI control loop." alt="" coords="469,245,625,272"/>
+<area shape="poly" id="edge18_Node000015_Node000017" title=" " alt="" coords="669,259,626,261,626,256,675,258"/>
+<area shape="rect" id="Node000018" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="462,347,633,373"/>
+<area shape="poly" id="edge19_Node000015_Node000018" title=" " alt="" coords="702,277,689,286,674,298,665,311,656,324,641,337,616,349,614,344,638,332,652,320,661,308,670,294,686,282,697,279"/>
+<area shape="rect" id="Node000020" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga25f7a72c6cb251cbf93dc32374f53ccd" title="Executes one step of the sensorless PMSM FOC control loop." alt="" coords="464,397,631,424"/>
+<area shape="poly" id="edge21_Node000015_Node000020" title=" " alt="" coords="695,279,689,286,678,298,671,310,666,335,660,361,653,375,641,387,622,399,620,394,638,383,649,372,655,359,661,334,666,308,674,294,686,282,690,281"/>
+<area shape="poly" id="edge17_Node000016_Node000012" title=" " alt="" coords="463,291,453,286,441,273,434,260,428,235,422,209,416,197,405,185,386,172,386,167,409,181,420,194,427,207,433,233,439,258,446,270,457,282,468,291"/>
+<area shape="rect" id="Node000019" href="$suite_2mcs__pmsm__mtpa_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="294,347,386,373"/>
+<area shape="poly" id="edge20_Node000018_Node000019" title=" " alt="" coords="444,360,386,363,385,357,449,360"/>
+<area shape="rect" id="Node000021" href="$suite_2mcs__pmsm__smo_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="294,397,386,424"/>
+<area shape="poly" id="edge22_Node000020_Node000021" title=" " alt="" coords="446,411,386,413,386,408,451,410"/>
+<area shape="poly" id="edge24_Node000022_Node000013" title=" " alt="" coords="705,293,686,286,670,274,661,260,652,248,638,236,615,225,615,219,641,231,656,244,665,257,674,270,689,282,711,294"/>
+<area shape="poly" id="edge25_Node000022_Node000016" title=" " alt="" coords="704,310,616,312,615,307,709,309"/>
+<area shape="poly" id="edge26_Node000022_Node000017" title=" " alt="" coords="708,293,616,275,616,270,713,292"/>
+<area shape="poly" id="edge27_Node000022_Node000018" title=" " alt="" coords="708,327,616,349,615,343,713,326"/>
+<area shape="poly" id="edge28_Node000022_Node000020" title=" " alt="" coords="758,330,702,361,640,388,605,399,604,394,638,383,700,356,753,331"/>
+<area shape="rect" id="Node000024" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="502,448,593,475"/>
+<area shape="poly" id="edge30_Node000023_Node000024" title=" " alt="" coords="714,427,594,455,593,449,708,428"/>
+</map>

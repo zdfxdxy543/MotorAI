@@ -1,0 +1,7 @@
+<map id="ctl_step_flc" name="ctl_step_flc">
+<area shape="rect" id="Node000001" title="Executes one step of the Fuzzy Logic Controller." alt="" coords="5,43,94,69"/>
+<area shape="rect" id="Node000002" href="$group__lookup__tables.html#gad04de2fc4b077f291d00cfc706ed0dbf" title="Performs 2D bilinear interpolation on a uniform grid." alt="" coords="142,5,276,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,45,129,41,124,43,95,50"/>
+<area shape="rect" id="Node000003" href="$group__saturation__blocks.html#gab4293cc14e0a1a4aa61f7b8e1fee3d1d" title="Executes one step of the saturation block." alt="" coords="143,72,274,99"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="94,61,131,70,125,71,94,67"/>
+</map>

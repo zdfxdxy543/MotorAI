@@ -1,0 +1,119 @@
+<map id="ctl_clear_pid" name="ctl_clear_pid">
+<area shape="rect" id="Node000001" title="Clears the internal states of the PID controller." alt="" coords="694,789,789,816"/>
+<area shape="rect" id="Node000002" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#gaf4d0594005ceb50671902efb18b74400" title="Resets the internal states of the PID controllers." alt="" coords="238,928,425,955"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="676,809,581,826,527,838,474,856,438,872,405,892,352,929,348,925,402,888,436,868,472,851,525,833,580,820,681,806"/>
+<area shape="rect" id="Node000005" href="$group__boost__controller__api.html#ga4eed4f8471b36175ee860184313eb673" title="Clears the internal states and integral terms of the PID controllers." alt="" coords="492,257,627,284"/>
+<area shape="poly" id="edge3_Node000001_Node000005" title=" " alt="" coords="736,773,728,669,712,526,700,454,685,388,666,334,644,298,628,285,627,280,648,294,671,332,690,387,705,453,717,525,734,669,741,775"/>
+<area shape="rect" id="Node000009" href="$group__buck__controller__api.html#ga5369a101e8504c42dd94c1733ee43dbf" title="Clears the internal states and integral terms of the PID controllers." alt="" coords="494,308,625,335"/>
+<area shape="poly" id="edge6_Node000001_Node000009" title=" " alt="" coords="735,773,726,679,709,551,696,487,682,428,664,381,644,349,626,334,625,329,648,345,669,378,687,427,702,486,714,550,732,678,741,775"/>
+<area shape="rect" id="Node000014" href="$group___c_t_l___p_l_l___a_p_i.html#ga47f0ede1ea493f365c5968236928a183" title="Clears internal states." alt="" coords="496,511,623,537"/>
+<area shape="poly" id="edge9_Node000001_Node000014" title=" " alt="" coords="735,773,728,726,712,666,685,604,667,576,645,551,624,538,623,532,648,547,671,573,690,602,717,664,733,725,740,774"/>
+<area shape="rect" id="Node000017" href="$group__fuzzy__pid__controller.html#gaf7e0dd1bf748270a494fb0d0f898e5b4" title="Clears the internal states of the Fuzzy PID controller." alt="" coords="493,409,626,436"/>
+<area shape="poly" id="edge11_Node000001_Node000017" title=" " alt="" coords="739,773,737,708,725,621,713,575,697,529,674,487,645,450,628,437,626,432,648,446,678,484,701,527,719,573,730,620,742,707,744,775"/>
+<area shape="rect" id="Node000019" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gab8bb7ccdfdb73f38b89245a61be19f5c" title="Clear GFL inverter parameters, without PLL." alt="" coords="502,29,617,56"/>
+<area shape="poly" id="edge13_Node000001_Node000019" title=" " alt="" coords="738,773,737,627,726,416,714,307,698,207,674,125,660,94,644,70,632,59,619,52,617,47,635,55,648,66,665,91,680,124,703,206,720,306,731,415,742,627,743,774"/>
+<area shape="rect" id="Node000031" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga9b85241e0b6bbf2ed68f33b0c0094c22" title="Reset the PQ controller (clear integrators)." alt="" coords="504,80,616,107"/>
+<area shape="poly" id="edge16_Node000001_Node000031" title=" " alt="" coords="738,773,735,637,723,441,711,340,695,248,673,172,659,143,644,120,631,110,617,102,616,97,634,105,648,117,664,140,678,170,700,247,717,339,728,440,740,636,743,775"/>
+<area shape="rect" id="Node000032" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#gaed08b5a4f5d4d91dee6b93cb3589d324" title=" " alt="" coords="478,663,641,689"/>
+<area shape="poly" id="edge18_Node000001_Node000032" title=" " alt="" coords="720,777,688,740,645,704,623,692,622,687,648,699,692,736,725,777"/>
+<area shape="rect" id="Node000034" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#ga70007141c851210d7ae0bfc226647789" title="Initializes the current controller structure to safe defaults." alt="" coords="476,713,644,740"/>
+<area shape="poly" id="edge20_Node000001_Node000034" title=" " alt="" coords="702,782,645,754,615,743,613,738,647,750,707,781"/>
+<area shape="rect" id="Node000040" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga6506e2971e0badc905a3f7a665efa97d" title="Clears all internal states of the negative sequence controller." alt="" coords="498,131,621,157"/>
+<area shape="poly" id="edge23_Node000001_Node000040" title=" " alt="" coords="738,773,735,682,723,548,712,473,695,396,673,319,644,246,629,221,611,197,578,161,577,155,615,193,634,218,649,244,678,318,700,394,717,472,729,548,741,682,743,775"/>
+<area shape="rect" id="Node000042" href="$group__spfc__api.html#ga0d518691be16d6a659cc233e08dfa45c" title="Clears the internal states of the PFC PID controllers." alt="" coords="500,612,620,639"/>
+<area shape="poly" id="edge26_Node000001_Node000042" title=" " alt="" coords="727,774,697,713,673,681,645,653,621,639,620,634,648,649,677,677,701,711,733,775"/>
+<area shape="rect" id="Node000043" href="$group___c_t_l___p_l_l___a_p_i.html#ga4dd06b5fe406f3f250c7d6921344e171" title="Clears the internal states of the three&#45;phase PLL controller." alt="" coords="500,460,619,487"/>
+<area shape="poly" id="edge27_Node000001_Node000043" title=" " alt="" coords="737,773,733,717,719,643,707,604,691,567,670,532,645,501,620,485,619,480,648,497,675,528,696,564,712,603,724,642,738,716,742,775"/>
+<area shape="rect" id="Node000053" href="$group___m_c___p_m_s_m___f_u_n_c_t_i_o_n_s.html#ga9256eae6770ddbfc71baa8f41ca92e0f" title="Clears the internal states and integral terms of all PID controllers." alt="" coords="262,1060,400,1087"/>
+<area shape="poly" id="edge33_Node000001_Node000053" title=" " alt="" coords="724,827,692,869,648,906,623,919,601,927,561,934,521,939,474,957,435,982,399,1011,347,1061,343,1058,396,1007,432,978,472,952,520,934,560,928,600,922,621,914,645,902,688,866,721,831"/>
+<area shape="rect" id="Node000057" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga6bb7d639321fe47746d9961bf7760b2d" title="Resets all internal states and integrators of the PID controllers." alt="" coords="252,1207,411,1233"/>
+<area shape="poly" id="edge36_Node000001_Node000057" title=" " alt="" coords="740,829,733,926,717,1050,705,1112,690,1168,671,1213,648,1242,614,1263,576,1274,536,1277,496,1275,420,1258,363,1237,362,1231,422,1253,496,1269,536,1272,575,1268,612,1258,645,1238,666,1210,685,1166,700,1111,712,1049,728,925,737,834"/>
+<area shape="rect" id="Node000059" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#gabc0d74a0d04b5f1a8eee5bf7edcc5f1f" title="Resets all internal states and integrators of the PID controllers." alt="" coords="244,1312,418,1339"/>
+<area shape="poly" id="edge38_Node000001_Node000059" title=" " alt="" coords="741,829,738,945,725,1100,713,1179,696,1249,675,1306,662,1327,648,1343,614,1364,577,1376,538,1380,497,1378,422,1363,364,1342,364,1337,423,1357,498,1373,537,1375,576,1371,612,1360,645,1339,658,1324,670,1303,691,1247,707,1178,719,1100,733,945,738,834"/>
+<area shape="rect" id="Node000062" href="$group___p_m_s_m___s_m_o.html#ga470b704ae4086233430a1c55197b1271" title="Clears the internal states of the SMO estimator." alt="" coords="487,865,632,892"/>
+<area shape="poly" id="edge40_Node000001_Node000062" title=" " alt="" coords="697,825,647,849,601,867,598,863,645,844,701,821"/>
+<area shape="rect" id="Node000063" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga3b421bb2dd03f581f2405134bb9387a8" title="Resets the controller and SMO to their initial states for startup." alt="" coords="246,1389,416,1416"/>
+<area shape="poly" id="edge41_Node000001_Node000063" title=" " alt="" coords="741,829,739,953,726,1120,715,1204,698,1281,676,1343,663,1367,648,1385,619,1406,585,1420,550,1429,514,1433,443,1430,383,1419,383,1414,443,1424,513,1427,549,1423,584,1415,616,1401,645,1381,659,1364,672,1341,693,1279,709,1203,721,1119,734,952,739,834"/>
+<area shape="rect" id="Node000066" href="$group__spll__dc__api.html#gac428ec52c1f4cd6cdc2cc35075361df7" title="Clears the internal states of the PLL." alt="" coords="483,967,636,1009"/>
+<area shape="poly" id="edge43_Node000001_Node000066" title=" " alt="" coords="730,828,698,890,675,922,648,950,621,968,618,964,645,946,671,918,694,887,726,832"/>
+<area shape="rect" id="Node000068" href="$group__spll__api.html#gaee5e9764986eb3547bd39b58827b3d97" title="Clears the internal states of the PLL." alt="" coords="473,1033,646,1060"/>
+<area shape="poly" id="edge44_Node000001_Node000068" title=" " alt="" coords="737,829,729,874,712,926,686,978,668,1002,648,1023,630,1035,627,1031,645,1019,664,999,681,975,707,924,724,873,734,834"/>
+<area shape="rect" id="Node000075" href="$group___c_t_l___t_o_p_o_l_o_g_y___s_i_n_v___h___a_p_i.html#gae39d68eb242371326f2e2798714fef40" title="Clears the states of the main controllers (PID, QPR, QR)." alt="" coords="509,1084,610,1111"/>
+<area shape="poly" id="edge45_Node000001_Node000075" title=" " alt="" coords="740,829,734,883,719,948,692,1015,672,1046,648,1074,631,1086,612,1093,609,1089,628,1081,645,1070,668,1043,687,1013,714,946,729,882,737,833"/>
+<area shape="rect" id="Node000077" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#gaaf2dd38d7f5a7f86fd7f13782d261b44" title="Clears all runtime states of the inverter controller." alt="" coords="474,1135,646,1161"/>
+<area shape="poly" id="edge46_Node000001_Node000077" title=" " alt="" coords="742,829,739,892,726,971,714,1012,697,1053,676,1091,648,1125,632,1136,629,1132,645,1121,671,1088,693,1050,709,1010,721,969,734,892,739,834"/>
+<area shape="rect" id="Node000080" href="$group__tracking__continuous__pid.html#ga9d3287eb8c2ebae114e81c6b01eafcbd" title="Clears the internal states of the tracking continuous PID controller." alt="" coords="498,1185,621,1228"/>
+<area shape="poly" id="edge47_Node000001_Node000080" title=" " alt="" coords="742,829,742,900,730,991,718,1040,701,1088,678,1134,648,1175,623,1194,620,1189,644,1171,674,1131,696,1086,713,1038,725,990,737,899,740,834"/>
+<area shape="rect" id="Node000081" href="$group___v_e_l_o_c_i_t_y___p_o_s_i_t_i_o_n___c_o_n_t_r_o_l_l_e_r.html#gab6193648837ba7afd525cc9e17314795" title="Initializes the velocity and position controller structure to safe defaults." alt="" coords="486,764,633,791"/>
+<area shape="poly" id="edge53_Node000001_Node000081" title=" " alt="" coords="677,795,635,790,633,785,682,793"/>
+<area shape="rect" id="Node000083" href="$suite_2pgs__1ph__dcac__inv_2implement_2stm32f407_2xplt_8ctl__interface_8h.html#a9a40c37fa2396bbfe55ad29bd391cba4" title=" " alt="" coords="498,1303,621,1329"/>
+<area shape="poly" id="edge55_Node000001_Node000083" title=" " alt="" coords="740,829,732,932,714,1067,702,1135,687,1198,669,1249,648,1286,623,1304,621,1300,644,1282,664,1247,682,1196,697,1134,709,1066,727,931,737,834"/>
+<area shape="rect" id="Node000084" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="518,561,601,588"/>
+<area shape="poly" id="edge56_Node000001_Node000084" title=" " alt="" coords="732,774,722,736,705,689,679,642,645,602,624,590,603,582,601,577,626,585,648,598,684,639,710,687,727,734,737,775"/>
+<area shape="rect" id="Node000099" href="$group__continuous__pid__controllers.html#gafb8c5b18ed5d7177498c7709474969ef" title="Initializes a parallel&#45;form PID controller." alt="" coords="494,359,625,385"/>
+<area shape="poly" id="edge61_Node000001_Node000099" title=" " alt="" coords="735,773,724,688,705,576,679,469,662,427,644,399,626,385,625,380,648,395,667,425,684,467,711,575,729,688,740,775"/>
+<area shape="rect" id="Node000104" href="$class_p_i_d___parallel___test.html#a13e204c293f7681d99603cc88a2017d3" title=" " alt="" coords="492,1455,627,1497"/>
+<area shape="poly" id="edge66_Node000001_Node000104" title=" " alt="" coords="741,830,736,960,722,1139,710,1232,694,1317,674,1388,648,1438,627,1456,625,1452,644,1434,669,1386,689,1315,704,1231,716,1139,731,959,738,834"/>
+<area shape="rect" id="Node000105" href="$continuous__pid__test_8cpp.html#a9a5ff50b5c324976fbcb95692e4362e7" title=" " alt="" coords="524,1521,595,1548"/>
+<area shape="poly" id="edge67_Node000001_Node000105" title=" " alt="" coords="742,829,741,973,730,1176,718,1281,701,1377,679,1456,664,1487,648,1511,624,1528,596,1536,595,1530,622,1523,644,1507,660,1485,674,1454,696,1375,713,1280,724,1175,736,972,739,833"/>
+<area shape="rect" id="Node000003" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="5,928,190,955"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="220,943,192,944,189,939,224,940"/>
+<area shape="rect" id="Node000006" href="$group__boost__controller__api.html#ga56ed84db82dde1e8829c0d4cda784f6d" title="Initializes the Boost controller with specified PID and filter parameters." alt="" coords="270,257,393,284"/>
+<area shape="poly" id="edge4_Node000005_Node000006" title=" " alt="" coords="475,272,395,273,392,268,479,269"/>
+<area shape="rect" id="Node000008" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="265,156,398,183"/>
+<area shape="poly" id="edge5_Node000005_Node000008" title=" " alt="" coords="523,250,477,223,424,197,393,186,391,181,426,192,480,219,528,248"/>
+<area shape="rect" id="Node000010" href="$group__buck__controller__api.html#ga90d2c266b08efaa9751c23bf89ef85c7" title="Initializes the Buck controller with specified PID and filter parameters." alt="" coords="272,308,391,335"/>
+<area shape="poly" id="edge7_Node000009_Node000010" title=" " alt="" coords="477,323,393,324,390,319,481,320"/>
+<area shape="rect" id="Node000012" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html#a5d338711dd3a853e9aed1d30e196a1ec" title=" " alt="" coords="265,207,398,233"/>
+<area shape="poly" id="edge8_Node000009_Node000012" title=" " alt="" coords="481,302,471,298,456,285,447,272,438,260,424,248,400,236,398,231,426,243,442,256,451,269,460,282,475,294,486,301"/>
+<area shape="rect" id="Node000015" href="$group___c_t_l___p_l_l___a_p_i.html#gafd60c60d4f6c410ef2ad284a2f769fd4" title="Initialize the DDSRF&#45;PLL." alt="" coords="274,612,389,639"/>
+<area shape="poly" id="edge10_Node000014_Node000015" title=" " alt="" coords="481,546,475,552,460,564,451,576,442,589,426,602,391,617,388,613,424,598,438,586,447,573,456,560,471,547,485,542"/>
+<area shape="rect" id="Node000018" href="$group__fuzzy__pid__controller.html#ga07ca262333a0e65dc519081a06989af5" title="Initializes the Fuzzy PID controller." alt="" coords="270,359,392,385"/>
+<area shape="poly" id="edge12_Node000017_Node000018" title=" " alt="" coords="479,407,394,388,392,383,484,404"/>
+<area shape="rect" id="Node000020" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#ga27f91fd6b8017d32183e85bf77e7a990" title="Auto&#45;tuning GFL inverter parameters." alt="" coords="9,460,186,487"/>
+<area shape="poly" id="edge14_Node000019_Node000020" title=" " alt="" coords="501,26,443,14,373,8,338,10,303,16,270,27,239,45,214,66,193,89,158,144,133,205,116,268,106,328,102,383,101,460,95,460,96,383,101,328,111,266,128,203,153,142,189,86,211,62,236,40,267,22,301,11,337,5,373,3,444,9,505,23"/>
+<area shape="rect" id="Node000026" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#ae8a9635dcf55a62807ef972f33f4a05e" title=" " alt="" coords="272,55,390,81"/>
+<area shape="poly" id="edge15_Node000019_Node000026" title=" " alt="" coords="484,53,392,64,389,59,488,49"/>
+<area shape="poly" id="edge17_Node000031_Node000026" title=" " alt="" coords="486,87,392,77,389,72,490,84"/>
+<area shape="rect" id="Node000033" href="$group___c_t_l___t_o_p_o_l_o_g_y___i_n_v___h___a_p_i.html#gab1324044592bb994e5ae4ebfbfe8911a" title=" " alt="" coords="268,663,395,689"/>
+<area shape="poly" id="edge19_Node000032_Node000033" title=" " alt="" coords="461,678,397,678,394,674,465,674"/>
+<area shape="rect" id="Node000035" href="$suite_2mcs__pmsm__nt_2implement_2common_2ctl__main_8c.html#ac6f35eac7dd51b1eab502ed5c84439af" title=" " alt="" coords="263,764,400,791"/>
+<area shape="poly" id="edge21_Node000034_Node000035" title=" " alt="" coords="479,746,396,766,393,761,483,742"/>
+<area shape="rect" id="Node000038" href="$group___c_u_r_r_e_n_t___c_o_n_t_r_o_l_l_e_r.html#ga03ba56dada0d048473f8751a91aade25" title="Sets up the parameters for the d&#45;q axis PI controllers." alt="" coords="253,713,410,740"/>
+<area shape="poly" id="edge22_Node000034_Node000038" title=" " alt="" coords="458,728,412,729,409,724,462,725"/>
+<area shape="poly" id="edge24_Node000040_Node000026" title=" " alt="" coords="489,127,472,121,424,96,392,84,390,80,426,91,474,116,493,124"/>
+<area shape="rect" id="Node000041" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gacdaaff164b0b207468a0151ccf598f2b" title="Initialize Negative Sequence Controller." alt="" coords="276,105,387,132"/>
+<area shape="poly" id="edge25_Node000040_Node000041" title=" " alt="" coords="481,137,389,127,386,123,485,134"/>
+<area shape="poly" id="edge30_Node000043_Node000020" title=" " alt="" coords="483,475,187,476,185,471,487,471"/>
+<area shape="rect" id="Node000044" href="$group___c_t_l___p_l_l___a_p_i.html#gabfac504f5c0cf25a3b605af4b87776d5" title="Clears the internal states of the DSOGI&#45;PLL controller." alt="" coords="267,511,396,537"/>
+<area shape="poly" id="edge28_Node000043_Node000044" title=" " alt="" coords="483,492,397,512,393,508,487,488"/>
+<area shape="rect" id="Node000045" href="$group___c_t_l___p_l_l___a_p_i.html#gae490fe7914e450936d2764b1070dddb7" title="Initializes the three&#45;phase PLL controller." alt="" coords="281,561,382,588"/>
+<area shape="poly" id="edge31_Node000043_Node000045" title=" " alt="" coords="484,494,474,501,460,513,451,526,442,539,426,552,384,568,381,564,424,547,438,535,447,523,456,509,472,496,488,490"/>
+<area shape="rect" id="Node000052" href="$group___c_t_l___p_l_l___a_p_i.html#gac0f0a49b6eefaae186c13f7ce7840487" title="Initializes the three&#45;phase PLL controller." alt="" coords="273,409,390,436"/>
+<area shape="poly" id="edge32_Node000043_Node000052" title=" " alt="" coords="483,458,391,438,389,433,488,456"/>
+<area shape="poly" id="edge29_Node000044_Node000020" title=" " alt="" coords="250,508,164,490,161,485,254,505"/>
+<area shape="rect" id="Node000054" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aaec5c36c55c6c2af00001e5ad785cbd9" title=" " alt="" coords="38,1085,157,1112"/>
+<area shape="poly" id="edge34_Node000053_Node000054" title=" " alt="" coords="245,1084,159,1095,156,1090,249,1081"/>
+<area shape="rect" id="Node000056" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8c.html#aca5c17f2be90070962a9274da8cadf00" title=" " alt="" coords="50,1035,145,1061"/>
+<area shape="poly" id="edge35_Node000053_Node000056" title=" " alt="" coords="245,1066,146,1056,144,1051,249,1063"/>
+<area shape="rect" id="Node000058" href="$group___p_m_s_m___h_f_i___b_a_r_e___c_o_n_t_r_o_l_l_e_r.html#ga81e9dd88e588e565364de4fc07772945" title="Executes one step of the PMSM FOC HFI control loop." alt="" coords="19,1207,176,1233"/>
+<area shape="poly" id="edge37_Node000057_Node000058" title=" " alt="" coords="234,1222,177,1222,175,1218,238,1218"/>
+<area shape="rect" id="Node000060" href="$group___p_m_s_m___m_t_p_a___c_o_n_t_r_o_l_l_e_r.html#ga67d364c87f2bb7cc3335996f5a76436c" title="Executes one step of the PMSM FOC control loop with MTPA." alt="" coords="12,1312,183,1339"/>
+<area shape="poly" id="edge39_Node000059_Node000060" title=" " alt="" coords="227,1327,185,1328,183,1323,231,1324"/>
+<area shape="rect" id="Node000064" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga25f7a72c6cb251cbf93dc32374f53ccd" title="Executes one step of the sensorless PMSM FOC control loop." alt="" coords="14,1389,181,1416"/>
+<area shape="poly" id="edge42_Node000063_Node000064" title=" " alt="" coords="229,1404,182,1405,181,1400,233,1402"/>
+<area shape="poly" id="edge48_Node000080_Node000002" title=" " alt="" coords="482,1183,471,1175,450,1144,442,1115,437,1084,423,1049,383,997,348,958,347,953,387,993,427,1047,442,1082,447,1113,455,1142,475,1172,487,1183"/>
+<area shape="poly" id="edge49_Node000080_Node000053" title=" " alt="" coords="481,1179,472,1176,401,1130,349,1090,349,1084,404,1126,474,1171,486,1178"/>
+<area shape="poly" id="edge50_Node000080_Node000057" title=" " alt="" coords="481,1212,412,1218,411,1213,486,1210"/>
+<area shape="poly" id="edge51_Node000080_Node000059" title=" " alt="" coords="502,1237,360,1314,358,1309,506,1234"/>
+<area shape="poly" id="edge52_Node000080_Node000063" title=" " alt="" coords="526,1237,475,1292,452,1324,427,1353,396,1374,365,1391,363,1386,393,1370,423,1349,448,1320,471,1289,522,1240"/>
+<area shape="poly" id="edge54_Node000081_Node000035" title=" " alt="" coords="468,779,401,780,399,775,473,776"/>
+<area shape="poly" id="edge57_Node000084_Node000015" title=" " alt="" coords="501,589,391,615,388,610,505,585"/>
+<area shape="poly" id="edge58_Node000084_Node000033" title=" " alt="" coords="501,588,474,602,460,614,451,627,442,640,426,653,398,666,394,662,424,648,438,636,447,624,456,611,472,598,505,585"/>
+<area shape="poly" id="edge59_Node000084_Node000038" title=" " alt="" coords="501,586,475,602,464,614,457,626,452,651,446,677,439,691,427,703,409,715,405,711,423,699,434,688,441,676,447,650,452,624,459,611,471,598,505,582"/>
+<area shape="poly" id="edge60_Node000084_Node000045" title=" " alt="" coords="500,576,384,577,381,572,505,573"/>
+<area shape="poly" id="edge62_Node000099_Node000006" title=" " alt="" coords="481,353,471,349,456,336,447,323,438,310,424,298,394,285,392,280,426,294,442,307,451,320,460,332,475,344,486,351"/>
+<area shape="poly" id="edge63_Node000099_Node000010" title=" " alt="" coords="479,356,393,337,390,332,483,353"/>
+<area shape="poly" id="edge64_Node000099_Node000018" title=" " alt="" coords="477,374,394,374,392,370,481,370"/>
+<area shape="poly" id="edge65_Node000099_Node000052" title=" " alt="" coords="479,391,392,412,388,408,483,387"/>
+</map>

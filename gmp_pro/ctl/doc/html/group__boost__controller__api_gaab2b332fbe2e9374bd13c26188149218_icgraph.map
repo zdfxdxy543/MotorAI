@@ -1,0 +1,5 @@
+<map id="ctl_attach_boost_ctrl_input" name="ctl_attach_boost_ctrl_input">
+<area shape="rect" id="Node000001" title="Attaches the controller to the physical ADC input interfaces." alt="" coords="170,5,312,48"/>
+<area shape="rect" id="Node000002" href="$suite_2dps__boost_2implement_2simulate_2xplt_8peripheral_8c.html#a88bc8e66490b2861a260395ae1c1b3bd" title=" " alt="" coords="5,13,122,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,27,122,29,122,24,157,26"/>
+</map>

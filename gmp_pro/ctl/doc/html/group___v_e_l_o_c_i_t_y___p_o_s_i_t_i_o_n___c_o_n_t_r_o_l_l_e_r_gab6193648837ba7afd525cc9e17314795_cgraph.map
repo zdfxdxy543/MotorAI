@@ -1,0 +1,7 @@
+<map id="ctl_clear_vel_pos_ctrl" name="ctl_clear_vel_pos_ctrl">
+<area shape="rect" id="Node000001" title="Initializes the velocity and position controller structure to safe defaults." alt="" coords="5,31,153,57"/>
+<area shape="rect" id="Node000002" href="$group__frequency__divider.html#ga9fa7c9d311a8673674c7a8e2066f54df" title="Clears the internal counter of the divider." alt="" coords="201,5,316,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,31,188,28,183,30,154,36"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="211,56,306,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="153,52,198,60,193,61,153,57"/>
+</map>

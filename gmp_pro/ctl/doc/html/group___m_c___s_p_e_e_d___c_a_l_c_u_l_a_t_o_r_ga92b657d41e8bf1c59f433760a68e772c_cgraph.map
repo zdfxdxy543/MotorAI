@@ -1,0 +1,9 @@
+<map id="ctl_init_spd_calculator" name="ctl_init_spd_calculator">
+<area shape="rect" id="Node000001" title="Initializes the speed calculator." alt="" coords="5,31,156,57"/>
+<area shape="rect" id="Node000002" href="$group__frequency__divider.html#gad3e09c3c54e840efcab4a5b0102ca0a5" title="Initializes the frequency divider module." alt="" coords="206,5,310,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="155,31,193,28,188,29,156,36"/>
+<area shape="rect" id="Node000003" href="$group__discrete__filter__api.html#ga2a5bf712c8e3957ff75b7b81da8b0406" title="Initializes a first&#45;order low&#45;pass filter object." alt="" coords="204,56,312,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="156,52,191,59,186,60,156,57"/>
+<area shape="rect" id="Node000004" href="$group__discrete__filter__api.html#ga14450919a7b473b9bf55db852ef574ef" title="Helper function to calculate the filter coefficient &#39;a&#39;." alt="" coords="360,56,486,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="312,67,347,69,342,69,312,72"/>
+</map>

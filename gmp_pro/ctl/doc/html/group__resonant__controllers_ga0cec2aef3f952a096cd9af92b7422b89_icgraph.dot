@@ -1,0 +1,15 @@
+digraph "ctl_init_qr_controller_prewarped"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  rankdir="RL";
+  Node1 [id="Node000001",label="ctl_init_qr_controller\l_prewarped",height=0.2,width=0.4,color="gray40", fillcolor="grey60", style="filled", fontcolor="black",tooltip="Initializes a quasi-resonant controller with Frequency Pre-warping."];
+  Node1 -> Node2 [id="edge1_Node000001_Node000002",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node2 [id="Node000002",label="ctl_init_qpr_controller\l_prewarped",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group__resonant__controllers.html#ga5fd1d0c80c964e0ca1ef1be9896d372b",tooltip="Initializes a QPR controller with Frequency Pre-warping."];
+  Node1 -> Node3 [id="edge2_Node000001_Node000003",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node3 [id="Node000003",label="ctl_update_dq_hcm_freq",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gaf3c03af3c3177d78ec2c3f8146045a8a",tooltip="Updates the resonant parameters."];
+  Node3 -> Node4 [id="edge3_Node000003_Node000004",dir="back",color="steelblue1",style="solid",tooltip=" "];
+  Node4 [id="Node000004",label="ctl_init_dq_hcm",height=0.2,width=0.4,color="grey40", fillcolor="white", style="filled",URL="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gae7500b33c7c70f8d0f856bbb77238f52",tooltip="Initializes the HCM module."];
+}

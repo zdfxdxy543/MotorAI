@@ -1,0 +1,23 @@
+<map id="ctl_clear_gfl_pq" name="ctl_clear_gfl_pq">
+<area shape="rect" id="Node000001" title="Reset the PQ controller (clear integrators)." alt="" coords="695,131,807,157"/>
+<area shape="rect" id="Node000002" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#ae8a9635dcf55a62807ef972f33f4a05e" title=" " alt="" coords="528,131,647,157"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="677,144,647,147,647,141,682,144"/>
+<area shape="rect" id="Node000003" href="$ctl__cia402__state__machine_8c.html#a65afb19d402886c377de354bd72ec41c" title=" " alt="" coords="342,5,474,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="562,118,526,83,479,46,457,35,457,30,482,42,530,79,568,119"/>
+<area shape="rect" id="Node000006" href="$ctl__cia402__state__machine_8c.html#af1e7ccc25bb2ef26964014172489dd73" title=" " alt="" coords="342,56,474,99"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="533,125,468,102,468,97,538,125"/>
+<area shape="rect" id="Node000007" href="$ctl__cia402__state__machine_8c.html#a8d88d6e2b4e0ac9c69b39fcc9e01a90e" title=" " alt="" coords="340,123,477,165"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="510,144,477,147,477,141,515,144"/>
+<area shape="rect" id="Node000008" href="$ctl__cia402__state__machine_8c.html#a441857b14fa36ea1dcdfac39b3d45792" title=" " alt="" coords="339,189,477,232"/>
+<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="538,162,469,191,467,186,533,164"/>
+<area shape="rect" id="Node000009" href="$ctl__cia402__state__machine_8c.html#a8af641589fb779b94c77b85200f3b4ee" title=" " alt="" coords="336,256,480,299"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="567,168,529,208,482,246,462,258,460,253,479,242,525,204,562,170"/>
+<area shape="rect" id="Node000004" href="$ctl__cia402__state__machine_8c.html#ac410ae5ea0c4e4b53716e8532cd03353" title=" " alt="" coords="113,131,288,157"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="345,40,337,46,270,91,219,132,215,128,267,86,335,42,349,37"/>
+<area shape="rect" id="Node000005" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,131,65,157"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="95,146,66,146,64,142,99,142"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="325,104,245,133,243,128,330,102"/>
+<area shape="poly" id="edge8_Node000007_Node000004" title=" " alt="" coords="321,145,289,147,288,141,327,143"/>
+<area shape="poly" id="edge10_Node000008_Node000004" title=" " alt="" coords="323,185,244,161,245,155,328,184"/>
+<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="341,248,335,246,268,201,217,160,219,155,271,196,337,242,346,249"/>
+</map>

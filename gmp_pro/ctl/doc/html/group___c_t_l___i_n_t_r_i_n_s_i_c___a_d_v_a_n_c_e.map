@@ -1,0 +1,15 @@
+<map id="Advance Components" name="Advance Components">
+<area shape="rect" id="Node000011" href="$group___a_d_a_p_t_i_v_e___c_o_n_t_r_o_l_l_e_r.html" title="An adaptive controller for SISO systems with unknown or varying parameters." alt="" coords="414,5,588,48"/>
+<area shape="rect" id="Node000007" href="$group___b_a_c_k_s_t_e_p_p_i_n_g___c_o_n_t_r_o_l_l_e_r.html" title="A nonlinear controller based on systematic Lyapunov design." alt="" coords="421,72,581,99"/>
+<area shape="rect" id="Node000001" title="Advance, reusable building blocks for control template library." alt="" coords="216,307,366,333"/>
+<area shape="rect" id="Node000008" href="$group___i_l_c___c_o_n_t_r_o_l_l_e_r.html" title="A controller that improves performance on repetitive tasks by learning from past errors." alt="" coords="440,123,562,165"/>
+<area shape="rect" id="Node000009" href="$group___i_m_c___c_o_n_t_r_o_l_l_e_r.html" title="A robust model&#45;based controller for SISO systems." alt="" coords="420,189,583,232"/>
+<area shape="rect" id="Node000005" href="$group__fuzzy__logic__controller.html" title="A complete FLC implementation based on a 2D look&#45;up table." alt="" coords="425,256,577,283"/>
+<area shape="rect" id="Node000004" href="$group__fuzzy__pid__controller.html" title="A self&#45;tuning PID controller using fuzzy logic look&#45;up tables." alt="" coords="429,307,573,333"/>
+<area shape="rect" id="Node000010" href="$group__lms__adaptive__filter.html" title="A self&#45;tuning filter that minimizes the mean square error." alt="" coords="434,357,569,384"/>
+<area shape="rect" id="Node000003" href="$group__lookup__tables.html" title="A library for 1D and 2D data searching and interpolation." alt="" coords="427,408,575,435"/>
+<area shape="rect" id="Node000006" href="$group__repetitive__controller.html" title="An internal model&#45;based controller for eliminating periodic errors." alt="" coords="415,459,587,485"/>
+<area shape="rect" id="Node000012" href="$group__sinc__interpolator.html" title="A high&#45;quality resampling and fractional delay module." alt="" coords="443,509,559,536"/>
+<area shape="rect" id="Node000013" href="$group__sliding__mode__controller.html" title="A nonlinear robust controller based on a sliding surface." alt="" coords="423,560,579,603"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___i_n_t_r_i_n_s_i_c___l_i_b.html" title="The Basic modules in Control Template Library." alt="" coords="5,299,168,341"/>
+</map>

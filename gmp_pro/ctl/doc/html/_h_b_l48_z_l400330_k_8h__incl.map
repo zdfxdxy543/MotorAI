@@ -1,0 +1,5 @@
+<map id="component/hardware_preset/pmsm_motor/HBL48ZL400330K.h" name="component/hardware_preset/pmsm_motor/HBL48ZL400330K.h">
+<area shape="rect" id="Node000001" title="Defines the parameters for the HBL48ZL400330K Brushless DC Motor (PMSM)." alt="" coords="5,5,271,48"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="68,96,208,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,46,140,81,136,79,136,51"/>
+</map>

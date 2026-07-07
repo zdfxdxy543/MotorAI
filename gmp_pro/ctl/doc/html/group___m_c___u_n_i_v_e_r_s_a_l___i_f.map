@@ -1,0 +1,4 @@
+<map id="Universal Motor Interface" name="Universal Motor Interface">
+<area shape="rect" id="Node000002" href="$group___m_c___i_n_t_e_r_f_a_c_e.html" title="Standardized interfaces for motor sensors and controllers." alt="" coords="5,5,161,32"/>
+<area shape="rect" id="Node000001" title="An aggregator structure that holds pointers to all sensor interfaces for a motor." alt="" coords="209,5,377,32"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="ctl_set_dtc_references" name="ctl_set_dtc_references">
+<area shape="rect" id="Node000001" title="Sets the reference (target) values for the flux and torque controllers." alt="" coords="5,13,159,40"/>
+<area shape="rect" id="Node000002" href="$group__hysteresis__controller.html#ga7cefa1fe5997a75813eaffd2f8505363" title="Sets a new target (center) for the hysteresis band." alt="" coords="207,5,334,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,24,193,26,188,27,159,29"/>
+</map>

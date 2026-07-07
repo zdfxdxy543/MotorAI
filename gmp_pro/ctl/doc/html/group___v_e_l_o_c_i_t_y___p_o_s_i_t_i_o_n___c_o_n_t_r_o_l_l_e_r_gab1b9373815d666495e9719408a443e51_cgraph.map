@@ -1,0 +1,7 @@
+<map id="ctl_step_vel_pos_ctrl" name="ctl_step_vel_pos_ctrl">
+<area shape="rect" id="Node000001" title="Executes one step of the velocity and position control loop." alt="" coords="5,31,150,57"/>
+<area shape="rect" id="Node000002" href="$group__frequency__divider.html#ga440482fa4859c76cd2b25a884ea84458" title="Executes one step of the frequency divider." alt="" coords="200,5,312,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,31,187,28,182,29,151,36"/>
+<area shape="rect" id="Node000003" href="$group__continuous__pid__controllers.html#ga6643ab7636f063fd148aaef61451d4a6" title="Executes one step of the parallel&#45;form PID controller." alt="" coords="198,56,314,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="150,52,185,59,179,59,150,57"/>
+</map>

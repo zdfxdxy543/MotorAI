@@ -1,0 +1,5 @@
+<map id="ctl_get_discrete_sogi_dc_beta" name="ctl_get_discrete_sogi_dc_beta">
+<area shape="rect" id="Node000001" title="Gets the latest quadrature (beta) output (DC&#45;free)." alt="" coords="5,5,150,48"/>
+<area shape="rect" id="Node000002" href="$group__discrete__sogi.html#ga5d538fa5b269f31860488d9e683ca9c5" title="Gets the latest quadrature (90&#45;degree shifted) output." alt="" coords="198,13,363,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="150,24,185,26,179,27,150,29"/>
+</map>

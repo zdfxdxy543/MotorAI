@@ -1,0 +1,10 @@
+<map id="ctl_init_discrete_sogi_dc" name="ctl_init_discrete_sogi_dc">
+<area shape="rect" id="Node000001" title="Initializes the SOGI&#45;DC module." alt="" coords="5,43,170,69"/>
+<area shape="rect" id="Node000002" href="$group__discrete__sogi__dc.html#gabd09fa41ae36180e508cddb7105a0def" title="Clears the internal states of the SOGI&#45;DC module." alt="" coords="228,5,351,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="169,41,215,37,210,38,170,47"/>
+<area shape="rect" id="Node000004" href="$group__discrete__sogi.html#ga7508b87bcacc8a60b67878481f08bd4d" title="Initializes the discrete SOGI module." alt="" coords="218,72,361,99"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="170,65,205,73,200,73,170,71"/>
+<area shape="rect" id="Node000003" href="$group__discrete__sogi.html#ga8edc414988bb0d07d82f63e4f4fdb09c" title="Clears the internal states of the SOGI module." alt="" coords="409,43,563,69"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="352,33,396,42,391,42,352,39"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="361,72,391,70,396,70,362,77"/>
+</map>

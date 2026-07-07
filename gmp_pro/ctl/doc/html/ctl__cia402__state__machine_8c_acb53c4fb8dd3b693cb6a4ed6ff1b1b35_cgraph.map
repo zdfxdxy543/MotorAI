@@ -1,0 +1,15 @@
+<map id="default_cb_fn_operation_enabled" name="default_cb_fn_operation_enabled">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,48,165,91"/>
+<area shape="rect" id="Node000002" href="$ctl__cia402__callback__fn_8c.html#aac90bf1808bd422d884a47ace5df6670" title="检查电网电压/频率是否符合安规 (Grid Code)" alt="" coords="213,5,363,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,47,220,35,215,37,166,52"/>
+<area shape="rect" id="Node000003" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#ad29ae2014832979b832c0dd937b695fe" title="硬件PWM输出使能/禁止" alt="" coords="230,56,346,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,67,217,69,212,70,165,72"/>
+<area shape="rect" id="Node000007" href="$ctl__cia402__callback__fn_8c.html#a164e18706644fd96f6aa4d2f670a791e" title="机械抱闸控制 (Holding Brake)" alt="" coords="226,107,350,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="165,87,220,102,215,103,165,92"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__pmsm__nt_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a9754cc2fe80af11975a0979f252def91" title=" " alt="" coords="411,56,563,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="346,67,398,69,393,70,346,72"/>
+<area shape="rect" id="Node000005" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gad04f84e7f3fb15104d4926d857279353" title="Enable GFL controller." alt="" coords="611,31,737,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="564,56,594,55,599,54,564,62"/>
+<area shape="rect" id="Node000006" href="$suite_2mcs__pmsm_2implement_2f280039c__iris__node_2xplt_8ctl__interface_8h.html#a181370011baab3adb8e1fbb57d27fb5e" title=" " alt="" coords="619,81,729,108"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="564,77,606,85,601,85,564,82"/>
+</map>

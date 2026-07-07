@@ -1,0 +1,5 @@
+<map id="ctl_clear_gfl_pq" name="ctl_clear_gfl_pq">
+<area shape="rect" id="Node000001" title="Reset the PQ controller (clear integrators)." alt="" coords="5,5,118,32"/>
+<area shape="rect" id="Node000002" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="166,5,260,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="118,16,153,18,148,19,118,21"/>
+</map>

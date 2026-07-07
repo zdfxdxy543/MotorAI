@@ -1,0 +1,5 @@
+<map id="SOGI&#45;based Quadrature Signal Generator" name="SOGI&#45;based Quadrature Signal Generator">
+<area shape="rect" id="Node000002" href="$group___c_t_l___i_n_t_r_i_n_s_i_c___d_i_s_c_r_e_t_e.html" title="Fundamental, reusable building discrete blocks for control template library." alt="" coords="5,21,154,48"/>
+<area shape="rect" id="Node000001" title="Implements a SOGI to generate in&#45;phase and quadrature&#45;phase signals." alt="" coords="202,13,363,56"/>
+<area shape="rect" id="Node000003" href="$group__discrete__sogi__dc.html" title="Implements a SOGI with an additional loop to reject DC offset." alt="" coords="411,5,572,64"/>
+</map>

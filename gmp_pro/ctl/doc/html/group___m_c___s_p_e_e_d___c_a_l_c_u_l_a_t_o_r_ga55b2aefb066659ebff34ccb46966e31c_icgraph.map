@@ -1,0 +1,9 @@
+<map id="ctl_step_spd_calc" name="ctl_step_spd_calc">
+<area shape="rect" id="Node000001" title="Executes one step of the speed calculation." alt="" coords="377,31,503,57"/>
+<area shape="rect" id="Node000002" href="$suite_2mcs__pmsm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="191,5,282,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="359,35,283,27,283,22,364,34"/>
+<area shape="rect" id="Node000003" href="$group___m_c___a_c_m___f_u_n_c_t_i_o_n_s.html#ga23810d087bc47257e06c3843bcea1b56" title="Executes one step of the sensored ACM control algorithm. This function should be called periodically ..." alt="" coords="145,56,329,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="364,54,330,60,329,55,359,54"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html#a254a29aed1003a6f09676392c3246e15" title=" " alt="" coords="5,56,97,83"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="127,70,97,72,97,67,132,69"/>
+</map>

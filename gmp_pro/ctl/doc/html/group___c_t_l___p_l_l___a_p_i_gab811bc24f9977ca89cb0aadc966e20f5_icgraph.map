@@ -1,0 +1,12 @@
+<map id="ctl_init_srf_pll_auto_tune" name="ctl_init_srf_pll_auto_tune">
+<area shape="rect" id="Node000001" title="Initializes the SRF&#45;PLL by automatically calculating the PI parameters based on the desired bandwidth..." alt="" coords="605,31,770,57"/>
+<area shape="rect" id="Node000002" href="$group___c_t_l___p_l_l___a_p_i.html#gaa8908dcef4a7f626cf9a91a0e5943bb4" title="Initializes the DSOGI&#45;PLL controller." alt="" coords="439,5,557,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="587,31,557,29,557,24,592,31"/>
+<area shape="rect" id="Node000003" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gaad37ff3a95825d39dcee5ff225e5796b" title="update GFL inverter controller parameters by init structure." alt="" coords="265,23,391,65"/>
+<area shape="poly" id="edge5_Node000001_Node000003" title=" " alt="" coords="586,44,391,47,391,41,592,44"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="426,29,392,37,392,32,421,30"/>
+<area shape="rect" id="Node000004" href="$group___c_t_l___t_o_p_o_l_o_g_y___g_f_l___i_n_v___h___a_p_i.html#gad2cd1f7524fc26c61a5f120b8c1858a2" title="Init GFL inverter parameters." alt="" coords="113,31,217,57"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="247,44,217,47,217,41,252,44"/>
+<area shape="rect" id="Node000005" href="$suite_2pgs__3ph___g_f_l__inverter_2implement_2common_2ctl__main_8c.html#a63deb114711ac8fe1936891422a7931c" title=" " alt="" coords="5,31,65,57"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="94,45,65,47,65,41,99,43"/>
+</map>

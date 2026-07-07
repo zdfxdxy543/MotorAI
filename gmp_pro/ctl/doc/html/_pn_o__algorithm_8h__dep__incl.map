@@ -1,0 +1,19 @@
+<map id="component/digital_power/mppt/PnO_algorithm.h" name="component/digital_power/mppt/PnO_algorithm.h">
+<area shape="rect" id="Node000001" title="Implements the Perturb and Observe (P&amp;O) MPPT algorithm with adaptive step size." alt="" coords="402,5,567,48"/>
+<area shape="rect" id="Node000002" href="$digital__power_8h.html" title=" " alt="" coords="5,112,182,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="385,52,194,99,138,114,136,109,193,93,388,48"/>
+<area shape="rect" id="Node000003" href="$ctl__dp__mppt_8c.html" title="Implementation file for the MPPT algorithm modules." alt="" coords="206,104,371,147"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="431,54,331,106,329,101,426,56"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__boost_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="396,104,573,147"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="486,61,486,105,482,102,483,65"/>
+<area shape="rect" id="Node000006" href="$suite_2dps__dcac__rectifier__spfc_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="597,96,768,155"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="541,52,626,95,621,95,540,58"/>
+<area shape="rect" id="Node000008" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8h.html" title=" " alt="" coords="793,104,957,147"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="582,46,781,93,810,104,805,103,780,99,582,52"/>
+<area shape="rect" id="Node000005" href="$suite_2dps__boost_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="396,211,573,253"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="486,160,486,212,482,209,482,164"/>
+<area shape="rect" id="Node000007" href="$suite_2dps__dcac__rectifier__spfc_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="597,203,768,261"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="685,168,685,204,681,201,681,172"/>
+<area shape="rect" id="Node000009" href="$tb_2_g_m_p___c_t_l___intrinsic___u_t_2common_2ctl__main_8c.html" title=" " alt="" coords="793,211,957,253"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="877,160,877,212,873,208,873,164"/>
+</map>

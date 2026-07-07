@@ -1,0 +1,7 @@
+<map id="ctl_vector2_normalize" name="ctl_vector2_normalize">
+<area shape="rect" id="Node000001" title="Normalizes a 2D vector to produce a unit vector (a vector with length 1)." alt="" coords="248,31,396,57"/>
+<area shape="rect" id="Node000002" href="$group___m_c___m_a_t_r_i_x2.html#ga65f2cf2b6cb431fe97ac679c78bb1f95" title="Calculates the real eigenvectors of a 2x2 matrix for given real eigenvalues." alt="" coords="5,5,200,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="229,34,200,33,200,27,235,33"/>
+<area shape="rect" id="Node000003" href="$group___m_p_c___c_o_n_t_r_o_l_l_e_r___a_c_m.html#ga3724306bee7ec8d8789a0ceaa9cc1253" title="Executes one step of the ACM FCS&#45;MPC algorithm." alt="" coords="37,56,168,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="229,55,169,64,168,59,235,54"/>
+</map>

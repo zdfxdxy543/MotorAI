@@ -1,0 +1,60 @@
+<map id="ctl_init_pmsm_smo_bare_controller" name="ctl_init_pmsm_smo_bare_controller">
+<area shape="rect" id="Node000001" title="Initializes the PMSM SMO Controller." alt="" coords="5,352,172,395"/>
+<area shape="rect" id="Node000002" href="$group___m_c___u_n_i_v_e_r_s_a_l___i_f.html#gaa0f5dc6886c0773f04032574fd802e95" title="Attaches a position encoder interface to the universal motor interface." alt="" coords="264,5,420,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,351,98,290,119,206,135,161,157,117,184,77,218,42,250,26,247,30,221,46,188,80,162,120,140,163,124,207,103,291,94,352"/>
+<area shape="rect" id="Node000003" href="$group___m_c___u_n_i_v_e_r_s_a_l___i_f.html#ga0c3a93675670423a80078fc40c95e1d9" title="Attaches a velocity sensor interface to the universal motor interface." alt="" coords="264,56,420,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,351,102,298,126,228,142,190,163,154,188,121,218,93,251,77,247,81,221,97,192,125,168,157,147,193,131,229,108,299,96,352"/>
+<area shape="rect" id="Node000004" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#ga48888801520024f50bae0a4ec258016a" title="Disables the entire PMSM controller." alt="" coords="250,107,434,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="94,351,109,308,135,254,171,198,193,172,218,150,242,138,238,142,221,154,197,176,175,201,140,256,114,310,99,352"/>
+<area shape="rect" id="Node000005" href="$group___slope_f_gen.html#gaf7ba190c99401a61550f2db541a4c898" title="Initializes the Constant Slope Frequency Controller." alt="" coords="274,411,410,453"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="172,390,261,411,256,414,173,395"/>
+<area shape="rect" id="Node000008" href="$group__discrete__pid__controller.html#ga748621c6b203e59a96a2b513682a2fc9" title="Initializes the discrete PID controller." alt="" coords="522,604,658,631"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="98,393,116,432,142,479,177,526,198,547,221,564,242,574,272,583,346,596,509,613,504,615,345,602,270,588,241,579,218,569,194,551,173,530,137,482,112,435,98,398"/>
+<area shape="rect" id="Node000009" href="$group__continuous__pid__controllers.html#gafb8c5b18ed5d7177498c7709474969ef" title="Initializes a parallel&#45;form PID controller." alt="" coords="525,284,655,311"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="171,349,219,339,373,316,512,302,507,305,374,321,220,344,174,354"/>
+<area shape="rect" id="Node000011" href="$group___p_m_s_m___s_m_o.html#gaedd2fd72cde2db547013f8451618f92a" title="Initializes the SMO estimator module." alt="" coords="275,208,409,235"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="105,350,153,300,184,274,218,251,262,235,258,239,221,256,187,278,156,304,110,353"/>
+<area shape="rect" id="Node000015" href="$group__continuous__pid__controllers.html#ga2cad6d004ee85199dc18464416141d4a" title="Set PID controller PID limit." alt="" coords="532,335,648,361"/>
+<area shape="poly" id="edge31_Node000001_Node000015" title=" " alt="" coords="172,367,518,349,515,354,173,372"/>
+<area shape="rect" id="Node000016" href="$group___m_c___v_e_c_t_o_r2.html#ga785736a1830bd3f835060de3194fcb10" title="Clears a 2D vector, setting its components to zero." alt="" coords="530,65,650,92"/>
+<area shape="poly" id="edge32_Node000001_Node000016" title=" " alt="" coords="97,351,114,316,141,273,176,230,218,194,252,176,283,167,339,164,397,163,428,157,463,143,477,134,486,123,496,113,511,102,525,97,521,100,513,106,500,117,490,127,480,138,465,148,430,162,397,168,340,169,284,172,254,181,221,198,179,233,145,276,119,318,102,353"/>
+<area shape="rect" id="Node000017" href="$suite_2dps__boost_2implement_2common_2user__main_8c.html#ad08ea401d985ef432f1cb8266660b946" title=" " alt="" coords="571,233,609,260"/>
+<area shape="poly" id="edge34_Node000001_Node000017" title=" " alt="" coords="123,350,168,325,219,304,313,279,407,262,558,247,553,250,408,267,314,284,221,309,170,330,127,353"/>
+<area shape="rect" id="Node000018" href="$group__tracking__continuous__pid.html#ga2f63a484d692b96e7412057bdb0f81a9" title="Initializes the tracking continuous PID controller." alt="" coords="239,477,445,504"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="113,392,162,429,221,463,241,472,236,473,219,468,159,434,114,398"/>
+<area shape="rect" id="Node000021" href="$group__tracking__pid.html#ga169253d0b07e1a3e80e4e7086853520b" title="Initializes the tracking PID controller." alt="" coords="274,528,410,555"/>
+<area shape="poly" id="edge24_Node000001_Node000021" title=" " alt="" coords="103,392,151,454,184,487,221,514,261,531,256,532,218,518,180,491,147,458,103,398"/>
+<area shape="rect" id="Node000022" href="$group__discrete__pid__controller.html#gafa491a5367233b354e3279be5098f4db" title="Sets the output limits for the PID controller." alt="" coords="522,655,659,697"/>
+<area shape="poly" id="edge30_Node000001_Node000022" title=" " alt="" coords="95,392,111,441,135,502,171,563,194,591,221,614,242,625,271,635,345,650,428,661,509,671,503,671,427,667,344,655,269,640,240,630,218,618,191,594,167,566,130,504,106,443,94,398"/>
+<area shape="rect" id="Node000023" href="$group___p_m_s_m___s_m_o___c_o_n_t_r_o_l_l_e_r.html#gaa0251712741a0fdb1b4e3bd2cf1718b8" title="Sets the controller to V¦Á¦Ã‚ (voltage) mode." alt="" coords="220,680,464,707"/>
+<area shape="poly" id="edge29_Node000001_Node000023" title=" " alt="" coords="93,393,107,449,130,520,147,558,167,595,192,630,221,659,240,673,234,673,218,663,188,633,163,598,142,561,125,522,102,450,93,398"/>
+<area shape="rect" id="Node000024" href="$group___m_c___v_e_c_t_o_r3.html#ga14a21387bfd3de106132fd7723b997bb" title="Clears a 3D vector, setting its components to zero." alt="" coords="282,731,402,757"/>
+<area shape="poly" id="edge33_Node000001_Node000024" title=" " alt="" coords="91,393,102,459,122,546,138,593,160,639,187,681,221,717,243,730,269,741,264,740,240,735,218,721,183,684,155,641,133,595,116,548,96,460,91,398"/>
+<area shape="rect" id="Node000006" href="$group__signal__generators.html#ga0c41edef79b75e6935cc0401dafa12ab" title="Initializes the ramp generator based on frequency and amplitude." alt="" coords="512,385,668,428"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="409,423,499,415,494,417,411,428"/>
+<area shape="rect" id="Node000007" href="$group__slope__limiter.html#gad45e36860962ffbce322d1a6645a1a06" title="Initializes the slope limiter module." alt="" coords="520,452,660,479"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="410,438,508,453,503,455,411,444"/>
+<area shape="rect" id="Node000010" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="732,393,827,420"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="642,309,670,320,716,350,755,383,750,383,713,354,667,325,642,314"/>
+<area shape="poly" id="edge13_Node000011_Node000009" title=" " alt="" coords="388,233,532,278,527,280,389,238"/>
+<area shape="rect" id="Node000012" href="$group__discrete__filter__api.html#ga2a5bf712c8e3957ff75b7b81da8b0406" title="Initializes a first&#45;order low&#45;pass filter object." alt="" coords="536,116,644,143"/>
+<area shape="poly" id="edge11_Node000011_Node000012" title=" " alt="" coords="408,206,463,187,487,170,511,152,527,147,523,150,513,157,490,174,465,192,411,211"/>
+<area shape="rect" id="Node000014" href="$group___m_c___c_o_o_r_d___t_r_a_n_s_f_o_r_m_a_t_i_o_n_s.html#ga02b09752d7a451a82b57f01d4cd4ace9" title="Generates a 2D phasor (sin, cos) from a given angle." alt="" coords="525,167,655,209"/>
+<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="408,210,512,197,507,200,411,215"/>
+<area shape="poly" id="edge15_Node000011_Node000015" title=" " alt="" coords="362,232,429,275,513,320,529,328,524,329,511,325,426,279,363,238"/>
+<area shape="poly" id="edge16_Node000011_Node000016" title=" " alt="" coords="408,211,437,202,462,187,479,167,486,146,493,124,510,102,519,98,516,102,514,106,498,127,491,148,484,170,466,191,439,207,411,216"/>
+<area shape="poly" id="edge17_Node000011_Node000017" title=" " alt="" coords="409,226,558,242,553,245,410,231"/>
+<area shape="rect" id="Node000013" href="$group__discrete__filter__api.html#ga14450919a7b473b9bf55db852ef574ef" title="Helper function to calculate the filter coefficient &#39;a&#39;." alt="" coords="716,116,843,143"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="644,127,703,128,698,130,646,132"/>
+<area shape="poly" id="edge22_Node000018_Node000007" title=" " alt="" coords="445,478,508,473,503,475,446,483"/>
+<area shape="poly" id="edge23_Node000018_Node000015" title=" " alt="" coords="443,474,462,463,480,442,486,419,492,395,510,371,521,367,517,370,514,375,497,398,491,421,484,445,466,467,446,479"/>
+<area shape="rect" id="Node000019" href="$group__frequency__divider.html#gad3e09c3c54e840efcab4a5b0102ca0a5" title="Initializes the frequency divider module." alt="" coords="538,553,642,580"/>
+<area shape="poly" id="edge19_Node000018_Node000019" title=" " alt="" coords="425,502,465,514,489,526,513,539,531,548,525,548,511,544,487,531,463,518,425,507"/>
+<area shape="rect" id="Node000020" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="548,503,632,529"/>
+<area shape="poly" id="edge20_Node000018_Node000020" title=" " alt="" coords="445,499,536,510,531,511,446,504"/>
+<area shape="poly" id="edge21_Node000020_Node000010" title=" " alt="" coords="631,503,667,488,713,459,750,432,755,429,716,463,670,493,633,508"/>
+<area shape="poly" id="edge27_Node000021_Node000007" title=" " alt="" coords="410,528,463,514,487,501,511,488,530,483,526,485,513,493,489,506,465,518,412,533"/>
+<area shape="poly" id="edge25_Node000021_Node000008" title=" " alt="" coords="401,553,465,571,513,589,534,599,529,599,511,595,463,576,401,558"/>
+<area shape="poly" id="edge26_Node000021_Node000019" title=" " alt="" coords="410,546,525,559,520,561,411,551"/>
+<area shape="poly" id="edge28_Node000021_Node000022" title=" " alt="" coords="364,552,430,594,513,640,525,648,520,647,511,645,428,598,364,558"/>
+</map>

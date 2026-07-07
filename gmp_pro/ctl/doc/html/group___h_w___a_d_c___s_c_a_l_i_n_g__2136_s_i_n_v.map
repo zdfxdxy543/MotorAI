@@ -1,0 +1,4 @@
+<map id="ADC Scaling and Reference Values" name="ADC Scaling and Reference Values">
+<area shape="rect" id="Node000001" title="Defines the scaling factors and reference voltages for ADC conversion." alt="" coords="243,5,429,48"/>
+<area shape="rect" id="Node000002" href="$group___h_w___b_o_a_r_d___p_a_r_a_m_e_t_e_r_s__2136_s_i_n_v.html" title="Contains definitions specific to the GMP 3PH 2136SINV DUAL hardware." alt="" coords="5,5,195,48"/>
+</map>

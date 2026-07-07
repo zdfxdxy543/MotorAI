@@ -1,0 +1,15 @@
+<map id="component/digital_power/basic/buck.h" name="component/digital_power/basic/buck.h">
+<area shape="rect" id="Node000001" title="Provides a generic cascaded PID controller for a Buck converter." alt="" coords="249,5,415,48"/>
+<area shape="rect" id="Node000002" href="$ctl__dp__basic_8c.html" title="Implementation file for basic digital power controller modules." alt="" coords="5,112,171,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,57,137,114,135,109,272,52"/>
+<area shape="rect" id="Node000003" href="$suite_2dps__buck_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="151,235,324,277"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="269,58,252,76,236,97,224,132,223,170,227,205,233,235,228,233,222,206,217,170,219,131,231,95,248,72,273,55"/>
+<area shape="rect" id="Node000004" href="$suite_2dps__buck_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="245,112,419,155"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="333,61,334,113,330,110,331,66"/>
+<area shape="rect" id="Node000005" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="435,219,592,293"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="384,54,410,73,433,94,455,124,475,157,503,219,498,217,470,159,451,127,429,98,406,77,383,59"/>
+<area shape="rect" id="Node000006" href="$suite_2pgs__1ph__dcac__dual__stage__rectifier_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="493,96,651,171"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="393,52,496,97,490,98,393,57"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="309,166,255,236,252,232,304,168"/>
+<area shape="poly" id="edge7_Node000006_Node000005" title=" " alt="" coords="550,184,533,220,529,216,545,187"/>
+</map>

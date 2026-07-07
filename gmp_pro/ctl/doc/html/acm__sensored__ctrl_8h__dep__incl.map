@@ -1,0 +1,11 @@
+<map id="component/motor_control/acm_controller/acm_sensored_ctrl.h" name="component/motor_control/acm_controller/acm_sensored_ctrl.h">
+<area shape="rect" id="Node000001" title="Implements a complete sensored Field&#45;Oriented Control (FOC) for AC Induction Motors (ACM)." alt="" coords="198,5,397,64"/>
+<area shape="rect" id="Node000002" href="$motor__control_8h.html" title=" " alt="" coords="5,128,185,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,74,121,130,118,125,230,69"/>
+<area shape="rect" id="Node000003" href="$ctl__mc__acm__sensored__ctrl_8c.html" title=" " alt="" coords="208,112,387,171"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="299,77,300,113,295,110,296,82"/>
+<area shape="rect" id="Node000004" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8h.html" title=" " alt="" coords="410,120,585,163"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="366,69,461,119,456,120,365,74"/>
+<area shape="rect" id="Node000005" href="$suite_2mcs__acm_2implement_2common_2ctl__main_8c.html" title=" " alt="" coords="410,219,585,261"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="500,176,500,220,496,217,496,180"/>
+</map>

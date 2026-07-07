@@ -1,0 +1,18 @@
+<map id="ctl_init_vel_pos_ctrl" name="ctl_init_vel_pos_ctrl">
+<area shape="rect" id="Node000001" title="Initializes the velocity and position controller structure to safe defaults." alt="" coords="5,107,142,133"/>
+<area shape="rect" id="Node000002" href="$group___v_e_l_o_c_i_t_y___p_o_s_i_t_i_o_n___c_o_n_t_r_o_l_l_e_r.html#gab6193648837ba7afd525cc9e17314795" title="Initializes the velocity and position controller structure to safe defaults." alt="" coords="190,5,337,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="91,104,134,73,188,42,205,37,200,40,191,46,137,78,94,108"/>
+<area shape="rect" id="Node000005" href="$group__frequency__divider.html#gad3e09c3c54e840efcab4a5b0102ca0a5" title="Initializes the frequency divider module." alt="" coords="211,56,316,83"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="125,104,198,85,194,89,128,108"/>
+<area shape="rect" id="Node000006" href="$group__continuous__pid__controllers.html#gad000b816a841d66ae6b6e4ea2cbd5a11" title="Initializes a parallel&#45;form PID controller." alt="" coords="222,107,305,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="141,117,209,119,204,121,142,123"/>
+<area shape="rect" id="Node000007" href="$group__slope__limiter.html#gad45e36860962ffbce322d1a6645a1a06" title="Initializes the slope limiter module." alt="" coords="194,157,333,184"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="127,131,198,152,194,154,126,137"/>
+<area shape="rect" id="Node000008" href="$group__continuous__pid__controllers.html#ga2cad6d004ee85199dc18464416141d4a" title="Set PID controller PID limit." alt="" coords="206,208,321,235"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="93,131,137,162,191,194,205,202,200,202,188,198,134,167,92,136"/>
+<area shape="rect" id="Node000003" href="$group__frequency__divider.html#ga9fa7c9d311a8673674c7a8e2066f54df" title="Clears the internal counter of the divider." alt="" coords="385,5,500,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="337,16,372,18,367,19,338,21"/>
+<area shape="rect" id="Node000004" href="$group__continuous__pid__controllers.html#ga0d1d4b8bbeefa0cfbcbd72e2711ff22b" title="Clears the internal states of the PID controller." alt="" coords="396,81,490,108"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="307,30,338,42,404,74,399,74,336,46,307,35"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="305,112,383,103,378,104,306,117"/>
+</map>

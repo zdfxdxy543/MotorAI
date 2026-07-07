@@ -1,0 +1,5 @@
+<map id="ctl_clear_df23" name="ctl_clear_df23">
+<area shape="rect" id="Node000001" title="Clears the internal state variables of the DF23 controller." alt="" coords="145,5,247,32"/>
+<area shape="rect" id="Node000002" href="$group__df__controllers.html#ga72f7ce063a0e903368b850253629a004" title="Initializes the DF23 controller." alt="" coords="5,5,97,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="127,19,97,21,97,16,132,18"/>
+</map>

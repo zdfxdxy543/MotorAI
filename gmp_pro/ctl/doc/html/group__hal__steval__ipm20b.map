@@ -1,0 +1,9 @@
+<map id="STEVAL&#45;IPM20B Hardware Abstraction Layer" name="STEVAL&#45;IPM20B Hardware Abstraction Layer">
+<area shape="rect" id="Node000002" href="$group___c_t_l___m_c___p_r_e_s_e_t.html" title="Motor &amp; Motor controller hardware preset." alt="" coords="5,115,165,157"/>
+<area shape="rect" id="Node000001" title="Parameters for the ST STEVAL&#45;IPM20B motor driver board." alt="" coords="213,115,395,157"/>
+<area shape="rect" id="Node000006" href="$group__hal__steval__ipm20b__circuits.html" title="This section defines the detailed electrical parameters of all sensing circuits." alt="" coords="443,5,624,32"/>
+<area shape="rect" id="Node000004" href="$group__hal__steval__ipm20b__limits.html" title="This section defines the boundary conditions for the safe physical operation of the board." alt="" coords="468,56,599,99"/>
+<area shape="rect" id="Node000007" href="$group__hal__steval__ipm20b__mapping.html" title="This section maps the board&#45;specific parameters to the generic &#39;MY_BOARD_&#39; macros." alt="" coords="444,123,624,149"/>
+<area shape="rect" id="Node000003" href="$group__hal__steval__ipm20b__nameplate.html" title="This section records the key hardware models of the board for identification and traceability." alt="" coords="492,173,576,200"/>
+<area shape="rect" id="Node000005" href="$group__hal__steval__ipm20b__topology.html" title="This section describes the type and layout of the onboard sensors." alt="" coords="472,224,595,251"/>
+</map>
