@@ -71,10 +71,11 @@ class RequirementPanel(QWidget):
         self.param_table.setHorizontalHeaderLabels(['信号名称', '目标值', '单位'])
         self.param_table.horizontalHeader().setStretchLastSection(True)
         self.param_table.verticalHeader().setVisible(False)
+        t = current_theme()
         self.param_table.setStyleSheet(
-            f'QTableWidget{{background:{COLOR_SURFACE};border:1px solid {COLOR_BORDER};'
+            f'QTableWidget{{background:{t.surface};border:1px solid {t.border};'
             f'border-radius:{RADIUS_CARD}px;}}'
-            f'QHeaderView::section{{background:{current_theme().header_bg};padding:4px;}}'
+            f'QHeaderView::section{{background:{t.header_bg};padding:4px;}}'
         )
         param_layout.addWidget(self.param_table)
 

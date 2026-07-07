@@ -124,9 +124,9 @@ class MainWindow(QMainWindow):
         central_layout.setSpacing(6)
 
         self.left_controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
-        self.left_controller_panel.setStyleSheet(f'background:{COLOR_SURFACE};border:none;')
+        self.left_controller_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
         self.tuning_result_panel = TuningResultPanel(project_json_getter=self.get_current_project_json_path)
-        self.tuning_result_panel.setStyleSheet(f'background:{COLOR_SURFACE};border:none;')
+        self.tuning_result_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
 
         left_splitter = QSplitter(Qt.Vertical)
         left_splitter.setChildrenCollapsible(False)
@@ -141,7 +141,7 @@ class MainWindow(QMainWindow):
             project_json_getter=self.get_current_project_json_path,
             run_tuning_callback=self.run_agent_optimization,
         )
-        self.right_panel_widget.setStyleSheet(f'background:{COLOR_SURFACE};border:none;')
+        self.right_panel_widget.setStyleSheet(f'background:{current_theme().surface};border:none;')
         self.right_panel_widget.set_controller_panel(self.left_controller_panel)
         self.right_panel_widget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
         self.right_panel_widget.setMinimumWidth(0)
@@ -156,7 +156,7 @@ class MainWindow(QMainWindow):
         info_layout.setContentsMargins(6, 6, 6, 6)
         info_layout.setSpacing(6)
         info_label = QLabel('Status: Ready')
-        info_label.setStyleSheet(f'color:{COLOR_MUTED};font-weight:600;')
+        info_label.setStyleSheet(f'color:{current_theme().muted};font-weight:600;')
         info_layout.addWidget(info_label)
         info_layout.addStretch()
         user_label = QLabel('User: Guest')
