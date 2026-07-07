@@ -193,12 +193,16 @@ class ChatBubbleWidget(QFrame):
         horizontal_padding = margins.left() + margins.right()
         available = max(1, content_width - 36)
 
-        if self.role in {'user', 'assistant'}:
+        if self.role == 'assistant':
+            # Fill full chat width — right border extends to the edge.
+            target = available
+            self.body.setMaximumWidth(max(1, target - horizontal_padding))
+            return target
+
+        if self.role == 'user':
             max_body_width = self._line_width(CHAT_LINE_CHARS)
             body_width = min(max_body_width, self._raw_text_width())
             body_width = max(self._min_body_width(), body_width)
-            if self.role == 'assistant' and self.title.isVisible():
-                body_width = max(body_width, _font_text_width(self.title.fontMetrics(), 'MotorAI'))
             target = body_width + horizontal_padding
             body_available = max(1, min(available, target) - horizontal_padding)
             self.body.setFixedWidth(body_available)
