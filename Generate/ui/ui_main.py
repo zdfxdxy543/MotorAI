@@ -117,37 +117,37 @@ class MainWindow(QMainWindow):
         toolbar_layout.addStretch()
         toolbar.setFixedHeight(48)
 
-        # Central area: left (1/3) and right (2/3)
+        # Central area: left (AI chat, 2/3) and right (controller + tuning, 1/3)
         central = QWidget()
         central_layout = QHBoxLayout(central)
         central_layout.setContentsMargins(0, 0, 0, 0)
         central_layout.setSpacing(6)
 
-        self.left_controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
-        self.left_controller_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
+        self.controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
+        self.controller_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
         self.tuning_result_panel = TuningResultPanel(project_json_getter=self.get_current_project_json_path)
         self.tuning_result_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
-
-        left_splitter = QSplitter(Qt.Vertical)
-        left_splitter.setChildrenCollapsible(False)
-        left_splitter.addWidget(self.left_controller_panel)
-        left_splitter.addWidget(self.tuning_result_panel)
-        left_splitter.setStretchFactor(0, 3)
-        left_splitter.setStretchFactor(1, 2)
-        left_splitter.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
-        left_splitter.setMinimumWidth(0)
 
         self.right_panel_widget = Design3RightPanel(
             project_json_getter=self.get_current_project_json_path,
             run_tuning_callback=self.run_agent_optimization,
         )
         self.right_panel_widget.setStyleSheet(f'background:{current_theme().surface};border:none;')
-        self.right_panel_widget.set_controller_panel(self.left_controller_panel)
+        self.right_panel_widget.set_controller_panel(self.controller_panel)
         self.right_panel_widget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
         self.right_panel_widget.setMinimumWidth(0)
 
-        central_layout.addWidget(left_splitter, 1)
+        right_splitter = QSplitter(Qt.Vertical)
+        right_splitter.setChildrenCollapsible(False)
+        right_splitter.addWidget(self.controller_panel)
+        right_splitter.addWidget(self.tuning_result_panel)
+        right_splitter.setStretchFactor(0, 3)
+        right_splitter.setStretchFactor(1, 2)
+        right_splitter.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
+        right_splitter.setMinimumWidth(0)
+
         central_layout.addWidget(self.right_panel_widget, 2)
+        central_layout.addWidget(right_splitter, 1)
 
         # Bottom information bar (horizontal)
         self.info_widget = QWidget()
@@ -188,7 +188,7 @@ class MainWindow(QMainWindow):
             self.setStyleSheet(app_qss())
 
     def _install_surface_effects(self):
-        for widget in [self.left_controller_panel, self.right_panel(), self.info_bar()]:
+        for widget in [self.controller_panel, self.right_panel(), self.info_bar()]:
             if widget is not None:
                 widget.setGraphicsEffect(None)
 
@@ -330,8 +330,8 @@ class MainWindow(QMainWindow):
             QMessageBox.critical(self, '错误', f'加载项目 JSON 失败：{exc}')
 
     def _refresh_project_panels(self):
-        if hasattr(self, 'left_controller_panel') and self.left_controller_panel is not None:
-            self.left_controller_panel.refresh_from_project()
+        if hasattr(self, 'left_controller_panel') and self.controller_panel is not None:
+            self.controller_panel.refresh_from_project()
         if hasattr(self, 'tuning_result_panel') and self.tuning_result_panel is not None:
             self.tuning_result_panel.refresh_from_project()
 
