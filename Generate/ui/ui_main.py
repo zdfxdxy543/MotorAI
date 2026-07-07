@@ -248,8 +248,6 @@ class MainWindow(QMainWindow):
                 'stdout': stdout_file,
                 'stderr': stderr_file,
             }
-            if os.name == 'nt':
-                kwargs['creationflags'] = subprocess.CREATE_NEW_CONSOLE
             process = subprocess.Popen(command, **kwargs)
             stdout_file.close()
             stderr_file.close()
@@ -257,6 +255,23 @@ class MainWindow(QMainWindow):
             stdout_file.close()
             stderr_file.close()
             raise
+
+        # Give the subprocess a moment.  If it crashed immediately (e.g. import
+        # error), read stderr and show the user what went wrong.
+        try:
+            process.wait(timeout=1.5)
+            if process.returncode != 0:
+                error_text = stderr_path.read_text(encoding="utf-8", errors="replace").strip()
+                if not error_text:
+                    error_text = "(no stderr output)"
+                QMessageBox.critical(
+                    self,
+                    "子进程异常退出",
+                    f"进程返回码 {process.returncode} —— 很可能发生了导入错误或配置错误。\n\nstderr:\n{error_text[-4000:]}",
+                )
+        except subprocess.TimeoutExpired:
+            pass  # still running — normal
+
         return process, stdout_path, stderr_path
 
     def run_agent_optimization(self):
