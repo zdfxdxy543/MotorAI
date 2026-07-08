@@ -36,7 +36,6 @@ from Optimize.config_project import (  # noqa: E402
     resolve_gmp_root,
     rewrite_bat_variables,
 )
-from Competition.controller_manifest import write_controller_manifest  # noqa: E402
 
 
 COMMON_PROJECT_FIELDS = [
@@ -49,7 +48,6 @@ COMMON_PROJECT_FIELDS = [
     "targets",
     "events",
     "metrics",
-    "evaluation_config",
     "stop_conditions",
 ]
 
@@ -652,7 +650,6 @@ def build_candidate_json(
     candidate["shared_context_files"] = list(shared_context_files or [])
     candidate["generate_outputs"] = {
         "loop_ids": str((paths.log_generate / "controller_loop_ids_generated.json").resolve()),
-        "controller_manifest": str((paths.log_generate / "controller_manifest.json").resolve()),
         "ctl_main_c": str((paths.src / "ctl_main.c").resolve()),
         "ctl_main_h": str((paths.src / "ctl_main.h").resolve()),
         "paras_header": str((paths.src / "paras.generated.h").resolve()),
@@ -744,7 +741,6 @@ def init_candidates(
     source_root = template_root or project_root
     source_src = source_root / "src"
     source_simulate = source_root / "project" / "simulate"
-    print(f"[init_candidates] source_root = {source_root}")
 
     if candidate_count < 1:
         raise ValueError("candidate_count must be >= 1")
@@ -765,16 +761,6 @@ def init_candidates(
 
         copy_required_directory(source_src, paths.src, force=force, project_root=project_root)
         copy_required_directory(source_simulate, paths.simulate, force=force, project_root=project_root)
-
-        # Also copy root-level files (e.g. chronos_Scope 1.json) from the
-        # template project to both the candidate root and simulate dir.
-        if source_root.exists():
-            for item in source_root.iterdir():
-                if item.is_file():
-                    for dst in (paths.root / item.name, paths.simulate / item.name):
-                        if not dst.exists() or force:
-                            shutil.copy2(item, dst)
-                            print(f"  copied {item.name} → {dst}")
 
         for log_dir in (
             paths.log_generate,
@@ -1124,7 +1110,6 @@ def generate_outputs(candidate_dir: Path) -> dict[str, str]:
     candidate_dir = candidate_dir.resolve()
     return {
         "loop_ids": str((candidate_dir / "log" / "generate" / "controller_loop_ids_generated.json").resolve()),
-        "controller_manifest": str((candidate_dir / "log" / "generate" / "controller_manifest.json").resolve()),
         "ctl_main_c": str((candidate_dir / "src" / "ctl_main.c").resolve()),
         "ctl_main_h": str((candidate_dir / "src" / "ctl_main.h").resolve()),
         "paras_header": str((candidate_dir / "src" / "paras.generated.h").resolve()),
@@ -1177,9 +1162,6 @@ def run_generate_for_candidate(candidate_dir: Path, *, dry_run: bool) -> dict[st
     )
     stdout_path.write_text(result.stdout or "", encoding="utf-8")
     stderr_path.write_text(result.stderr or "", encoding="utf-8")
-    if result.returncode == 0:
-        manifest_path = write_controller_manifest(candidate_dir)
-        outputs["controller_manifest"] = str(manifest_path.resolve())
 
     return {
         "candidate_id": candidate_dir.name,

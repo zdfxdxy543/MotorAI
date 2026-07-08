@@ -53,17 +53,12 @@ class CandidateNetworkPanel(QWidget):
         self.mode_combo = QComboBox()
         self.mode_combo.addItem("本地 Simulink 模型", "local")
         self.mode_combo.addItem("外地 Simulink 模型", "remote")
-        self.mode_combo.addItem("自动调度 (Scheduler)", "scheduled")
         self.mode_combo.currentIndexChanged.connect(self._on_mode_changed)
         form.addRow("模型位置", self.mode_combo)
 
         self.worker_url_edit = QLineEdit()
         self.worker_url_edit.setPlaceholderText("例如 http://192.168.1.23:8787")
         form.addRow("SILWorker 地址", self.worker_url_edit)
-
-        self.scheduler_url_edit = QLineEdit()
-        self.scheduler_url_edit.setPlaceholderText("例如 http://192.168.1.1:8786")
-        form.addRow("Scheduler 地址", self.scheduler_url_edit)
 
         self.remote_model_path_edit = QLineEdit()
         self.remote_model_path_edit.setPlaceholderText("远程机器上的 .slx 路径")
@@ -165,10 +160,9 @@ class CandidateNetworkPanel(QWidget):
         self._loading = True
         try:
             mode = str(row.get("mode") or "local").lower()
-            mode_index = self.mode_combo.findData(mode if mode in ("remote", "scheduled") else "local")
+            mode_index = self.mode_combo.findData("remote" if mode == "remote" else "local")
             self.mode_combo.setCurrentIndex(max(0, mode_index))
             self.worker_url_edit.setText(str(row.get("worker_url") or ""))
-            self.scheduler_url_edit.setText(str(row.get("scheduler_url") or ""))
             self.remote_model_path_edit.setText(str(row.get("remote_model_path") or ""))
 
             network = row.get("network") if isinstance(row.get("network"), dict) else {}
@@ -184,12 +178,8 @@ class CandidateNetworkPanel(QWidget):
     def _on_mode_changed(self, *_args):
         mode = self.mode_combo.currentData() or "local"
         remote_enabled = mode == "remote"
-        scheduled_enabled = mode == "scheduled"
-
-        self.worker_url_edit.setEnabled(remote_enabled)
-        self.scheduler_url_edit.setEnabled(scheduled_enabled)
-
         for widget in (
+            self.worker_url_edit,
             self.remote_model_path_edit,
             self.target_address_edit,
             self.receive_port_spin,
@@ -197,7 +187,7 @@ class CandidateNetworkPanel(QWidget):
             self.command_recv_port_spin,
             self.command_trans_port_spin,
         ):
-            widget.setEnabled(remote_enabled or scheduled_enabled)
+            widget.setEnabled(remote_enabled)
 
     def save_current(self):
         project_json = self._project_json_path()
@@ -220,7 +210,6 @@ class CandidateNetworkPanel(QWidget):
                 str(candidate_id),
                 mode=str(mode),
                 worker_url=self.worker_url_edit.text().strip(),
-                scheduler_url=self.scheduler_url_edit.text().strip(),
                 remote_model_path=self.remote_model_path_edit.text().strip(),
                 target_address=self.target_address_edit.text().strip() or "127.0.0.1",
                 receive_port=int(self.receive_port_spin.value()),

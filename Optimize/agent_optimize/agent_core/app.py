@@ -11,7 +11,6 @@ from .config import ProjectContext, load_project_context
 from .llm import LLMClient
 from .prompts import SYSTEM_PROMPT
 from .tool_registry import ToolRegistry
-from .evaluation.schemas import load_evaluation_config_from_dict, validate_evaluation_config
 from .tools import (
     register_automation_tools,
     register_resource_tools,
@@ -385,22 +384,6 @@ def _compact_evaluation_summary(evaluation_result: Dict[str, Any]) -> Dict[str, 
     return {key: evaluation_result.get(key) for key in keys if key in evaluation_result}
 
 
-def _write_evaluation_config_from_job(
-    ctx: ProjectContext,
-    evaluation_config: Dict[str, Any],
-    *,
-    allow_unknown_metrics: bool,
-) -> str:
-    output_path = _automation_path(ctx, "evaluation_config", "../log/evaluation_config.json")
-    config = load_evaluation_config_from_dict(evaluation_config)
-    validate_evaluation_config(config, strict_metric_names=not allow_unknown_metrics)
-    config.to_json_file(output_path)
-    return (
-        "evaluation_config written from job.evaluation_config without LLM inference. "
-        f"Path: {output_path}"
-    )
-
-
 def _build_setup_prompt(job: Dict[str, Any], job_file: Path) -> str:
     options = job.get("options") or {}
     allow_unknown_metrics = bool(options.get("allow_unknown_metrics", False))
@@ -505,7 +488,6 @@ def run_headless_job(
     max_tool_rounds = int(options.get("max_tool_rounds_per_turn", DEFAULT_HEADLESS_MAX_TOOL_ROUNDS))
 
     use_job_file_as_evaluation_config = _is_direct_evaluation_job(job)
-    has_job_evaluation_config = isinstance(job.get("evaluation_config"), dict)
     if use_job_file_as_evaluation_config:
         # Direct-evaluation mode: the command-line job JSON is the evaluation config.
         # This overrides the static agent_project.json automation.evaluation_config path
@@ -516,13 +498,7 @@ def run_headless_job(
         "schema_version": 1,
         "job_id": job.get("job_id"),
         "job_file": str(job_file),
-        "evaluation_config_source": (
-            "job_file"
-            if use_job_file_as_evaluation_config
-            else "job_evaluation_config"
-            if has_job_evaluation_config
-            else "generated_or_configured"
-        ),
+        "evaluation_config_source": "job_file" if use_job_file_as_evaluation_config else "generated_or_configured",
         "status": "running",
         "stop_reason": None,
         "iterations_requested": max_iterations,
@@ -554,14 +530,6 @@ def run_headless_job(
                 "Skipped evaluation_config setup because the job file itself contains "
                 "task_type, objective, signals, and metrics. The job file is used "
                 "directly as the evaluation config."
-            )
-            write_result_json(result_file, result)
-        elif isinstance(job.get("evaluation_config"), dict):
-            print("[headless] writing job evaluation_config")
-            result["setup_summary"] = _write_evaluation_config_from_job(
-                ctx,
-                job["evaluation_config"],
-                allow_unknown_metrics=bool(options.get("allow_unknown_metrics", False)),
             )
             write_result_json(result_file, result)
         elif not bool(options.get("skip_evaluation_config_setup", False)):
