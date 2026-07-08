@@ -648,7 +648,10 @@ class RequirementPanel(QWidget):
         if speed_target is not None and speed_target > 0:
             collected['rotor_speed_rad_s'] = speed_target
 
-        # 第三优先：从 LLM constraints 补充（可补充转矩等其他信号的目标值）
+        # 标记已由正则确定的信号，LLM constraints 不得覆盖
+        _regex_signals = set(collected.keys())
+
+        # 第三优先：从 LLM constraints 补充（仅填充正则未覆盖的信号）
         for item in parsed_items:
             combo, constraints = self._normalize_metric_item(item)
             if not combo:
@@ -668,6 +671,10 @@ class RequirementPanel(QWidget):
                 try:
                     value = float(c.get('value', 0))
                 except (TypeError, ValueError):
+                    continue
+
+                # 正则已确定的信号不受 LLM 约束覆盖
+                if signal_name in _regex_signals:
                     continue
 
                 if ctype == 'target_rpm':
@@ -832,7 +839,7 @@ class RequirementPanel(QWidget):
                 user_input=self._last_user_input or '',
             )
 
-            # ── 构建 metrics：模板默认 → 信号级目标值覆盖 → 旧值保留 → LLM 约束覆盖 ──
+            # ── 构建 metrics：模板默认 → 旧值保留 → 信号级目标值覆盖 → LLM 约束覆盖 ──
             metrics = []
             for item in parsed:
                 combo, constraints = self._normalize_metric_item(item)
@@ -866,17 +873,17 @@ class RequirementPanel(QWidget):
                 }
                 metric.update(param_template)
 
-                # 第二层：信号级目标值覆盖（LLM 提取的 target_rpm / target_rad_s）
-                # 同一信号的所有 metric 共享此值
-                if signal_name in signal_target_overrides:
-                    metric['target_value'] = signal_target_overrides[signal_name]
-
-                # 第三层：保留用户手动修改过的旧值
+                # 第二层：保留用户手动修改过的旧值
                 if combo in existing_by_name:
                     old = existing_by_name[combo]
                     for field in self._PRESERVABLE_FIELDS:
                         if field in old:
                             metric[field] = old[field]
+
+                # 第三层：信号级目标值覆盖（正则/LM 提取的 target_rpm / target_rad_s）
+                # 同一信号的所有 metric 共享此值，且优先级高于旧值保留
+                if signal_name in signal_target_overrides:
+                    metric['target_value'] = signal_target_overrides[signal_name]
 
                 # 第四层：LLM 约束覆盖（非 target 类约束）
                 # 使用 signal_target_overrides 作为参考目标值，
