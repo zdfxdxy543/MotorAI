@@ -53,15 +53,15 @@ pushd "%SLN_DIR%"
 
 rem ------------------------------------------------------------
 rem Run exe in automation mode.
-rem echo. sends one Enter to avoid simple pause/getchar blocking.
-rem stdout and stderr are written to run_exe.log.
+rem SIL_NO_PAUSE=1 tells the EXE to skip "Press Enter" prompts.
+rem No stdin pipe needed; the EXE blocks until Simulink finishes.
 rem ------------------------------------------------------------
 
 echo [INFO] Running exe at %DATE% %TIME% > "%RUN_LOG%"
 echo [INFO] Exe: "%EXE_PATH%" >> "%RUN_LOG%"
 echo [INFO] Working dir: "%SLN_DIR%" >> "%RUN_LOG%"
 echo [INFO] SIL_NO_PAUSE=%SIL_NO_PAUSE% >> "%RUN_LOG%"
-echo. | "%EXE_PATH%" >> "%RUN_LOG%" 2>&1
+"%EXE_PATH%" >> "%RUN_LOG%" 2>&1
 
 set "RUN_RESULT=%ERRORLEVEL%"
 

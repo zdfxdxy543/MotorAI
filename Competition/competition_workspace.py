@@ -894,6 +894,7 @@ def build_candidate_agent_project(candidate_json: Path) -> dict[str, Any]:
     automation = agent_project.setdefault("automation", {})
     automation.update(
         {
+            "candidate_id": str(candidate.get("candidate_id", candidate_root.name)),
             "build_bat_path": "build_sln.bat",
             "start_exe_bat_path": "start_exe.bat",
             "sim_bat_path": "run_local_quick.bat",

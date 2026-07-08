@@ -263,9 +263,17 @@ def _dispatcher_loop(
                     break
                 except Exception as exc:
                     elapsed = time.time() - t_start
+                    err_detail = f"{type(exc).__name__}: {exc}"
+                    # 尝试读取 HTTPError 的响应体（Worker 端的错误详情）
+                    if hasattr(exc, 'read'):
+                        try:
+                            body = exc.read().decode('utf-8-sig', errors='replace')
+                            err_detail += f"\n    worker response body: {body[:2000]}"
+                        except Exception:
+                            pass
                     print(
                         f"[scheduler] <<< ERROR    job={job_id}  "
-                        f"worker={worker_id}  {type(exc).__name__}: {exc}  "
+                        f"worker={worker_id}  {err_detail}  "
                         f"elapsed={elapsed:.1f}s  -> retrying next worker"
                     )
                     pool.mark_idle(worker_id)

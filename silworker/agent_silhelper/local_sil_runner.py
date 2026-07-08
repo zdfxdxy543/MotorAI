@@ -64,6 +64,10 @@ class LocalSimulinkRunner:
         diagnostics["matlab_lastwarn_id"] = sim_capture["lastwarn_id"]
         diagnostics["model_sim_status"] = sim_capture["model_sim_status"]
 
+        print(f"[silworker]   sim() elapsed={diagnostics['execution_time_sec']}s  "
+              f"status={sim_capture['sim_status']}  model_status={sim_capture['model_sim_status']}  "
+              f"error={sim_capture['error_report'][:200] if sim_capture['error_report'] else 'none'}")
+
         status = "done" if sim_capture["sim_status"] == "done" else "failed"
         if status == "failed":
             diagnostics["error_msg"] = sim_capture["error_report"] or "MATLAB simulation failed"
@@ -74,6 +78,16 @@ class LocalSimulinkRunner:
             raw_scopes[scope_var] = self._read_workspace_var_as_json(scope_var)
 
         merged_signals, mapping_errors = self._merge_scope_signals(raw_scopes, scope_channel_map)
+
+        # 诊断：输出每个 signal 的采样数和首尾值
+        signal_summary = []
+        for name, sig in sorted(merged_signals.items()):
+            vals = sig.get("values", []) if isinstance(sig, dict) else []
+            t = sig.get("time", []) if isinstance(sig, dict) else []
+            first = vals[0] if vals else "N/A"
+            last = vals[-1] if vals else "N/A"
+            signal_summary.append(f"{name}: {len(vals)} samples, time=[{t[0] if t else '?'}..{t[-1] if t else '?'}], first={first}, last={last}")
+        print(f"[silworker]   signals ({len(merged_signals)}): " + "; ".join(signal_summary[:10]))
 
         return {
             "status": status,
@@ -97,6 +111,19 @@ class LocalSimulinkRunner:
         self.eng.cd(matlab_model_dir, nargout=0)
         self.eng.addpath(matlab_model_dir, nargout=0)
         self.eng.load_system(model_name, nargout=0)
+
+        # 检查并修正 StopTime：若为 0 或未初始化的变量，设置默认值 10s
+        try:
+            stop_time_raw = str(self.eng.get_param(model_name, "StopTime", nargout=1)).strip()
+            try:
+                stop_time_val = float(stop_time_raw)
+            except ValueError:
+                stop_time_val = 0.0
+            if stop_time_val <= 0.0:
+                self.eng.set_param(model_name, "StopTime", "10.0", nargout=0)
+                print(f"[silworker]   StopTime overridden: '{stop_time_raw}' -> 10.0")
+        except Exception:
+            pass
 
         if open_model_ui:
             try:
