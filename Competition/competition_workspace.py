@@ -741,6 +741,7 @@ def init_candidates(
     source_root = template_root or project_root
     source_src = source_root / "src"
     source_simulate = source_root / "project" / "simulate"
+    print(f"[init_candidates] source_root = {source_root}")
 
     if candidate_count < 1:
         raise ValueError("candidate_count must be >= 1")
@@ -761,6 +762,16 @@ def init_candidates(
 
         copy_required_directory(source_src, paths.src, force=force, project_root=project_root)
         copy_required_directory(source_simulate, paths.simulate, force=force, project_root=project_root)
+
+        # Also copy root-level files (e.g. chronos_Scope 1.json) from the
+        # template project to both the candidate root and simulate dir.
+        if source_root.exists():
+            for item in source_root.iterdir():
+                if item.is_file():
+                    for dst in (paths.root / item.name, paths.simulate / item.name):
+                        if not dst.exists() or force:
+                            shutil.copy2(item, dst)
+                            print(f"  copied {item.name} → {dst}")
 
         for log_dir in (
             paths.log_generate,

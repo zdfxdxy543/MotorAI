@@ -39,11 +39,12 @@ class AutomationTools:
         import urllib.request
 
         scheduler_url = str(backend.get("scheduler_url", "http://127.0.0.1:8786")).rstrip("/")
+        print(f"[scheduled] POST to scheduler at {scheduler_url}/submit")
         candidate_id = str(automation.get("candidate_id", ""))
         timeout_sec = int(backend.get("timeout_sec") or automation.get("sim_timeout_sec", 1800))
 
         # Read scope_map and build payload (same as remote_sil_client).
-        scope_map_path = self._path_from_automation("scope_channel_map", "scope_channel_map.json")
+        scope_map_path = self._path_from_automation("scope_map", "simulation/scope_channel_map.json")
         scope_map = {}
         if scope_map_path is not None and scope_map_path.exists():
             try:
