@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, QVBoxLayout
-from PyQt5.QtCore import Qt, QDateTime
+from PyQt5.QtCore import Qt, QDateTime, QSize
 from PyQt5.QtGui import QMovie
 import json
 from pathlib import Path
@@ -40,6 +40,9 @@ from Competition.competition_workspace import (
     write_candidate_generation_context,
     write_common_requirement_snapshot,
 )
+
+
+WELCOME_GIF_SIZE = 50
 
 
 class IntentConfirmCard(QFrame):
@@ -150,7 +153,7 @@ class MainProgramPanel(QWidget):
         input_layout.setSpacing(10)
 
         self.input_edit = ChatInputEdit()
-        self.input_edit.setPlaceholderText('请输入需求描述...')
+        self.input_edit.setPlaceholderText('有需求，尽管说')
         self.input_edit.setFixedHeight(96)
         self.input_edit.enterPressed.connect(self.send_requirement)
 
@@ -191,21 +194,40 @@ class MainProgramPanel(QWidget):
         self.welcome_layout.setContentsMargins(0, 0, 0, 0)
         self.welcome_layout.setSpacing(0)
         
-        self.welcome_title = QLabel('通用电机驱动器智能开发平台')
-        self.welcome_title.setStyleSheet(f'''
+        self.welcome_prompt_row = QWidget()
+        self.welcome_prompt_row.setStyleSheet('border: none; background: transparent;')
+        welcome_prompt_layout = QHBoxLayout(self.welcome_prompt_row)
+        welcome_prompt_layout.setContentsMargins(0, 0, 0, 14)
+        welcome_prompt_layout.setSpacing(10)
+
+        self.welcome_gif_label = QLabel()
+        self.welcome_gif_label.setFixedSize(WELCOME_GIF_SIZE, WELCOME_GIF_SIZE)
+        self.welcome_gif_label.setAlignment(Qt.AlignCenter)
+        self.welcome_gif_label.setFrameShape(QFrame.NoFrame)
+        self.welcome_gif_label.setStyleSheet('border: none; outline: none; margin: 0; padding: 0;')
+        self.welcome_movie = None
+        welcome_gif_path = GENERATE_ROOT / '旋转.gif'
+        if welcome_gif_path.exists():
+            self.welcome_movie = QMovie(str(welcome_gif_path))
+            self.welcome_movie.setScaledSize(QSize(WELCOME_GIF_SIZE, WELCOME_GIF_SIZE))
+            self.welcome_gif_label.setMovie(self.welcome_movie)
+            self.welcome_movie.start()
+
+        self.welcome_prompt_label = QLabel('想生成什么电机程序？')
+        self.welcome_prompt_label.setStyleSheet(f'''
             QLabel {{
-                font-size: 32pt;
+                font-size: 18pt;
                 font-weight: 700;
                 color: {current_theme().text};
-                padding-bottom: 40px;
                 border: none;
                 background: transparent;
             }}
         ''')
-        self.welcome_title.setAlignment(Qt.AlignCenter)
-        
+        welcome_prompt_layout.addWidget(self.welcome_gif_label)
+        welcome_prompt_layout.addWidget(self.welcome_prompt_label)
+
         self.welcome_input = QLineEdit()
-        self.welcome_input.setPlaceholderText('请输入需求描述...')
+        self.welcome_input.setPlaceholderText('有需求，尽管说')
         self.welcome_input.setStyleSheet(f'''
             QLineEdit {{
                 background: {current_theme().surface};
@@ -215,8 +237,8 @@ class MainProgramPanel(QWidget):
                 font-size: 14pt;
                 color: {current_theme().text};
                 min-height: 56px;
-                min-width: 1200px;
-                max-width: 1400px;
+                min-width: 1000px;
+                max-width: 1200px;
             }}
             QLineEdit::placeholder {{
                 color: {current_theme().muted};
@@ -249,23 +271,11 @@ class MainProgramPanel(QWidget):
         quick_action_layout.addWidget(self.btn_servo)
         quick_action_layout.addWidget(self.btn_current)
         
-        self.welcome_gif_label = QLabel()
-        self.welcome_gif_label.setAlignment(Qt.AlignCenter)
-        self.welcome_gif_label.setFrameShape(QFrame.NoFrame)
-        self.welcome_gif_label.setStyleSheet('border: none; outline: none; margin: 0; padding: 0;')
-        self.welcome_movie = None
-        welcome_gif_path = GENERATE_ROOT / '旋转.gif'
-        if welcome_gif_path.exists():
-            self.welcome_movie = QMovie(str(welcome_gif_path))
-            self.welcome_gif_label.setMovie(self.welcome_movie)
-            self.welcome_movie.start()
-        
-        self.welcome_layout.addStretch(2)
-        self.welcome_layout.addWidget(self.welcome_gif_label, 0, Qt.AlignCenter)
-        self.welcome_layout.addWidget(self.welcome_title, 0, Qt.AlignCenter)
+        self.welcome_layout.addStretch(7)
+        self.welcome_layout.addWidget(self.welcome_prompt_row, 0, Qt.AlignCenter)
         self.welcome_layout.addWidget(self.welcome_input, 0, Qt.AlignCenter)
         self.welcome_layout.addWidget(self.quick_action_buttons, 0, Qt.AlignCenter)
-        self.welcome_layout.addStretch(3)
+        self.welcome_layout.addStretch(4)
         self.welcome_overlay.setStyleSheet(f'background:{current_theme().surface};')
         
         self._load_chat_record()

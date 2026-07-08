@@ -388,6 +388,11 @@ def main(argv: list[str] | None = None) -> int:
     # -- pick LAN interface --
     from heartbeat import list_interfaces, pick_interface, start_heartbeat
 
+    # Always append the LAN IP so two machines never share the same identity.
+    ips = list_interfaces()
+    if ips:
+        config["worker_id"] = f"{config.get('worker_id', 'silworker')}_{ips[0]}"
+
     listen_ip = args.host
     if listen_ip in ("0.0.0.0", "127.0.0.1") and sys.stdin.isatty():
         listen_ip = pick_interface()
