@@ -594,16 +594,17 @@ class RequirementPanel(QWidget):
                 return float(phys_info.get('target_value', 0.0))
         return 0.0
 
-    # ── 正则模式：从自然语言 objective 中确定性提取目标转速 ──
+    # ── 正则模式：从自然语言中确定性提取目标转速 ──
+    # .*? 非贪婪匹配关键字与数字之间的任意字符（如"速度目标是10rad/s"中的"目标是"）
     _TARGET_SPEED_PATTERNS = [
-        # "转速 1000 rpm" / "目标转速 1000rpm" / "速度 3000 RPM"
-        (r'(?:转速|目标转速|速度|额定转速)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*rpm', 'rpm'),
-        # "1000 rpm 转速" / "3000RPM"
-        (r'(\d+(?:\.\d+)?)\s*[rR][pP][mM]\s*(?:转速|速度)?', 'rpm'),
-        # "转速 314.16 rad/s" / "目标转速 104.72 rad/s"
-        (r'(?:转速|目标转速|速度)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*rad/s', 'rad_s'),
-        # "104.72 rad/s 的目标转速"
-        (r'(\d+(?:\.\d+)?)\s*rad/s\s*(?:的)?(?:目标)?(?:转速|速度)', 'rad_s'),
+        # rpm 关键字在前：  "转速 1000rpm" / "目标转速改成 2000rpm" / "额定转速3000RPM"
+        (r'(?:转速|目标转速|速度|额定转速).*?(\d+(?:\.\d+)?)\s*[rR][pP][mM]', 'rpm'),
+        # rpm 数字在前：    "1000rpm 转速" / "3000 RPM"
+        (r'(\d+(?:\.\d+)?)\s*[rR][pP][mM]', 'rpm'),
+        # rad/s 关键字在前："目标转速 10rad/s" / "速度目标是10rad/s" / "转速改成 104.72 rad/s"
+        (r'(?:转速|目标转速|速度|额定转速).*?(\d+(?:\.\d+)?)\s*rad/s', 'rad_s'),
+        # rad/s 数字在前：  "10rad/s 的目标转速" / "104.72 rad/s"
+        (r'(\d+(?:\.\d+)?)\s*rad/s', 'rad_s'),
     ]
 
     @classmethod
@@ -774,20 +775,26 @@ class RequirementPanel(QWidget):
                 '- ripple_absolute：纹波绝对值\n'
                 '- ripple_percent：纹波百分比，value 为百分数\n'
                 '- target_rpm：目标转速(rpm)，value 为 rpm 数值\n'
-                '- target_rad_s：目标转速(rad/s)\n\n'
+                '- target_rad_s：目标转速(rad/s)，value 为 rad/s 数值\n\n'
                 '重要原则：\n'
                 '- constraints 中每个值必须能直接从用户原文中找到，不要猜测或推算\n'
                 '- 如果用户只说"响应快""低噪音"等定性描述没有具体数字，不要加 constraint\n'
-                '- 如果某个 combo 没有任何用户明确给出的数值约束，constraints 可为空数组 []\n\n'
+                '- 如果某个 combo 没有任何用户明确给出的数值约束，constraints 可为空数组 []\n'
+                '- 【关键】target_rpm / target_rad_s 是信号级约束，不是某个指标的专属参数。'
+                '请将其作为 constraint 附加到该信号的任意一个 combo 上'
+                '（例如 speed_overshoot），系统会自动同步到同信号的所有指标。'
+                '不要因为"不知道该放哪个 combo"而遗漏目标转速约束。\n\n'
                 '输出格式（严格遵守）：只输出 JSON 数组，每个元素格式：\n'
                 '{"combo": "物理量_测量参数", '
                 '"constraints": [{"type": "约束类型", "value": 数值}]}\n'
                 '示例：\n'
                 '[{"combo": "speed_overshoot", '
-                '"constraints": [{"type": "overshoot_percent", "value": 5}]},'
+                '"constraints": [{"type": "overshoot_percent", "value": 5}, '
+                '{"type": "target_rad_s", "value": 104.72}]},'
                 ' {"combo": "speed_settling_time", '
                 '"constraints": [{"type": "time_seconds", "value": 0.5}]},'
-                ' {"combo": "speed_steady_state_error", "constraints": []}]\n\n'
+                ' {"combo": "speed_steady_state_error", '
+                '"constraints": [{"type": "error_percent", "value": 2}]}]\n\n'
                 '用户需求：' + objective + '\n\n'
                 '请输出JSON数组：'
             )

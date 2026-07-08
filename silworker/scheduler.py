@@ -62,6 +62,7 @@ class WorkerPool:
     def __init__(self) -> None:
         self._lock = threading.Lock()
         self._workers: dict[str, dict[str, Any]] = {}  # worker_id → {url, last_seen, ...}
+        self._busy: set[str] = set()                    # worker_ids currently running a job
 
     def heartbeat(self, worker_id: str, worker_url: str) -> None:
         with self._lock:
@@ -80,16 +81,60 @@ class WorkerPool:
                 if now - info["last_seen"] > timeout_sec:
                     stale.append(wid)
                     del self._workers[wid]
+                    self._busy.discard(wid)
         return stale
 
     def idle_workers(self) -> list[dict[str, Any]]:
-        """Return all currently-known workers (for health reporting)."""
+        """Return currently-known workers (for health reporting)."""
         with self._lock:
             return list(self._workers.values())
 
     def snapshot(self) -> dict[str, dict[str, Any]]:
         with self._lock:
             return dict(self._workers)
+
+    # ── busy tracking ──────────────────────────────────────────────────
+
+    def mark_busy(self, worker_id: str) -> bool:
+        """Try to mark a worker as busy. Returns True if successful (was idle)."""
+        with self._lock:
+            if worker_id in self._busy:
+                return False
+            if worker_id not in self._workers:
+                return False
+            self._busy.add(worker_id)
+            return True
+
+    def mark_idle(self, worker_id: str) -> None:
+        """Release a worker back to idle pool."""
+        with self._lock:
+            self._busy.discard(worker_id)
+
+    def free_workers(self) -> list[dict[str, Any]]:
+        """Return idle (non-busy) workers only."""
+        with self._lock:
+            return [
+                w for wid, w in self._workers.items()
+                if wid not in self._busy
+            ]
+
+    def status_summary(self) -> dict[str, Any]:
+        """Return a snapshot summary for logging."""
+        with self._lock:
+            total = len(self._workers)
+            busy_count = len(self._busy)
+            idle_count = total - busy_count
+            workers_info = []
+            for wid, w in self._workers.items():
+                age = round(time.time() - w["last_seen"], 1)
+                state = "busy" if wid in self._busy else "idle"
+                workers_info.append(f"{wid}({state},{age}s)")
+            return {
+                "total": total,
+                "busy": busy_count,
+                "idle": idle_count,
+                "workers": workers_info,
+            }
 
 
 # ── task queue ────────────────────────────────────────────────────────
@@ -130,10 +175,26 @@ def _dispatcher_loop(
         if task is None:
             continue
 
+        job_id = task["job_id"]
+        candidate_id = task.get("candidate_id", "")
+        t_start = time.time()
+
+        print(
+            f"[scheduler] >>> PICKUP  job={job_id}  candidate={candidate_id}  "
+            f"queue_depth={task_queue.qsize()}"
+        )
+
         dispatched = False
         wait_start = time.time()
+        retry_count = 0
+
         while not dispatched:
-            if time.time() - wait_start > QUEUE_WAIT_TIMEOUT:
+            elapsed_wait = time.time() - wait_start
+            if elapsed_wait > QUEUE_WAIT_TIMEOUT:
+                print(
+                    f"[scheduler] <<< TIMEOUT job={job_id}  "
+                    f"no worker available after {QUEUE_WAIT_TIMEOUT}s"
+                )
                 task["result"] = {
                     "ok": False,
                     "error": f"No workers available after {QUEUE_WAIT_TIMEOUT}s. "
@@ -142,17 +203,46 @@ def _dispatcher_loop(
                 dispatched = True
                 break
 
-            workers = pool.idle_workers()
+            workers = pool.free_workers()
             if not workers:
+                if retry_count == 0:
+                    print(
+                        f"[scheduler] --- WAIT   job={job_id}  "
+                        f"no free workers, waiting..."
+                    )
+                retry_count += 1
                 time.sleep(2)
                 continue
 
+            if retry_count > 0:
+                print(
+                    f"[scheduler] --- RETRY  job={job_id}  "
+                    f"retry_count={retry_count}  free_workers={len(workers)}"
+                )
+                retry_count = 0
+
             for worker in workers:
                 worker_url = worker["url"]
+                worker_id = worker["worker_id"]
+
+                # health check
                 try:
                     _http_get(f"{worker_url}/health", timeout=3)
-                except Exception:
+                except Exception as exc:
+                    print(
+                        f"[scheduler] --- HCHK-FAIL  worker={worker_id}  "
+                        f"url={worker_url}  reason={exc}"
+                    )
                     continue
+
+                # try to claim the worker (mark busy)
+                if not pool.mark_busy(worker_id):
+                    continue
+
+                print(
+                    f"[scheduler] >>> DISPATCH  job={job_id}  "
+                    f"candidate={candidate_id}  ->  worker={worker_id}"
+                )
 
                 try:
                     result = _http_post(
@@ -160,14 +250,25 @@ def _dispatcher_loop(
                         task["payload"],
                         timeout=simulation_timeout_sec,
                     )
+                    elapsed = time.time() - t_start
+                    ok_str = "OK" if result.get("ok", False) else "FAIL"
+                    print(
+                        f"[scheduler] <<< DONE     job={job_id}  "
+                        f"worker={worker_id}  status={ok_str}  "
+                        f"elapsed={elapsed:.1f}s"
+                    )
                     task["result"] = result
                     dispatched = True
+                    pool.mark_idle(worker_id)
                     break
                 except Exception as exc:
+                    elapsed = time.time() - t_start
                     print(
-                        f"[scheduler] worker {worker_url} failed: {exc}. "
-                        f"Retrying with next worker for job {task['job_id']}."
+                        f"[scheduler] <<< ERROR    job={job_id}  "
+                        f"worker={worker_id}  {type(exc).__name__}: {exc}  "
+                        f"elapsed={elapsed:.1f}s  -> retrying next worker"
                     )
+                    pool.mark_idle(worker_id)
                     continue
 
             if not dispatched:
@@ -215,7 +316,23 @@ def _prune_loop(pool: WorkerPool, timeout_sec: int) -> None:
         time.sleep(15)
         stale = pool.prune(timeout_sec)
         for wid in stale:
-            print(f"[scheduler] worker timed out: {wid}")
+            print(f"[scheduler] --- PRUNE  worker timed out: {wid}")
+
+
+def _status_heartbeat(pool: WorkerPool, task_queue: SimulationTaskQueue, interval_sec: int = 60) -> None:
+    """Periodically print scheduler status: workers, queue, throughput."""
+    last_completed = 0
+    while True:
+        time.sleep(interval_sec)
+        s = pool.status_summary()
+        qs = task_queue.qsize()
+        workers_str = ", ".join(s["workers"]) if s["workers"] else "(none)"
+        print(
+            f"[scheduler] === STATUS ===  "
+            f"workers: {s['total']} total ({s['busy']} busy, {s['idle']} idle)  "
+            f"queue_depth: {qs}  "
+            f"workers: [{workers_str}]"
+        )
 
 
 # ── HTTP helpers ──────────────────────────────────────────────────────
@@ -260,16 +377,22 @@ def _make_handler(
             if self.path.rstrip("/") != "/health":
                 self._json(404, {"ok": False, "error": "not found"})
                 return
-            workers = pool.idle_workers()
+            s = pool.status_summary()
             self._json(
                 200,
                 {
                     "ok": True,
                     "scheduler": "MotorAI-Scheduler/1.0",
-                    "workers": len(workers),
+                    "workers_total": s["total"],
+                    "workers_busy": s["busy"],
+                    "workers_idle": s["idle"],
                     "worker_list": [
-                        {"worker_id": w["worker_id"], "url": w["url"], "age_sec": round(time.time() - w["last_seen"], 1)}
-                        for w in workers
+                        {
+                            "worker_id": w["worker_id"],
+                            "url": w["url"],
+                            "age_sec": round(time.time() - w["last_seen"], 1),
+                        }
+                        for w in pool.idle_workers()
                     ],
                     "queue_depth": task_queue.qsize(),
                 },
@@ -381,12 +504,17 @@ def main() -> int:
     threading.Thread(
         target=_dispatcher_loop, args=(pool, task_queue, sim_timeout), daemon=True
     ).start()
+    threading.Thread(
+        target=_status_heartbeat, args=(pool, task_queue, 60), daemon=True
+    ).start()
 
     # -- HTTP server --
     handler_cls = _make_handler(pool, task_queue, sim_timeout, max_body)
     server = ThreadingHTTPServer((http_host, http_port), handler_cls)
 
-    print(f"[scheduler] worker pool heartbeat timeout = {heartbeat_timeout}s")
+    print(f"[scheduler] === CONFIG ===  config={args.config}")
+    print(f"[scheduler] heartbeat_timeout={heartbeat_timeout}s  "
+          f"simulation_timeout={sim_timeout}s  max_request_bytes={max_body}")
     print(f"[scheduler] UDP heartbeat listener on :{udp_port}")
     print(f"[scheduler] HTTP API on http://{http_host}:{http_port}")
     print("[scheduler] endpoints: GET /health   POST /submit")
