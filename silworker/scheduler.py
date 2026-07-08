@@ -123,25 +123,37 @@ def _dispatcher_loop(
     simulation_timeout_sec: int,
 ) -> None:
     """Continuously dequeue tasks and forward them to idle workers."""
+    QUEUE_WAIT_TIMEOUT = 300  # max seconds to wait for a worker before giving up
+
     while True:
         task = task_queue.dequeue(timeout=1.0)
         if task is None:
             continue
 
-        # Wait for an idle worker.  We could use a more sophisticated
-        # selection here; for now try any worker that responds to /health.
         dispatched = False
+        wait_start = time.time()
         while not dispatched:
+            if time.time() - wait_start > QUEUE_WAIT_TIMEOUT:
+                task["result"] = {
+                    "ok": False,
+                    "error": f"No workers available after {QUEUE_WAIT_TIMEOUT}s. "
+                             f"Check that at least one worker is running and broadcasting heartbeats.",
+                }
+                dispatched = True
+                break
+
             workers = pool.idle_workers()
+            if not workers:
+                time.sleep(2)
+                continue
+
             for worker in workers:
                 worker_url = worker["url"]
-                # Quick health check
                 try:
                     _http_get(f"{worker_url}/health", timeout=3)
                 except Exception:
-                    continue  # worker is busy or unreachable
+                    continue
 
-                # Send the simulation request
                 try:
                     result = _http_post(
                         f"{worker_url}/run_simulation",
@@ -152,7 +164,6 @@ def _dispatcher_loop(
                     dispatched = True
                     break
                 except Exception as exc:
-                    # Worker failed mid-job; log and try next worker.
                     print(
                         f"[scheduler] worker {worker_url} failed: {exc}. "
                         f"Retrying with next worker for job {task['job_id']}."
@@ -160,7 +171,6 @@ def _dispatcher_loop(
                     continue
 
             if not dispatched:
-                # No worker available; wait and retry.
                 time.sleep(2)
 
         task["event"].set()
@@ -190,7 +200,10 @@ def _udp_listener(pool: WorkerPool, udp_port: int) -> None:
             if len(parts) >= 3 and parts[0].upper() == "HELLO":
                 worker_id = parts[1]
                 worker_url = parts[2]
+                known = worker_id in pool.snapshot()
                 pool.heartbeat(worker_id, worker_url)
+                tag = "refresh" if known else "DISCOVERED"
+                print(f"[scheduler] {tag} worker {worker_id} @ {worker_url}")
         except socket.timeout:
             pass
         except OSError:
