@@ -27,6 +27,7 @@ from motorai_config import get_output_root, load_settings
 from dialogs.project import NewProjectDialog, SettingsDialog
 from panels.controller_structure import ControllerStructurePanel
 from panels.cosim_config import CandidateNetworkPanel
+from panels.history import HistoryPanel, add_to_history
 from panels.tuning_result import TuningResultPanel
 from panels.workspace import Design3RightPanel
 from styles.theme import (
@@ -117,7 +118,7 @@ class MainWindow(QMainWindow):
         toolbar_layout.addStretch()
         toolbar.setFixedHeight(48)
 
-        # Central area: left (AI chat, 2/3) and right (controller + tuning, 1/3)
+        # Central area: history (1) | AI chat (3) | controller+tuning (1)
         central = QWidget()
         central_layout = QHBoxLayout(central)
         central_layout.setContentsMargins(0, 0, 0, 0)
@@ -146,7 +147,14 @@ class MainWindow(QMainWindow):
         right_splitter.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
         right_splitter.setMinimumWidth(0)
 
-        central_layout.addWidget(self.right_panel_widget, 2)
+        self.history_panel = HistoryPanel(
+            on_project_selected=self._on_history_project_selected,
+            on_project_opened=self._on_history_project_opened,
+        )
+        self.history_panel.setMinimumWidth(200)
+
+        central_layout.addWidget(self.history_panel, 1)
+        central_layout.addWidget(self.right_panel_widget, 3)
         central_layout.addWidget(right_splitter, 1)
 
         # Bottom information bar (horizontal)
@@ -172,6 +180,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(container)
         self._install_surface_effects()
+        self.history_panel.refresh()
 
     def _apply_visual_theme(self):
         theme = 'light'
@@ -218,6 +227,8 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, '已加载项目', f'当前项目：{self.current_project_json_path}')
             self._refresh_project_panels()
             self._load_panel_data()
+            add_to_history(self.current_project_json_path)
+            self.history_panel.refresh()
 
     def get_current_project_json_path(self):
         return self.current_project_json_path
@@ -237,8 +248,6 @@ class MainWindow(QMainWindow):
                 'stdout': stdout_file,
                 'stderr': stderr_file,
             }
-            if os.name == 'nt':
-                kwargs['creationflags'] = subprocess.CREATE_NEW_CONSOLE
             process = subprocess.Popen(command, **kwargs)
             stdout_file.close()
             stderr_file.close()
@@ -246,6 +255,23 @@ class MainWindow(QMainWindow):
             stdout_file.close()
             stderr_file.close()
             raise
+
+        # Give the subprocess a moment.  If it crashed immediately (e.g. import
+        # error), read stderr and show the user what went wrong.
+        try:
+            process.wait(timeout=1.5)
+            if process.returncode != 0:
+                error_text = stderr_path.read_text(encoding="utf-8", errors="replace").strip()
+                if not error_text:
+                    error_text = "(no stderr output)"
+                QMessageBox.critical(
+                    self,
+                    "子进程异常退出",
+                    f"进程返回码 {process.returncode} —— 很可能发生了导入错误或配置错误。\n\nstderr:\n{error_text[-4000:]}",
+                )
+        except subprocess.TimeoutExpired:
+            pass  # still running — normal
+
         return process, stdout_path, stderr_path
 
     def run_agent_optimization(self):
@@ -324,8 +350,28 @@ class MainWindow(QMainWindow):
             self.action_network_config.setEnabled(True)
             QMessageBox.information(self, '已加载项目', f'当前项目：{self.current_project_json_path}')
             self._refresh_project_panels()
-            
             self._load_panel_data()
+            add_to_history(self.current_project_json_path)
+            self.history_panel.refresh()
+        except Exception as exc:
+            QMessageBox.critical(self, '错误', f'加载项目 JSON 失败：{exc}')
+
+    def _on_history_project_selected(self, json_path: Path) -> None:
+        """Single-click on a history item: info is shown by the panel itself."""
+        pass
+
+    def _on_history_project_opened(self, json_path: Path) -> None:
+        """Double-click on a history item: load the project."""
+        try:
+            data = json.loads(json_path.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                raise ValueError("JSON 顶层必须是对象")
+            self.current_project_json_path = json_path
+            self.action_network_config.setEnabled(True)
+            self._refresh_project_panels()
+            self._load_panel_data()
+            add_to_history(json_path)
+            self.history_panel.refresh()
         except Exception as exc:
             QMessageBox.critical(self, '错误', f'加载项目 JSON 失败：{exc}')
 

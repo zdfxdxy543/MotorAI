@@ -22,6 +22,10 @@ DEFAULT_CONFIG = {
     "default_timeout_sec": 1800,
     "max_request_bytes": 5 * 1024 * 1024,
     "python_executable": sys.executable,
+    "heartbeat_enabled": True,
+    "heartbeat_scheduler_port": 8785,
+    "heartbeat_interval_sec": 30,
+    "heartbeat_worker_url": None,
 }
 
 
@@ -96,6 +100,10 @@ class SilWorkerState:
         return model_path
 
     def run_simulation(self, request: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+        job_id = request.get("job_id", "?")
+        candidate_id = request.get("candidate_id", "?")
+        print(f"[silworker] ===> 收到仿真请求: job={job_id} candidate={candidate_id}")
+
         if not HELPER_SCRIPT.exists():
             return 500, {
                 "ok": False,
@@ -258,6 +266,8 @@ class SilWorkerState:
             }
 
         processed_json = json.loads(processed_output.read_text(encoding="utf-8-sig"))
+        elapsed = round(time.time() - started_at, 1)
+        print(f"[silworker] <=== 仿真完成: job={job_id} candidate={candidate_id} elapsed={elapsed}s")
         return 200, {
             "ok": True,
             "worker_id": self.worker_id,
@@ -374,15 +384,46 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     config = _merge_config(args.config)
+
+    # -- pick LAN interface --
+    from heartbeat import list_interfaces, pick_interface, start_heartbeat
+
+    listen_ip = args.host
+    if listen_ip in ("0.0.0.0", "127.0.0.1") and sys.stdin.isatty():
+        listen_ip = pick_interface()
+        print(f"[silworker] using {listen_ip}")
+    elif listen_ip in ("0.0.0.0", "127.0.0.1"):
+        # Non-interactive — listen on all interfaces, use first LAN IP.
+        ips = list_interfaces()
+        if ips:
+            listen_ip = ips[0]
+        print(f"[silworker] auto-detected {listen_ip}")
+
     state = SilWorkerState(config)
     handler_cls = make_handler(state)
-    server = ThreadingHTTPServer((args.host, args.port), handler_cls)
+    server = ThreadingHTTPServer((listen_ip, args.port), handler_cls)
 
     print(f"[silworker] worker_id={state.worker_id}")
     print(f"[silworker] job_root={state.job_root}")
-    print(f"[silworker] listening on http://{args.host}:{args.port}")
+    print(f"[silworker] listening on http://{listen_ip}:{args.port}")
     print("[silworker] health endpoint: /health")
     print("[silworker] run endpoint: POST /run_simulation")
+
+    # -- auto-discovery heartbeat --
+    if config.get("heartbeat_enabled", True):
+        heartbeat_url = config.get("heartbeat_worker_url")
+        if not heartbeat_url:
+            heartbeat_url = f"http://{listen_ip}:{args.port}"
+        scheduler_port = int(config.get("heartbeat_scheduler_port", 8785))
+        interval = int(config.get("heartbeat_interval_sec", 30))
+
+        start_heartbeat(
+            worker_id=state.worker_id,
+            worker_url=str(heartbeat_url),
+            scheduler_port=scheduler_port,
+            interval_sec=interval,
+        )
+        print(f"[silworker] heartbeat → scheduler port {scheduler_port} every {interval}s")
 
     try:
         server.serve_forever()
