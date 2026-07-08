@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"from silworker.scheduler import main as s_main; print\\('scheduler OK'\\)\")",
+      "Bash(python -c \"from silworker.heartbeat import start_heartbeat; print\\('heartbeat OK'\\)\")",
+      "Bash(python -c \"import json; exec\\(open\\('silworker/remote_sil_worker.py'\\).read\\(\\).split\\('def main'\\)[0]\\); print\\('worker OK'\\)\")"
+    ]
+  }
+}

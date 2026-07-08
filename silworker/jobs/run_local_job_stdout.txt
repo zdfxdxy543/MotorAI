@@ -1,22 +1,30 @@
+����: The file containing block diagram '<a href="matlab:open_system ('MCS_STD_PMSM_MODEL')">MCS_STD_PMSM_MODEL</a>' is shadowed by a file of the same name higher on the MATLAB path. This can cause unexpected behavior. For more information see <a href="matlab:helpview([docroot '/toolbox/simulink/helptargets.map'], 'shadowing')">"Avoiding Problems with Shadowed Files"</a> in the Simulink documentation.
+
+The file containing the block diagram is: E:\Related_Github_Project\gmp_pro\ctl\suite\Test\candidates\candidate_01\project\simulate\MCS_STD_PMSM_MODEL.slx.
+The file higher on the MATLAB path is: E:\Related_Github_Project\gmp_pro\ctl\suite\Final1\candidates\candidate_01\project\simulate\MCS_STD_PMSM_MODEL.slx
 GMP_SIL_Core: unpack malloc:200, packed malloc:264
 GMP_SIL_Core: mdlStart is invoked
 GMP_SIL_Core: Host IP address:127.0.0.1.
-GMP_SIL_Core: Host port:transmit port: 12600, receive port: 12601, cmd transmit port: 12602, cmd receive port: 12603.
+GMP_SIL_Core: Host port:transmit port: 12500, receive port: 12501, cmd transmit port: 12502, cmd receive port: 12503.
 
-  {"command_recv_port":12602,"command_trans_port":12603,"receive_port":12600,"target_address":"127.0.0.1","transmit_port":12601}
+  {"command_recv_port":12502,"command_trans_port":12503,"receive_port":12500,"target_address":"127.0.0.1","transmit_port":12501}
 
 
 GMP_SIL_Core: Network Script is generated.
 GMP_SIL_Core: network.json is generated, this script is for controller program!
-GMP_SIL_Core: Connecting to target (TCP) in background thread: 127.0.0.1.
-GMP_SIL_Core: mdlTerminate is invoked
+GMP_SIL_Core: Connecting to target: 127.0.0.1.
+[ASIO-UDP] Link established. Remote: 127.0.0.1
+GMP_SIL_Core: mdlStop is invoked
 GMP_SIL_Core: Bye!
 ======================================================================
 status: done
-raw result file: D:\WorkDocuments\Github\MotorAI\silworker\jobs\raw.json
-processed result file: D:\WorkDocuments\Github\MotorAI\silworker\jobs\processed.json
+raw result file: E:\Related_Github_Project\MotorAI\silworker\jobs\raw.json
+processed result file: E:\Related_Github_Project\MotorAI\silworker\jobs\processed.json
 diagnostics.error_msg: None
-diagnostics.matlab_lastwarn_msg: 
+diagnostics.matlab_lastwarn_msg: The file containing block diagram '<a href="matlab:open_system ('MCS_STD_PMSM_MODEL')">MCS_STD_PMSM_MODEL</a>' is shadowed by a file of the same name higher on the MATLAB path. This can cause unexpected behavior. For more information see <a href="matlab:helpview([docroot '/toolbox/simulink/helptargets.map'], 'shadowing')">"Avoiding Problems with Shadowed Files"</a> in the Simulink documentation.
+
+The file containing the block diagram is: E:\Related_Github_Project\gmp_pro\ctl\suite\Test\candidates\candidate_01\project\simulate\MCS_STD_PMSM_MODEL.slx.
+The file higher on the MATLAB path is: E:\Related_Github_Project\gmp_pro\ctl\suite\Final1\candidates\candidate_01\project\simulate\MCS_STD_PMSM_MODEL.slx
 signals keys: ['electromagnetic_torque_nm', 'rotor_angle_rad', 'rotor_speed_rad_s', 'stator_id_a', 'stator_iq_a']
 raw scope keys: ['ScopeData1', 'ScopeData2', 'ScopeData3']
 scope_mapping_errors: []

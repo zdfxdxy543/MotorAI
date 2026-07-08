@@ -160,6 +160,7 @@ def list_candidate_network_configs(project_json: Path) -> list[dict[str, Any]]:
                 "candidate_dir": str(candidate_dir),
                 "mode": str(backend.get("mode") or "local").lower(),
                 "worker_url": str(backend.get("worker_url") or ""),
+                "scheduler_url": str(backend.get("scheduler_url") or ""),
                 "remote_model_path": _remote_model_default(candidate_dir, candidate_data),
                 "network": _normalize_network_config(
                     candidate_dir=candidate_dir,

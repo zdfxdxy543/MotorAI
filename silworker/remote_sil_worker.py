@@ -100,6 +100,10 @@ class SilWorkerState:
         return model_path
 
     def run_simulation(self, request: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+        job_id = request.get("job_id", "?")
+        candidate_id = request.get("candidate_id", "?")
+        print(f"[silworker] ===> 收到仿真请求: job={job_id} candidate={candidate_id}")
+
         if not HELPER_SCRIPT.exists():
             return 500, {
                 "ok": False,
@@ -262,6 +266,8 @@ class SilWorkerState:
             }
 
         processed_json = json.loads(processed_output.read_text(encoding="utf-8-sig"))
+        elapsed = round(time.time() - started_at, 1)
+        print(f"[silworker] <=== 仿真完成: job={job_id} candidate={candidate_id} elapsed={elapsed}s")
         return 200, {
             "ok": True,
             "worker_id": self.worker_id,
