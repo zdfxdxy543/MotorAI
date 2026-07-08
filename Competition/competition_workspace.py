@@ -36,6 +36,7 @@ from Optimize.config_project import (  # noqa: E402
     resolve_gmp_root,
     rewrite_bat_variables,
 )
+from Competition.controller_manifest import write_controller_manifest  # noqa: E402
 
 
 COMMON_PROJECT_FIELDS = [
@@ -48,6 +49,7 @@ COMMON_PROJECT_FIELDS = [
     "targets",
     "events",
     "metrics",
+    "evaluation_config",
     "stop_conditions",
 ]
 
@@ -650,6 +652,7 @@ def build_candidate_json(
     candidate["shared_context_files"] = list(shared_context_files or [])
     candidate["generate_outputs"] = {
         "loop_ids": str((paths.log_generate / "controller_loop_ids_generated.json").resolve()),
+        "controller_manifest": str((paths.log_generate / "controller_manifest.json").resolve()),
         "ctl_main_c": str((paths.src / "ctl_main.c").resolve()),
         "ctl_main_h": str((paths.src / "ctl_main.h").resolve()),
         "paras_header": str((paths.src / "paras.generated.h").resolve()),
@@ -1121,6 +1124,7 @@ def generate_outputs(candidate_dir: Path) -> dict[str, str]:
     candidate_dir = candidate_dir.resolve()
     return {
         "loop_ids": str((candidate_dir / "log" / "generate" / "controller_loop_ids_generated.json").resolve()),
+        "controller_manifest": str((candidate_dir / "log" / "generate" / "controller_manifest.json").resolve()),
         "ctl_main_c": str((candidate_dir / "src" / "ctl_main.c").resolve()),
         "ctl_main_h": str((candidate_dir / "src" / "ctl_main.h").resolve()),
         "paras_header": str((candidate_dir / "src" / "paras.generated.h").resolve()),
@@ -1173,6 +1177,9 @@ def run_generate_for_candidate(candidate_dir: Path, *, dry_run: bool) -> dict[st
     )
     stdout_path.write_text(result.stdout or "", encoding="utf-8")
     stderr_path.write_text(result.stderr or "", encoding="utf-8")
+    if result.returncode == 0:
+        manifest_path = write_controller_manifest(candidate_dir)
+        outputs["controller_manifest"] = str(manifest_path.resolve())
 
     return {
         "candidate_id": candidate_dir.name,

@@ -27,7 +27,7 @@ from styles.theme import (
 )
 
 
-CHAT_LINE_CHARS = 30
+CHAT_LINE_CHARS = 32
 
 
 def _font_text_width(metrics, text: str) -> int:
@@ -117,7 +117,7 @@ class ChatBubbleWidget(QFrame):
         t = current_theme()
         if self.role == 'user':
             self.header_widget.hide()
-            layout.setContentsMargins(16, 12, 16, 12)
+            layout.setContentsMargins(16, 8, 16, 8)
             self.setStyleSheet(
                 f'QFrame#chatBubble_user{{background:#F0F0F0;border:none;border-radius:{RADIUS_BUBBLE}px;}}'
                 'QFrame#chatBubble_user * { border: none; }'
@@ -395,7 +395,6 @@ class ChatStreamWidget(QWidget):
         row_layout.setSpacing(0)
 
         bubble = ChatBubbleWidget(role, text)
-        bubble.adjustSize()
 
         if role == 'user':
             row_layout.addStretch(1)
@@ -509,9 +508,13 @@ class ChatStreamWidget(QWidget):
         content_width = max(0, viewport_width - 24)
         system_width = int(content_width * 0.66)
 
-        for role, _row, bubble in self.message_rows:
+        for role, row, bubble in self.message_rows:
             if role in {'user', 'assistant'}:
                 bubble.setFixedWidth(bubble.preferred_width(content_width))
+                bubble.body.updateGeometry()
+                bubble.layout().activate()
+                bubble.adjustSize()
+                row.updateGeometry()
             elif role == '__widget__':
                 ratio = bubble.property('chatWidthRatio')
                 try:

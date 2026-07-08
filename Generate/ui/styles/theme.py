@@ -5,9 +5,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 FONT_FAMILY = "Microsoft YaHei, Segoe UI, sans-serif"
-RADIUS_CARD = 10
+RADIUS_CARD = 14
 RADIUS_CONTROL = 8
-RADIUS_BUBBLE = 10
+RADIUS_BUBBLE = 14
 RADIUS_SMALL = 6
 
 

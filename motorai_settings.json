@@ -10,7 +10,7 @@
     "gmp_root": "D:/WorkDocuments/Github/gmp_pro",
     "generate_root": "Generate",
     "optimize_root": "Optimize",
-    "output_root": "D:\\WorkDocuments\\Github\\MotorAIoutput"
+    "output_root": "D:\\WorkDocuments\\Github\\MotorAI\\Output"
   },
   "generate": {
     "max_kb_items": 120,

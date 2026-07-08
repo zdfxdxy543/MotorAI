@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 
 import core.paths  # ensures repository roots are on sys.path
+from core.evaluation_config_builder import build_evaluation_payload
 from styles.theme import (
     RADIUS_CARD,
     current_theme,
@@ -338,6 +339,28 @@ class RequirementPanel(QWidget):
             if not isinstance(data, dict):
                 data = {}
             data['objective'] = requirement_text
+            source_text = "\n".join(
+                part
+                for part in (
+                    str(data.get('objective_text') or '').strip(),
+                    requirement_text,
+                )
+                if part
+            )
+            evaluation_payload = build_evaluation_payload(
+                source_text or requirement_text,
+                task_type=str(data.get('task_type') or ''),
+                llm_caller=call_ui_chat_model,
+            )
+            if not str(data.get('task_type') or '').strip():
+                data['task_type'] = evaluation_payload['evaluation_config']['task_type']
+            for key in ('signals', 'targets', 'metrics', 'evaluation_config'):
+                data[key] = evaluation_payload[key]
+            if not data.get('stop_conditions'):
+                data['stop_conditions'] = {
+                    'overall_score_min': 85,
+                    'metric_error_count_max': 0,
+                }
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             write_common_requirement_snapshot(Path(project_json), data)
@@ -391,16 +414,9 @@ class RequirementPanel(QWidget):
         self.chat_view.hide_thinking()
         self._append_chat('assistant', reply)
         self._write_requirement_to_project_json(reply)
-        self._set_progress('正在生成任务类型...')
-        self._generate_task_type()
-        self._set_progress('正在生成信号、目标和事件...')
-        self._generate_signals_targets_events()
-        self._set_progress('正在生成评价指标...')
-        self._generate_metrics()
-        self._set_progress('正在生成目标参数...')
-        self._generate_targets_from_metrics()
         self._set_progress('正在生成停止条件...')
         self._generate_stop_conditions()
+        self.load_from_project_json()
         self._set_status_text('状态：需求指标已完善')
         if callable(self.completion_callback):
             self.completion_callback()

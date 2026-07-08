@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from core.paths import GENERATE_ROOT, MOTORAI_ROOT
+from core.evaluation_config_builder import build_evaluation_payload
 from styles.theme import (
     RADIUS_CARD,
     current_theme,
@@ -394,10 +395,12 @@ class MainProgramPanel(QWidget):
         self._auto_start_tuning_if_ready(force=False, announce=announce)
 
     def _on_load_curve_saved(self):
+        if self._has_metrics_ready():
+            self._append_success('负载曲线已保存。已根据初始需求生成评价指标；如果需要修改指标，可以继续输入补充说明。')
+            self._auto_start_tuning_if_ready(force=True)
+            return
         self._append_success('负载曲线已保存。请在下方输入详细的指标需求；如果还想重画负载曲线，也可以直接告诉我。')
         self._set_metric_input_mode()
-        if self._has_metrics_ready():
-            self._auto_start_tuning_if_ready(force=True)
 
     def _on_requirement_ready(self):
         self._auto_start_tuning_if_ready(force=False)
@@ -871,7 +874,10 @@ class MainProgramPanel(QWidget):
 
     def _has_metrics_ready(self):
         data = self._project_data()
-        return bool(data.get('objective') or data.get('metrics') or data.get('targets'))
+        evaluation_config = data.get('evaluation_config') if isinstance(data, dict) else None
+        if isinstance(evaluation_config, dict):
+            return bool(evaluation_config.get('signals') and evaluation_config.get('metrics'))
+        return bool(data.get('signals') and data.get('metrics'))
 
     def _assistant_busy(self):
         if self.chat_worker is not None and self.chat_worker.isRunning():
@@ -952,6 +958,20 @@ class MainProgramPanel(QWidget):
             if not isinstance(data, dict):
                 data = {}
             data['objective_text'] = requirement_text
+            evaluation_payload = build_evaluation_payload(
+                requirement_text,
+                task_type=str(data.get('task_type') or ''),
+                llm_caller=call_ui_chat_model,
+            )
+            if not str(data.get('task_type') or '').strip():
+                data['task_type'] = evaluation_payload['evaluation_config']['task_type']
+            for key in ('objective', 'signals', 'targets', 'metrics', 'evaluation_config'):
+                data[key] = evaluation_payload[key]
+            if not data.get('stop_conditions'):
+                data['stop_conditions'] = {
+                    'overall_score_min': 85,
+                    'metric_error_count_max': 0,
+                }
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
             write_common_requirement_snapshot(Path(project_json), data)
@@ -963,6 +983,9 @@ class MainProgramPanel(QWidget):
                     candidate_data = json.load(f)
                 if isinstance(candidate_data, dict):
                     candidate_data['objective_text'] = requirement_text
+                    for key in ('objective', 'signals', 'targets', 'metrics', 'evaluation_config', 'stop_conditions'):
+                        if key in data:
+                            candidate_data[key] = data[key]
                     with open(candidate_json, 'w', encoding='utf-8') as f:
                         json.dump(candidate_data, f, ensure_ascii=False, indent=2)
             self._append_debug('需求已保存到当前项目。')
