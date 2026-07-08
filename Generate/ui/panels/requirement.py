@@ -298,22 +298,60 @@ class RequirementPanel(QWidget):
     def _ctl_main_paths(self):
         project_json = self._project_json_path()
         if not project_json:
+            self._append_debug('_ctl_main_paths: project_json 为 None，跳过。')
             return []
 
+        paths = []
+        seen = set()
+
+        # 优先从 project JSON 的 candidate_generation 中读取路径
+        try:
+            with open(project_json, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            candidate_gen = data.get('candidate_generation')
+            if isinstance(candidate_gen, list):
+                for entry in candidate_gen:
+                    if isinstance(entry, dict):
+                        ctl_main = entry.get('ctl_main_c', '')
+                        if ctl_main:
+                            p = Path(ctl_main)
+                            if p not in seen and p.exists():
+                                seen.add(p)
+                                paths.append(p)
+        except Exception:
+            pass
+
+        if paths:
+            self._append_debug(
+                f'_ctl_main_paths: 从 candidate_generation 找到 {len(paths)} 个: '
+                f'{[str(p) for p in paths]}'
+            )
+            return paths
+
+        # 回退：文件系统搜索
         base_dir = project_json.parent
         candidates = [
             base_dir / 'ctl_main.c',
             base_dir / 'src' / 'ctl_main.c',
         ]
+        try:
+            for candidate_dir in sorted(base_dir.glob('candidate_*')):
+                if candidate_dir.is_dir():
+                    candidates.append(candidate_dir / 'src' / 'ctl_main.c')
+        except OSError:
+            pass
 
-        paths = []
-        seen = set()
         for candidate in candidates:
             if candidate in seen:
                 continue
             seen.add(candidate)
             if candidate.exists():
                 paths.append(candidate)
+
+        self._append_debug(
+            f'_ctl_main_paths: base_dir={base_dir}, 候选路径数={len(candidates)}, '
+            f'找到={len(paths)}: {[str(p) for p in paths]}'
+        )
         return paths
 
     def _format_float_literal(self, value):
@@ -900,8 +938,23 @@ class RequirementPanel(QWidget):
             data['targets'] = targets
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
-            
+
             self._update_param_table(targets)
+
+            # 同步目标转速到 ctl_main.c 的速度环设定值
+            if 'rotor_speed_rad_s' in targets:
+                speed_target = targets['rotor_speed_rad_s'].get('target_value', 0.0)
+                self._append_debug(
+                    f'_generate_targets_from_metrics: 检测到速度目标值={speed_target} rad/s，'
+                    f'准备同步到 ctl_main.c'
+                )
+                if speed_target > 0:
+                    self._update_ctl_main_target_velocity(speed_target)
+            else:
+                self._append_debug(
+                    '_generate_targets_from_metrics: rotor_speed_rad_s 不在 targets 中，'
+                    f'当前 targets 键: {list(targets.keys())}'
+                )
         except Exception as exc:
             self._append_error('目标参数生成失败。', str(exc))
 
