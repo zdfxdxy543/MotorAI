@@ -103,39 +103,25 @@ def _build_backend(
     candidate_dir: Path,
     candidate_data: dict[str, Any],
     worker_url: str = "",
-    scheduler_url: str = "",
     remote_model_path: str = "",
     network_config: dict[str, Any],
 ) -> dict[str, Any]:
     mode = (mode or "local").strip().lower()
+    if mode != "remote":
+        return {"mode": "local"}
 
-    if mode == "scheduled":
-        url = scheduler_url.strip() or "http://127.0.0.1:8786"
-        return {
-            "mode": "scheduled",
-            "scheduler_url": url,
-            "remote_model_path": remote_model_path.strip() or _remote_model_default(candidate_dir, candidate_data),
-            "target_address": network_config["target_address"],
-            "receive_port": int(network_config["receive_port"]),
-            "transmit_port": int(network_config["transmit_port"]),
-            "command_recv_port": int(network_config["command_recv_port"]),
-            "command_trans_port": int(network_config["command_trans_port"]),
-        }
-
-    if mode == "remote":
-        model_path = remote_model_path.strip() or _remote_model_default(candidate_dir, candidate_data)
-        return {
-            "mode": "remote",
-            "worker_url": worker_url.strip(),
-            "remote_model_path": model_path,
-            "target_address": network_config["target_address"],
-            "receive_port": int(network_config["receive_port"]),
-            "transmit_port": int(network_config["transmit_port"]),
-            "command_recv_port": int(network_config["command_recv_port"]),
-            "command_trans_port": int(network_config["command_trans_port"]),
-        }
-
-    return {"mode": "local"}
+    model_path = remote_model_path.strip() or _remote_model_default(candidate_dir, candidate_data)
+    backend = {
+        "mode": "remote",
+        "worker_url": worker_url.strip(),
+        "remote_model_path": model_path,
+        "target_address": network_config["target_address"],
+        "receive_port": int(network_config["receive_port"]),
+        "transmit_port": int(network_config["transmit_port"]),
+        "command_recv_port": int(network_config["command_recv_port"]),
+        "command_trans_port": int(network_config["command_trans_port"]),
+    }
+    return backend
 
 
 def list_candidate_network_configs(project_json: Path) -> list[dict[str, Any]]:
@@ -160,7 +146,6 @@ def list_candidate_network_configs(project_json: Path) -> list[dict[str, Any]]:
                 "candidate_dir": str(candidate_dir),
                 "mode": str(backend.get("mode") or "local").lower(),
                 "worker_url": str(backend.get("worker_url") or ""),
-                "scheduler_url": str(backend.get("scheduler_url") or ""),
                 "remote_model_path": _remote_model_default(candidate_dir, candidate_data),
                 "network": _normalize_network_config(
                     candidate_dir=candidate_dir,
@@ -182,7 +167,6 @@ def save_candidate_network_config(
     *,
     mode: str,
     worker_url: str = "",
-    scheduler_url: str = "",
     remote_model_path: str = "",
     target_address: str = "127.0.0.1",
     receive_port: int = 12500,
@@ -217,7 +201,6 @@ def save_candidate_network_config(
         candidate_dir=candidate_dir,
         candidate_data=candidate_data,
         worker_url=worker_url,
-        scheduler_url=scheduler_url,
         remote_model_path=remote_model_path,
         network_config=network_config,
     )

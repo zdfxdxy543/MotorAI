@@ -1,8 +1,0 @@
-{
-  "http_host": "0.0.0.0",
-  "http_port": 8786,
-  "udp_port": 8785,
-  "heartbeat_timeout_sec": 90,
-  "simulation_timeout_sec": 3600,
-  "max_request_bytes": 5242880
-}

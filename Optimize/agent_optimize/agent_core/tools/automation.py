@@ -32,102 +32,6 @@ class AutomationTools:
             return backend
         return {"mode": "local"}
 
-    def _run_scheduled_simulation(self, backend: dict, automation: dict) -> str:
-        """POST to the scheduler and block until a worker returns the result."""
-        import json
-        import urllib.error
-        import urllib.request
-
-        scheduler_url = str(backend.get("scheduler_url", "http://127.0.0.1:8786")).rstrip("/")
-        print(f"[scheduled] POST to scheduler at {scheduler_url}/submit")
-        candidate_id = str(
-            backend.get("candidate_id")
-            or automation.get("candidate_id", "")
-        )
-        timeout_sec = int(backend.get("timeout_sec") or automation.get("sim_timeout_sec", 1800))
-
-        # Read scope_map and build payload (same as remote_sil_client).
-        scope_map_path = self._path_from_automation("scope_map", "simulation/scope_channel_map.json")
-        scope_map = {}
-        if scope_map_path is not None and scope_map_path.exists():
-            try:
-                scope_map = json.loads(scope_map_path.read_text(encoding="utf-8-sig"))
-            except Exception:
-                pass
-
-        network_config = {
-            "target_address": str(backend.get("target_address", "127.0.0.1")),
-            "receive_port": int(backend.get("receive_port", 12500)),
-            "transmit_port": int(backend.get("transmit_port", 12501)),
-            "command_recv_port": int(backend.get("command_recv_port", 12502)),
-            "command_trans_port": int(backend.get("command_trans_port", 12503)),
-        }
-
-        # 远程模型路径：优先用 backend（网络配置面板中填的 Worker 机上的路径）
-        remote_model = str(
-            backend.get("remote_model_path")
-            or automation.get("remote_model_path")
-            or automation.get("sim_model_path", "")
-        )
-        payload = {
-            "candidate_id": candidate_id,
-            "remote_model_path": remote_model,
-            "scope_map": scope_map,
-            "network_config": network_config,
-            "timeout_sec": timeout_sec,
-            "no_open_ui": True,
-        }
-
-        result_json = self._path_from_automation("simulation_result", "../log/processed.json")
-        if result_json is not None:
-            try:
-                result_json.unlink()
-            except FileNotFoundError:
-                pass
-
-        url = f"{scheduler_url}/submit"
-        body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-        req = urllib.request.Request(
-            url,
-            data=body,
-            headers={"Content-Type": "application/json; charset=utf-8"},
-            method="POST",
-        )
-
-        sim_started_at = time.time()
-        try:
-            with urllib.request.urlopen(req, timeout=timeout_sec + 120) as resp:
-                response = json.loads(resp.read().decode("utf-8-sig"))
-        except urllib.error.HTTPError as exc:
-            err_body = exc.read().decode("utf-8-sig", errors="replace")
-            return f"Error: scheduler HTTP {exc.code}: {err_body}"
-        except urllib.error.URLError as exc:
-            return f"Error: failed to reach scheduler at {scheduler_url}: {exc}"
-        except Exception as exc:
-            return f"Error: scheduler request failed: {type(exc).__name__}: {exc}"
-
-        if not response.get("ok"):
-            return f"Error: scheduler returned failure: {response.get('error', 'unknown')}"
-
-        processed_json = response.get("processed_json")
-        if processed_json is None:
-            return "Error: scheduler response missing processed_json"
-
-        # Write processed.json locally so the evaluator can read it.
-        if result_json is not None:
-            result_json.parent.mkdir(parents=True, exist_ok=True)
-            result_json.write_text(
-                json.dumps(processed_json, ensure_ascii=False, indent=2, default=str),
-                encoding="utf-8",
-            )
-            elapsed = round(time.time() - sim_started_at, 1)
-            return (
-                f"OK: scheduled simulation completed in {elapsed}s.\n"
-                f"result={result_json}"
-            )
-
-        return "Error: no simulation_result path configured"
-
     def build_solution(self) -> str:
         """Run build_sln.bat synchronously. With the split-bat design, this bat must only build and exit."""
         automation = self._automation()
@@ -198,14 +102,6 @@ class AutomationTools:
         deadline = time.time() + timeout_sec
         while time.time() < deadline:
             if run_exe_log is not None and file_updated_after(run_exe_log, started_at, slack_sec=1.0):
-                # Log was updated — but did the EXE crash right after?
-                time.sleep(1.0)
-                returncode = proc.poll()
-                if returncode is not None:
-                    return (
-                        f"Error: EXE exited immediately after launch. returncode={returncode}\n\n"
-                        f"[run_exe.log]\n{read_text_if_exists(run_exe_log, DEFAULT_MAX_CHARS) if run_exe_log else '[not configured]'}"
-                    )
                 return (
                     f"{msg}\n"
                     "OK: exe launch was observed via run_exe.log update. The exe may now be waiting for Simulink.\n\n"
@@ -214,6 +110,13 @@ class AutomationTools:
 
             returncode = proc.poll()
             if returncode is not None:
+                if returncode == 0:
+                    return (
+                        f"{msg}\n"
+                        "OK: start_exe.bat exited quickly with code 0 before run_exe.log update. "
+                        "This may mean the exe finished very quickly.\n\n"
+                        f"[run_exe.log]\n{read_text_if_exists(run_exe_log, 4000) if run_exe_log else '[not configured]'}"
+                    )
                 return (
                     f"Error: start_exe.bat exited before exe launch. returncode={returncode}\n\n"
                     f"[run_exe.log]\n{read_text_if_exists(run_exe_log, DEFAULT_MAX_CHARS) if run_exe_log else '[not configured]'}"
@@ -231,9 +134,7 @@ class AutomationTools:
         automation = self._automation()
         backend = self._simulation_backend()
         mode = str(backend.get("mode", "local") or "local").strip().lower()
-        if mode == "scheduled":
-            return self._run_scheduled_simulation(backend, automation)
-        elif mode == "remote":
+        if mode == "remote":
             bat_path = self._path_from_automation("remote_sim_bat_path", "run_remote_simulation.bat")
         elif mode == "local":
             bat_path = self._path_from_automation("sim_bat_path")
