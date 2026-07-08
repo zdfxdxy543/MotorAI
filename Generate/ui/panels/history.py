@@ -122,6 +122,9 @@ class HistoryPanel(QWidget):
         self._on_project_opened = on_project_opened
 
         t = current_theme()
+        self.setObjectName('historyPanel')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(f'QWidget#historyPanel{{background:{t.panel};border:none;}}')
 
         # ── project list ──────────────────────────────────────────
         self.project_list = QListWidget()
@@ -129,13 +132,15 @@ class HistoryPanel(QWidget):
         self.project_list.itemClicked.connect(self._on_item_clicked)
         self.project_list.itemDoubleClicked.connect(self._on_item_double_clicked)
         self.project_list.setStyleSheet(
-            f"QListWidget{{background:{t.surface};border:none;}}"
-            f"QListWidget::item{{padding:6px 8px;border-bottom:1px solid {t.border};}}"
+            f"QListWidget{{background:{t.panel};border:none;outline:none;}}"
+            f"QListWidget::item{{padding:6px 8px;border:none;border-radius:6px;}}"
             f"QListWidget::item:selected{{background:{t.selection};color:{t.text_strong};}}"
             f"QListWidget::item:hover{{background:{t.panel_hover};}}"
         )
 
         list_header = QWidget()
+        list_header.setAttribute(Qt.WA_StyledBackground, True)
+        list_header.setStyleSheet(f'background:{t.panel};border:none;')
         list_header_layout = QHBoxLayout(list_header)
         list_header_layout.setContentsMargins(8, 4, 8, 4)
         title_label = QLabel("历史工程")  # 历史工程
@@ -148,10 +153,12 @@ class HistoryPanel(QWidget):
         self.info_view.setPlaceholderText("单击项目查看详情")  # 单击项目查看详情
         self.info_view.setFrameShape(QFrame.NoFrame)
         self.info_view.setStyleSheet(
-            f"QTextEdit{{background:{t.surface};border:none;color:{t.text};padding:8px;}}"
+            f"QTextEdit{{background:{t.panel};border:none;color:{t.text};padding:8px;}}"
         )
 
         info_header = QWidget()
+        info_header.setAttribute(Qt.WA_StyledBackground, True)
+        info_header.setStyleSheet(f'background:{t.panel};border:none;')
         info_header_layout = QHBoxLayout(info_header)
         info_header_layout.setContentsMargins(8, 4, 8, 4)
         info_label = QLabel("项目信息")  # 项目信息
@@ -163,6 +170,8 @@ class HistoryPanel(QWidget):
         splitter.setChildrenCollapsible(False)
 
         list_container = QWidget()
+        list_container.setAttribute(Qt.WA_StyledBackground, True)
+        list_container.setStyleSheet(f'background:{t.panel};border:none;')
         list_layout = QVBoxLayout(list_container)
         list_layout.setContentsMargins(0, 0, 0, 0)
         list_layout.setSpacing(0)
@@ -170,6 +179,8 @@ class HistoryPanel(QWidget):
         list_layout.addWidget(self.project_list)
 
         info_container = QWidget()
+        info_container.setAttribute(Qt.WA_StyledBackground, True)
+        info_container.setStyleSheet(f'background:{t.panel};border:none;')
         info_layout = QVBoxLayout(info_container)
         info_layout.setContentsMargins(0, 0, 0, 0)
         info_layout.setSpacing(0)

@@ -71,7 +71,7 @@ class ChatBubbleWidget(QFrame):
     def __init__(self, role: str, text: str, parent=None):
         super().__init__(parent)
         self.role = self._normalize_role(role)
-        self.raw_text = text or ''
+        self.raw_text = self._display_text(self.role, text or '')
         self.setFrameShape(QFrame.NoFrame)
         self.setAttribute(Qt.WA_StyledBackground, True)
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
@@ -105,6 +105,7 @@ class ChatBubbleWidget(QFrame):
 
         self.body = QLabel(self.raw_text)
         self.body.setObjectName('chatBubbleBody')
+        self.body.setTextFormat(Qt.PlainText)
         self.body.setWordWrap(True)
         self.body.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.body.setStyleSheet('background: transparent;')
@@ -118,20 +119,17 @@ class ChatBubbleWidget(QFrame):
             self.header_widget.hide()
             layout.setContentsMargins(16, 12, 16, 12)
             self.setStyleSheet(
-                f'QFrame#chatBubble_user{{background:{t.primary};border:none;border-radius:{RADIUS_BUBBLE}px;}}'
+                f'QFrame#chatBubble_user{{background:#F0F0F0;border:none;border-radius:{RADIUS_BUBBLE}px;}}'
                 'QFrame#chatBubble_user * { border: none; }'
             )
-            self.body.setStyleSheet(f'color:white;background:transparent;border:none;')
+            self.body.setStyleSheet(f'color:{t.text};background:transparent;border:none;')
         elif self.role == 'assistant':
-            self.title.setText('MotorAI')
-            self.avatar.hide()
-            layout.setContentsMargins(16, 12, 16, 12)
+            self.header_widget.hide()
+            layout.setContentsMargins(0, 4, 0, 4)
             self.setStyleSheet(
-                f'QFrame#chatBubble_assistant{{background:{t.surface};border:1px solid {t.border};'
-                f'border-radius:{RADIUS_BUBBLE}px;}}'
+                'QFrame#chatBubble_assistant{background:transparent;border:none;border-radius:0px;}'
                 'QFrame#chatBubble_assistant * { outline: none; }'
             )
-            self.title.setStyleSheet(f'color:{t.muted};font-size:10pt;font-weight:600;border:none;background:transparent;')
             self.body.setStyleSheet(f'color:{t.text};background:transparent;border:none;')
         elif self.role == 'debug':
             self._apply_debug_style(layout)
@@ -148,6 +146,55 @@ class ChatBubbleWidget(QFrame):
         if role in {'user', 'assistant'}:
             return role
         return 'assistant'
+
+    @staticmethod
+    def _display_text(role: str, text: str) -> str:
+        if role != 'assistant':
+            return text or ''
+        return ChatBubbleWidget._format_assistant_text(text or '')
+
+    @staticmethod
+    def _format_assistant_text(text: str) -> str:
+        text = (text or '').strip()
+        if not text:
+            return ''
+
+        section_markers = (
+            '完善后的需求文本：',
+            '默认假设：',
+            '控制目标：',
+            '需配置',
+            '机械环控制方法',
+            'PWM调制策略',
+            '关键信号链路：',
+            '性能指标：',
+            '候选方案设置：',
+        )
+        if not any(marker in text for marker in section_markers):
+            return text
+        if '\n\n' in text:
+            return text
+
+        formatted = text
+        if formatted.startswith('完善后的需求文本：'):
+            formatted = formatted.replace('完善后的需求文本：', '完善后的需求文本：\n', 1)
+
+        for marker in section_markers[1:]:
+            formatted = formatted.replace(marker, f'\n\n{marker}')
+
+        formatted = formatted.replace('。需反馈', '。\n\n需反馈')
+        lines = []
+        last_blank = False
+        for raw_line in formatted.splitlines():
+            line = raw_line.strip()
+            if not line:
+                if lines and not last_blank:
+                    lines.append('')
+                last_blank = True
+                continue
+            lines.append(line)
+            last_blank = False
+        return '\n'.join(lines).strip()
 
     def _apply_debug_style(self, layout: QVBoxLayout):
         t = current_theme()
@@ -194,7 +241,7 @@ class ChatBubbleWidget(QFrame):
         available = max(1, content_width - 36)
 
         if self.role == 'assistant':
-            # Fill full chat width — right border extends to the edge.
+            # Fill the readable chat width for borderless assistant replies.
             target = available
             self.body.setMaximumWidth(max(1, target - horizontal_padding))
             return target
@@ -287,7 +334,8 @@ class ChatStreamWidget(QWidget):
         self._thinking_widget = None
         self.setObjectName('chatStreamWidget')
         self.setAttribute(Qt.WA_StyledBackground, True)
-        self.setStyleSheet('QWidget#chatStreamWidget{background:transparent;border:none;}')
+        t = current_theme()
+        self.setStyleSheet(f'QWidget#chatStreamWidget{{background:{t.surface};border:none;}}')
 
         outer_layout = QVBoxLayout(self)
         outer_layout.setContentsMargins(0, 0, 0, 0)
@@ -298,16 +346,16 @@ class ChatStreamWidget(QWidget):
         self.scroll.setFrameShape(QFrame.NoFrame)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scroll.setStyleSheet('QScrollArea{background:transparent;border:none;}')
+        self.scroll.setStyleSheet(f'QScrollArea{{background:{t.surface};border:none;}}')
+        self.scroll.viewport().setStyleSheet(f'background:{t.surface};border:none;')
 
         self.container = QWidget()
         self.container.setObjectName('chatStreamContainer')
         self.container.setAttribute(Qt.WA_StyledBackground, True)
-        self.container.setStyleSheet('QWidget#chatStreamContainer{background:transparent;border:none;}')
+        self.container.setStyleSheet(f'QWidget#chatStreamContainer{{background:{t.surface};border:none;}}')
         self.container_layout = QVBoxLayout(self.container)
         self.container_layout.setContentsMargins(12, 12, 12, 12)
         self.container_layout.setSpacing(14)
-        self.container_layout.addStretch(1)
 
         self.scroll.setWidget(self.container)
         outer_layout.addWidget(self.scroll)
@@ -328,7 +376,6 @@ class ChatStreamWidget(QWidget):
             widget = item.widget()
             if widget:
                 widget.deleteLater()
-        self.container_layout.addStretch(1)
 
     def append_message(self, role: str, text: str):
         role = ChatBubbleWidget._normalize_role(role)
@@ -339,8 +386,6 @@ class ChatStreamWidget(QWidget):
             return
 
         self.messages.append((role, text))
-
-        self._remove_trailing_stretch()
 
         row = QWidget()
         row.setAttribute(Qt.WA_StyledBackground, True)
@@ -369,7 +414,6 @@ class ChatStreamWidget(QWidget):
         row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.container_layout.addWidget(row)
-        self.container_layout.addStretch(1)
         self.message_rows.append((role, row, bubble))
         self._update_bubble_widths()
         self._scroll_to_bottom()
@@ -384,8 +428,6 @@ class ChatStreamWidget(QWidget):
         return True
 
     def append_widget(self, widget: QWidget, width_ratio: float = 0.92):
-        self._remove_trailing_stretch()
-
         row = QWidget()
         row.setAttribute(Qt.WA_StyledBackground, True)
         row.setStyleSheet('background:transparent;border:none;')
@@ -399,7 +441,6 @@ class ChatStreamWidget(QWidget):
         widget.show()
         row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.container_layout.addWidget(row)
-        self.container_layout.addStretch(1)
         self.message_rows.append(('__widget__', row, widget))
         widget.setProperty('chatWidthRatio', width_ratio)
         self._update_bubble_widths()
@@ -408,8 +449,6 @@ class ChatStreamWidget(QWidget):
     def show_thinking(self, text: str = '正在思考中'):
         if self._thinking_row is not None:
             return
-
-        self._remove_trailing_stretch()
 
         row = QWidget()
         row.setAttribute(Qt.WA_StyledBackground, True)
@@ -425,7 +464,6 @@ class ChatStreamWidget(QWidget):
 
         row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
         self.container_layout.addWidget(row)
-        self.container_layout.addStretch(1)
         self.message_rows.append(('__thinking__', row, indicator))
         self._thinking_row = row
         self._thinking_widget = indicator
@@ -451,18 +489,7 @@ class ChatStreamWidget(QWidget):
         self._thinking_row.deleteLater()
         self._thinking_row = None
         self._thinking_widget = None
-        self._ensure_trailing_stretch()
         self._scroll_to_bottom()
-
-    def _remove_trailing_stretch(self):
-        last_item = self.container_layout.itemAt(self.container_layout.count() - 1)
-        if last_item and last_item.spacerItem():
-            self.container_layout.takeAt(self.container_layout.count() - 1)
-
-    def _ensure_trailing_stretch(self):
-        last_item = self.container_layout.itemAt(self.container_layout.count() - 1)
-        if not (last_item and last_item.spacerItem()):
-            self.container_layout.addStretch(1)
 
     def resizeEvent(self, event):
         super().resizeEvent(event)

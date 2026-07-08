@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QLabel, QPushButton, QTextEdit, QWidget, QHBoxLayout, QVBoxLayout
 from PyQt5.QtCore import QFileSystemWatcher
+from PyQt5.QtCore import Qt
 import json
 from pathlib import Path
 
@@ -24,12 +25,18 @@ class TuningResultPanel(QWidget):
         self._watcher.fileChanged.connect(self._on_watch_triggered)
         self._watcher.directoryChanged.connect(self._on_watch_triggered)
         self._watched_paths = set()
+        t = current_theme()
+        self.setObjectName('tuningResultPanel')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(f'QWidget#tuningResultPanel{{background:{t.panel};border:none;}}')
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
         title_row = QWidget()
+        title_row.setAttribute(Qt.WA_StyledBackground, True)
+        title_row.setStyleSheet(f'background:{t.panel};border:none;')
         title_layout = QHBoxLayout(title_row)
         title_layout.setContentsMargins(0, 0, 0, 0)
         title_layout.addWidget(QLabel('调优结果'))
@@ -42,10 +49,12 @@ class TuningResultPanel(QWidget):
         self.result_view.setReadOnly(True)
         self.result_view.setPlaceholderText('等待生成 tuning_result.json ...')
         self.result_view.setMinimumHeight(180)
-        self.result_view.setStyleSheet('QTextEdit{background:#ffffff;border:1px solid #d9e2ec;border-radius:0;padding:8px;border-top:none;}')
+        self.result_view.setStyleSheet(
+            f'QTextEdit{{background:{t.panel};border:none;border-radius:0;padding:8px;color:{t.text};}}'
+        )
 
         self.source_label = QLabel('来源：未加载项目')
-        self.source_label.setStyleSheet('color: #666666;')
+        self.source_label.setStyleSheet(f'color:{t.subtle};background:{t.panel};border:none;')
         self.source_label.setWordWrap(True)
 
         layout.addWidget(title_row)

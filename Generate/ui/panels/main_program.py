@@ -12,7 +12,6 @@ from styles.theme import (
     ghost_button_qss,
     primary_button_qss,
     secondary_button_qss,
-    status_label_qss,
     surface_card_qss,
 )
 from widgets.chat import ChatInputEdit, ChatStreamWidget, ChatWorker, call_ui_chat_model
@@ -144,7 +143,6 @@ class MainProgramPanel(QWidget):
         self.main_layout.setContentsMargins(0, 0, 0, 0)
         self.main_layout.setSpacing(8)
 
-        self.title_label = QLabel('主程序生成')
         self.chat_view = ChatStreamWidget()
         
         self.input_row = QWidget()
@@ -185,9 +183,7 @@ class MainProgramPanel(QWidget):
         self.run_btn.clicked.connect(self.generate_program)
         action_layout.addWidget(self.run_btn)
 
-        self.status_label = QLabel('状态：等待输入需求')
-        self.status_label.setObjectName('taskStatusLabel')
-        self.status_label.setStyleSheet(status_label_qss())
+        self._status_text = '状态：等待输入需求'
 
         self.welcome_overlay = QWidget()
         self.welcome_layout = QVBoxLayout(self.welcome_overlay)
@@ -305,21 +301,15 @@ class MainProgramPanel(QWidget):
                 widget.hide()
 
         self._main_content_widgets = [
-            self.title_label,
             self.chat_view,
             self.input_row,
-            self.status_label,
         ]
-        self.main_layout.addWidget(self.title_label)
         self.main_layout.addWidget(self.chat_view, 1)
         self.main_layout.addWidget(self.input_row)
-        self.main_layout.addWidget(self.status_label)
         
         self.chat_view.show()
         self.input_row.show()
         self.action_row.hide()
-        self.status_label.show()
-        self.title_label.show()
 
     def _welcome_is_active(self):
         for index in range(self.main_layout.count()):
@@ -413,21 +403,21 @@ class MainProgramPanel(QWidget):
         self._auto_start_tuning_if_ready(force=False)
 
     def _set_status_text(self, text: str):
-        self.status_label.setText(text)
+        self._status_text = text
 
     def _set_program_input_mode(self):
         self.input_mode = 'agent'
         self.input_edit.setPlaceholderText('可以继续补充需求；确认方案后回复“生成程序”。')
         self.send_btn.setText('发送')
         self.run_btn.setEnabled(False)
-        self.status_label.setText('状态：等待输入')
+        self._set_status_text('状态：等待输入')
 
     def _set_metric_input_mode(self):
         self.input_mode = 'agent'
         self.input_edit.setPlaceholderText('请输入指标需求；也可以要求重画负载曲线、补充程序需求或继续提问。')
         self.send_btn.setText('发送')
         self.run_btn.setEnabled(False)
-        self.status_label.setText('状态：等待输入需求指标')
+        self._set_status_text('状态：等待输入需求指标')
 
     def _on_metric_requirement_finished(self):
         self.chat_view.hide_thinking()
@@ -467,6 +457,7 @@ class MainProgramPanel(QWidget):
             '如果用户没有指定候选方案设置，则说明沿用默认四策略：稳健低超调、快速响应、抗扰恢复、平滑低纹波。'
             '只有当用户完全没有提供可识别的应用场景、控制对象或控制目标时，才输出一条以“NEED_MORE_INFO:”开头的追问。'
             '输出要求：信息充分时仅输出“完善后的需求文本”；信息不足时仅输出 NEED_MORE_INFO 追问；'
+            '完善后的需求文本需要按语义分段输出，每段聚焦一个主题，例如控制对象、默认假设、控制目标、环路结构、控制方法、PWM策略、信号链路、性能指标、候选方案设置；'
             '不要输出代码块，不要输出额外解释。'
         )
 
@@ -481,7 +472,7 @@ class MainProgramPanel(QWidget):
             self.show_main_content()
         self._set_progress('正在整理控制程序需求...')
         self.chat_view.show_thinking()
-        self.status_label.setText('状态：对话处理中...')
+        self._set_status_text('状态：对话处理中...')
         self.send_btn.setEnabled(False)
         self._chat_task = 'program_refine'
 
@@ -552,7 +543,7 @@ class MainProgramPanel(QWidget):
         self._append_chat('debug', text)
 
     def _set_progress(self, text: str):
-        self.status_label.setText(f'状态：{text}')
+        self._set_status_text(f'状态：{text}')
 
     def _flow_state(self):
         return {
@@ -634,7 +625,7 @@ class MainProgramPanel(QWidget):
             self._append_chat('user', text)
             self.input_edit.clear()
             self.show_load_curve_card(announce=True, force=True)
-            self.status_label.setText('状态：等待负载曲线')
+            self._set_status_text('状态：等待负载曲线')
             return
 
         if action == ACTION_SUBMIT_METRICS:
@@ -652,7 +643,7 @@ class MainProgramPanel(QWidget):
             explicit_restart = any(term in normalized for term in ('调优', '优化', '迭代参数', '重新', '再跑', '再运行'))
             if self._auto_tuning_started and not explicit_restart:
                 self._append_chat('assistant', 'Optimize Agent 已经启动。你可以继续询问结果、修改负载曲线或补充指标；如果需要重新运行，请明确输入“重新调优”。')
-                self.status_label.setText('状态：调优已启动')
+                self._set_status_text('状态：调优已启动')
                 return
             self._auto_start_tuning_if_ready(force=True, confirmed=True)
             return
@@ -662,7 +653,7 @@ class MainProgramPanel(QWidget):
             self.input_edit.clear()
             if reply:
                 self._append_chat('assistant', reply)
-                self.status_label.setText('状态：已回答')
+                self._set_status_text('状态：已回答')
             else:
                 self._start_answer_response(text)
             return
@@ -670,7 +661,7 @@ class MainProgramPanel(QWidget):
         self._append_chat('user', text)
         self.input_edit.clear()
         self._append_chat('assistant', reply or '我需要再确认一下你的意图。你是想修改程序需求、重画负载曲线，还是输入指标需求？')
-        self.status_label.setText('状态：等待澄清')
+        self._set_status_text('状态：等待澄清')
 
     def _needs_intent_confirmation(self, action: str) -> bool:
         if action in {ACTION_CONFIRM_GENERATE, ACTION_SUBMIT_METRICS, ACTION_START_TUNING}:
@@ -695,7 +686,7 @@ class MainProgramPanel(QWidget):
             on_cancel=lambda: self._cancel_intent_confirmation(),
         )
         self.chat_view.append_widget(card, width_ratio=0.78)
-        self.status_label.setText('状态：等待确认意图')
+        self._set_status_text('状态：等待确认意图')
 
     def _intent_title(self, action: str) -> str:
         titles = {
@@ -739,7 +730,7 @@ class MainProgramPanel(QWidget):
 
     def _cancel_intent_confirmation(self):
         self._append_notice('已取消本次操作。你可以重新输入，或换一种说法继续。')
-        self.status_label.setText('状态：已取消')
+        self._set_status_text('状态：已取消')
 
     def _execute_confirmed_route(self, text: str, action: str):
         if action == ACTION_CONFIRM_GENERATE:
@@ -769,7 +760,7 @@ class MainProgramPanel(QWidget):
         explicit_restart = any(term in normalized for term in ('调优', '优化', '迭代参数', '重新', '再跑', '再运行'))
         if self._auto_tuning_started and not explicit_restart:
             self._append_chat('assistant', 'Optimize Agent 已经启动。你可以继续询问结果、修改负载曲线或补充指标；如果需要重新运行，请明确输入“重新调优”。')
-            self.status_label.setText('状态：调优已启动')
+            self._set_status_text('状态：调优已启动')
             return
         self._auto_start_tuning_if_ready(force=True, confirmed=True)
 
@@ -780,6 +771,7 @@ class MainProgramPanel(QWidget):
             '你是 MotorAI 电机控制程序生成工作台中的对话助手。'
             '请回答用户关于当前项目、程序需求、负载曲线、指标或调优流程的问题。'
             '回答要简洁、具体，不要擅自推进生成程序、负载曲线、指标处理或调优。'
+            '如果回答超过两句话，请按段落或短列表组织，避免输出一整段难以阅读的长文本。'
             f'当前工作流状态：\n{state_text}'
         )
 
@@ -939,7 +931,7 @@ class MainProgramPanel(QWidget):
             on_cancel=self._cancel_auto_tuning_start,
         )
         self.chat_view.append_widget(card, width_ratio=0.78)
-        self.status_label.setText('状态：等待确认是否启动调优')
+        self._set_status_text('状态：等待确认是否启动调优')
 
     def _confirm_auto_tuning_start(self):
         self._auto_tuning_confirm_pending = False
@@ -948,7 +940,7 @@ class MainProgramPanel(QWidget):
     def _cancel_auto_tuning_start(self):
         self._auto_tuning_confirm_pending = False
         self._append_notice('已暂缓启动调优。准备好后可以输入“启动调优”。')
-        self.status_label.setText('状态：调优已暂缓')
+        self._set_status_text('状态：调优已暂缓')
 
     def _update_project_json_requirement(self, requirement_text: str):
         project_json = self._project_json_path()
@@ -1137,13 +1129,13 @@ class MainProgramPanel(QWidget):
         self.chat_view.hide_thinking()
         if self._chat_task == 'answer':
             self._append_chat('assistant', reply)
-            self.status_label.setText('状态：已回答')
+            self._set_status_text('状态：已回答')
             return
 
         if self._chat_task == 'program_refine' and self._is_requirement_clarification(reply):
             self.current_requirement = self._program_requirement_before_refine
             self._append_chat('assistant', self._clean_requirement_clarification(reply))
-            self.status_label.setText('状态：等待补充原始需求')
+            self._set_status_text('状态：等待补充原始需求')
             return
 
         self._append_chat('assistant', reply)
@@ -1152,7 +1144,7 @@ class MainProgramPanel(QWidget):
         self._update_project_json_requirement(reply)
         self._append_chat('assistant', self._candidate_plan_text())
         self._set_program_input_mode()
-        self.status_label.setText('状态：等待确认生成程序')
+        self._set_status_text('状态：等待确认生成程序')
 
     @staticmethod
     def _is_requirement_clarification(reply: str) -> bool:
@@ -1180,7 +1172,7 @@ class MainProgramPanel(QWidget):
     def on_chat_failure(self, error_text: str):
         self.chat_view.hide_thinking()
         self._append_error('对话失败，请检查设置与网络。', error_text)
-        self.status_label.setText('状态：对话失败，请检查设置与网络')
+        self._set_status_text('状态：对话失败，请检查设置与网络')
 
     def on_chat_finished(self):
         self.chat_view.hide_thinking()
@@ -1190,7 +1182,7 @@ class MainProgramPanel(QWidget):
     def generate_program(self):
         if not self.current_requirement:
             self._append_notice('请先输入并发送需求，再执行生成。')
-            self.status_label.setText('状态：缺少需求')
+            self._set_status_text('状态：缺少需求')
             return
 
         template_dir = GENERATE_ROOT / 'Example'
@@ -1200,13 +1192,13 @@ class MainProgramPanel(QWidget):
 
         if not project_json or not candidate_dirs:
             self._append_error('未找到 candidate 工作区。请重新新建竞争模式工程。')
-            self.status_label.setText('状态：缺少 candidate')
+            self._set_status_text('状态：缺少 candidate')
             return
         for template_name in ('ctl_main.c', 'ctl_main.h', 'paras.h'):
             template_path = template_dir / template_name
             if not template_path.exists():
                 self._append_error('生成模板不存在。', str(template_path))
-                self.status_label.setText('状态：生成模板缺失')
+                self._set_status_text('状态：生成模板缺失')
                 return
 
         self._set_progress(f'正在为 {len(candidate_dirs)} 个 candidate 生成控制器程序...')
@@ -1295,13 +1287,13 @@ class MainProgramPanel(QWidget):
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(project_data, f, ensure_ascii=False, indent=2)
 
-            self.status_label.setText('状态：生成完成')
+            self._set_status_text('状态：生成完成')
             self._append_debug('所有 candidate 控制器程序已生成。根目录 src 未被修改。')
             if callable(self.structure_refresh_callback):
                 self.structure_refresh_callback()
             self.show_load_curve_card()
         except Exception as exc:
-            self.status_label.setText('状态：调用失败')
+            self._set_status_text('状态：调用失败')
             self._append_error('生成过程中发生异常。', str(exc))
 
     def _project_folder(self):
@@ -1412,4 +1404,5 @@ class MainProgramPanel(QWidget):
             self._set_metric_input_mode()
 
         if isinstance(data, dict) and (data.get('objective') or data.get('metrics') or data.get('targets')):
-            self.status_label.setText('状态：信息已准备，可继续提问或输入“重新调优”启动优化')
+            self._set_status_text('状态：信息已准备，可继续提问或输入“重新调优”启动优化')
+

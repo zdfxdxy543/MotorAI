@@ -11,9 +11,12 @@ class ControllerStructureCanvas(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setMinimumHeight(640)
-        self.setFrameShape(QFrame.StyledPanel)
+        self.setFrameShape(QFrame.NoFrame)
         self.setObjectName('CurveCanvas')
         self.setObjectName('ControllerStructureCanvas')
+        t = current_theme()
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(f'QFrame#ControllerStructureCanvas{{background:{t.panel};border:none;}}')
         self._model = {
             'items': [],
             'mech_props': [],
@@ -49,7 +52,7 @@ class ControllerStructureCanvas(QFrame):
         t = current_theme()
 
         rect = self.rect().adjusted(20, 20, -20, -20)
-        painter.fillRect(rect, QColor(t.canvas_bg))
+        painter.fillRect(rect, QColor(t.panel))
 
         painter.setPen(QColor(t.canvas_title))
         painter.drawText(QRectF(rect.left(), rect.top(), rect.width(), 36), Qt.AlignCenter, '控制器结构框图')
@@ -185,9 +188,13 @@ class ControllerStructurePanel(QWidget):
     def __init__(self, project_json_getter=None, parent=None):
         super().__init__(parent)
         self.project_json_getter = project_json_getter
+        t = current_theme()
+        self.setObjectName('controllerStructurePanel')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(f'QWidget#controllerStructurePanel{{background:{t.panel};border:none;}}')
         self.canvas = ControllerStructureCanvas()
         self.source_label = QLabel('来源：未加载项目')
-        self.source_label.setStyleSheet(f'color: {current_theme().subtle};')
+        self.source_label.setStyleSheet(f'color:{t.subtle};background:{t.panel};border:none;')
         self.source_label.setWordWrap(True)
 
         layout = QVBoxLayout(self)
@@ -195,6 +202,8 @@ class ControllerStructurePanel(QWidget):
         layout.setSpacing(0)
 
         title_row = QWidget()
+        title_row.setAttribute(Qt.WA_StyledBackground, True)
+        title_row.setStyleSheet(f'background:{t.panel};border:none;')
         title_layout = QHBoxLayout(title_row)
         title_layout.setContentsMargins(0, 0, 0, 0)
         title_layout.addWidget(QLabel('控制器结构'))

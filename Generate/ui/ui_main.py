@@ -4,7 +4,6 @@ from PyQt5.QtWidgets import (
     QDialog,
     QDialogButtonBox,
     QHBoxLayout,
-    QLabel,
     QMainWindow,
     QMenu,
     QMessageBox,
@@ -125,9 +124,9 @@ class MainWindow(QMainWindow):
         central_layout.setSpacing(6)
 
         self.controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
-        self.controller_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
+        self.controller_panel.setStyleSheet(f'background:{current_theme().panel};border:none;')
         self.tuning_result_panel = TuningResultPanel(project_json_getter=self.get_current_project_json_path)
-        self.tuning_result_panel.setStyleSheet(f'background:{current_theme().surface};border:none;')
+        self.tuning_result_panel.setStyleSheet(f'background:{current_theme().panel};border:none;')
 
         self.right_panel_widget = Design3RightPanel(
             project_json_getter=self.get_current_project_json_path,
@@ -140,6 +139,10 @@ class MainWindow(QMainWindow):
 
         right_splitter = QSplitter(Qt.Vertical)
         right_splitter.setChildrenCollapsible(False)
+        right_splitter.setStyleSheet(
+            f'QSplitter{{background:{current_theme().panel};border:none;}}'
+            f'QSplitter::handle{{background:{current_theme().background};}}'
+        )
         right_splitter.addWidget(self.controller_panel)
         right_splitter.addWidget(self.tuning_result_panel)
         right_splitter.setStretchFactor(0, 3)
@@ -157,26 +160,9 @@ class MainWindow(QMainWindow):
         central_layout.addWidget(self.right_panel_widget, 3)
         central_layout.addWidget(right_splitter, 1)
 
-        # Bottom information bar (horizontal)
-        self.info_widget = QWidget()
-        self.info_widget.setObjectName('panelCard')
-        info_layout = QHBoxLayout(self.info_widget)
-        info_layout.setContentsMargins(6, 6, 6, 6)
-        info_layout.setSpacing(6)
-        info_label = QLabel('Status: Ready')
-        info_label.setStyleSheet(f'color:{current_theme().muted};font-weight:600;')
-        info_layout.addWidget(info_label)
-        info_layout.addStretch()
-        user_label = QLabel('User: Guest')
-        user_label.setStyleSheet(f'color:{current_theme().muted};')
-        info_layout.addWidget(user_label)
-        self.info_widget.setMinimumHeight(46)
-        self.info_widget.setStyleSheet(f'background:{current_theme().panel};border:none;')
-
         # Assemble main layout
         main_layout.addWidget(toolbar)
         main_layout.addWidget(central)
-        main_layout.addWidget(self.info_widget)
 
         self.setCentralWidget(container)
         self._install_surface_effects()
@@ -197,15 +183,12 @@ class MainWindow(QMainWindow):
             self.setStyleSheet(app_qss())
 
     def _install_surface_effects(self):
-        for widget in [self.controller_panel, self.right_panel(), self.info_bar()]:
+        for widget in [self.controller_panel, self.right_panel()]:
             if widget is not None:
                 widget.setGraphicsEffect(None)
 
     def right_panel(self):
         return getattr(self, 'right_panel_widget', None)
-
-    def info_bar(self):
-        return getattr(self, 'info_widget', None)
 
     def open_settings_dialog(self):
         dialog = SettingsDialog(self)
