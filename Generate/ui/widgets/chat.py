@@ -117,7 +117,7 @@ class ChatBubbleWidget(QFrame):
         t = current_theme()
         if self.role == 'user':
             self.header_widget.hide()
-            layout.setContentsMargins(16, 12, 16, 12)
+            layout.setContentsMargins(16, 8, 16, 8)
             self.setStyleSheet(
                 f'QFrame#chatBubble_user{{background:#F0F0F0;border:none;border-radius:{RADIUS_BUBBLE}px;}}'
                 'QFrame#chatBubble_user * { border: none; }'
@@ -356,9 +356,13 @@ class ChatStreamWidget(QWidget):
         self.container_layout = QVBoxLayout(self.container)
         self.container_layout.setContentsMargins(12, 12, 12, 12)
         self.container_layout.setSpacing(14)
+        self.container_layout.addStretch(1)
 
         self.scroll.setWidget(self.container)
         outer_layout.addWidget(self.scroll)
+
+    def _message_insert_index(self) -> int:
+        return max(0, self.container_layout.count() - 1)
 
     def clear_messages(self):
         for role, _row, content in self.message_rows:
@@ -376,6 +380,7 @@ class ChatStreamWidget(QWidget):
             widget = item.widget()
             if widget:
                 widget.deleteLater()
+        self.container_layout.addStretch(1)
 
     def append_message(self, role: str, text: str):
         role = ChatBubbleWidget._normalize_role(role)
@@ -395,7 +400,6 @@ class ChatStreamWidget(QWidget):
         row_layout.setSpacing(0)
 
         bubble = ChatBubbleWidget(role, text)
-        bubble.adjustSize()
 
         if role == 'user':
             row_layout.addStretch(1)
@@ -411,9 +415,9 @@ class ChatStreamWidget(QWidget):
             row_layout.addWidget(bubble, 0, Qt.AlignCenter)
             row_layout.addStretch(1)
 
-        row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
+        row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
 
-        self.container_layout.addWidget(row)
+        self.container_layout.insertWidget(self._message_insert_index(), row)
         self.message_rows.append((role, row, bubble))
         self._update_bubble_widths()
         self._scroll_to_bottom()
@@ -439,8 +443,8 @@ class ChatStreamWidget(QWidget):
         row_layout.addStretch(1)
 
         widget.show()
-        row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.container_layout.addWidget(row)
+        row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        self.container_layout.insertWidget(self._message_insert_index(), row)
         self.message_rows.append(('__widget__', row, widget))
         widget.setProperty('chatWidthRatio', width_ratio)
         self._update_bubble_widths()
@@ -462,8 +466,8 @@ class ChatStreamWidget(QWidget):
         row_layout.addWidget(indicator, 0, Qt.AlignLeft)
         row_layout.addStretch(1)
 
-        row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Minimum)
-        self.container_layout.addWidget(row)
+        row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        self.container_layout.insertWidget(self._message_insert_index(), row)
         self.message_rows.append(('__thinking__', row, indicator))
         self._thinking_row = row
         self._thinking_widget = indicator
@@ -509,8 +513,14 @@ class ChatStreamWidget(QWidget):
         content_width = max(0, viewport_width - 24)
         system_width = int(content_width * 0.66)
 
-        for role, _row, bubble in self.message_rows:
-            if role in {'user', 'assistant'}:
+        for role, row, bubble in self.message_rows:
+            if role == 'user':
+                bubble.setFixedWidth(bubble.preferred_width(content_width))
+                bubble.setMaximumHeight(16777215)
+                bubble.layout().activate()
+                bubble.updateGeometry()
+                row.updateGeometry()
+            elif role == 'assistant':
                 bubble.setFixedWidth(bubble.preferred_width(content_width))
             elif role == '__widget__':
                 ratio = bubble.property('chatWidthRatio')

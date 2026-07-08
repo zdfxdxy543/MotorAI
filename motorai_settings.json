@@ -1,16 +1,16 @@
 {
   "llm": {
-    "api_key": "sk-b07aea357ae74fbda3608ce8ed2a14d1",
+    "api_key": "sk-6bfda45ffd09431993b96d6350dffe1d",
     "model": "deepseek-v4-flash",
     "base_url": "https://api.deepseek.com",
     "temperature": 0.0,
     "timeout": 180
   },
   "paths": {
-    "gmp_root": "D:/WorkDocuments/Github/gmp_pro",
+    "gmp_root": "E:/Related_Github_Project/gmp_pro",
     "generate_root": "Generate",
     "optimize_root": "Optimize",
-    "output_root": "D:\\WorkDocuments\\Github\\MotorAIoutput"
+    "output_root": "E:\\Related_Github_Project\\gmp_pro\\ctl\\suite"
   },
   "generate": {
     "max_kb_items": 120,

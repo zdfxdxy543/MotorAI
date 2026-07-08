@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt, QDateTime
 import json
+import math
 from pathlib import Path
 
 import core.paths  # ensures repository roots are on sys.path
@@ -33,6 +34,7 @@ class RequirementPanel(QWidget):
         self.completion_callback = None
         self.external_chat_callback = None
         self.external_status_callback = None
+        self._last_user_input = None
         self.external_finished_callback = None
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -250,6 +252,7 @@ class RequirementPanel(QWidget):
 
         if append_user:
             self._append_chat('user', text, echo_external=echo_user_external)
+        self._last_user_input = text
         self._set_progress('正在整理需求指标...')
         self.chat_view.show_thinking()
         self.send_btn.setEnabled(False)
@@ -267,10 +270,17 @@ class RequirementPanel(QWidget):
             (
                 '你是面向 loop-ids 生成系统的需求指标完善助手。'
                 '你的任务是根据给定的控制器结构，把用户输入改写为可执行、可测量、适合控制器设计验证的中文需求指标。'
-                '性能指标仅限于：超调量、调整时间、上升时间、稳态误差。'
-                '当存在已有需求指标时，需要将其与新增需求进行整合、合并，保留合理的部分，去除冲突的部分。'
+                '性能指标包括：超调量、调整时间、上升时间、稳态误差。'
+                '同时必须保留用户明确给出的工况参数，包括但不限于：目标转速（含 rpm 或 rad/s 数值）、'
+                '目标转矩（含 N*m 数值）、目标电流 iq/id（含 A 数值）。\n\n'
+                '整合规则（严格遵守）：\n'
+                '1. 用户新增需求中的任何数值或描述，无条件覆盖已有需求指标中的同名参数。'
+                '   例如已有"超调<10%"，用户新增"超调改成5%"→输出"超调<5%"，绝不输出10%。\n'
+                '2. 用户新增需求中没提到的已有参数，保留原有值不变。\n'
+                '3. 用户明确说"删除""去掉""不要"某个指标时，从整合结果中移除该指标。\n'
+                '4. 冲突判定以用户意图为准，不要自行判断哪个值"更合理"。\n\n'
                 '请在现有控制器结构的基础上设计指标，不要改变控制器结构。'
-                '输出要求：用一句话简洁描述整合后的需求指标，不输出其他内容。'
+                '输出要求：用一句话简洁描述整合后的需求指标（含工况参数），不输出其他内容。'
             ),
             self,
         )
@@ -499,11 +509,184 @@ class RequirementPanel(QWidget):
                 available_signals.extend(current_signals)
             
             data['available_signals'] = available_signals
-            
+            data['signals'] = {sig: sig for sig in available_signals}
+
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
         except Exception as exc:
             self._append_error('信号和目标事件生成失败。', str(exc))
+
+    # ── 用户可编辑字段：下次生成时从旧 metrics 中保留 ──
+    _PRESERVABLE_FIELDS = (
+        'target_value', 'good_threshold', 'bad_threshold',
+        'weight', 'tolerance_ratio', 'window', 'normalize',
+    )
+
+    @staticmethod
+    def _normalize_metric_item(item):
+        """兼容旧格式（字符串）和新格式（含 constraints 的对象）。"""
+        if isinstance(item, str):
+            return item, []
+        if isinstance(item, dict):
+            return item.get('combo', ''), item.get('constraints') or []
+        return '', []
+
+    def _get_reference_target(self, signal_name, existing_metrics, existing_targets):
+        """获取某个信号的参考目标值，用于百分比→绝对值的确定性转换。
+
+        优先级：已有 targets > 已有 metrics > PHYSICAL_QUANTITIES 默认值。
+        """
+        if isinstance(existing_targets, dict):
+            tv = existing_targets.get(signal_name)
+            if isinstance(tv, dict):
+                val = tv.get('target_value')
+                if isinstance(val, (int, float)) and val != 0:
+                    return float(val)
+            elif isinstance(tv, (int, float)) and tv != 0:
+                return float(tv)
+
+        for m in (existing_metrics or []):
+            if isinstance(m, dict) and m.get('signal') == signal_name:
+                val = m.get('target_value')
+                if isinstance(val, (int, float)) and val != 0:
+                    return float(val)
+
+        for phys_info in self.PHYSICAL_QUANTITIES.values():
+            if phys_info.get('signal') == signal_name:
+                return float(phys_info.get('target_value', 0.0))
+        return 0.0
+
+    # ── 正则模式：从自然语言 objective 中确定性提取目标转速 ──
+    _TARGET_SPEED_PATTERNS = [
+        # "转速 1000 rpm" / "目标转速 1000rpm" / "速度 3000 RPM"
+        (r'(?:转速|目标转速|速度|额定转速)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*rpm', 'rpm'),
+        # "1000 rpm 转速" / "3000RPM"
+        (r'(\d+(?:\.\d+)?)\s*[rR][pP][mM]\s*(?:转速|速度)?', 'rpm'),
+        # "转速 314.16 rad/s" / "目标转速 104.72 rad/s"
+        (r'(?:转速|目标转速|速度)\s*[:：]?\s*(\d+(?:\.\d+)?)\s*rad/s', 'rad_s'),
+        # "104.72 rad/s 的目标转速"
+        (r'(\d+(?:\.\d+)?)\s*rad/s\s*(?:的)?(?:目标)?(?:转速|速度)', 'rad_s'),
+    ]
+
+    @classmethod
+    def _extract_target_speed_from_text(cls, text):
+        """从 objective 文本中确定性提取目标转速（rad/s）。
+
+        优先级高于 LLM 约束提取，因为 LLM 可能遗漏或错误附加 combo。
+        返回 None 表示未能识别。
+        """
+        import re
+        for pattern, unit in cls._TARGET_SPEED_PATTERNS:
+            match = re.search(pattern, str(text), re.IGNORECASE)
+            if match:
+                value = float(match.group(1))
+                if unit == 'rpm':
+                    return value * math.pi / 30.0
+                return value
+        return None
+
+    def _collect_signal_targets(self, parsed_items, existing_metrics, existing_targets,
+                                objective_text='', user_input=''):
+        """从 LLM 输出 + objective 文本 + 用户原始输入中聚合信号级目标值覆盖。
+
+        目标值（转速等）是信号级属性，同一个信号的所有 metric
+        应该共享相同的 target_value。
+
+        优先级：
+        1. 用户原始输入正则提取（最高优先，用户说了算）
+        2. objective 文本正则提取（LLM 整合后的文本）
+        3. LLM constraints 中的 target_rpm / target_rad_s
+
+        Returns:
+            dict[str, float]: {signal_name: target_value}
+        """
+        collected = {}
+
+        # 第一优先：从用户原始输入确定性提取（用户意图的最终权威来源）
+        speed_target = self._extract_target_speed_from_text(user_input)
+        if speed_target is None:
+            # 回退：从 objective 文本提取
+            speed_target = self._extract_target_speed_from_text(objective_text)
+        if speed_target is not None and speed_target > 0:
+            collected['rotor_speed_rad_s'] = speed_target
+
+        # 第三优先：从 LLM constraints 补充（可补充转矩等其他信号的目标值）
+        for item in parsed_items:
+            combo, constraints = self._normalize_metric_item(item)
+            if not combo:
+                continue
+            parts = combo.split('_', 1)
+            if len(parts) != 2:
+                continue
+            physical_quantity = parts[0].strip().lower()
+            if physical_quantity not in self.PHYSICAL_QUANTITIES:
+                continue
+            signal_name = self.PHYSICAL_QUANTITIES[physical_quantity]["signal"]
+
+            for c in (constraints or []):
+                if not isinstance(c, dict):
+                    continue
+                ctype = str(c.get('type', '')).strip()
+                try:
+                    value = float(c.get('value', 0))
+                except (TypeError, ValueError):
+                    continue
+
+                if ctype == 'target_rpm':
+                    collected[signal_name] = value * math.pi / 30.0
+                elif ctype == 'target_rad_s':
+                    collected[signal_name] = value
+
+        return collected
+
+    def _apply_constraints(self, constraints, signal_name, existing_metrics, existing_targets,
+                           signal_target_overrides=None):
+        """将 LLM 提取的约束转换为 metric 字段覆盖值。
+
+        LLM 只负责从用户原文中提取数值和类型，Python 负责所有数学转换。
+        返回 dict[str, float]，可直接 update 到 metric 对象上。
+
+        signal_target_overrides: 预计算好的 {signal_name: target_value}，优先于
+            _get_reference_target 的查询结果，确保百分比转换使用用户最新指定的目标值。
+        """
+        if not constraints:
+            return {}
+        overrides = {}
+        ref_target = None  # 惰性计算
+
+        for c in constraints:
+            if not isinstance(c, dict):
+                continue
+            ctype = str(c.get('type', '')).strip()
+            try:
+                value = float(c.get('value', 0))
+            except (TypeError, ValueError):
+                continue
+
+            if ctype == 'overshoot_percent':
+                overrides['good_threshold'] = value / 100.0
+
+            elif ctype == 'time_seconds':
+                overrides['good_threshold'] = value
+
+            elif ctype in ('error_absolute', 'ripple_absolute'):
+                overrides['good_threshold'] = value
+
+            elif ctype in ('error_percent', 'ripple_percent'):
+                if ref_target is None:
+                    # 优先使用 LLM 提取的目标值，否则走查询链
+                    if isinstance(signal_target_overrides, dict) and signal_name in signal_target_overrides:
+                        ref_target = signal_target_overrides[signal_name]
+                    else:
+                        ref_target = self._get_reference_target(
+                            signal_name, existing_metrics, existing_targets,
+                        )
+                if ref_target and ref_target != 0:
+                    overrides['good_threshold'] = value / 100.0 * abs(ref_target)
+
+            # target_* 约束不在此处处理——由 _collect_signal_targets 预先聚合
+
+        return overrides
 
     def _generate_metrics(self):
         project_json = self._project_json_path()
@@ -515,82 +698,159 @@ class RequirementPanel(QWidget):
             objective_text = data.get('objective_text', '')
             objective = data.get('objective', '')
             available_signals = data.get('available_signals', [])
-            
+
             if not objective_text.strip() and not objective.strip():
                 data['metrics'] = []
                 with open(project_json, 'w', encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=2)
                 return
-            
+
+            # ── 建立旧 metrics 索引，用于保留用户手动修改过的值 ──
+            existing_metrics = data.get('metrics') or []
+            existing_by_name = {}
+            for m in existing_metrics:
+                name = m.get('result_name', '') if isinstance(m, dict) else ''
+                if name:
+                    existing_by_name[name] = m
+            existing_targets = data.get('targets') or {}
+
+            # ── LLM 调用：提取 combo + 约束 ──
             system_prompt = (
-                '你是性能评价指标分析助手。请根据用户需求，分析需要测量哪些物理量的哪些参数。\n\n'
+                '你是性能评价指标分析助手。请根据用户需求文本，分析需要测量哪些物理量，'
+                '以及用户明确给出了哪些数值要求。\n\n'
                 '可选物理量：speed(速度), torque(转矩), iq(q轴电流), id(d轴电流)\n'
-                '可选测量参数：overshoot(超调量), settling_time(调整时间), steady_state_error(稳态误差), ripple(纹波)\n\n'
-                '输出格式要求（严格遵守）：\n'
-                '1. 只输出JSON数组格式，不输出任何其他文字、解释或说明\n'
-                '2. JSON必须是有效的，可以被标准JSON解析器解析\n'
-                '3. 顶层必须是一个数组，数组元素是字符串，表示物理量-测量参数组合\n'
-                '4. 每个字符串格式为：物理量_测量参数，如 "speed_overshoot", "torque_ripple"\n\n'
+                '可选测量参数：overshoot(超调量), settling_time(调整时间), '
+                'steady_state_error(稳态误差), ripple(纹波)\n\n'
+                '约束类型（constraint type）说明：\n'
+                '- overshoot_percent：超调百分比，value 为百分数（如用户说"超调小于5%"→value=5）\n'
+                '- time_seconds：调节时间秒数，value 为秒（如用户说"调节时间小于0.5s"→value=0.5）\n'
+                '- error_absolute：稳态误差绝对值，value 为 rad/s 或 N*m 或 A\n'
+                '- error_percent：稳态误差百分比，value 为百分数（如"稳态误差小于2%"→value=2）\n'
+                '- ripple_absolute：纹波绝对值\n'
+                '- ripple_percent：纹波百分比，value 为百分数\n'
+                '- target_rpm：目标转速(rpm)，value 为 rpm 数值\n'
+                '- target_rad_s：目标转速(rad/s)\n\n'
+                '重要原则：\n'
+                '- constraints 中每个值必须能直接从用户原文中找到，不要猜测或推算\n'
+                '- 如果用户只说"响应快""低噪音"等定性描述没有具体数字，不要加 constraint\n'
+                '- 如果某个 combo 没有任何用户明确给出的数值约束，constraints 可为空数组 []\n\n'
+                '输出格式（严格遵守）：只输出 JSON 数组，每个元素格式：\n'
+                '{"combo": "物理量_测量参数", '
+                '"constraints": [{"type": "约束类型", "value": 数值}]}\n'
+                '示例：\n'
+                '[{"combo": "speed_overshoot", '
+                '"constraints": [{"type": "overshoot_percent", "value": 5}]},'
+                ' {"combo": "speed_settling_time", '
+                '"constraints": [{"type": "time_seconds", "value": 0.5}]},'
+                ' {"combo": "speed_steady_state_error", "constraints": []}]\n\n'
                 '用户需求：' + objective + '\n\n'
                 '请输出JSON数组：'
             )
-            
+
             parsed = None
             max_retries = 2
             for attempt in range(max_retries + 1):
                 result = call_ui_chat_model(objective, system_prompt, temperature=0.2)
-                
                 self._append_debug(f'大模型返回（评价指标分析）：{result.strip()}')
-                
+
                 if not result or not result.strip():
                     if attempt < max_retries:
                         self._append_debug(f'第{attempt+1}次评价指标分析返回为空，重新调用。')
-                        system_prompt = f'你上次返回了空内容。请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        system_prompt = '你上次返回了空内容。请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
                         continue
-                    else:
-                        self._append_debug('多次评价指标分析返回为空，使用默认指标。')
-                        parsed = ["speed_overshoot", "speed_settling_time", "speed_steady_state_error"]
-                        break
-                
+                    self._append_debug('多次评价指标分析返回为空，使用默认指标。')
+                    parsed = [
+                        {"combo": "speed_overshoot", "constraints": []},
+                        {"combo": "speed_settling_time", "constraints": []},
+                        {"combo": "speed_steady_state_error", "constraints": []},
+                    ]
+                    break
+
                 try:
                     parsed = json.loads(result.strip())
                     if isinstance(parsed, list) and len(parsed) > 0:
                         break
-                    else:
-                        raise ValueError("返回内容不是有效的JSON数组或数组为空")
+                    raise ValueError("返回内容不是有效的JSON数组或数组为空")
                 except (json.JSONDecodeError, ValueError) as e:
                     if attempt < max_retries:
                         self._append_debug(f'第{attempt+1}次评价指标分析解析失败({e})，重新调用。')
-                        system_prompt = f'你上次返回的内容不是有效的JSON格式：{result.strip()}\n\n请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        system_prompt = (
+                            f'你上次返回的内容不是有效的JSON格式：{result.strip()}\n\n'
+                            '请重新输出正确的JSON数组格式。\n\n只输出JSON数组，不要其他内容：'
+                        )
                         continue
-                    else:
-                        self._append_debug(f'多次评价指标分析解析失败({e})，使用默认指标。')
-                        parsed = ["speed_overshoot", "speed_settling_time", "speed_steady_state_error"]
-                        break
-            
+                    self._append_debug(f'多次评价指标分析解析失败({e})，使用默认指标。')
+                    parsed = [
+                        {"combo": "speed_overshoot", "constraints": []},
+                        {"combo": "speed_settling_time", "constraints": []},
+                        {"combo": "speed_steady_state_error", "constraints": []},
+                    ]
+                    break
+
+            # ── 预处理：聚合信号级目标值覆盖 ──
+            signal_target_overrides = self._collect_signal_targets(
+                parsed, existing_metrics, existing_targets,
+                objective_text=objective,
+                user_input=self._last_user_input or '',
+            )
+
+            # ── 构建 metrics：模板默认 → 信号级目标值覆盖 → 旧值保留 → LLM 约束覆盖 ──
             metrics = []
-            for combo in parsed:
-                if isinstance(combo, str):
-                    parts = combo.split('_', 1)
-                    if len(parts) == 2:
-                        physical_quantity = parts[0].strip().lower()
-                        metric_param = parts[1].strip().lower()
-                        
-                        if physical_quantity in self.PHYSICAL_QUANTITIES and metric_param in self.METRICS_PARAM_TEMPLATES:
-                            phys_info = self.PHYSICAL_QUANTITIES[physical_quantity]
-                            param_template = self.METRICS_PARAM_TEMPLATES[metric_param]
-                            
-                            metric = {
-                                "result_name": combo,
-                                "signal": phys_info["signal"],
-                                "target_value": phys_info["target_value"],
-                                "weight": phys_info["weight"],
-                            }
-                            metric.update(param_template)
-                            
-                            if phys_info["signal"] in available_signals or not available_signals:
-                                metrics.append(metric)
-            
+            for item in parsed:
+                combo, constraints = self._normalize_metric_item(item)
+                if not combo:
+                    continue
+
+                parts = combo.split('_', 1)
+                if len(parts) != 2:
+                    continue
+                physical_quantity = parts[0].strip().lower()
+                metric_param = parts[1].strip().lower()
+
+                if physical_quantity not in self.PHYSICAL_QUANTITIES:
+                    continue
+                if metric_param not in self.METRICS_PARAM_TEMPLATES:
+                    continue
+
+                phys_info = self.PHYSICAL_QUANTITIES[physical_quantity]
+                param_template = self.METRICS_PARAM_TEMPLATES[metric_param]
+                signal_name = phys_info["signal"]
+
+                if available_signals and signal_name not in available_signals:
+                    continue
+
+                # 第一层：模板默认值
+                metric = {
+                    "result_name": combo,
+                    "signal": signal_name,
+                    "target_value": phys_info["target_value"],
+                    "weight": phys_info["weight"],
+                }
+                metric.update(param_template)
+
+                # 第二层：信号级目标值覆盖（LLM 提取的 target_rpm / target_rad_s）
+                # 同一信号的所有 metric 共享此值
+                if signal_name in signal_target_overrides:
+                    metric['target_value'] = signal_target_overrides[signal_name]
+
+                # 第三层：保留用户手动修改过的旧值
+                if combo in existing_by_name:
+                    old = existing_by_name[combo]
+                    for field in self._PRESERVABLE_FIELDS:
+                        if field in old:
+                            metric[field] = old[field]
+
+                # 第四层：LLM 约束覆盖（非 target 类约束）
+                # 使用 signal_target_overrides 作为参考目标值，
+                # 确保 error_percent 等百分比转换使用用户最新指定的目标值
+                constraint_overrides = self._apply_constraints(
+                    constraints, signal_name, existing_metrics, existing_targets,
+                    signal_target_overrides=signal_target_overrides,
+                )
+                metric.update(constraint_overrides)
+
+                metrics.append(metric)
+
             data['metrics'] = metrics
             with open(project_json, 'w', encoding='utf-8') as f:
                 json.dump(data, f, ensure_ascii=False, indent=2)
