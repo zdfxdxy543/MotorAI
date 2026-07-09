@@ -374,6 +374,24 @@ def run_competition(
                 print(f"[ERROR] {r.get('candidate_id')} generate 失败 (status={r.get('status')})，"
                       f"跳过 optimize。详见 stderr: {r.get('stderr')}", file=sys.stderr)
 
+    # ── 生成后重新校准 evaluation_config ────────────────────────────
+    # generate 阶段的 sync_candidate_common_fields() 会用 FinalGo.json
+    # 的原始指标覆盖 candidate.json，把 configure_optimize 做的阈值校准
+    # 冲掉。这里重新生成一次，同时回写到 candidate.json，
+    # 确保无论 evaluator 读 evaluation_config.json 还是 candidate.json
+    # 都能拿到正确的阈值。
+    if not skip_generate and not dry_run:
+        for cdir in candidate_dirs:
+            try:
+                cj = cdir / "candidate.json"
+                if cj.exists():
+                    from Competition.competition_workspace import _write_candidate_evaluation_config  # noqa: E402
+                    candidate_data = load_json_object(cj)
+                    log_opt = cdir / "log" / "optimize"
+                    _write_candidate_evaluation_config(candidate_data, log_opt, candidate_json=cj)
+            except Exception:
+                pass
+
     optimize_results: list[dict[str, Any]] = []
     if not skip_optimize and generate_all_ok:
         optimize_results = run_optimize(candidate_dirs, parallel=optimize_parallel, dry_run=dry_run)

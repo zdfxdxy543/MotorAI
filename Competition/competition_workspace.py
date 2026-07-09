@@ -997,23 +997,33 @@ def _normalize_metric_thresholds(metrics: list[dict[str, Any]]) -> list[dict[str
     return metrics
 
 
-def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: Path) -> Path:
+def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: Path, *, candidate_json: Path | None = None) -> Path:
     """从 candidate.json 提取评估配置字段，写入 evaluation_config.json。
 
-    candidate.json 在 sync_candidate_common_fields() 之后已经持有
-    最新的 task_type / objective / signals / metrics，和项目 JSON 一致。
-    提取后自动校准阈值，防止模板残留值导致评分失真。
+    同时将校准后的阈值回写到 candidate.json，确保无论 evaluator
+    走 direct-evaluation 模式（读 candidate.json）还是默认路径
+    （读 evaluation_config.json）都拿到一致的阈值。
     """
+    # 深拷贝 metrics，避免校准时污染 candidate dict 中的原始对象
+    raw_metrics = candidate.get("metrics")
+    metrics_copy = [dict(m) for m in raw_metrics] if isinstance(raw_metrics, list) else []
+    calibrated = _normalize_metric_thresholds(metrics_copy)
+
     config: dict[str, Any] = {}
-    for field in ("task_type", "objective", "signals", "metrics"):
+    for field in ("task_type", "objective", "signals"):
         value = candidate.get(field)
         if value is not None:
             config[field] = value
-    # 自动校准阈值
-    if isinstance(config.get("metrics"), list):
-        config["metrics"] = _normalize_metric_thresholds(list(config["metrics"]))
+    config["metrics"] = calibrated
+
     output = optimize_dir / "evaluation_config.json"
     write_json(output, config)
+
+    # 同步回写 candidate.json，防止 generate 阶段冲掉后 evaluator 读到旧值
+    if candidate_json is not None:
+        candidate["metrics"] = calibrated
+        write_json(candidate_json, candidate)
+
     return output
 
 
@@ -1074,7 +1084,7 @@ def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
     # task_type / objective / signals / metrics，直接落盘为 evaluation_config.json。
     # 这样 evaluator 无论走 direct-evaluation override 还是读默认路径，
     # 都能拿到正确的评估配置，不依赖 LLM 的行为。
-    _write_candidate_evaluation_config(candidate, log_optimize)
+    _write_candidate_evaluation_config(candidate, log_optimize, candidate_json=candidate_json)
 
     modify_simulink_vcxproj(str(sln_dir), gmp_root)
     modify_gmp_compiler_include_summaries(candidate_root, gmp_root)
