@@ -338,6 +338,17 @@ def run_competition(
     if not skip_optimize:
         optimize_results = run_optimize(candidate_dirs, parallel=optimize_parallel, dry_run=dry_run)
 
+    # ── Step 3: 轮次反馈 ───────────────────────────────────────────────
+    # optimize 全部完成后，自动汇总所有 candidate 的证据生成 round_feedback。
+    round_feedback_path: str | None = None
+    if not skip_optimize and not dry_run:
+        try:
+            from Competition.round_feedback import generate_round_feedback  # noqa: E402
+            fb_path = generate_round_feedback(project_json, round_number=1)
+            round_feedback_path = str(fb_path.resolve())
+        except Exception:
+            pass
+
     scoreboard = [read_score(candidate_dir) for candidate_dir in candidate_dirs]
     winner = None if dry_run else choose_winner(scoreboard)
     winner_summary = (
@@ -365,6 +376,7 @@ def run_competition(
         "optimize_config": optimize_config_results,
         "generate": generate_result,
         "optimize": optimize_results,
+        "round_feedback": round_feedback_path,
         "scoreboard": scoreboard,
         "stop_conditions": stop_conditions,
         **winner_summary,
