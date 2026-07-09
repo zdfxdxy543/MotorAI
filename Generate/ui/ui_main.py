@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QProcess
 from PyQt5.QtGui import QIcon
 import json
 import os
@@ -277,24 +277,38 @@ class MainWindow(QMainWindow):
                     QMessageBox.warning(self, '提示', f'未找到脚本文件：{runner_script}')
                     return
                 candidate_count = int(project_data.get('candidate_count') or 4)
-                _process, stdout_path, stderr_path = self._launch_background_script([
-                    sys.executable,
+
+                # 使用 QProcess 监控进程完成，而非 subprocess.Popen
+                project_dir = Path(project_json_path).parent
+                log_dir = project_dir / 'log' / 'ui'
+                log_dir.mkdir(parents=True, exist_ok=True)
+                stdout_path = log_dir / 'competition_runner_stdout.txt'
+                stderr_path = log_dir / 'competition_runner_stderr.txt'
+
+                self._competition_process = QProcess(self)
+                self._competition_process.setProcessChannelMode(QProcess.SeparateChannels)
+                self._competition_process.setStandardOutputFile(str(stdout_path))
+                self._competition_process.setStandardErrorFile(str(stderr_path))
+                self._competition_process.setWorkingDirectory(str(MOTORAI_ROOT))
+                self._competition_process.finished.connect(
+                    lambda exit_code, exit_status:
+                        self._on_competition_finished(exit_code, exit_status,
+                                                       project_json_path, stdout_path, stderr_path)
+                )
+                self._competition_process.start(sys.executable, [
                     str(runner_script),
                     str(project_json_path),
-                    '--candidates',
-                    str(candidate_count),
-                    '--parallel',
-                    '2',
-                    '--optimize-parallel',
-                    '1',
+                    '--candidates', str(candidate_count),
+                    '--parallel', '2',
+                    '--optimize-parallel', '1',
                     '--skip-generate',
-                ], cwd=MOTORAI_ROOT, log_name='competition_runner')
-                QMessageBox.information(
-                    self,
-                    '已启动',
-                    '多 candidate 调优任务已启动，将按 candidate_01、candidate_02... 串行迭代。\n'
-                    f'标准输出：{stdout_path}\n错误输出：{stderr_path}'
-                )
+                    '--force-next-round',
+                ])
+                right_panel = self.right_panel()
+                if right_panel is not None:
+                    right_panel.main_program_panel._append_debug('多 candidate 调优任务已启动（后台运行中）...')
+                    right_panel.main_program_panel._set_status_text('状态：调优进行中')
+                return
                 return
 
             run_agent_script = Path(__file__).parent / 'run_agent.py'
@@ -314,6 +328,63 @@ class MainWindow(QMainWindow):
             )
         except Exception as exc:
             QMessageBox.critical(self, '错误', f'启动失败：{type(exc).__name__}: {exc}')
+
+    def _on_competition_finished(self, exit_code, exit_status, project_json_path, stdout_path, stderr_path):
+        """所有 candidate 调优完成后，读取结果并在对话框中通知用户。"""
+        project_dir = Path(project_json_path).parent
+        right_panel = self.right_panel()
+
+        # 读取轮次反馈
+        feedback_path = project_dir / 'rounds' / 'round_01' / 'round_feedback.json'
+        feedback = {}
+        if feedback_path.exists():
+            try:
+                with open(feedback_path, 'r', encoding='utf-8') as f:
+                    feedback = json.load(f)
+            except Exception:
+                pass
+
+        # 构建消息
+        winner = feedback.get('winner', {})
+        scoreboard = feedback.get('scoreboard', [])
+        satisfied = feedback.get('requirement_satisfied', False)
+
+        lines = ['本轮调优已完成。']
+        if winner:
+            lines.append(f'🏆 最高分：{winner["candidate_id"]}（{winner["overall_score"]} 分）')
+        if scoreboard:
+            lines.append('📊 各组得分：')
+            for item in scoreboard:
+                lines.append(f'  · {item["candidate_id"]}：{item["overall_score"]} 分')
+
+        failed = feedback.get('failed_metrics_summary', [])
+        if failed:
+            lines.append('⚠️ 普遍未达标的指标：')
+            for item in failed[:3]:
+                lines.append(f'  · {item["metric"]}（{item["failed_count"]} 个 candidate 未通过）')
+
+        if exit_code == 0:
+            if satisfied:
+                lines.append('✅ 停止条件已满足。')
+            else:
+                lines.append('📋 停止条件未满足，可以继续下一轮迭代。')
+        else:
+            lines.append(f'❌ 进程异常退出（返回码 {exit_code}）。详情见日志：{stderr_path}')
+
+        message = '\n'.join(lines)
+
+        # 显示在聊天面板中
+        if right_panel is not None:
+            right_panel.main_program_panel._append_notice(message)
+            right_panel.main_program_panel._set_status_text(
+                '状态：调优完成（条件已满足）' if satisfied else '状态：调优完成（可继续下一轮）'
+            )
+            # 如果需求未满足，提示用户是否继续
+            if not satisfied and exit_code == 0:
+                right_panel.main_program_panel._append_notice(
+                    '是否继续第二轮仿真？如需继续请输入"继续仿真"或"开始第二轮"，'
+                    '系统将基于当前结果生成新的候选方案并自动运行。'
+                )
 
     def _read_project_open_root(self):
         return str(get_output_root(load_settings()))
