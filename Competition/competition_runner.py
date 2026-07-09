@@ -19,6 +19,7 @@ OPTIMIZE_AGENT_CWD = MOTORAI_ROOT / "Optimize" / "agent_optimize"
 if str(MOTORAI_ROOT) not in sys.path:
     sys.path.insert(0, str(MOTORAI_ROOT))
 
+from Competition.candidate_evidence import write_candidate_evidence  # noqa: E402
 from Competition.competition_workspace import (  # noqa: E402
     candidate_id,
     candidate_optimize_paths,
@@ -130,6 +131,15 @@ def run_optimize_for_candidate(candidate_dir: Path, *, dry_run: bool) -> dict[st
     )
     stdout_path.write_text(result.stdout or "", encoding="utf-8")
     stderr_path.write_text(result.stderr or "", encoding="utf-8")
+
+    # ── Step 2: 优化证据 ───────────────────────────────────────────────
+    # optimize 子进程结束后，从产物中提取指标、参数变化、收敛情况。
+    if result.returncode == 0 and not dry_run:
+        try:
+            evidence_path = write_candidate_evidence(candidate_dir)
+            outputs["candidate_evidence"] = str(evidence_path.resolve())
+        except Exception:
+            pass  # 证据生成失败不阻塞 optimize 流程
 
     return {
         "candidate_id": candidate_id_value,
