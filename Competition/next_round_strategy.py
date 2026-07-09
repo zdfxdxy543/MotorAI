@@ -50,6 +50,36 @@ def _write_json(path: Path, data: dict[str, Any]) -> None:
 
 # ── 构建 LLM 提示词 ──────────────────────────────────────────────────────
 
+def _detect_user_method_constraint(requirement: str) -> str:
+    """从用户原始需求中检测明确指定的控制方法，返回逗号分隔的中文方法名。
+
+    如果用户没有明确指定方法（只是泛泛说"良好的控制性能"），返回空字符串。
+    """
+    if not requirement:
+        return ""
+
+    found: list[str] = []
+    text = requirement.lower()
+
+    # PID 及其变体
+    if any(kw in text for kw in ("pid", "比例积分微分", "比例积分")):
+        found.append("PID")
+
+    # 滑模
+    if any(kw in text for kw in ("滑模", "smc", "sliding mode")):
+        found.append("SMC（滑模）")
+
+    # 自抗扰
+    if any(kw in text for kw in ("自抗扰", "adrc", "ladrc", "线性自抗扰", "active disturbance rejection")):
+        found.append("LADRC（自抗扰）")
+
+    # 前馈
+    if any(kw in text for kw in ("前馈", "feedforward", "feed forward")):
+        found.append("前馈")
+
+    return "、".join(found)
+
+
 def _build_system_prompt() -> str:
     return """你是一个电机控制系统的结构迭代策略师。你的任务是根据上一轮多候选方案竞争的结果，为下一轮设计新的候选方案策略。
 
@@ -78,7 +108,11 @@ def _build_system_prompt() -> str:
 - 通用参数（CUR_LIMIT、SPEED_LIMIT 等）通常可以从 winner 继承，即使结构不同
 
 重要规则：
-- 至少保留一个接近 winner 结构的方向（exploit），同时至少有一个尝试不同结构的方向（explore）
+- 至少保留一个接近 winner 结构的方向（exploit），同时至少有一个尝试不同策略方向（explore）。
+  策略差异可以在参数偏置、性能取舍、限幅/滤波策略上体现，不一定要更换控制方法。
+- **如果用户原始需求中已经明确指定了控制方法（如"速度环采用PID控制器"），
+  则所有 candidate 的 preferred_control_methods 必须包含该方法，不得替换为用户未指定的方法。**
+  在这种情况下，explore 方案应聚焦于参数策略差异、响应速度 vs 稳定性的权衡等方向。
 - 如果多个候选方案都失败了同一个指标，说明可能是结构层面的瓶颈，下一轮应考虑替代结构
 - 方案名称和 structure_bias 要用中文
 - 输出的 JSON 必须是合法的 JSON 对象，包含 "profiles" 数组"""
@@ -96,6 +130,16 @@ def _build_user_prompt(
     # 用户需求
     objective = user_requirement.get("objective_text") or user_requirement.get("objective", "未指定")
     parts.append(f"## 用户原始需求\n\n{objective}\n")
+
+    # ── 从用户需求中检测控制方法约束 ─────────────────────────────────
+    user_method_hint = _detect_user_method_constraint(objective)
+    if user_method_hint:
+        parts.append(f"## ⚠️ 用户已指定控制方法\n\n")
+        parts.append(f"用户的原始需求中明确提到了以下控制方法：**{user_method_hint}**。\n")
+        parts.append("所有候选方案的 preferred_control_methods 必须包含用户已指定的方法，")
+        parts.append("不得替换为用户未提及的控制方法。")
+        parts.append("explore 方向应聚焦于参数偏置、响应速度 vs 稳定性权衡、限幅/滤波策略等方面的差异化，")
+        parts.append("而不是换掉用户已经选定的控制方法。\n")
 
     # 停止条件
     stop = round_feedback.get("stop_conditions", {})
@@ -183,7 +227,11 @@ def _build_user_prompt(
     # 任务
     parts.append(f"\n## 任务\n")
     parts.append(f"请为第下一轮生成 {candidate_count} 个候选方案策略。")
-    parts.append("确保至少有一个 exploit（基于 winner 方向改进）和一个 explore（尝试不同结构方向）。")
+    if user_method_hint:
+        parts.append(f"注意：用户已指定控制方法为 {user_method_hint}，所有方案的控制方法必须保持一致。")
+        parts.append("差异化应体现在参数偏置方向、性能指标侧重点（如一个偏快速响应、一个偏稳态精度）等方面。")
+    else:
+        parts.append("确保至少有一个 exploit（基于 winner 方向改进）和一个 explore（尝试不同结构方向）。")
     parts.append("以 JSON 格式输出：{\"profiles\": [...]}")
 
     return "\n".join(parts)
