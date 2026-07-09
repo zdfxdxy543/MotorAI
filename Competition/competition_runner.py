@@ -324,32 +324,53 @@ def run_competition(
     if not isinstance(stop_conditions, dict):
         stop_conditions = {}
 
-    # ── 多轮支持：round > 1 时备份上一轮源码 + 加载本轮 profiles ──
+    # ── 多轮支持 ────────────────────────────────────────────────────
+    import shutil
+    project_root = project_json.parent
+
+    if round_number == 1:
+        # 第一轮开始时清空旧的 rounds 目录
+        old_rounds = project_root / "rounds"
+        if old_rounds.exists():
+            shutil.rmtree(old_rounds)
+
     if round_number > 1:
-        import shutil
-        project_root = project_json.parent
         prev_round = round_number - 1
 
-        # 备份上一轮源码：candidates/candidate_XX/src → rounds/round_NN/candidates/
+        # 备份上一轮源码 + 优化产物
         for cdir in sorted((project_root / "candidates").glob("candidate_*")):
             if cdir.is_dir():
+                round_backup = project_root / "rounds" / f"round_{prev_round:02d}" / "candidates" / cdir.name
+                # 源码
                 src_dir = cdir / "src"
                 if src_dir.is_dir():
-                    backup_dir = project_root / "rounds" / f"round_{prev_round:02d}" / "candidates" / cdir.name / "src"
-                    backup_dir.parent.mkdir(parents=True, exist_ok=True)
-                    if backup_dir.exists():
-                        shutil.rmtree(backup_dir)
-                    shutil.copytree(src_dir, backup_dir)
+                    backup_src = round_backup / "src"
+                    backup_src.parent.mkdir(parents=True, exist_ok=True)
+                    if backup_src.exists():
+                        shutil.rmtree(backup_src)
+                    shutil.copytree(src_dir, backup_src)
+                # 优化产物
+                log_opt = cdir / "log" / "optimize"
+                if log_opt.is_dir():
+                    backup_log = round_backup / "log" / "optimize"
+                    backup_log.mkdir(parents=True, exist_ok=True)
+                    for name in ("tuning_result.json", "evaluation_result.json",
+                                 "evaluation_config.json", "evaluation_summary.txt",
+                                 "optimization_history.jsonl", "agent_project.json",
+                                 "candidate_evidence.json"):
+                        src_file = log_opt / name
+                        if src_file.exists():
+                            shutil.copy2(src_file, backup_log / name)
 
-        # 用本轮 profiles 覆盖 common，generate 阶段会读取它
+        # 用本轮 profiles 覆盖 common
         round_profiles = project_root / "rounds" / f"round_{round_number:02d}" / "candidate_profiles.json"
         if round_profiles.exists():
             common_profiles = project_root / "common" / "candidate_profiles.json"
             common_profiles.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(round_profiles, common_profiles)
 
-        skip_generate = False   # 可能换了控制结构，必须重新生成
-        force_init = False      # 不重建 candidate 目录
+        skip_generate = False
+        force_init = False
 
     candidate_dirs = ensure_candidates(project_json, candidates, force_init=force_init)
     optimize_config_results = configure_optimize(candidate_dirs)
@@ -409,7 +430,7 @@ def run_competition(
             fb_data = load_json_object(fb_path)
             max_rounds = int(project_data.get("max_rounds") or 0)
             at_limit = max_rounds > 0 and round_number >= max_rounds
-            if not at_limit and (force_next_round or not fb_data.get("requirement_satisfied", True)):
+            if not at_limit:
                 from Competition.next_round_strategy import generate_next_round_strategy  # noqa: E402
                 next_count = int(project_data.get("candidate_count", candidates))
                 next_result = generate_next_round_strategy(
@@ -419,6 +440,18 @@ def run_competition(
                     candidate_count=next_count,
                 )
                 next_round_profiles_path = next_result.get("candidate_profiles")
+                # 自动继续下一轮
+                return run_competition(
+                    project_json,
+                    candidates=candidates,
+                    parallel=parallel,
+                    optimize_parallel=optimize_parallel,
+                    dry_run=dry_run,
+                    skip_generate=False,
+                    skip_optimize=False,
+                    force_init=False,
+                    round_number=round_number + 1,
+                )
         except Exception:
             pass
 
