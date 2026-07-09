@@ -953,18 +953,65 @@ exit /b %ERRORLEVEL%
     bat_path.write_text(content, encoding="utf-8")
 
 
+def _normalize_metric_thresholds(metrics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """自动校准 metric 的 good_threshold / bad_threshold。
+
+    防止两种常见问题：
+    1. good == bad（评分函数会抛异常跳过该指标）
+    2. bad 值来自模板默认值，与当前 target_value 不匹配（如 62.832 是 3000rpm
+       模板的残留值，用于 500rpm 目标会导致评分几乎无区分度）
+
+    规则（对 minimize 指标）：
+    - good >= bad         → bad = good * 2
+    - bad > target * 0.3  → bad = target * 0.15（误差类指标，bad 不应超过目标值 30%）
+    - bad > good * 10     → bad = good * 5（兜底，压制模板残留的极端值）
+    """
+    if not isinstance(metrics, list):
+        return metrics
+
+    for m in metrics:
+        if not isinstance(m, dict):
+            continue
+        good = m.get("good_threshold")
+        bad = m.get("bad_threshold")
+        if not isinstance(good, (int, float)) or not isinstance(bad, (int, float)):
+            continue
+        target = m.get("target_value")
+        direction = str(m.get("optimization_direction", "minimize")).strip().lower()
+
+        if direction == "minimize":
+            if good >= bad:
+                m["bad_threshold"] = good * 2.0
+                bad = m["bad_threshold"]
+            # bad 超过目标值 30%，说明是旧模板残留的绝对值，按 target 缩放
+            if isinstance(target, (int, float)) and target > 0 and bad > target * 0.3:
+                m["bad_threshold"] = target * 0.15
+                bad = m["bad_threshold"]
+            # 兜底：bad 仍超过 good 的 10 倍
+            if bad > good * 10:
+                m["bad_threshold"] = good * 5.0
+        elif direction == "maximize":
+            if good <= bad:
+                m["bad_threshold"] = good * 0.5
+
+    return metrics
+
+
 def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: Path) -> Path:
     """从 candidate.json 提取评估配置字段，写入 evaluation_config.json。
 
     candidate.json 在 sync_candidate_common_fields() 之后已经持有
-    最新的 task_type / objective / signals / metrics，和 MainTest.json 一致。
-    直接提取这四个字段落盘，不依赖 app.py 的内存 override 或 LLM 的行为。
+    最新的 task_type / objective / signals / metrics，和项目 JSON 一致。
+    提取后自动校准阈值，防止模板残留值导致评分失真。
     """
     config: dict[str, Any] = {}
     for field in ("task_type", "objective", "signals", "metrics"):
         value = candidate.get(field)
         if value is not None:
             config[field] = value
+    # 自动校准阈值
+    if isinstance(config.get("metrics"), list):
+        config["metrics"] = _normalize_metric_thresholds(list(config["metrics"]))
     output = optimize_dir / "evaluation_config.json"
     write_json(output, config)
     return output

@@ -321,6 +321,65 @@ def _ensure_list(value: Any, default: list[str]) -> list[str]:
     return default
 
 
+def _ensure_elite_preservation(
+    profiles: list[dict[str, Any]],
+    feedback: dict[str, Any],
+) -> list[dict[str, Any]]:
+    """精英保留：保证至少一个 candidate 继承上一轮 winner 的结构和参数。
+
+    如果 LLM 生成的 profiles 中没有任何一个以 winner 为参考来源且使用
+    inherit 或 inherit_then_perturb 模式，则用 winner 保留方案替换最后一个
+    candidate，确保第二轮不会比第一轮退步。
+    """
+    winner = feedback.get("winner")
+    if not isinstance(winner, dict):
+        return profiles
+
+    winner_id = str(winner.get("candidate_id", "") or "").strip()
+    if not winner_id:
+        return profiles
+
+    # 检查是否已有 profile 保留了 winner
+    for p in profiles:
+        seed = p.get("parameter_seed_policy") if isinstance(p.get("parameter_seed_policy"), dict) else {}
+        mode = str(seed.get("mode", "") or "").strip()
+        refs = p.get("reference_candidates") or []
+        source = str(seed.get("source_candidate", "") or "").strip()
+        if mode in ("inherit", "inherit_then_perturb") and (winner_id in refs or source == winner_id):
+            return profiles  # 已经有人保留了 winner，不需要干预
+
+    # 从 feedback 中提取 winner 的控制方法
+    candidates = feedback.get("candidates") or []
+    winner_methods: list[str] = ["pid"]
+    for c in candidates:
+        if c.get("candidate_id") == winner_id:
+            manifest = c.get("structure_manifest") if isinstance(c.get("structure_manifest"), dict) else {}
+            methods = manifest.get("control_methods") or []
+            if isinstance(methods, list) and methods:
+                winner_methods = [str(m).strip().lower() for m in methods if str(m).strip()]
+            break
+
+    # 用 winner 保留方案替换最后一个 profile
+    last_index = len(profiles) - 1
+    preserve: dict[str, Any] = {
+        "candidate_id": f"candidate_{last_index + 1:02d}",
+        "name": f"精英保留（继承 {winner_id}）",
+        "structure_bias": f"与 {winner_id} 保持一致的控制结构，继承其最终参数作为起点",
+        "preferred_control_methods": winner_methods,
+        "reference_candidates": [winner_id],
+        "parameter_seed_policy": {
+            "mode": "inherit",
+            "source_candidate": winner_id,
+            "perturbation_direction": "",
+        },
+        "expected_improvement": {
+            "target_failed_metrics": [],
+        },
+    }
+    profiles[-1] = preserve
+    return profiles
+
+
 # ── 主函数 ────────────────────────────────────────────────────────────────
 
 def generate_next_round_strategy(
@@ -363,6 +422,9 @@ def generate_next_round_strategy(
         raise RuntimeError(f"LLM 返回的 profiles 不是有效数组: {json.dumps(llm_result, ensure_ascii=False)[:500]}")
 
     profiles = _validate_profiles(raw_profiles, candidate_count)
+
+    # ── 精英保留：确保至少一个 candidate 继承 winner ─────────────────
+    profiles = _ensure_elite_preservation(profiles, feedback)
 
     # 3. 写入输出
     round_dir = project_root / "rounds" / f"round_{to_round:02d}"
