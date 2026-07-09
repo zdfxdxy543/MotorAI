@@ -1259,6 +1259,42 @@ class MainProgramPanel(QWidget):
                     if not generated_path.exists():
                         raise FileNotFoundError(f'{candidate_dir.name} 未生成文件：{generated_path}')
 
+                # ── Step 0: 差异化参数种子 ──────────────────────────────
+                # merger 生成的 paras.generated.h 所有 candidate 默认值相同。
+                # 根据当前 candidate 的设计方案对初始参数值做差异化扰动。
+                try:
+                    from Competition.parameter_seeder import seed_parameters  # noqa: E402
+                    seed_report = seed_parameters(
+                        paras_output,
+                        candidate_index=index,
+                        profile=profile,
+                        seed_report_dir=candidate_dir / 'log' / 'generate',
+                        label=candidate_dir.name,
+                    )
+                    # 调试详情：输出种子结果
+                    profile_name = profile.get("name", candidate_dir.name) if isinstance(profile, dict) else candidate_dir.name
+                    updated = seed_report.get("updated_count", 0)
+                    skipped = seed_report.get("skipped_count", 0)
+                    self._append_debug(
+                        f'  [seed] {candidate_dir.name} ({profile_name}) '
+                        f'参数种子完成: 已扰动 {updated} 个, 跳过 {skipped} 个'
+                    )
+                    for p in seed_report.get("parameters", []):
+                        if p.get("skipped"):
+                            continue
+                        old_v = p.get("old_value")
+                        new_v = p.get("new_value")
+                        mult = p.get("multiplier")
+                        if isinstance(old_v, float):
+                            old_v = round(old_v, 4)
+                        if isinstance(new_v, float):
+                            new_v = round(new_v, 4)
+                        self._append_debug(
+                            f'    {p["name"]}: {old_v} -> {new_v}  (×{mult:.3f}, {p["category"]})'
+                        )
+                except Exception as seed_exc:
+                    self._append_debug(f'  [seed] {candidate_dir.name} 参数种子失败: {seed_exc}，保留默认值')
+
                 candidate_data = self._write_candidate_generated_result(candidate_dir, loop_ids_output, profile)
                 if first_loop_ids_path is None:
                     first_loop_ids_path = loop_ids_output

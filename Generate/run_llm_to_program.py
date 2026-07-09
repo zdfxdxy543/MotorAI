@@ -4,6 +4,7 @@
 2) Feed the generated loop-ids JSON into the Example-based merge step.
 3) Generate `ctl_main.c`, `ctl_main.h`, `paras.generated.h` from the Example templates.
 4) Copy `user_main.c` and `user_main.h` from Example/ to the output (static copy, not generated).
+5) Seed differentiated initial parameter values based on the candidate design profile (Step 0).
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ if str(MOTORAI_ROOT) not in sys.path:
 
 import controller_loop_id_exporter as loop_exporter
 import merge_loop_ids_into_ctl_main as merger
+from Competition.parameter_seeder import seed_parameters  # noqa: E402
 
 EXAMPLE_DIR = Path(__file__).with_name("Example")
 
@@ -75,9 +77,69 @@ def main(
             shutil.copy2(src, dst)
             print(f"Copied {dst}")
 
+    # ── Step 0: 差异化参数种子 ──────────────────────────────────────────
+    # paras.generated.h 刚由 merger 生成，所有 candidate 此时参数相同。
+    # 根据 candidate 的设计方案倾向对初始值做差异化扰动，增强优化多样性。
+    _seed_candidate_parameters(paras_output)
+
     generated_files = f"{loop_ids_output}, {c_output}, {h_output}, {paras_output}"
     print(f"Pipeline completed: {generated_files}")
     return 0
+
+
+def _seed_candidate_parameters(paras_output: Path) -> None:
+    """Post-generate step: perturbs paras.generated.h based on design profile.
+
+    The candidate directory is derived from the paras output path:
+        <candidate_dir>/src/paras.generated.h  →  <candidate_dir>
+    Design profile and candidate index are read from candidate.json.
+    """
+    candidate_dir = paras_output.expanduser().resolve().parent.parent
+    candidate_json = candidate_dir / "candidate.json"
+
+    profile = None
+    candidate_index = 1
+    if candidate_json.exists():
+        try:
+            data = json.loads(candidate_json.read_text(encoding="utf-8-sig"))
+            profile = data.get("design_profile")
+            candidate_index = int(data.get("candidate_index", 1))
+        except Exception:
+            pass
+
+    # Fallback: parse index from directory name "candidate_03"
+    if candidate_index <= 1 and not profile:
+        import re
+        match = re.search(r"candidate[_\s]*(\d+)", candidate_dir.name, re.IGNORECASE)
+        if match:
+            candidate_index = int(match.group(1))
+
+    seed_report_dir = candidate_dir / "log" / "generate"
+
+    try:
+        report = seed_parameters(
+            paras_output,
+            candidate_index=candidate_index,
+            profile=profile,
+            seed_report_dir=seed_report_dir,
+            label=candidate_dir.name,
+        )
+        updated = report.get("updated_count", 0)
+        skipped = report.get("skipped_count", 0)
+        print(f"  [seed] parameter seeding complete: {updated} updated, {skipped} skipped")
+        for p in report.get("parameters", []):
+            if p.get("skipped"):
+                continue
+            old_v = p.get("old_value")
+            new_v = p.get("new_value")
+            mult = p.get("multiplier", 0)
+            if isinstance(old_v, float):
+                old_v = round(old_v, 4)
+            if isinstance(new_v, float):
+                new_v = round(new_v, 4)
+            print(f"    {p['name']}: {old_v} -> {new_v}  (x{mult:.3f}, {p['category']})")
+    except Exception as exc:
+        print(f"  [seed] warning: parameter seeding failed ({exc}), keeping defaults")
 
 
 if __name__ == "__main__":
