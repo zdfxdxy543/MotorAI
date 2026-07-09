@@ -1295,6 +1295,14 @@ class MainProgramPanel(QWidget):
                 except Exception as seed_exc:
                     self._append_debug(f'  [seed] {candidate_dir.name} 参数种子失败: {seed_exc}，保留默认值')
 
+                # ── Step 1: 结构清单 ──────────────────────────────────
+                try:
+                    from Competition.controller_manifest import write_controller_manifest  # noqa: E402
+                    manifest_path = write_controller_manifest(candidate_dir)
+                    self._append_debug(f'  [manifest] {candidate_dir.name} 结构清单已写入: {manifest_path.name}')
+                except Exception as manifest_exc:
+                    self._append_debug(f'  [manifest] {candidate_dir.name} 结构清单失败: {manifest_exc}')
+
                 candidate_data = self._write_candidate_generated_result(candidate_dir, loop_ids_output, profile)
                 if first_loop_ids_path is None:
                     first_loop_ids_path = loop_ids_output

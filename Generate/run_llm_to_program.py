@@ -82,6 +82,10 @@ def main(
     # 根据 candidate 的设计方案倾向对初始值做差异化扰动，增强优化多样性。
     _seed_candidate_parameters(paras_output)
 
+    # ── Step 1: 结构清单 ────────────────────────────────────────────────
+    # 从 generate 产物中提取结构化摘要，供后续轮次的 agent 决策使用。
+    _write_candidate_manifest(paras_output)
+
     generated_files = f"{loop_ids_output}, {c_output}, {h_output}, {paras_output}"
     print(f"Pipeline completed: {generated_files}")
     return 0
@@ -140,6 +144,21 @@ def _seed_candidate_parameters(paras_output: Path) -> None:
             print(f"    {p['name']}: {old_v} -> {new_v}  (x{mult:.3f}, {p['category']})")
     except Exception as exc:
         print(f"  [seed] warning: parameter seeding failed ({exc}), keeping defaults")
+
+
+def _write_candidate_manifest(paras_output: Path) -> None:
+    """Post-generate step: write controller_manifest.json from generate artifacts.
+
+    Derives the candidate directory from the paras output path, same as
+    _seed_candidate_parameters().
+    """
+    candidate_dir = paras_output.expanduser().resolve().parent.parent
+    try:
+        from Competition.controller_manifest import write_controller_manifest  # noqa: E402
+        manifest_path = write_controller_manifest(candidate_dir)
+        print(f"  [manifest] wrote {manifest_path}")
+    except Exception as exc:
+        print(f"  [manifest] warning: controller manifest failed ({exc})")
 
 
 if __name__ == "__main__":
