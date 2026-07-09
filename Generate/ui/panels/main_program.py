@@ -19,6 +19,7 @@ from workflow.agent_flow import (
     ACTION_ANSWER_QUESTION,
     ACTION_CLARIFY,
     ACTION_CONFIRM_GENERATE,
+    ACTION_CONTINUE_NEXT_ROUND,
     ACTION_REVISE_PROGRAM,
     ACTION_SHOW_LOAD_CURVE,
     ACTION_START_TUNING,
@@ -636,6 +637,12 @@ class MainProgramPanel(QWidget):
             self.send_metric_requirement(text)
             return
 
+        if action == ACTION_CONTINUE_NEXT_ROUND:
+            self._append_chat('user', text)
+            self.input_edit.clear()
+            self._handle_continue_next_round()
+            return
+
         if action == ACTION_START_TUNING:
             self._append_chat('user', text)
             self.input_edit.clear()
@@ -916,6 +923,39 @@ class MainProgramPanel(QWidget):
         else:
             self._append_error('调优入口尚未初始化，无法启动 Optimize Agent。')
         return True
+
+    def _handle_continue_next_round(self):
+        """用户要求继续下一轮仿真：检查第二轮策略是否就绪，然后启动调优。"""
+        project_json = self._project_json_path()
+        if not project_json:
+            self._append_error('未找到项目文件，无法继续下一轮。')
+            return
+
+        project_dir = Path(project_json).parent
+        round2_profiles = project_dir / 'rounds' / 'round_02' / 'candidate_profiles.json'
+
+        if round2_profiles.exists():
+            # Step 4 已生成策略，直接启动下一轮调优
+            self._append_success(
+                '第二轮候选方案策略已就绪，正在启动下一轮调优...\n'
+                f'策略文件：{round2_profiles}'
+            )
+        else:
+            # 尝试实时生成
+            self._append_notice('正在基于第一轮实验报告生成第二轮方案策略（需要调用 LLM）...')
+            try:
+                from Competition.next_round_strategy import generate_next_round_strategy  # noqa: E402
+                result = generate_next_round_strategy(project_json, from_round=1, to_round=2)
+                self._append_success(f'第二轮策略已生成：{result.get("candidate_profiles")}')
+            except Exception as exc:
+                self._append_error(f'无法生成第二轮策略：{exc}')
+                return
+
+        self._set_progress('正在启动第二轮调优...')
+        if callable(self.run_tuning_callback):
+            self.run_tuning_callback()
+        else:
+            self._append_error('调优入口尚未初始化，无法启动。')
 
     def _append_auto_tuning_confirm_card(self):
         if self._auto_tuning_confirm_pending or self._auto_tuning_started:
