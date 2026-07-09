@@ -251,15 +251,18 @@ def rise_time(
     """
     Return 10%-to-90% rise time by default.
 
+    Thresholds are computed relative to the signal's own final steady-state
+    value (y[-1]), NOT the target. This ensures rise_time remains computable
+    even when the system cannot reach the commanded target (e.g. due to
+    saturation or limited actuator authority).
+
     For a decreasing response, this function automatically uses the matching
-    downward crossings. target is required and is reduced to its final value if
-    a target signal/vector is provided.
+    downward crossings.
 
     Raises MetricComputationError if the response does not reach the requested
     lower or upper threshold.
     """
     t, y = _extract_time_values(signal=signal, time=time, values=values, require_time=True)
-    target_final = _target_final_value(target, metric_name="rise_time")
 
     _validate_ratio(lower_ratio, "lower_ratio")
     _validate_ratio(upper_ratio, "upper_ratio")
@@ -267,10 +270,12 @@ def rise_time(
         raise MetricComputationError("rise_time requires lower_ratio < upper_ratio.")
 
     initial = y[0]
-    delta = target_final - initial
+    # 使用信号自身的最终值（实际稳态值）而非目标值作为基准
+    signal_final = y[-1]
+    delta = signal_final - initial
     if abs(delta) <= _EPSILON:
         raise MetricComputationError(
-            "rise_time cannot be computed because initial value and target are equal."
+            "rise_time cannot be computed because initial value and final value are equal."
         )
 
     lower_level = initial + lower_ratio * delta
@@ -306,32 +311,36 @@ def settling_time(
     tolerance_ratio: float = 0.02,
 ) -> float:
     """
-    Return the time after which the signal remains inside the target band.
+    Return the time after which the signal remains inside the tolerance band.
+
+    The tolerance band is centered on the signal's own final steady-state value
+    (y[-1]), NOT the target. This ensures settling_time remains computable even
+    when the system cannot reach the commanded target (e.g. due to saturation or
+    limited actuator authority).
 
     If tolerance is provided, it is treated as an absolute tolerance.
-    Otherwise, tolerance_ratio * abs(target_final) is used. If target_final is
+    Otherwise, tolerance_ratio * abs(signal_final) is used. If signal_final is
     near zero, tolerance_ratio * max(abs(signal)) is used as a fallback.
-
-    target is required and is reduced to its final value if a target
-    signal/vector is provided.
     """
     t, y = _extract_time_values(signal=signal, time=time, values=values, require_time=True)
-    target_final = _target_final_value(target, metric_name="settling_time")
+    # 使用信号自身的最终值（实际稳态值）作为基准
+    signal_final = y[-1]
 
     band = _resolve_tolerance(
         tolerance=tolerance,
         tolerance_ratio=tolerance_ratio,
-        target_final=target_final,
+        target_final=signal_final,
         values=y,
         metric_name="settling_time",
     )
 
     for i in range(len(y)):
-        if all(abs(sample - target_final) <= band for sample in y[i:]):
+        if all(abs(sample - signal_final) <= band for sample in y[i:]):
             return t[i] - t[0]
 
     raise MetricComputationError(
-        f"settling_time cannot be computed because the signal never remains within +/-{band}."
+        f"settling_time cannot be computed because the signal never remains within +/-{band} "
+        f"of its final value {signal_final}."
     )
 
 

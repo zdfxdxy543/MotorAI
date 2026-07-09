@@ -425,6 +425,15 @@ class RequirementPanel(QWidget):
             "good_threshold": 0.02,
             "bad_threshold": 0.20,
             "description": "稳态纹波，末尾 10% 数据窗口内的峰峰值"
+        },
+        "rise_time": {
+            "metric_name": "rise_time",
+            "optimization_direction": "minimize",
+            "lower_ratio": 0.10,
+            "upper_ratio": 0.90,
+            "good_threshold": 0.10,
+            "bad_threshold": 1.00,
+            "description": "上升时间，信号从目标值 10% 上升到 90% 所需时间"
         }
     }
 
@@ -766,10 +775,10 @@ class RequirementPanel(QWidget):
                 '以及用户明确给出了哪些数值要求。\n\n'
                 '可选物理量：speed(速度), torque(转矩), iq(q轴电流), id(d轴电流)\n'
                 '可选测量参数：overshoot(超调量), settling_time(调整时间), '
-                'steady_state_error(稳态误差), ripple(纹波)\n\n'
+                'steady_state_error(稳态误差), ripple(纹波), rise_time(上升时间)\n\n'
                 '约束类型（constraint type）说明：\n'
                 '- overshoot_percent：超调百分比，value 为百分数（如用户说"超调小于5%"→value=5）\n'
-                '- time_seconds：调节时间秒数，value 为秒（如用户说"调节时间小于0.5s"→value=0.5）\n'
+                '- time_seconds：调节时间/上升时间秒数，value 为秒（如用户说"上升时间小于0.3s"→value=0.3）\n'
                 '- error_absolute：稳态误差绝对值，value 为 rad/s 或 N*m 或 A\n'
                 '- error_percent：稳态误差百分比，value 为百分数（如"稳态误差小于2%"→value=2）\n'
                 '- ripple_absolute：纹波绝对值\n'
