@@ -953,6 +953,23 @@ exit /b %ERRORLEVEL%
     bat_path.write_text(content, encoding="utf-8")
 
 
+def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: Path) -> Path:
+    """从 candidate.json 提取评估配置字段，写入 evaluation_config.json。
+
+    candidate.json 在 sync_candidate_common_fields() 之后已经持有
+    最新的 task_type / objective / signals / metrics，和 MainTest.json 一致。
+    直接提取这四个字段落盘，不依赖 app.py 的内存 override 或 LLM 的行为。
+    """
+    config: dict[str, Any] = {}
+    for field in ("task_type", "objective", "signals", "metrics"):
+        value = candidate.get(field)
+        if value is not None:
+            config[field] = value
+    output = optimize_dir / "evaluation_config.json"
+    write_json(output, config)
+    return output
+
+
 def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
     candidate_json = candidate_json.expanduser().resolve()
     candidate = sync_candidate_common_fields(candidate_json)
@@ -1004,6 +1021,13 @@ def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
 
     agent_project = build_candidate_agent_project(candidate_json)
     write_json(optimize_paths["agent_project"], agent_project)
+
+    # ── 生成 evaluation_config.json ─────────────────────────────────────
+    # candidate.json 已通过 sync_candidate_common_fields() 拿到最新的
+    # task_type / objective / signals / metrics，直接落盘为 evaluation_config.json。
+    # 这样 evaluator 无论走 direct-evaluation override 还是读默认路径，
+    # 都能拿到正确的评估配置，不依赖 LLM 的行为。
+    _write_candidate_evaluation_config(candidate, log_optimize)
 
     modify_simulink_vcxproj(str(sln_dir), gmp_root)
     modify_gmp_compiler_include_summaries(candidate_root, gmp_root)
