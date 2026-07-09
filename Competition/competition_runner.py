@@ -315,6 +315,7 @@ def run_competition(
     skip_optimize: bool,
     force_init: bool,
     force_next_round: bool = False,
+    round_number: int = 1,
 ) -> dict[str, Any]:
     project_json = project_json.expanduser().resolve()
     project_data = load_json_object(project_json)
@@ -322,6 +323,34 @@ def run_competition(
     stop_conditions = project_data.get("stop_conditions")
     if not isinstance(stop_conditions, dict):
         stop_conditions = {}
+
+    # ── 多轮支持：round > 1 时备份上一轮源码 + 加载本轮 profiles ──
+    if round_number > 1:
+        import shutil
+        project_root = project_json.parent
+        prev_round = round_number - 1
+
+        # 备份上一轮源码：candidates/candidate_XX/src → rounds/round_NN/candidates/
+        for cdir in sorted((project_root / "candidates").glob("candidate_*")):
+            if cdir.is_dir():
+                src_dir = cdir / "src"
+                if src_dir.is_dir():
+                    backup_dir = project_root / "rounds" / f"round_{prev_round:02d}" / "candidates" / cdir.name / "src"
+                    backup_dir.parent.mkdir(parents=True, exist_ok=True)
+                    if backup_dir.exists():
+                        shutil.rmtree(backup_dir)
+                    shutil.copytree(src_dir, backup_dir)
+
+        # 用本轮 profiles 覆盖 common，generate 阶段会读取它
+        round_profiles = project_root / "rounds" / f"round_{round_number:02d}" / "candidate_profiles.json"
+        if round_profiles.exists():
+            common_profiles = project_root / "common" / "candidate_profiles.json"
+            common_profiles.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(round_profiles, common_profiles)
+
+        skip_generate = False   # 可能换了控制结构，必须重新生成
+        force_init = False      # 不重建 candidate 目录
+
     candidate_dirs = ensure_candidates(project_json, candidates, force_init=force_init)
     optimize_config_results = configure_optimize(candidate_dirs)
 
@@ -335,8 +364,18 @@ def run_competition(
             dry_run=dry_run,
         )
 
+    # 检查 generate 是否全部成功；如果有失败，跳过 optimize 并报错
+    generate_all_ok = True
+    if generate_result and not dry_run:
+        gen_results = generate_result.get("results") or []
+        for r in gen_results:
+            if r.get("status") != "completed":
+                generate_all_ok = False
+                print(f"[ERROR] {r.get('candidate_id')} generate 失败 (status={r.get('status')})，"
+                      f"跳过 optimize。详见 stderr: {r.get('stderr')}", file=sys.stderr)
+
     optimize_results: list[dict[str, Any]] = []
-    if not skip_optimize:
+    if not skip_optimize and generate_all_ok:
         optimize_results = run_optimize(candidate_dirs, parallel=optimize_parallel, dry_run=dry_run)
 
     # ── Step 3: 轮次反馈 ───────────────────────────────────────────────
@@ -345,18 +384,21 @@ def run_competition(
     if not skip_optimize and not dry_run:
         try:
             from Competition.round_feedback import generate_round_feedback  # noqa: E402
-            fb_path = generate_round_feedback(project_json, round_number=1)
+            fb_path = generate_round_feedback(project_json, round_number=round_number)
             round_feedback_path = str(fb_path.resolve())
 
             # ── Step 4: 下一轮策略生成 ─────────────────────────────
-            # 如果停止条件未满足（或指定了 --force-next-round），
-            # 自动调用 LLM 生成第二轮方案策略。
             fb_data = load_json_object(fb_path)
-            if force_next_round or not fb_data.get("requirement_satisfied", True):
+            max_rounds = int(project_data.get("max_rounds") or 0)
+            at_limit = max_rounds > 0 and round_number >= max_rounds
+            if not at_limit and (force_next_round or not fb_data.get("requirement_satisfied", True)):
                 from Competition.next_round_strategy import generate_next_round_strategy  # noqa: E402
                 next_count = int(project_data.get("candidate_count", candidates))
                 next_result = generate_next_round_strategy(
-                    project_json, from_round=1, to_round=2, candidate_count=next_count,
+                    project_json,
+                    from_round=round_number,
+                    to_round=round_number + 1,
+                    candidate_count=next_count,
                 )
                 next_round_profiles_path = next_result.get("candidate_profiles")
         except Exception:
@@ -422,6 +464,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--skip-generate", action="store_true")
     parser.add_argument("--skip-optimize", action="store_true")
     parser.add_argument("--force-init", action="store_true")
+    parser.add_argument("--round", type=int, default=1, help="轮次编号，默认 1")
     parser.add_argument("--force-next-round", action="store_true", help="即使停止条件已满足，也强制生成下一轮策略")
     args = parser.parse_args(argv)
 
@@ -436,6 +479,7 @@ def main(argv: list[str] | None = None) -> int:
             skip_optimize=args.skip_optimize,
             force_init=args.force_init,
             force_next_round=args.force_next_round,
+            round_number=args.round,
         )
     except Exception as exc:
         print(f"Error: {type(exc).__name__}: {exc}", file=sys.stderr)

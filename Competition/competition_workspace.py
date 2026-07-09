@@ -389,7 +389,13 @@ def build_candidate_generation_requirement(base_requirement: str, profile: dict[
     if implementation_bias:
         parts.append(f"- 代码逻辑偏置：{implementation_bias}")
     if methods_text:
-        parts.append(f"- 必须使用的控制方法（只能从以下方法中选择，不得使用未列出的方法）：{methods_text}")
+        # 第二轮以后（有 parameter_seed_policy 的 profile）才强制方法，
+        # 第一轮 profile 的 preferred_control_methods 只是建议。
+        seed_policy = profile.get("parameter_seed_policy") if isinstance(profile, dict) else None
+        if seed_policy:
+            parts.append(f"- 必须使用的控制方法（只能从以下方法中选择，不得使用未列出的方法）：{methods_text}")
+        else:
+            parts.append(f"- 优先探索控制方法：{methods_text}")
     if current_mode:
         parts.append(f"- 当前生成模式：{current_mode}")
     if current_scope:

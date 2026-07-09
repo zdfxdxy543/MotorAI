@@ -284,11 +284,23 @@ def _split_raw_properties(raw_properties: Any) -> list[str]:
 
 
 def _infer_mech_method(requirement: str, raw_props: list[str]) -> str:
+    # 先检查 requirement 中是否有"必须使用"的强制约束——优先级高于 LLM 输出
+    low_req = (requirement or "").lower()
+
+    # 模式1：强制约束 "必须使用的控制方法：xxx" 或 "必须使用...：xxx"
+    import re
+    forced_match = re.search(r'必须使用[^：:]*[：:]\s*([a-zA-Z_]+)', requirement)
+    if forced_match:
+        forced_method = forced_match.group(1).strip().lower()
+        if forced_method in MECH_METHODS:
+            return forced_method
+
+    # 模式2：LLM 输出的 raw_props 中有有效方法
     for prop in raw_props:
         if prop in MECH_METHODS:
             return prop
 
-    low_req = (requirement or "").lower()
+    # 模式3：从 requirement 关键字推断
     if " smc" in f" {low_req}" or "滑模" in requirement:
         return "smc"
     if " mit" in f" {low_req}" or " model-in-the-loop" in low_req or "模型在环" in requirement:
