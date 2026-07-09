@@ -283,13 +283,15 @@ def _split_raw_properties(raw_properties: Any) -> list[str]:
     return []
 
 
-def _infer_mech_method(requirement: str, raw_props: list[str]) -> str:
-    # 先检查 requirement 中是否有"必须使用"的强制约束——优先级高于 LLM 输出
-    low_req = (requirement or "").lower()
-
-    # 模式1：强制约束 "必须使用的控制方法：xxx" 或 "必须使用...：xxx"
+def _infer_mech_method(requirement: str, raw_props: list[str], *, original_requirement: str = "") -> str:
+    # 最优先：从原始需求（中文 prompt）中提取"必须使用"的强制约束
+    # LLM 输出的 requirement 是英文摘要，不含"必须使用"四个字，
+    # 所以必须读原始输入。
     import re
-    forced_match = re.search(r'必须使用[^：:]*[：:]\s*([a-zA-Z_]+)', requirement)
+    search_text = (original_requirement or "") + " " + (requirement or "")
+
+    # 模式1：强制约束 "必须使用...：xxx" — 优先从原始需求匹配
+    forced_match = re.search(r'必须使用[^：:]*[：:]\s*([a-zA-Z_]+)', search_text)
     if forced_match:
         forced_method = forced_match.group(1).strip().lower()
         if forced_method in MECH_METHODS:
@@ -301,6 +303,7 @@ def _infer_mech_method(requirement: str, raw_props: list[str]) -> str:
             return prop
 
     # 模式3：从 requirement 关键字推断
+    low_req = (requirement or "").lower()
     if " smc" in f" {low_req}" or "滑模" in requirement:
         return "smc"
     if " mit" in f" {low_req}" or " model-in-the-loop" in low_req or "模型在环" in requirement:
@@ -323,7 +326,7 @@ def _infer_mech_target(loop_name: str, raw_props: list[str]) -> str:
     return "speed"
 
 
-def canonicalize_loop_selection(payload: dict[str, Any]) -> dict[str, Any]:
+def canonicalize_loop_selection(payload: dict[str, Any], *, original_requirement: str = "") -> dict[str, Any]:
     """Normalize loop ids to stable deterministic ids by loop name."""
 
     normalized: list[dict[str, Any]] = []
@@ -348,7 +351,7 @@ def canonicalize_loop_selection(payload: dict[str, Any]) -> dict[str, Any]:
 
         if is_mech:
             mech_target = _infer_mech_target(loop_name, raw_props)
-            mech_method = _infer_mech_method(requirement, raw_props)
+            mech_method = _infer_mech_method(requirement, raw_props, original_requirement=original_requirement)
             properties = [mech_target, mech_method]
         else:
             properties = list(LOOP_PROPERTY_LIBRARY.get(loop_name) or [])
@@ -371,7 +374,7 @@ def canonicalize_loop_selection(payload: dict[str, Any]) -> dict[str, Any]:
     return out
 
 
-def _normalize_mechanical_loops(payload: dict[str, Any]) -> dict[str, Any]:
+def _normalize_mechanical_loops(payload: dict[str, Any], *, original_requirement: str = "") -> dict[str, Any]:
     """Convert speed/position loops into a single mech loop for backward compatibility.
 
     Rules:
@@ -391,10 +394,10 @@ def _normalize_mechanical_loops(payload: dict[str, Any]) -> dict[str, Any]:
     for l in loops:
         raw_props = _split_raw_properties(l.get("properties"))
         if any(prop in MECH_METHODS for prop in raw_props):
-            mech_method = _infer_mech_method(requirement, raw_props)
+            mech_method = _infer_mech_method(requirement, raw_props, original_requirement=original_requirement)
             break
     else:
-        mech_method = _infer_mech_method(requirement, [])
+        mech_method = _infer_mech_method(requirement, [], original_requirement=original_requirement)
 
     new_loops: list[dict[str, Any]] = []
     mech_added = False
@@ -432,7 +435,7 @@ def _normalize_mechanical_loops(payload: dict[str, Any]) -> dict[str, Any]:
             continue
         raw_props = _split_raw_properties(loop.get("properties"))
         target = _infer_mech_target("mech_loop", raw_props)
-        method = _infer_mech_method(requirement, raw_props)
+        method = _infer_mech_method(requirement, raw_props, original_requirement=original_requirement)
         # SMC is fundamentally a position-only controller — its step function
         # always computes x1 = position_error.  Speed-mode SMC does not exist.
         if method == "smc":
@@ -480,8 +483,8 @@ def select_loops(
 
     payload = parse_loop_json(text)
     validate_loop_selection(payload)
-    normalized = canonicalize_loop_selection(payload)
-    normalized = _normalize_mechanical_loops(normalized)
+    normalized = canonicalize_loop_selection(payload, original_requirement=requirement)
+    normalized = _normalize_mechanical_loops(normalized, original_requirement=requirement)
     return normalized
 
 

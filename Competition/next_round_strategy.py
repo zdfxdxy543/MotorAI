@@ -51,9 +51,12 @@ def _write_json(path: Path, data: dict[str, Any]) -> None:
 # ── 构建 LLM 提示词 ──────────────────────────────────────────────────────
 
 def _detect_user_method_constraint(requirement: str) -> str:
-    """从用户原始需求中检测明确指定的控制方法，返回逗号分隔的中文方法名。
+    """从用户原始需求中检测明确指定的控制方法。
 
-    如果用户没有明确指定方法（只是泛泛说"良好的控制性能"），返回空字符串。
+    只匹配肯定句式（如"采用PID控制器"、"速度环使用PI"），
+    不匹配备选/未来/参考性提及（如"可考虑SMC"、"如果使用滑模"）。
+
+    如果用户没有明确指定方法，返回空字符串。
     """
     if not requirement:
         return ""
@@ -61,21 +64,39 @@ def _detect_user_method_constraint(requirement: str) -> str:
     found: list[str] = []
     text = requirement.lower()
 
-    # PID 及其变体
-    if any(kw in text for kw in ("pid", "比例积分微分", "比例积分")):
+    # 肯定句式模式：用户在描述自己选用的方法
+    # 匹配 "采用/使用/选用/基于/选择/优先 pid/pi" 等肯定表达
+    import re
+
+    def _affirmative(keyword: str) -> bool:
+        """检查 keyword 是否出现在肯定上下文中。"""
+        pattern = r'(?:采用|使用|选用|基于|选择|优先|默认|采用.*控制|方案.*采用).{0,10}' + re.escape(keyword)
+        return bool(re.search(pattern, text))
+
+    # PID 及其变体 — 肯定句式
+    pid_affirm = any(
+        re.search(r'(?:采用|使用|选用|基于|选择|优先|默认)[^。]{0,15}' + kw, text)
+        for kw in ("pid", "比例积分微分", "比例积分", "pi控制", "pi ")
+    )
+    if pid_affirm:
+        found.append("PID")
+    elif any(kw in text for kw in ("pid", "比例积分微分", "比例积分")):
+        # 退一步：至少提到了，但不够肯定 → 仍然列入但优先级低
         found.append("PID")
 
-    # 滑模
-    if any(kw in text for kw in ("滑模", "smc", "sliding mode")):
+    # 滑模 — 需要肯定表述
+    if any(
+        re.search(r'(?:采用|使用|选用|基于|选择|优先|默认)[^。]{0,15}' + kw, text)
+        for kw in ("滑模", "smc", "sliding mode")
+    ):
         found.append("SMC（滑模）")
 
-    # 自抗扰
-    if any(kw in text for kw in ("自抗扰", "adrc", "ladrc", "线性自抗扰", "active disturbance rejection")):
+    # 自抗扰 — 需要肯定表述
+    if any(
+        re.search(r'(?:采用|使用|选用|基于|选择|优先|默认)[^。]{0,15}' + kw, text)
+        for kw in ("自抗扰", "adrc", "ladrc", "线性自抗扰", "active disturbance rejection")
+    ):
         found.append("LADRC（自抗扰）")
-
-    # 前馈
-    if any(kw in text for kw in ("前馈", "feedforward", "feed forward")):
-        found.append("前馈")
 
     return "、".join(found)
 
@@ -339,14 +360,15 @@ def _ensure_elite_preservation(
     if not winner_id:
         return profiles
 
-    # 检查是否已有 profile 保留了 winner
+    # 检查是否已有 profile 以纯 inherit 模式保留了 winner
     for p in profiles:
         seed = p.get("parameter_seed_policy") if isinstance(p.get("parameter_seed_policy"), dict) else {}
         mode = str(seed.get("mode", "") or "").strip()
         refs = p.get("reference_candidates") or []
         source = str(seed.get("source_candidate", "") or "").strip()
-        if mode in ("inherit", "inherit_then_perturb") and (winner_id in refs or source == winner_id):
-            return profiles  # 已经有人保留了 winner，不需要干预
+        # 必须是纯 inherit（不扰动），inherit_then_perturb 可能改坏参数
+        if mode == "inherit" and (winner_id in refs or source == winner_id):
+            return profiles  # 已有人原样保留了 winner，不需要干预
 
     # 从 feedback 中提取 winner 的控制方法
     candidates = feedback.get("candidates") or []
