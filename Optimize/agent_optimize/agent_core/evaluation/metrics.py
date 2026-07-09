@@ -249,18 +249,12 @@ def rise_time(
     upper_ratio: float = 0.9,
 ) -> float:
     """
-    Return 10%-to-90% rise time by default.
+    Return 10%-to-90% rise time relative to the TARGET value.
 
-    Thresholds are computed relative to the signal's own final steady-state
-    value (y[-1]), NOT the target. This ensures rise_time remains computable
-    even when the system cannot reach the commanded target (e.g. due to
-    saturation or limited actuator authority).
-
-    For a decreasing response, this function automatically uses the matching
-    downward crossings.
-
-    Raises MetricComputationError if the response does not reach the requested
-    lower or upper threshold.
+    Thresholds are computed relative to the commanded target, not the signal's
+    own final value.  If the system cannot reach the target, rise_time returns
+    the full simulation duration so the score naturally becomes 0 — the metric
+    no longer gives a false pass when the motor runs at the wrong speed.
     """
     t, y = _extract_time_values(signal=signal, time=time, values=values, require_time=True)
 
@@ -269,34 +263,28 @@ def rise_time(
     if lower_ratio >= upper_ratio:
         raise MetricComputationError("rise_time requires lower_ratio < upper_ratio.")
 
+    _target = _resolve_scalar_target(target, metric_name="rise_time")
+    if _target is None:
+        raise MetricComputationError("rise_time requires a scalar target (target_value or target_signal).")
+
     initial = y[0]
-    # 使用信号自身的最终值（实际稳态值）而非目标值作为基准
-    signal_final = y[-1]
-    delta = signal_final - initial
+    delta = _target - initial
     if abs(delta) <= _EPSILON:
-        raise MetricComputationError(
-            "rise_time cannot be computed because initial value and final value are equal."
-        )
+        raise MetricComputationError("rise_time: target equals initial value.")
 
     lower_level = initial + lower_ratio * delta
     upper_level = initial + upper_ratio * delta
 
     t_lower = _first_crossing_time(t, y, level=lower_level, direction=delta)
     if t_lower is None:
-        raise MetricComputationError(
-            f"rise_time lower threshold was not reached: level={lower_level}."
-        )
+        return t[-1] - t[0]  # 到不了目标 → 返回仿真总时长 → 得 0 分
 
     t_upper = _first_crossing_time(t, y, level=upper_level, direction=delta)
     if t_upper is None:
-        raise MetricComputationError(
-            f"rise_time upper threshold was not reached: level={upper_level}."
-        )
+        return t[-1] - t[0]
 
     if t_upper < t_lower:
-        raise MetricComputationError(
-            "rise_time produced upper crossing before lower crossing; check signal data."
-        )
+        return t[-1] - t[0]
 
     return t_upper - t_lower
 
@@ -313,35 +301,31 @@ def settling_time(
     """
     Return the time after which the signal remains inside the tolerance band.
 
-    The tolerance band is centered on the signal's own final steady-state value
-    (y[-1]), NOT the target. This ensures settling_time remains computable even
-    when the system cannot reach the commanded target (e.g. due to saturation or
-    limited actuator authority).
-
-    If tolerance is provided, it is treated as an absolute tolerance.
-    Otherwise, tolerance_ratio * abs(signal_final) is used. If signal_final is
-    near zero, tolerance_ratio * max(abs(signal)) is used as a fallback.
+    The tolerance band is centered on the COMMANDED TARGET, not the signal's
+    own final value.  If the system cannot reach the target, settling_time
+    returns the full simulation duration so the score naturally becomes 0 —
+    the metric no longer gives a false pass when the motor runs at the wrong speed.
     """
     t, y = _extract_time_values(signal=signal, time=time, values=values, require_time=True)
-    # 使用信号自身的最终值（实际稳态值）作为基准
-    signal_final = y[-1]
+
+    _target = _resolve_scalar_target(target, metric_name="settling_time")
+    if _target is None:
+        raise MetricComputationError("settling_time requires a scalar target (target_value or target_signal).")
 
     band = _resolve_tolerance(
         tolerance=tolerance,
         tolerance_ratio=tolerance_ratio,
-        target_final=signal_final,
+        target_final=_target,
         values=y,
         metric_name="settling_time",
     )
 
     for i in range(len(y)):
-        if all(abs(sample - signal_final) <= band for sample in y[i:]):
+        if all(abs(sample - _target) <= band for sample in y[i:]):
             return t[i] - t[0]
 
-    raise MetricComputationError(
-        f"settling_time cannot be computed because the signal never remains within +/-{band} "
-        f"of its final value {signal_final}."
-    )
+    # 到不了目标 → 返回仿真总时长 → 得 0 分
+    return t[-1] - t[0]
 
 
 def ripple(

@@ -278,6 +278,16 @@ Your job is:
 - call apply_parameter_update_and_record only when build, simulation, and
   evaluation succeeded.
 
+Critical diagnosis rule:
+
+- **If steady_state_error exceeds its bad_threshold, the system is NOT
+  reaching the commanded target.**  In this case, rise_time and settling_time
+  scores are unreliable — they may reflect the signal settling at the WRONG
+  operating point.  Prioritise fixing the steady-state error (e.g. via
+  integral gain, current limit, or speed limit) before trusting dynamic
+  response metrics.  Do NOT declare victory just because rise_time or
+  settling_time scored well when steady_state_error is bad.
+
 The Python evaluation layer's job is:
 
 - parse processed.json;
