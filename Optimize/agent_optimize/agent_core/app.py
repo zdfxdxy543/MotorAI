@@ -554,16 +554,18 @@ def run_headless_job(
                     "content": _build_iteration_prompt(job, job_file, iteration, max_iterations),
                 }
             )
+            # 最后一轮迭代不允许修改参数——改了也没机会验证，坏参数会被继承
+            iteration_tools = ["run_one_tuning_iteration"]
+            if iteration < max_iterations:
+                iteration_tools.append("apply_parameter_update_and_record")
+
             final_message = run_agent_turn(
                 llm,
                 registry,
                 messages,
                 max_tool_rounds=max_tool_rounds,
                 echo_tools=True,
-                allowed_tool_names=[
-                    "run_one_tuning_iteration",
-                    "apply_parameter_update_and_record",
-                ],
+                allowed_tool_names=iteration_tools,
             )
 
             latest_evaluation = _load_latest_evaluation_result(ctx)

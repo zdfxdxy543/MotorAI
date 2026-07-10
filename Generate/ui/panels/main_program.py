@@ -925,35 +925,58 @@ class MainProgramPanel(QWidget):
         return True
 
     def _handle_continue_next_round(self):
-        """用户要求继续下一轮仿真：检查第二轮策略是否就绪，然后启动调优。"""
+        """用户要求继续下一轮仿真：确定当前轮次，检查策略，启动调优。"""
         project_json = self._project_json_path()
         if not project_json:
             self._append_error('未找到项目文件，无法继续下一轮。')
             return
 
         project_dir = Path(project_json).parent
-        round2_profiles = project_dir / 'rounds' / 'round_02' / 'candidate_profiles.json'
+        rounds_root = project_dir / 'rounds'
 
-        if round2_profiles.exists():
-            # Step 4 已生成策略，直接启动下一轮调优
+        # 找到最新有 round_feedback.json 的轮次（表示该轮已完成）
+        import re
+        current_round = 0
+        for d in sorted(rounds_root.glob('round_*')) if rounds_root.exists() else []:
+            m = re.search(r'round_(\d+)', d.name)
+            if m and (d / 'round_feedback.json').exists():
+                current_round = max(current_round, int(m.group(1)))
+
+        if current_round <= 0:
+            self._append_error('未找到任何已完成轮次的数据，请先完成第一轮调优。')
+            return
+
+        next_round = current_round + 1
+        next_profiles = rounds_root / f'round_{next_round:02d}' / 'candidate_profiles.json'
+
+        if next_profiles.exists():
             self._append_success(
-                '第二轮候选方案策略已就绪，正在启动下一轮调优...\n'
-                f'策略文件：{round2_profiles}'
+                f'第 {next_round} 轮候选方案策略已就绪，正在启动调优...'
             )
         else:
-            # 尝试实时生成
-            self._append_notice('正在基于第一轮实验报告生成第二轮方案策略（需要调用 LLM）...')
+            self._append_notice(f'正在基于第 {current_round} 轮实验报告生成第 {next_round} 轮方案策略（需要调用 LLM）...')
             try:
                 from Competition.next_round_strategy import generate_next_round_strategy  # noqa: E402
-                result = generate_next_round_strategy(project_json, from_round=1, to_round=2)
-                self._append_success(f'第二轮策略已生成：{result.get("candidate_profiles")}')
+                result = generate_next_round_strategy(
+                    project_json, from_round=current_round, to_round=next_round,
+                )
+                self._append_success(f'第 {next_round} 轮策略已生成。')
             except Exception as exc:
-                self._append_error(f'无法生成第二轮策略：{exc}')
+                self._append_error(f'无法生成第 {next_round} 轮策略：{exc}')
                 return
 
-        self._set_progress('正在启动第二轮调优...')
+        self._set_progress(f'正在启动第 {next_round} 轮调优...')
         if callable(self.run_tuning_callback):
-            self.run_tuning_callback()
+            # 传 round_number 给回调（run_agent_optimization 现在接受此参数）
+            try:
+                import inspect
+                sig = inspect.signature(self.run_tuning_callback)
+                if len(sig.parameters) > 0:
+                    self.run_tuning_callback(round_number=next_round)
+                else:
+                    self.run_tuning_callback()
+            except Exception:
+                self.run_tuning_callback()
         else:
             self._append_error('调优入口尚未初始化，无法启动。')
 

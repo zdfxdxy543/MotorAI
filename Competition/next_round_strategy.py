@@ -346,59 +346,85 @@ def _ensure_elite_preservation(
     profiles: list[dict[str, Any]],
     feedback: dict[str, Any],
 ) -> list[dict[str, Any]]:
-    """精英保留：保证至少一个 candidate 继承上一轮 winner 的结构和参数。
+    """精英保留 + 去重：保证多样性，防止两个 candidate 参数一模一样。
 
-    如果 LLM 生成的 profiles 中没有任何一个以 winner 为参考来源且使用
-    inherit 或 inherit_then_perturb 模式，则用 winner 保留方案替换最后一个
-    candidate，确保第二轮不会比第一轮退步。
+    规则：
+    1. 至少有一个 candidate 纯 inherit winner（精英保留）
+    2. 不允许两个 candidate 同为纯 inherit 且来源相同（浪费仿真资源）
+       违者将后出现的转为 inherit_then_perturb + 默认微扰动
     """
     winner = feedback.get("winner")
     if not isinstance(winner, dict):
-        return profiles
+        return _deduplicate_inherit(profiles)
 
     winner_id = str(winner.get("candidate_id", "") or "").strip()
     if not winner_id:
-        return profiles
+        return _deduplicate_inherit(profiles)
 
-    # 检查是否已有 profile 以纯 inherit 模式保留了 winner
+    # ── 规则 1：精英保留 ──────────────────────────────────────────────
+    has_elite = False
     for p in profiles:
         seed = p.get("parameter_seed_policy") if isinstance(p.get("parameter_seed_policy"), dict) else {}
         mode = str(seed.get("mode", "") or "").strip()
         refs = p.get("reference_candidates") or []
         source = str(seed.get("source_candidate", "") or "").strip()
-        # 必须是纯 inherit（不扰动），inherit_then_perturb 可能改坏参数
         if mode == "inherit" and (winner_id in refs or source == winner_id):
-            return profiles  # 已有人原样保留了 winner，不需要干预
-
-    # 从 feedback 中提取 winner 的控制方法
-    candidates = feedback.get("candidates") or []
-    winner_methods: list[str] = ["pid"]
-    for c in candidates:
-        if c.get("candidate_id") == winner_id:
-            manifest = c.get("structure_manifest") if isinstance(c.get("structure_manifest"), dict) else {}
-            methods = manifest.get("control_methods") or []
-            if isinstance(methods, list) and methods:
-                winner_methods = [str(m).strip().lower() for m in methods if str(m).strip()]
+            has_elite = True
             break
 
-    # 用 winner 保留方案替换最后一个 profile
-    last_index = len(profiles) - 1
-    preserve: dict[str, Any] = {
-        "candidate_id": f"candidate_{last_index + 1:02d}",
-        "name": f"精英保留（继承 {winner_id}）",
-        "structure_bias": f"与 {winner_id} 保持一致的控制结构，继承其最终参数作为起点",
-        "preferred_control_methods": winner_methods,
-        "reference_candidates": [winner_id],
-        "parameter_seed_policy": {
-            "mode": "inherit",
-            "source_candidate": winner_id,
-            "perturbation_direction": "",
-        },
-        "expected_improvement": {
-            "target_failed_metrics": [],
-        },
-    }
-    profiles[-1] = preserve
+    if not has_elite:
+        # 提取 winner 的控制方法
+        candidates = feedback.get("candidates") or []
+        winner_methods: list[str] = ["pid"]
+        for c in candidates:
+            if c.get("candidate_id") == winner_id:
+                manifest = c.get("structure_manifest") if isinstance(c.get("structure_manifest"), dict) else {}
+                methods = manifest.get("control_methods") or []
+                if isinstance(methods, list) and methods:
+                    winner_methods = [str(m).strip().lower() for m in methods if str(m).strip()]
+                break
+
+        last_index = len(profiles) - 1
+        preserve: dict[str, Any] = {
+            "candidate_id": f"candidate_{last_index + 1:02d}",
+            "name": f"精英保留（继承 {winner_id}）",
+            "structure_bias": f"与 {winner_id} 保持一致的控制结构，继承其最终参数作为起点",
+            "preferred_control_methods": winner_methods,
+            "reference_candidates": [winner_id],
+            "parameter_seed_policy": {
+                "mode": "inherit",
+                "source_candidate": winner_id,
+                "perturbation_direction": "",
+            },
+            "expected_improvement": {"target_failed_metrics": []},
+        }
+        profiles[-1] = preserve
+
+    # ── 规则 2：去重 ──────────────────────────────────────────────────
+    return _deduplicate_inherit(profiles)
+
+
+def _deduplicate_inherit(profiles: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """若多个 candidate 同为纯 inherit 且来源相同，将冗余者转为微扰动模式。"""
+    seen_sources: dict[str, int] = {}  # source_id -> first profile index
+    for i, p in enumerate(profiles):
+        seed = p.get("parameter_seed_policy") if isinstance(p.get("parameter_seed_policy"), dict) else {}
+        mode = str(seed.get("mode", "") or "").strip()
+        source = str(seed.get("source_candidate", "") or "").strip()
+        if mode != "inherit" or not source:
+            continue
+        if source in seen_sources:
+            # 重复了，转为 inherit_then_perturb
+            dup = profiles[i]
+            dup_name = dup.get("name", "")
+            dup["parameter_seed_policy"] = {
+                "mode": "inherit_then_perturb",
+                "source_candidate": source,
+                "perturbation_direction": "在继承参数基础上小幅扰动：关键增益参数 ±5% 以内随机微调，保持整体方向不变",
+            }
+            dup["name"] = dup_name + "（微调）" if dup_name else f"继承 {source}（微调）"
+        else:
+            seen_sources[source] = i
     return profiles
 
 

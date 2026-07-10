@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PyQt5.QtCore import Qt, QProcess
+from PyQt5.QtCore import Qt, QProcess, QTimer
 from PyQt5.QtGui import QIcon
 import json
 import os
@@ -257,7 +257,7 @@ class MainWindow(QMainWindow):
 
         return process, stdout_path, stderr_path
 
-    def run_agent_optimization(self):
+    def run_agent_optimization(self, round_number: int = 0):
         project_json_path = self.get_current_project_json_path()
         if not project_json_path:
             QMessageBox.warning(self, '提示', '请先打开或创建一个项目文件')
@@ -293,28 +293,41 @@ class MainWindow(QMainWindow):
 
                 self._competition_process = QProcess(self)
                 self._competition_process.setProcessChannelMode(QProcess.SeparateChannels)
+                self._competition_process.setWorkingDirectory(str(MOTORAI_ROOT))
+
                 self._competition_process.setStandardOutputFile(str(stdout_path))
                 self._competition_process.setStandardErrorFile(str(stderr_path))
-                self._competition_process.setWorkingDirectory(str(MOTORAI_ROOT))
                 self._competition_process.finished.connect(
                     lambda exit_code, exit_status:
                         self._on_competition_finished(exit_code, exit_status,
-                                                       project_json_path, stdout_path, stderr_path)
+                                                       project_json_path)
                 )
-                self._competition_process.start(sys.executable, [
+                # 确定当前轮次：手动点击永远从 1 开始，自动继续才传具体轮次
+                if round_number <= 0:
+                    current_round = 1  # 手动触发，从第一轮开始
+                else:
+                    current_round = round_number  # 自动继续，使用指定轮次
+
+                # 第二轮及以后需要重新 generate（可能换控制结构），
+                # 第一轮通过 UI 已手动 generate，所以 skip
+                cmd_args = [
                     str(runner_script),
                     str(project_json_path),
                     '--candidates', str(candidate_count),
                     '--parallel', '2',
                     '--optimize-parallel', '1',
-                    '--skip-generate',
+                    '--round', str(current_round),
                     '--force-next-round',
-                ])
+                ]
+                if current_round <= 1:
+                    cmd_args.append('--skip-generate')
+
+                self._competition_process.start(sys.executable, cmd_args)
                 right_panel = self.right_panel()
                 if right_panel is not None:
                     try:
-                        right_panel.main_program_panel._append_debug('多 candidate 调优任务已启动（后台运行中）...')
-                        right_panel.main_program_panel._set_status_text('状态：调优进行中')
+                        right_panel.main_program_panel._append_debug(f'第 {current_round} 轮调优已启动（后台运行中）...')
+                        right_panel.main_program_panel._set_status_text(f'状态：第 {current_round} 轮调优进行中')
                     except RuntimeError:
                         pass
                 return
@@ -337,32 +350,42 @@ class MainWindow(QMainWindow):
         except Exception as exc:
             QMessageBox.critical(self, '错误', f'启动失败：{type(exc).__name__}: {exc}')
 
-    def _on_competition_finished(self, exit_code, exit_status, project_json_path, stdout_path, stderr_path):
-        """所有 candidate 调优完成后，读取结果并在对话框中通知用户。"""
-        project_dir = Path(project_json_path).parent
-
+    def _on_competition_finished(self, exit_code, exit_status, project_json_path):
+        """所有 candidate 调优完成后，读取结果并自动决定是否继续下一轮。"""
         # 清理进程引用
         proc = getattr(self, '_competition_process', None)
         if proc is not None:
             proc.deleteLater()
             self._competition_process = None
 
-        # 读取轮次反馈
-        feedback_path = project_dir / 'rounds' / 'round_01' / 'round_feedback.json'
-        feedback = {}
-        if feedback_path.exists():
-            try:
-                with open(feedback_path, 'r', encoding='utf-8') as f:
-                    feedback = json.load(f)
-            except Exception:
-                pass
+        project_dir = Path(project_json_path).parent
 
-        # 构建消息
+        # 读取最新已完成的轮次反馈（必须有 round_feedback.json 才算完成）
+        rounds_root = project_dir / 'rounds'
+        current_round = 0
+        feedback = {}
+        if rounds_root.exists():
+            import re
+            for d in sorted(rounds_root.glob('round_*'), reverse=True):
+                fb = d / 'round_feedback.json'
+                if fb.exists():
+                    m = re.search(r'round_(\d+)', d.name)
+                    if m:
+                        current_round = int(m.group(1))
+                    try:
+                        with open(fb, 'r', encoding='utf-8') as f:
+                            feedback = json.load(f)
+                    except Exception:
+                        pass
+                    break
+        if current_round <= 0:
+            current_round = 1  # 第一轮还在跑
+
         winner = feedback.get('winner', {})
         scoreboard = feedback.get('scoreboard', [])
         satisfied = feedback.get('requirement_satisfied', False)
 
-        lines = ['本轮调优已完成。']
+        lines = [f'第 {current_round} 轮调优已完成。']
         if winner:
             lines.append(f'最高分：{winner["candidate_id"]}（{winner["overall_score"]} 分）')
         if scoreboard:
@@ -370,37 +393,73 @@ class MainWindow(QMainWindow):
             for item in scoreboard:
                 lines.append(f'  - {item["candidate_id"]}：{item["overall_score"]} 分')
 
-        failed = feedback.get('failed_metrics_summary', [])
-        if failed:
-            lines.append('普遍未达标的指标：')
-            for item in failed[:3]:
-                lines.append(f'  - {item["metric"]}（{item["failed_count"]} 个 candidate 未通过）')
-
-        if exit_code == 0:
-            if satisfied:
-                lines.append('停止条件已满足。')
-            else:
-                lines.append('停止条件未满足，可以继续下一轮迭代。')
-        else:
-            lines.append(f'进程异常退出（返回码 {exit_code}）。详情见日志：{stderr_path}')
+        if exit_code != 0:
+            lines.append(f'进程异常退出（返回码 {exit_code}）')
+        elif satisfied:
+            lines.append('停止条件已满足，迭代结束。')
 
         message = '\n'.join(lines)
 
-        # 显示在聊天面板中（UI 可能已被销毁，加保护）
         try:
             right_panel = self.right_panel()
             if right_panel is not None:
                 right_panel.main_program_panel._append_notice(message)
                 right_panel.main_program_panel._set_status_text(
-                    '状态：调优完成（条件已满足）' if satisfied else '状态：调优完成（可继续下一轮）'
+                    f'状态：第 {current_round} 轮完成（条件已满足）' if satisfied
+                    else f'状态：第 {current_round} 轮完成'
                 )
-                if not satisfied and exit_code == 0:
-                    right_panel.main_program_panel._append_notice(
-                        '是否继续第二轮仿真？如需继续请输入"继续仿真"或"开始第二轮"，'
-                        '系统将基于当前结果生成新的候选方案并自动运行。'
-                    )
         except RuntimeError:
-            pass  # UI 已销毁，忽略
+            return
+
+        # 自动继续：如果未满足停止条件且进程正常退出，直接启动下一轮
+        # 检查 max_rounds 上限
+        try:
+            with open(project_json_path, 'r', encoding='utf-8') as f:
+                max_rounds = json.load(f).get('max_rounds', 0)
+        except Exception:
+            max_rounds = 0
+
+        if not satisfied and exit_code == 0 and (max_rounds <= 0 or current_round < max_rounds):
+            try:
+                right_panel.main_program_panel._append_notice(
+                    f'正在自动启动第 {current_round + 1} 轮仿真...'
+                )
+            except RuntimeError:
+                return
+            QTimer.singleShot(500, lambda: self._start_next_round(current_round + 1))
+        elif max_rounds > 0 and current_round >= max_rounds and not satisfied:
+            try:
+                right_panel.main_program_panel._append_notice(
+                    f'已达到最大轮次上限（{max_rounds}），停止迭代。'
+                )
+            except RuntimeError:
+                pass
+
+    def _start_next_round(self, next_round: int):
+        """生成下一轮策略并自动启动调优。"""
+        project_json_path = self.get_current_project_json_path()
+        if not project_json_path:
+            return
+        project_dir = Path(project_json_path).parent
+        next_profiles = project_dir / 'rounds' / f'round_{next_round:02d}' / 'candidate_profiles.json'
+        right_panel = self.right_panel()
+
+        # 如果策略文件不存在，先生成
+        if not next_profiles.exists():
+            try:
+                if right_panel is not None:
+                    right_panel.main_program_panel._append_debug(
+                        f'正在生成第 {next_round} 轮方案策略（需要调用 LLM）...'
+                    )
+                from Competition.next_round_strategy import generate_next_round_strategy
+                generate_next_round_strategy(project_json_path, from_round=next_round - 1, to_round=next_round)
+            except Exception as exc:
+                if right_panel is not None:
+                    right_panel.main_program_panel._append_error(f'无法生成第 {next_round} 轮策略：{exc}')
+                return
+
+        # 直接启动，不弹窗
+        self.run_agent_optimization(round_number=next_round)
 
     def _read_project_open_root(self):
         return str(get_output_root(load_settings()))
