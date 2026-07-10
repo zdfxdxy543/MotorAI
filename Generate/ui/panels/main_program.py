@@ -1,6 +1,16 @@
-from PyQt5.QtWidgets import QFrame, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget, QVBoxLayout
-from PyQt5.QtCore import Qt, QDateTime, QSize
-from PyQt5.QtGui import QMovie
+from PyQt5.QtWidgets import (
+    QFrame,
+    QGraphicsDropShadowEffect,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QPushButton,
+    QSizePolicy,
+    QWidget,
+    QVBoxLayout,
+)
+from PyQt5.QtCore import Qt, QDateTime, QSize, QThread, pyqtSignal
+from PyQt5.QtGui import QColor, QMovie
 import json
 from pathlib import Path
 
@@ -43,6 +53,347 @@ from Competition.competition_workspace import (
 
 
 WELCOME_GIF_SIZE = 50
+INPUT_CARD_RADIUS = 16
+WELCOME_INPUT_MAX_WIDTH = 1020
+CHAT_INPUT_MAX_WIDTH = 1020
+
+
+def _build_tuning_policy_from_loops(selected_loops):
+    loop_names = {loop.get('name', '').lower() for loop in selected_loops if isinstance(loop, dict)}
+
+    allowed_parameters = {}
+    if 'current_loop' in loop_names or 'current_error_loop' in loop_names:
+        allowed_parameters['CUR_KP'] = {'min': 1.0, 'max': 500.0, 'description': '电流环比例增益'}
+        allowed_parameters['CUR_KI'] = {'min': 0.0, 'max': 100.0, 'description': '电流环积分增益'}
+        allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
+    if 'speed_loop' in loop_names or 'speed_error_loop' in loop_names or 'mech_loop' in loop_names:
+        allowed_parameters['VEL_KP'] = {'min': 0.1, 'max': 20.0, 'description': '速度环比例增益'}
+        allowed_parameters['VEL_KI'] = {'min': 0.0, 'max': 5.0, 'description': '速度环积分增益'}
+        allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
+    if 'position_loop' in loop_names or 'position_error_loop' in loop_names:
+        allowed_parameters['POS_KP'] = {'min': 0.1, 'max': 50.0, 'description': '位置环比例增益'}
+        allowed_parameters['POS_KI'] = {'min': 0.0, 'max': 10.0, 'description': '位置环积分增益'}
+        allowed_parameters['VEL_LIMIT'] = {'min': 0.1, 'max': 100.0, 'description': '速度限幅'}
+    if 'torque_loop' in loop_names or 'torque_reference_loop' in loop_names:
+        allowed_parameters['TRQ_KP'] = {'min': 1.0, 'max': 500.0, 'description': '转矩环比例增益'}
+        allowed_parameters['TRQ_KI'] = {'min': 0.0, 'max': 100.0, 'description': '转矩环积分增益'}
+
+    return {
+        'allowed_parameters': allowed_parameters,
+        'update_rule': '每轮可同时修改多个参数，数量上限由候选方案激进程度决定；如果编译、仿真或评价失败，不修改参数。'
+    }
+
+
+class GenerateProgramWorker(QThread):
+    progress = pyqtSignal(str)
+    debug = pyqtSignal(str)
+    success = pyqtSignal(dict)
+    failure = pyqtSignal(str)
+
+    def __init__(
+        self,
+        requirement: str,
+        project_json: Path,
+        candidate_dirs: list[Path],
+        template_dir: Path,
+        llm_config: Path,
+        parent=None,
+    ):
+        super().__init__(parent)
+        self.requirement = requirement
+        self.project_json = Path(project_json)
+        self.candidate_dirs = [Path(candidate_dir) for candidate_dir in candidate_dirs]
+        self.template_dir = Path(template_dir)
+        self.llm_config = Path(llm_config)
+
+    def run(self):
+        try:
+            self.success.emit(self._generate())
+        except Exception as exc:
+            self.failure.emit(str(exc))
+
+    def _generate(self) -> dict:
+        self.progress.emit(f'正在为 {len(self.candidate_dirs)} 个 candidate 生成控制器程序...')
+        sync_candidate_profiles_from_common(self.project_json, self.candidate_dirs)
+        candidate_summaries = []
+        first_loop_ids_path = None
+        first_candidate_data = None
+
+        for index, candidate_dir in enumerate(self.candidate_dirs, start=1):
+            profile = self._load_candidate_profile(candidate_dir, index)
+            loop_ids_output = candidate_dir / 'log' / 'generate' / 'controller_loop_ids_generated.json'
+            c_output = candidate_dir / 'src' / 'ctl_main.c'
+            h_output = candidate_dir / 'src' / 'ctl_main.h'
+            paras_output = candidate_dir / 'src' / 'paras.generated.h'
+            loop_ids_output.parent.mkdir(parents=True, exist_ok=True)
+            c_output.parent.mkdir(parents=True, exist_ok=True)
+
+            candidate_requirement = build_candidate_generation_requirement(self.requirement, profile)
+            write_candidate_generation_context(
+                candidate_dir / 'candidate.json',
+                self.requirement,
+                candidate_requirement,
+                profile,
+            )
+            profile_temperature = candidate_llm_temperature(profile)
+
+            profile_name = profile.get('name', candidate_dir.name)
+            self.progress.emit(f'[{index}/{len(self.candidate_dirs)}] 正在生成 {candidate_dir.name} 的 loop-ids...')
+            self.debug.emit(f'[{index}/{len(self.candidate_dirs)}] {candidate_dir.name} 生成 loop-ids：{profile_name}')
+            loop_exporter.export_json(
+                output_path=loop_ids_output,
+                requirement=candidate_requirement,
+                settings_path=self.llm_config,
+                chat_text_caller=lambda system_prompt, user_prompt, temp, temperature=profile_temperature: call_ui_chat_model(
+                    user_prompt=user_prompt,
+                    system_prompt=system_prompt,
+                    temperature=temperature if temperature is not None else temp,
+                ),
+                temperature_override=profile_temperature,
+            )
+
+            self.progress.emit(f'[{index}/{len(self.candidate_dirs)}] 正在生成 {candidate_dir.name} 的控制程序文件...')
+            self.debug.emit(f'[{index}/{len(self.candidate_dirs)}] {candidate_dir.name} 生成 ctl_main 与 paras')
+            merge_code = merger.main(
+                loop_ids_path=loop_ids_output,
+                template_path=self.template_dir / 'ctl_main.c',
+                output_path=c_output,
+                header_template_path=self.template_dir / 'ctl_main.h',
+                header_output_path=h_output,
+                paras_template_path=self.template_dir / 'paras.h',
+                paras_output_path=paras_output,
+            )
+            if merge_code != 0:
+                raise RuntimeError(f'{candidate_dir.name} 模板合并失败，返回码：{merge_code}')
+            for generated_path in (c_output, h_output, paras_output):
+                if not generated_path.exists():
+                    raise FileNotFoundError(f'{candidate_dir.name} 未生成文件：{generated_path}')
+
+            # ── 复制 user_main.c / user_main.h ─────────────────────────
+            for name in ('user_main.c', 'user_main.h'):
+                src = self.template_dir / name
+                dst = c_output.parent / name
+                if src.exists():
+                    import shutil
+                    shutil.copy2(src, dst)
+
+            # ── Step 0: 差异化参数种子 ─────────────────────────────────
+            self._seed_candidate_parameters(paras_output, index, profile,
+                                            candidate_dir)
+
+            # ── Step 1: 控制器结构清单 ─────────────────────────────────
+            self._write_candidate_manifest(candidate_dir)
+
+            candidate_data = self._write_candidate_generated_result(candidate_dir, loop_ids_output, profile)
+            if first_loop_ids_path is None:
+                first_loop_ids_path = loop_ids_output
+                first_candidate_data = candidate_data
+
+            candidate_summaries.append({
+                'candidate_id': candidate_dir.name,
+                'design_profile': profile,
+                'loop_ids': str(loop_ids_output),
+                'ctl_main_c': str(c_output),
+                'ctl_main_h': str(h_output),
+                'paras_header': str(paras_output),
+            })
+
+        if first_loop_ids_path is not None:
+            self._update_project_json_selected_loops(first_loop_ids_path)
+
+        with open(self.project_json, 'r', encoding='utf-8') as f:
+            project_data = json.load(f)
+        if not isinstance(project_data, dict):
+            project_data = {}
+        project_data['candidate_generation'] = candidate_summaries
+        if isinstance(first_candidate_data, dict):
+            project_data['selected_loops'] = first_candidate_data.get('selected_loops') or []
+            project_data['tuning_policy'] = first_candidate_data.get('tuning_policy') or {}
+        with open(self.project_json, 'w', encoding='utf-8') as f:
+            json.dump(project_data, f, ensure_ascii=False, indent=2)
+
+        return {
+            'candidate_count': len(candidate_summaries),
+            'first_loop_ids_path': str(first_loop_ids_path) if first_loop_ids_path is not None else '',
+        }
+
+    @staticmethod
+    def _load_candidate_profile(candidate_dir: Path, index: int) -> dict:
+        profile = candidate_design_profile(index)
+        candidate_json = candidate_dir / 'candidate.json'
+        if not candidate_json.exists():
+            return profile
+        try:
+            with open(candidate_json, 'r', encoding='utf-8') as f:
+                candidate_data = json.load(f)
+            candidate_profile = candidate_data.get('design_profile') if isinstance(candidate_data, dict) else None
+            if isinstance(candidate_profile, dict):
+                merged = dict(profile)
+                merged.update(candidate_profile)
+                return merged
+        except Exception:
+            pass
+        return profile
+
+    @staticmethod
+    def _write_candidate_generated_result(candidate_dir: Path, loop_ids_path: Path, profile: dict):
+        with open(loop_ids_path, 'r', encoding='utf-8') as f:
+            loops_payload = json.load(f)
+        if not isinstance(loops_payload, dict):
+            return {}
+
+        candidate_json = candidate_dir / 'candidate.json'
+        with open(candidate_json, 'r', encoding='utf-8') as f:
+            candidate_data = json.load(f)
+        if not isinstance(candidate_data, dict):
+            candidate_data = {}
+
+        selected_loops = loops_payload.get('selected_loops') or []
+        candidate_data['selected_loops'] = selected_loops
+        candidate_data['generated_loop_ids_path'] = str(loop_ids_path)
+        candidate_data['design_profile'] = profile
+        candidate_data['tuning_policy'] = _build_tuning_policy_from_loops(selected_loops)
+        candidate_data.setdefault('paths', {})
+        candidate_data['paths']['header_path'] = 'src/paras.generated.h'
+        candidate_data['paths']['result_file'] = 'log/optimize/tuning_result.json'
+        with open(candidate_json, 'w', encoding='utf-8') as f:
+            json.dump(candidate_data, f, ensure_ascii=False, indent=2)
+
+        configure_candidate_optimize(candidate_json)
+        return candidate_data
+
+    def _update_project_json_selected_loops(self, loop_ids_path: Path):
+        with open(loop_ids_path, 'r', encoding='utf-8') as f:
+            loops_payload = json.load(f)
+        if not isinstance(loops_payload, dict):
+            return
+
+        with open(self.project_json, 'r', encoding='utf-8') as f:
+            project_data = json.load(f)
+        if not isinstance(project_data, dict):
+            project_data = {}
+
+        selected_loops = loops_payload.get('selected_loops') or []
+        project_data['selected_loops'] = selected_loops
+        project_data['generated_loop_ids_path'] = str(loop_ids_path)
+        paths = project_data.get('paths')
+        if not isinstance(paths, dict):
+            paths = {}
+            project_data['paths'] = paths
+        paths['generated_loop_ids_path'] = str(loop_ids_path)
+        project_data['tuning_policy'] = _build_tuning_policy_from_loops(selected_loops)
+
+        with open(self.project_json, 'w', encoding='utf-8') as f:
+            json.dump(project_data, f, ensure_ascii=False, indent=2)
+        self.debug.emit('主程序结构已保存到当前项目。')
+        self.debug.emit('调参策略已准备好。')
+
+    def _seed_candidate_parameters(self, paras_output, candidate_index, profile, candidate_dir):
+        """根据 parameter_seed_policy 为 candidate 设置差异化初始参数值。"""
+        try:
+            from Competition.parameter_seeder import seed_parameters
+            seed_report_dir = candidate_dir / 'log' / 'generate'
+            seed_report_dir.mkdir(parents=True, exist_ok=True)
+            seed_policy = profile.get('parameter_seed_policy') if isinstance(profile, dict) else None
+            if isinstance(seed_policy, dict) and seed_policy.get('mode') in ('inherit', 'inherit_then_perturb'):
+                mode = str(seed_policy.get('mode', '') or '').strip()
+                source_id = str(seed_policy.get('source_candidate', '') or '').strip()
+                if source_id:
+                    source_header = candidate_dir.parent / source_id / 'src' / 'paras.generated.h'
+                    # 优先从 rounds 备份读取
+                    project_root = candidate_dir.parent.parent
+                    rounds_dir = project_root / 'rounds'
+                    if rounds_dir.is_dir():
+                        for rd in sorted(rounds_dir.glob('round_*'), reverse=True):
+                            backup = rd / 'candidates' / source_id / 'src' / 'paras.generated.h'
+                            if backup.exists():
+                                source_header = backup
+                                break
+                    if source_header.exists():
+                        from Optimize.agent_optimize.agent_core.parameters.parameter_header_editor import (
+                            read_tunable_parameters_detailed,
+                            patch_tunable_parameters,
+                        )
+                        import re
+                        target_params = read_tunable_parameters_detailed(paras_output)
+                        source_params = read_tunable_parameters_detailed(source_header)
+                        inherited = {}
+                        for name in target_params:
+                            if name in source_params:
+                                inherited[name] = source_params[name].value
+                        if mode == 'inherit_then_perturb':
+                            perturbation_text = str(seed_policy.get('perturbation_direction', '') or '').strip()
+                            if perturbation_text:
+                                _PT_DIR = r'(提高|增加|加大|升高|上调|降低|减少|减小|下调)'
+                                _PT_NAME_LIST = r'([A-Za-z_][A-Za-z0-9_]*(?:\s*(?:和|、|,)\s*[A-Za-z_][A-Za-z0-9_]*)*)'
+                                _PT_PCT = r'(?:约|約|大约|大概)?\s*(\d+(?:\.\d+)?)\s*%'
+                                _PT_FILLER = r'(?:再|进一步|适当|略微|小幅|大幅)?\s*'
+
+                                def _apply_pert(dir_word, names_text, pct_val):
+                                    for rn in re.split(r'\s*(?:和|、|,)\s*', names_text):
+                                        pn = rn.strip().upper()
+                                        if not pn or pn not in inherited:
+                                            continue
+                                        if dir_word in ('提高', '增加', '加大', '升高', '上调'):
+                                            inherited[pn] = round(inherited[pn] * (1.0 + pct_val), 6)
+                                        else:
+                                            inherited[pn] = round(inherited[pn] * (1.0 - pct_val), 6)
+
+                                # 语序 A：方向词在前
+                                for match in re.finditer(
+                                    rf'{_PT_DIR}\s*{_PT_FILLER}?{_PT_NAME_LIST}\s*{_PT_PCT}',
+                                    perturbation_text,
+                                ):
+                                    _apply_pert(match.group(1), match.group(2), float(match.group(3)) / 100.0)
+                                # 语序 B：参数名在前
+                                for match in re.finditer(
+                                    rf'{_PT_NAME_LIST}\s*{_PT_FILLER}{_PT_DIR}\s*{_PT_PCT}',
+                                    perturbation_text,
+                                ):
+                                    _apply_pert(match.group(2), match.group(1), float(match.group(3)) / 100.0)
+                        if inherited:
+                            patch_tunable_parameters(paras_output, inherited, backup=True)
+                            self.debug.emit(f'  [seed] {candidate_dir.name}: 从 {source_id} 继承 {len(inherited)} 个参数 (mode={mode})')
+                            return
+            # fallback: 使用差异化乘性扰动
+            report = seed_parameters(
+                paras_output,
+                candidate_index=candidate_index,
+                profile=profile,
+                seed_report_dir=seed_report_dir,
+                label=candidate_dir.name,
+            )
+            self.debug.emit(f'  [seed] {candidate_dir.name}: {report.get("updated_count", 0)} updated, {report.get("skipped_count", 0)} skipped')
+        except Exception as exc:
+            self.debug.emit(f'  [seed] warning: parameter seeding failed ({exc}), keeping defaults')
+
+    def _write_candidate_manifest(self, candidate_dir):
+        """生成控制器结构清单。"""
+        try:
+            from Competition.controller_manifest import write_controller_manifest
+            manifest_path = write_controller_manifest(candidate_dir)
+            self.debug.emit(f'  [manifest] wrote {manifest_path.name}')
+        except Exception as exc:
+            self.debug.emit(f'  [manifest] warning: controller manifest failed ({exc})')
+
+
+def _apply_floating_input_shadow(widget: QWidget):
+    shadow = QGraphicsDropShadowEffect(widget)
+    shadow.setBlurRadius(22)
+    shadow.setOffset(0, 8)
+    shadow.setColor(QColor(15, 23, 42, 36))
+    widget.setGraphicsEffect(shadow)
+
+
+def _floating_input_card_qss(object_name: str) -> str:
+    t = current_theme()
+    return (
+        f'QFrame#{object_name}{{background:{t.surface};border:1px solid {t.border};'
+        f'border-radius:{INPUT_CARD_RADIUS}px;}}'
+        f'QFrame#{object_name}:hover{{border-color:{t.border_strong};}}'
+        f'QFrame#{object_name} QTextEdit,'
+        f'QFrame#{object_name} QLineEdit{{background:transparent;border:none;color:{t.text};}}'
+    )
 
 
 class IntentConfirmCard(QFrame):
@@ -123,6 +474,7 @@ class MainProgramPanel(QWidget):
         self.current_requirement = ''
         self.chat_worker = None
         self.route_worker = None
+        self.program_worker = None
         self._chat_task = None
         self._pending_route_text = ''
         self._pending_program_text = ''
@@ -146,14 +498,42 @@ class MainProgramPanel(QWidget):
 
         self.chat_view = ChatStreamWidget()
         
-        self.input_row = QWidget()
+        self.input_dock = QWidget()
+        self.input_dock.setObjectName('floatingInputDock')
+        self.input_dock.setAttribute(Qt.WA_StyledBackground, True)
+        self.input_dock.setStyleSheet('QWidget#floatingInputDock{background:transparent;border:none;}')
+        input_dock_layout = QHBoxLayout(self.input_dock)
+        input_dock_layout.setContentsMargins(0, 4, 0, 10)
+        input_dock_layout.setSpacing(0)
+        input_dock_layout.addStretch(1)
+
+        self.input_row = QFrame()
+        self.input_row.setObjectName('floatingInputCard')
+        self.input_row.setAttribute(Qt.WA_StyledBackground, True)
+        self.input_row.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.input_row.setStyleSheet(_floating_input_card_qss('floatingInputCard'))
+        _apply_floating_input_shadow(self.input_row)
         input_layout = QHBoxLayout(self.input_row)
-        input_layout.setContentsMargins(0, 0, 0, 0)
+        input_layout.setContentsMargins(14, 8, 12, 8)
         input_layout.setSpacing(10)
 
         self.input_edit = ChatInputEdit()
         self.input_edit.setPlaceholderText('有需求，尽管说')
-        self.input_edit.setFixedHeight(96)
+        self.input_edit.setFixedHeight(66)
+        self.input_edit.setStyleSheet(f'''
+            QTextEdit {{
+                background: transparent;
+                border: none;
+                border-radius: 0px;
+                padding: 8px 10px;
+                font-size: 11pt;
+                color: {current_theme().text};
+            }}
+            QTextEdit:focus {{
+                border: none;
+                outline: none;
+            }}
+        ''')
         self.input_edit.enterPressed.connect(self.send_requirement)
 
         input_actions = QWidget()
@@ -164,15 +544,13 @@ class MainProgramPanel(QWidget):
         self.send_btn.setObjectName('primaryButton')
         self.send_btn.setStyleSheet(primary_button_qss(padding='7px 14px'))
         self.send_btn.clicked.connect(self.send_requirement)
-        self.clear_btn = QPushButton('清空')
-        self.clear_btn.setObjectName('ghostButton')
-        self.clear_btn.clicked.connect(self.clear_input)
         input_actions_layout.addWidget(self.send_btn)
-        input_actions_layout.addWidget(self.clear_btn)
         input_actions_layout.addStretch()
 
         input_layout.addWidget(self.input_edit, 1)
         input_layout.addWidget(input_actions)
+        input_dock_layout.addWidget(self.input_row, 0, Qt.AlignCenter)
+        input_dock_layout.addStretch(1)
 
         self.action_row = QWidget()
         action_layout = QHBoxLayout(self.action_row)
@@ -223,25 +601,34 @@ class MainProgramPanel(QWidget):
         welcome_prompt_layout.addWidget(self.welcome_gif_label)
         welcome_prompt_layout.addWidget(self.welcome_prompt_label)
 
+        self.welcome_input_shell = QFrame()
+        self.welcome_input_shell.setObjectName('welcomeInputCard')
+        self.welcome_input_shell.setAttribute(Qt.WA_StyledBackground, True)
+        self.welcome_input_shell.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.welcome_input_shell.setStyleSheet(_floating_input_card_qss('welcomeInputCard'))
+        _apply_floating_input_shadow(self.welcome_input_shell)
+        welcome_input_layout = QHBoxLayout(self.welcome_input_shell)
+        welcome_input_layout.setContentsMargins(20, 8, 20, 8)
+        welcome_input_layout.setSpacing(0)
+
         self.welcome_input = QLineEdit()
         self.welcome_input.setPlaceholderText('有需求，尽管说')
         self.welcome_input.setStyleSheet(f'''
             QLineEdit {{
-                background: {current_theme().surface};
-                border: 1px solid {current_theme().border};
-                border-radius: {RADIUS_CARD}px;
-                padding: 16px 24px;
+                background: transparent;
+                border: none;
+                border-radius: 0px;
+                padding: 10px 6px;
                 font-size: 14pt;
                 color: {current_theme().text};
-                min-height: 56px;
-                min-width: 1000px;
-                max-width: 1200px;
+                min-height: 46px;
             }}
             QLineEdit::placeholder {{
                 color: {current_theme().muted};
             }}
         ''')
         self.welcome_input.returnPressed.connect(self._on_welcome_input)
+        welcome_input_layout.addWidget(self.welcome_input)
         
         self.quick_action_buttons = QWidget()
         self.quick_action_buttons.setStyleSheet('border: none; background: transparent;')
@@ -270,7 +657,7 @@ class MainProgramPanel(QWidget):
         
         self.welcome_layout.addStretch(7)
         self.welcome_layout.addWidget(self.welcome_prompt_row, 0, Qt.AlignCenter)
-        self.welcome_layout.addWidget(self.welcome_input, 0, Qt.AlignCenter)
+        self.welcome_layout.addWidget(self.welcome_input_shell, 0, Qt.AlignCenter)
         self.welcome_layout.addWidget(self.quick_action_buttons, 0, Qt.AlignCenter)
         self.welcome_layout.addStretch(4)
         self.welcome_overlay.setStyleSheet(f'background:{current_theme().surface};')
@@ -281,6 +668,21 @@ class MainProgramPanel(QWidget):
             self.show_welcome_overlay()
         else:
             self.show_main_content()
+        self._sync_input_widths()
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self._sync_input_widths()
+
+    def _sync_input_widths(self):
+        available = max(320, self.width())
+        welcome_width = min(WELCOME_INPUT_MAX_WIDTH, available)
+        chat_width = min(CHAT_INPUT_MAX_WIDTH, available)
+
+        if hasattr(self, 'welcome_input_shell'):
+            self.welcome_input_shell.setFixedWidth(welcome_width)
+        if hasattr(self, 'input_row'):
+            self.input_row.setFixedWidth(chat_width)
 
     def show_welcome_overlay(self):
         while self.main_layout.count():
@@ -293,6 +695,7 @@ class MainProgramPanel(QWidget):
         
         self.welcome_overlay.show()
         self.main_layout.addWidget(self.welcome_overlay)
+        self._sync_input_widths()
     
     def show_main_content(self):
         while self.main_layout.count():
@@ -303,14 +706,15 @@ class MainProgramPanel(QWidget):
 
         self._main_content_widgets = [
             self.chat_view,
-            self.input_row,
+            self.input_dock,
         ]
         self.main_layout.addWidget(self.chat_view, 1)
-        self.main_layout.addWidget(self.input_row)
+        self.main_layout.addWidget(self.input_dock)
         
         self.chat_view.show()
-        self.input_row.show()
+        self.input_dock.show()
         self.action_row.hide()
+        self._sync_input_widths()
 
     def _welcome_is_active(self):
         for index in range(self.main_layout.count()):
@@ -502,9 +906,6 @@ class MainProgramPanel(QWidget):
             self.welcome_input.setText(template_text)
             self._on_welcome_input()
 
-    def clear_input(self):
-        self.input_edit.clear()
-
     def _append_chat(self, role: str, text: str):
         role = self._normalize_chat_role(role)
         if role == 'assistant':
@@ -637,12 +1038,6 @@ class MainProgramPanel(QWidget):
             self.send_metric_requirement(text)
             return
 
-        if action == ACTION_CONTINUE_NEXT_ROUND:
-            self._append_chat('user', text)
-            self.input_edit.clear()
-            self._handle_continue_next_round()
-            return
-
         if action == ACTION_START_TUNING:
             self._append_chat('user', text)
             self.input_edit.clear()
@@ -653,6 +1048,12 @@ class MainProgramPanel(QWidget):
                 self._set_status_text('状态：调优已启动')
                 return
             self._auto_start_tuning_if_ready(force=True, confirmed=True)
+            return
+
+        if action == ACTION_CONTINUE_NEXT_ROUND:
+            self._append_chat('user', text)
+            self.input_edit.clear()
+            self._handle_continue_next_round()
             return
 
         if action == ACTION_ANSWER_QUESTION:
@@ -797,6 +1198,9 @@ class MainProgramPanel(QWidget):
         text = self.input_edit.toPlainText().strip()
         if not text:
             return
+        if self.program_worker is not None and self.program_worker.isRunning():
+            self._append_notice('正在生成控制程序，请稍后。')
+            return
         if self.chat_worker is not None and self.chat_worker.isRunning():
             self._append_notice('正在等待上一条对话返回，请稍后。')
             return
@@ -885,6 +1289,8 @@ class MainProgramPanel(QWidget):
             return True
         if self.route_worker is not None and self.route_worker.isRunning():
             return True
+        if self.program_worker is not None and self.program_worker.isRunning():
+            return True
         if self.requirement_panel is not None:
             worker = getattr(self.requirement_panel, 'chat_worker', None)
             if worker is not None and worker.isRunning():
@@ -923,62 +1329,6 @@ class MainProgramPanel(QWidget):
         else:
             self._append_error('调优入口尚未初始化，无法启动 Optimize Agent。')
         return True
-
-    def _handle_continue_next_round(self):
-        """用户要求继续下一轮仿真：确定当前轮次，检查策略，启动调优。"""
-        project_json = self._project_json_path()
-        if not project_json:
-            self._append_error('未找到项目文件，无法继续下一轮。')
-            return
-
-        project_dir = Path(project_json).parent
-        rounds_root = project_dir / 'rounds'
-
-        # 找到最新有 round_feedback.json 的轮次（表示该轮已完成）
-        import re
-        current_round = 0
-        for d in sorted(rounds_root.glob('round_*')) if rounds_root.exists() else []:
-            m = re.search(r'round_(\d+)', d.name)
-            if m and (d / 'round_feedback.json').exists():
-                current_round = max(current_round, int(m.group(1)))
-
-        if current_round <= 0:
-            self._append_error('未找到任何已完成轮次的数据，请先完成第一轮调优。')
-            return
-
-        next_round = current_round + 1
-        next_profiles = rounds_root / f'round_{next_round:02d}' / 'candidate_profiles.json'
-
-        if next_profiles.exists():
-            self._append_success(
-                f'第 {next_round} 轮候选方案策略已就绪，正在启动调优...'
-            )
-        else:
-            self._append_notice(f'正在基于第 {current_round} 轮实验报告生成第 {next_round} 轮方案策略（需要调用 LLM）...')
-            try:
-                from Competition.next_round_strategy import generate_next_round_strategy  # noqa: E402
-                result = generate_next_round_strategy(
-                    project_json, from_round=current_round, to_round=next_round,
-                )
-                self._append_success(f'第 {next_round} 轮策略已生成。')
-            except Exception as exc:
-                self._append_error(f'无法生成第 {next_round} 轮策略：{exc}')
-                return
-
-        self._set_progress(f'正在启动第 {next_round} 轮调优...')
-        if callable(self.run_tuning_callback):
-            # 传 round_number 给回调（run_agent_optimization 现在接受此参数）
-            try:
-                import inspect
-                sig = inspect.signature(self.run_tuning_callback)
-                if len(sig.parameters) > 0:
-                    self.run_tuning_callback(round_number=next_round)
-                else:
-                    self.run_tuning_callback()
-            except Exception:
-                self.run_tuning_callback()
-        else:
-            self._append_error('调优入口尚未初始化，无法启动。')
 
     def _append_auto_tuning_confirm_card(self):
         if self._auto_tuning_confirm_pending or self._auto_tuning_started:
@@ -1077,29 +1427,7 @@ class MainProgramPanel(QWidget):
 
     @staticmethod
     def _build_tuning_policy_from_loops(selected_loops):
-        loop_names = {loop.get('name', '').lower() for loop in selected_loops if isinstance(loop, dict)}
-
-        allowed_parameters = {}
-        if 'current_loop' in loop_names or 'current_error_loop' in loop_names:
-            allowed_parameters['CUR_KP'] = {'min': 1.0, 'max': 500.0, 'description': '电流环比例增益'}
-            allowed_parameters['CUR_KI'] = {'min': 0.0, 'max': 100.0, 'description': '电流环积分增益'}
-            allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
-        if 'speed_loop' in loop_names or 'speed_error_loop' in loop_names or 'mech_loop' in loop_names:
-            allowed_parameters['VEL_KP'] = {'min': 0.1, 'max': 20.0, 'description': '速度环比例增益'}
-            allowed_parameters['VEL_KI'] = {'min': 0.0, 'max': 5.0, 'description': '速度环积分增益'}
-            allowed_parameters['CUR_LIMIT'] = {'min': 0.05, 'max': 10.0, 'description': '电流限幅'}
-        if 'position_loop' in loop_names or 'position_error_loop' in loop_names:
-            allowed_parameters['POS_KP'] = {'min': 0.1, 'max': 50.0, 'description': '位置环比例增益'}
-            allowed_parameters['POS_KI'] = {'min': 0.0, 'max': 10.0, 'description': '位置环积分增益'}
-            allowed_parameters['VEL_LIMIT'] = {'min': 0.1, 'max': 100.0, 'description': '速度限幅'}
-        if 'torque_loop' in loop_names or 'torque_reference_loop' in loop_names:
-            allowed_parameters['TRQ_KP'] = {'min': 1.0, 'max': 500.0, 'description': '转矩环比例增益'}
-            allowed_parameters['TRQ_KI'] = {'min': 0.0, 'max': 100.0, 'description': '转矩环积分增益'}
-
-        return {
-            'allowed_parameters': allowed_parameters,
-            'update_rule': '每轮只允许小幅修改 1 到 2 个参数；如果编译、仿真或评价失败，不修改参数。'
-        }
+        return _build_tuning_policy_from_loops(selected_loops)
 
     def _write_candidate_generated_result(self, candidate_dir: Path, loop_ids_path: Path, profile: dict):
         with open(loop_ids_path, 'r', encoding='utf-8') as f:
@@ -1240,9 +1568,14 @@ class MainProgramPanel(QWidget):
     def on_chat_finished(self):
         self.chat_view.hide_thinking()
         self._chat_task = None
-        self.send_btn.setEnabled(True)
+        if not self._assistant_busy():
+            self.send_btn.setEnabled(True)
 
     def generate_program(self):
+        if self.program_worker is not None and self.program_worker.isRunning():
+            self._append_notice('正在生成控制程序，请稍后。')
+            return
+
         if not self.current_requirement:
             self._append_notice('请先输入并发送需求，再执行生成。')
             self._set_status_text('状态：缺少需求')
@@ -1265,143 +1598,88 @@ class MainProgramPanel(QWidget):
                 return
 
         self._set_progress(f'正在为 {len(candidate_dirs)} 个 candidate 生成控制器程序...')
+        self.chat_view.show_thinking('正在思考中，正在生成控制程序...')
+        self.send_btn.setEnabled(False)
+        self.run_btn.setEnabled(False)
 
-        try:
-            sync_candidate_profiles_from_common(Path(project_json), candidate_dirs)
-            candidate_summaries = []
-            first_loop_ids_path = None
-            first_candidate_data = None
+        self.program_worker = GenerateProgramWorker(
+            requirement=self.current_requirement,
+            project_json=Path(project_json),
+            candidate_dirs=candidate_dirs,
+            template_dir=template_dir,
+            llm_config=llm_config,
+            parent=self,
+        )
+        self.program_worker.progress.connect(self._set_progress)
+        self.program_worker.debug.connect(self._append_debug)
+        self.program_worker.success.connect(self._on_program_generation_success)
+        self.program_worker.failure.connect(self._on_program_generation_failure)
+        self.program_worker.finished.connect(self._on_program_generation_finished)
+        self.program_worker.start()
 
-            for index, candidate_dir in enumerate(candidate_dirs, start=1):
-                profile = self._load_candidate_profile(candidate_dir, index)
-                loop_ids_output = candidate_dir / 'log' / 'generate' / 'controller_loop_ids_generated.json'
-                c_output = candidate_dir / 'src' / 'ctl_main.c'
-                h_output = candidate_dir / 'src' / 'ctl_main.h'
-                paras_output = candidate_dir / 'src' / 'paras.generated.h'
-                loop_ids_output.parent.mkdir(parents=True, exist_ok=True)
-                c_output.parent.mkdir(parents=True, exist_ok=True)
+    def _on_program_generation_success(self, result: dict):
+        self._set_status_text('状态：生成完成')
+        self._append_debug('所有 candidate 控制器程序已生成。根目录 src 未被修改。')
+        if callable(self.structure_refresh_callback):
+            self.structure_refresh_callback()
+        self.show_load_curve_card()
 
-                candidate_requirement = build_candidate_generation_requirement(self.current_requirement, profile)
-                write_candidate_generation_context(
-                    candidate_dir / 'candidate.json',
-                    self.current_requirement,
-                    candidate_requirement,
-                    profile,
-                )
-                profile_temperature = candidate_llm_temperature(profile)
+    def _on_program_generation_failure(self, error_text: str):
+        self._set_status_text('状态：调用失败')
+        self._append_error('生成过程中发生异常。', error_text)
 
-                profile_name = profile.get("name", candidate_dir.name)
-                self._set_progress(f'[{index}/{len(candidate_dirs)}] 正在生成 {candidate_dir.name} 的 loop-ids...')
-                self._append_debug(f'[{index}/{len(candidate_dirs)}] {candidate_dir.name} 生成 loop-ids：{profile_name}')
-                loop_exporter.export_json(
-                    output_path=loop_ids_output,
-                    requirement=candidate_requirement,
-                    settings_path=llm_config,
-                    chat_text_caller=lambda system_prompt, user_prompt, temp: call_ui_chat_model(
-                        user_prompt=user_prompt,
-                        system_prompt=system_prompt,
-                        temperature=profile_temperature if profile_temperature is not None else temp,
-                    ),
-                    temperature_override=profile_temperature,
-                )
+    def _on_program_generation_finished(self):
+        self.chat_view.hide_thinking()
+        self.send_btn.setEnabled(True)
+        self.run_btn.setEnabled(True)
+        worker = self.program_worker
+        self.program_worker = None
+        if worker is not None:
+            worker.deleteLater()
 
-                self._set_progress(f'[{index}/{len(candidate_dirs)}] 正在生成 {candidate_dir.name} 的控制程序文件...')
-                self._append_debug(f'[{index}/{len(candidate_dirs)}] {candidate_dir.name} 生成 ctl_main 与 paras')
-                merge_code = merger.main(
-                    loop_ids_path=loop_ids_output,
-                    template_path=template_dir / 'ctl_main.c',
-                    output_path=c_output,
-                    header_template_path=template_dir / 'ctl_main.h',
-                    header_output_path=h_output,
-                    paras_template_path=template_dir / 'paras.h',
-                    paras_output_path=paras_output,
-                )
-                if merge_code != 0:
-                    raise RuntimeError(f'{candidate_dir.name} 模板合并失败，返回码：{merge_code}')
-                for generated_path in (c_output, h_output, paras_output):
-                    if not generated_path.exists():
-                        raise FileNotFoundError(f'{candidate_dir.name} 未生成文件：{generated_path}')
-
-                # ── Step 0: 差异化参数种子 ──────────────────────────────
-                # merger 生成的 paras.generated.h 所有 candidate 默认值相同。
-                # 根据当前 candidate 的设计方案对初始参数值做差异化扰动。
-                try:
-                    from Competition.parameter_seeder import seed_parameters  # noqa: E402
-                    seed_report = seed_parameters(
-                        paras_output,
-                        candidate_index=index,
-                        profile=profile,
-                        seed_report_dir=candidate_dir / 'log' / 'generate',
-                        label=candidate_dir.name,
-                    )
-                    # 调试详情：输出种子结果
-                    profile_name = profile.get("name", candidate_dir.name) if isinstance(profile, dict) else candidate_dir.name
-                    updated = seed_report.get("updated_count", 0)
-                    skipped = seed_report.get("skipped_count", 0)
-                    self._append_debug(
-                        f'  [seed] {candidate_dir.name} ({profile_name}) '
-                        f'参数种子完成: 已扰动 {updated} 个, 跳过 {skipped} 个'
-                    )
-                    for p in seed_report.get("parameters", []):
-                        if p.get("skipped"):
-                            continue
-                        old_v = p.get("old_value")
-                        new_v = p.get("new_value")
-                        mult = p.get("multiplier")
-                        if isinstance(old_v, float):
-                            old_v = round(old_v, 4)
-                        if isinstance(new_v, float):
-                            new_v = round(new_v, 4)
-                        self._append_debug(
-                            f'    {p["name"]}: {old_v} -> {new_v}  (×{mult:.3f}, {p["category"]})'
-                        )
-                except Exception as seed_exc:
-                    self._append_debug(f'  [seed] {candidate_dir.name} 参数种子失败: {seed_exc}，保留默认值')
-
-                # ── Step 1: 结构清单 ──────────────────────────────────
-                try:
-                    from Competition.controller_manifest import write_controller_manifest  # noqa: E402
-                    manifest_path = write_controller_manifest(candidate_dir)
-                    self._append_debug(f'  [manifest] {candidate_dir.name} 结构清单已写入: {manifest_path.name}')
-                except Exception as manifest_exc:
-                    self._append_debug(f'  [manifest] {candidate_dir.name} 结构清单失败: {manifest_exc}')
-
-                candidate_data = self._write_candidate_generated_result(candidate_dir, loop_ids_output, profile)
-                if first_loop_ids_path is None:
-                    first_loop_ids_path = loop_ids_output
-                    first_candidate_data = candidate_data
-
-                candidate_summaries.append({
-                    'candidate_id': candidate_dir.name,
-                    'design_profile': profile,
-                    'loop_ids': str(loop_ids_output),
-                    'ctl_main_c': str(c_output),
-                    'ctl_main_h': str(h_output),
-                    'paras_header': str(paras_output),
-                })
-
-            if first_loop_ids_path is not None:
-                self._update_project_json_selected_loops(first_loop_ids_path)
-
-            with open(project_json, 'r', encoding='utf-8') as f:
-                project_data = json.load(f)
-            if not isinstance(project_data, dict):
-                project_data = {}
-            project_data['candidate_generation'] = candidate_summaries
-            if isinstance(first_candidate_data, dict):
-                project_data['selected_loops'] = first_candidate_data.get('selected_loops') or []
-                project_data['tuning_policy'] = first_candidate_data.get('tuning_policy') or {}
-            with open(project_json, 'w', encoding='utf-8') as f:
-                json.dump(project_data, f, ensure_ascii=False, indent=2)
-
-            self._set_status_text('状态：生成完成')
-            self._append_debug('所有 candidate 控制器程序已生成。根目录 src 未被修改。')
-            if callable(self.structure_refresh_callback):
-                self.structure_refresh_callback()
-            self.show_load_curve_card()
-        except Exception as exc:
-            self._set_status_text('状态：调用失败')
-            self._append_error('生成过程中发生异常。', str(exc))
+    def _handle_continue_next_round(self):
+        """处理继续下一轮的请求：发现最新完成的轮次，生成下一轮策略并启动调优。"""
+        import inspect
+        project_json_path = self._project_json_path()
+        if not project_json_path:
+            self._append_error('未找到项目 JSON，无法继续下一轮。')
+            return
+        project_dir = Path(project_json_path).parent
+        rounds_root = project_dir / 'rounds'
+        current_round = 0
+        if rounds_root.exists():
+            import re
+            for d in sorted(rounds_root.glob('round_*'), reverse=True):
+                if (d / 'round_feedback.json').exists():
+                    m = re.search(r'round_(\d+)', d.name)
+                    if m:
+                        current_round = int(m.group(1))
+                    break
+        if current_round <= 0:
+            self._append_error('未找到已完成轮次的 round_feedback.json，请先完整运行一轮调优。')
+            return
+        next_round = current_round + 1
+        next_profiles = rounds_root / f'round_{next_round:02d}' / 'candidate_profiles.json'
+        if not next_profiles.exists():
+            self._append_debug(f'正在生成第 {next_round} 轮方案策略（需要调用 LLM）...')
+            try:
+                from Competition.next_round_strategy import generate_next_round_strategy
+                generate_next_round_strategy(project_json_path,
+                                             from_round=current_round,
+                                             to_round=next_round)
+            except Exception as exc:
+                self._append_error(f'无法生成第 {next_round} 轮策略：{exc}')
+                return
+        self._append_notice(f'正在启动第 {next_round} 轮调优（将自动 generate + optimize）...')
+        if callable(self.run_tuning_callback):
+            try:
+                sig = inspect.signature(self.run_tuning_callback)
+                if 'round_number' in sig.parameters:
+                    self.run_tuning_callback(round_number=next_round)
+                else:
+                    self.run_tuning_callback()
+            except Exception as exc:
+                self._append_error(f'启动第 {next_round} 轮调优失败：{exc}')
 
     def _project_folder(self):
         if callable(self.project_json_getter):

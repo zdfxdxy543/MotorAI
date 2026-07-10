@@ -34,6 +34,14 @@ from Optimize.agent_optimize.agent_core.parameters.parameter_header_editor impor
 )
 
 
+# ── 固定参数：始终保持在 per-unit 基准值，不参与差异化扰动 ──────────────
+# 这些参数是保护/限幅类参数，1.0 PU 表示允许全范围运行。压低它们会
+# 人为钳制系统工作范围而非改善控制品质，与"稳健"策略的意图相悖。
+_FIXED_PARAMETERS: set[str] = {
+    "SPEED_LIMIT",
+}
+
+
 # ── 语义分类 ────────────────────────────────────────────────────────────────
 
 def classify_parameter(name: str) -> str:
@@ -83,6 +91,24 @@ def classify_parameter(name: str) -> str:
         return "SPEED"
 
     return "DEFAULT"
+
+
+def _zero_value_base(name: str, cls: str) -> float | None:
+    """为零值参数推断合理基准值，供乘性扰动使用。"""
+    upper = name.upper().strip()
+    # 增益类参数：0 通常表示功能未启用，需要给一个有意义的起点
+    if cls == "KI":
+        # 积分增益默认 1.0，与模板 paras.h 一致
+        return 1.0
+    if cls == "KP":
+        return 5.0
+    if cls == "KD":
+        return 0.5
+    # 带宽类参数（LADRC / SMC）
+    if cls in ("WC", "WO", "BW"):
+        return 50.0
+    # 限幅、斜率、电流、速度等保持跳过——0 通常表示"不限制"
+    return None
 
 
 # ── 方案 → 参数类别 → 乘数范围 ─────────────────────────────────────────────
@@ -231,8 +257,42 @@ def seed_parameters(
         cls = classify_parameter(name)
         min_m, max_m = multipliers.get(cls, multipliers["DEFAULT"])
 
-        # 零值参数跳过：乘性扰动对 0 无意义
+        # 固定参数：始终保持在 per-unit 基准值，不参与差异化扰动
+        if name.upper().strip() in _FIXED_PARAMETERS:
+            skipped_count += 1
+            report_params.append({
+                "name": name,
+                "category": cls,
+                "old_value": param.value,
+                "new_value": param.value,
+                "multiplier": None,
+                "skipped": True,
+                "reason": "固定参数，保持在 per-unit 基准值不变",
+                "raw_old": param.raw_value,
+            })
+            continue
+
+        # 零值增益参数：乘性扰动无意义，但 0 表示"该功能未启用"会导致
+        # optimize 第一轮全浪费在修复硬编码默认值上。按参数类别赋予合理初值。
         if param.value == 0:
+            base = _zero_value_base(name, cls)
+            if base is not None:
+                # 用推断的基准值替代 0，再施加乘性扰动
+                mult = rng.uniform(min_m, max_m)
+                new_value = round(base * mult, 6)
+                report_params.append({
+                    "name": name,
+                    "category": cls,
+                    "old_value": param.value,
+                    "new_value": new_value,
+                    "multiplier": round(mult, 4),
+                    "skipped": False,
+                    "reason": f"零值{cls}参数，以基准值 {base} 启动扰动",
+                    "raw_old": param.raw_value,
+                })
+                updates[name] = new_value
+                continue
+            # 非增益类零值参数（如 limit=0 表示不限制）：保持跳过
             skipped_count += 1
             report_params.append({
                 "name": name,

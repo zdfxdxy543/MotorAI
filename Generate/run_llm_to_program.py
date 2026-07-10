@@ -232,28 +232,40 @@ def _inherit_parameters(
     # ── Step 2: inherit_then_perturb 模式，解析扰动方向 ───────────────
     perturbed: dict[str, Any] = {}
     if mode == "inherit_then_perturb" and perturbation_text:
-        # 匹配 "提高/增加/加大 PARAM1 和 PARAM2 约 10%" 或 "降低 PARAM 约 20%"
-        # 支持多个参数名用 "和"、"、", "," 连接。
+        # 匹配两种语序的扰动描述：
+        #   A) "提高 VEL_KP 和 POS_KP 约 20%"（方向词在前）
+        #   B) "VEL_KP 提高 10%，SPEED_SLOPE_LIMIT 降低 5%"（参数名在前）
+        # 方向词和参数名之间允许出现 "再"、"进一步" 等修饰词。
+        _PT_DIR = r'(提高|增加|加大|升高|上调|降低|减少|减小|下调)'
+        _PT_NAME_LIST = r'([A-Za-z_][A-Za-z0-9_]*(?:\s*(?:和|、|,)\s*[A-Za-z_][A-Za-z0-9_]*)*)'
+        _PT_PCT = r'(?:约|約|大约|大概)?\s*(\d+(?:\.\d+)?)\s*%'
+        _PT_FILLER = r'(?:再|进一步|适当|略微|小幅|大幅)?\s*'
+
+        def _apply_perturbation(dir_word, names_text, pct_val):
+            """将单条扰动应用到 inherited dict。"""
+            for raw_name in re.split(r'\s*(?:和|、|,)\s*', names_text):
+                pn = raw_name.strip().upper()
+                if not pn or pn not in inherited:
+                    continue
+                if dir_word in ("提高", "增加", "加大", "升高", "上调"):
+                    inherited[pn] = round(inherited[pn] * (1.0 + pct_val), 6)
+                else:
+                    inherited[pn] = round(inherited[pn] * (1.0 - pct_val), 6)
+                perturbed[pn] = inherited[pn]
+
+        # 语序 A：方向词在前 → groups: (direction, names, pct)
         for match in re.finditer(
-            r'(提高|增加|加大|升高|上调|降低|减少|减小|下调)\s*'
-            r'([A-Za-z_][A-Za-z0-9_]*(?:\s*(?:和|、|,)\s*[A-Za-z_][A-Za-z0-9_]*)*)\s*'
-            r'(?:约|約|大约|大概)?\s*(\d+(?:\.\d+)?)\s*%',
+            rf'{_PT_DIR}\s*{_PT_FILLER}?{_PT_NAME_LIST}\s*{_PT_PCT}',
             perturbation_text,
         ):
-            direction = match.group(1)
-            names_text = match.group(2)
-            pct = float(match.group(3)) / 100.0
-            param_names = re.split(r'\s*(?:和|、|,)\s*', names_text)
-            for raw_name in param_names:
-                param_name = raw_name.strip().upper()
-                if not param_name:
-                    continue
-                if param_name in inherited:
-                    if direction in ("提高", "增加", "加大", "升高", "上调"):
-                        inherited[param_name] = inherited[param_name] * (1.0 + pct)
-                    else:
-                        inherited[param_name] = inherited[param_name] * (1.0 - pct)
-                    perturbed[param_name] = inherited[param_name]
+            _apply_perturbation(match.group(1), match.group(2), float(match.group(3)) / 100.0)
+
+        # 语序 B：参数名在前 → groups: (names, direction, pct)
+        for match in re.finditer(
+            rf'{_PT_NAME_LIST}\s*{_PT_FILLER}{_PT_DIR}\s*{_PT_PCT}',
+            perturbation_text,
+        ):
+            _apply_perturbation(match.group(2), match.group(1), float(match.group(3)) / 100.0)
 
     # ── Step 3: 合并并写入 ────────────────────────────────────────────
     updates = dict(inherited)

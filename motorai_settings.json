@@ -1,7 +1,7 @@
 {
   "llm": {
-    "api_key": "sk-4f42ddbc114041129dc99f79f819ae22",
-    "model": "deepseek-v4-flash",
+    "api_key": "sk-76a8198a1b584749af5c99388676a076",
+    "model": "deepseek-v4-pro",
     "base_url": "https://api.deepseek.com",
     "temperature": 0.0,
     "timeout": 180

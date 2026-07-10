@@ -18,6 +18,56 @@ from .tools import (
     register_parameter_edit_tools,
     register_optimization_tools,
 )
+from .tools.optimization import validate_tuning_policy_coverage
+from .parameters.parameter_header_editor import ParameterHeaderError, read_tunable_parameters
+
+
+def _infer_parameter_range(name: str, current_value: float) -> dict[str, Any]:
+    """为自动补全的参数推断合理的 min/max 范围。
+
+    规则按参数名后缀分类，与 parameter_seeder.classify_parameter() 的分类逻辑
+    保持一致。兜底用 [current*0.1, current*10]。
+    """
+    name_upper = str(name).upper()
+    abs_val = abs(current_value) if current_value != 0.0 else 1.0
+
+    # ── 斜率 / 爬坡限制（必须在 _LIMIT 之前，否则 SPEED_SLOPE_LIMIT
+    #     会被优先命中 _LIMIT 分支）────────────────────────────────
+    if "_SLOPE" in name_upper:
+        return {"min": 0.01, "max": round(max(abs_val * 5.0, 1.0), 4),
+                "description": "自动补全：斜率/爬坡参数"}
+
+    # ── 限幅参数（SPEED_LIMIT, CUR_LIMIT, …）─────────────────────
+    if name_upper.endswith("_LIMIT") or name_upper.endswith("_MAX"):
+        return {"min": 0.05, "max": round(max(abs_val * 5.0, 10.0), 4),
+                "description": "自动补全：限幅参数"}
+
+    # ── PID 增益 ─────────────────────────────────────────────────
+    if name_upper.endswith("_KP"):
+        return {"min": 0.1, "max": round(max(abs_val * 5.0, 20.0), 4),
+                "description": "自动补全：比例增益"}
+    if name_upper.endswith("_KI"):
+        return {"min": 0.0, "max": round(max(abs_val * 5.0, 5.0), 4),
+                "description": "自动补全：积分增益"}
+    if name_upper.endswith("_KD"):
+        return {"min": 0.0, "max": round(max(abs_val * 5.0, 5.0), 4),
+                "description": "自动补全：微分增益"}
+
+    # ── 带宽参数（LADRC / SMC）───────────────────────────────────
+    if any(name_upper.endswith(s) for s in ("_WC", "_WO", "_BW")):
+        return {"min": 1.0, "max": round(max(abs_val * 5.0, 500.0), 4),
+                "description": "自动补全：带宽参数"}
+
+    # ── 物理常数 ─────────────────────────────────────────────────
+    if name_upper in ("INERTIA", "TORQUE_CONST") \
+            or name_upper.endswith("_INERTIA") \
+            or name_upper.endswith("_TORQUE_CONST"):
+        return {"min": round(abs_val * 0.5, 6), "max": round(abs_val * 2.0, 6),
+                "description": "自动补全：物理常数"}
+
+    # ── 兜底 ─────────────────────────────────────────────────────
+    return {"min": round(abs_val * 0.1, 6), "max": round(abs_val * 10.0, 4),
+            "description": "自动补全：未分类参数"}
 
 
 DEFAULT_HEADLESS_MAX_TOOL_ROUNDS = 12
@@ -427,6 +477,28 @@ def _build_setup_prompt(job: Dict[str, Any], job_file: Path) -> str:
     )
 
 
+def _get_max_params_per_update(job: Dict[str, Any]) -> int:
+    """根据 candidate design_profile 的激进程度决定每轮最多可修改的参数数量。
+
+    温度越高 → 策略越激进 → 允许一次改更多参数。
+    """
+    profile = job.get("design_profile")
+    if isinstance(profile, dict):
+        temp = profile.get("llm_temperature")
+        if temp is None:
+            temp = profile.get("temperature")
+        if isinstance(temp, (int, float)):
+            if temp <= 0.20:
+                return 5    # 稳健低超调
+            elif temp <= 0.30:
+                return 8    # 平滑低纹波
+            elif temp <= 0.40:
+                return 10   # 快速响应
+            else:
+                return 12   # 抗扰恢复
+    return 8  # 默认
+
+
 def _build_iteration_prompt(
     job: Dict[str, Any],
     job_file: Path,
@@ -439,6 +511,7 @@ def _build_iteration_prompt(
 
     header_path = _optional_job_path_as_str(job_file, paths.get("header_path"))
     history_path = _optional_job_path_as_str(job_file, paths.get("history_path"))
+    max_params = _get_max_params_per_update(job)
 
     payload = {
         "iteration": iteration,
@@ -464,8 +537,12 @@ def _build_iteration_prompt(
         "evaluation_result, current_parameters_after_run, and recent_history.\n"
         "3. If the returned evaluation already satisfies stop_conditions, do not patch parameters. Summarize why.\n"
         "4. If build/simulation/evaluation failed, do not patch parameters. Summarize the failure and next action.\n"
-        "5. Otherwise, decide one conservative numeric parameter update and call "
-        "apply_parameter_update_and_record. Pass dry_run, header_path, and history_path from tool_options.\n"
+        f"5. Otherwise, decide a batch of parameter updates. You may update up to {max_params} parameters "
+        "in a single iteration. When multiple parameters share a common root cause (e.g. zero integral "
+        "gain requires both KI and KP adjustment for stability), update the related set together. "
+        "Do NOT limit yourself to one parameter unless the problem is truly isolated. "
+        "Prioritise parameters affecting failed or low-scoring metrics first. "
+        "Call apply_parameter_update_and_record. Pass dry_run, header_path, and history_path from tool_options.\n"
         "6. Finish with a concise JSON-like summary in plain text. Do not ask the user questions.\n\n"
         f"Payload:\n{json.dumps(payload, ensure_ascii=False, indent=2)}"
     )
@@ -510,6 +587,88 @@ def run_headless_job(
         "assumptions": [],
     }
     write_result_json(result_file, result)
+
+    # ── 注入 tuning_policy.allowed_parameters 到工具层（含自动补全） ──
+    # 1）从 job JSON 读取用户显式配置的白名单；
+    # 2）与 paras.generated.h 中的实际参数做差集；
+    # 3）缺失的参数自动补全，推断合理的 min/max 范围；
+    # 4）同步注入 context.automation（工具层硬约束）和 job dict（LLM prompt）。
+    tuning_policy = job.get("tuning_policy")
+    if isinstance(tuning_policy, dict):
+        allowed_params = tuning_policy.get("allowed_parameters")
+        if isinstance(allowed_params, dict):
+            allowed_params = dict(allowed_params)  # 浅拷贝，避免污染原始 job
+        else:
+            allowed_params = {}
+    else:
+        allowed_params = {}
+
+    header_path = _resolve_job_relative_path(
+        job_file,
+        (paths.get("header_path") or "src/paras.generated.h"),
+    )
+    header_params: dict[str, Any] = {}
+    if header_path and header_path.exists():
+        try:
+            header_params = read_tunable_parameters(header_path)
+        except (ParameterHeaderError, OSError, TypeError, ValueError):
+            header_params = {}
+
+    if header_params:
+        header_names = {str(k).upper() for k in header_params}
+        policy_names = {str(k).upper() for k in allowed_params}
+        missing = header_names - policy_names
+        nonexistent = policy_names - header_names
+
+        # ── 自动补全缺失参数 ──────────────────────────────────────
+        auto_added: list[str] = []
+        for name in sorted(missing):
+            original_name = name  # header 里的原始大小写
+            # 在 header_params 中找到原始 key
+            for hk in header_params:
+                if str(hk).upper() == name:
+                    original_name = str(hk)
+                    break
+            current_val = float(header_params.get(original_name, 1.0))
+            inferred = _infer_parameter_range(original_name, current_val)
+            allowed_params[original_name] = inferred
+            auto_added.append(original_name)
+
+        if auto_added:
+            print(
+                f"[headless] ⚡ auto-completed {len(auto_added)} missing tuning_policy "
+                f"parameter(s): {', '.join(auto_added)}"
+            )
+        if nonexistent:
+            print(
+                f"[headless] ⚠ tuning_policy lists {len(nonexistent)} parameter(s) "
+                f"not found in header: {', '.join(sorted(nonexistent))}"
+            )
+
+        # 回写 job dict（LLM prompt 会看到补全后的白名单）
+        if tuning_policy is not job.get("tuning_policy"):
+            job["tuning_policy"] = dict(job.get("tuning_policy", {}))
+        job["tuning_policy"]["allowed_parameters"] = allowed_params
+
+        # 注入 context（工具层硬约束）
+        _ensure_automation_config(ctx)["_tuning_policy_allowed_names"] = sorted(allowed_params.keys())
+
+        # 校验结果写入 tuning_result.json
+        result["tuning_policy_validation"] = {
+            "status": "validated",
+            "header_param_count": len(header_names),
+            "header_parameters": sorted(header_names),
+            "policy_param_count": len(allowed_params),
+            "policy_parameters": sorted(allowed_params.keys()),
+            "auto_added": auto_added,
+            "nonexistent_in_policy": sorted(nonexistent),
+            "is_coverage_complete": len(missing) == 0 or len(auto_added) == len(missing),
+        }
+        write_result_json(result_file, result)
+
+    elif allowed_params:
+        # header 不存在但有白名单：仍然注入，不做补全
+        _ensure_automation_config(ctx)["_tuning_policy_allowed_names"] = sorted(allowed_params.keys())
 
     messages: List[Dict[str, Any]] = [
         {"role": "system", "content": SYSTEM_PROMPT},

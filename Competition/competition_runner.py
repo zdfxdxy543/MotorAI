@@ -438,8 +438,51 @@ def run_competition(
                     candidate_data = load_json_object(cj)
                     log_opt = cdir / "log" / "optimize"
                     _write_candidate_evaluation_config(candidate_data, log_opt, candidate_json=cj)
-            except Exception:
-                pass
+            except Exception as exc:
+                print(f"  [evaluation_config] recalibrate failed for {cdir.name}: {exc}", file=sys.stderr)
+
+    # ── 跳过 generate 时的兜底步骤 ──────────────────────────────────
+    # 正常路径在 run_generate_for_candidate() / run_llm_to_program.py 里
+    # 已经完成了参数差异化种子和 tuning_policy 自动补全。
+    # 这里处理 --skip-generate 的场景：paras.generated.h 保持模板默认值，
+    # 在进入 optimize 之前必须补做参数扰动和白名单补全。
+    if not dry_run and not skip_optimize and skip_generate:
+        from Competition.parameter_seeder import seed_parameters  # noqa: E402
+        from Competition.competition_workspace import sync_tuning_policy_with_header  # noqa: E402
+        for cdir in candidate_dirs:
+            # ── Step 0: 差异化参数种子 ──────────────────────────────
+            # 仅当 UI generate 阶段未做过 seeding 时才执行。
+            # UI generate（GenerateProgramWorker）成功后会写入
+            # parameter_seed_report.json；若该文件已存在则跳过，避免对已扰动值二次乘性叠加。
+            seed_report = cdir / "log" / "generate" / "parameter_seed_report.json"
+            already_seeded = seed_report.exists()
+            if not already_seeded:
+                try:
+                    cj = cdir / "candidate.json"
+                    paras_header = cdir / "src" / "paras.generated.h"
+                    if cj.exists() and paras_header.exists():
+                        candidate_data = load_json_object(cj)
+                        profile = candidate_data.get("design_profile")
+                        cidx = int(candidate_data.get("candidate_index", 1))
+                        report = seed_parameters(
+                            paras_header,
+                            candidate_index=cidx,
+                            profile=profile,
+                            seed_report_dir=cdir / "log" / "generate",
+                            label=cdir.name,
+                        )
+                        print(f"  [seed] {cdir.name}: {report.get('updated_count', 0)} updated, {report.get('skipped_count', 0)} skipped")
+                except Exception as exc:
+                    print(f"  [seed] warning: parameter seeding failed for {cdir.name} ({exc}), keeping defaults")
+            else:
+                print(f"  [seed] {cdir.name}: skipped (already seeded by generate step)")
+            # ── 自动补全 tuning_policy ──────────────────────────────
+            try:
+                cj = cdir / "candidate.json"
+                if cj.exists():
+                    sync_tuning_policy_with_header(cj)
+            except Exception as exc:
+                print(f"  [tuning_policy] auto-complete failed for {cdir.name}: {exc}", file=sys.stderr)
 
     optimize_results: list[dict[str, Any]] = []
     if not skip_optimize and generate_all_ok:

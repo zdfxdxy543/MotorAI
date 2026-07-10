@@ -274,7 +274,7 @@ Your job is:
 - call run_one_tuning_iteration in headless mode;
 - interpret evaluation_result.json and evaluation_summary.txt;
 - explain performance bottlenecks;
-- decide a conservative parameter update when justified;
+- decide parameter updates when justified, respecting the per-iteration limit;
 - call apply_parameter_update_and_record only when build, simulation, and
   evaluation succeeded.
 
@@ -287,6 +287,17 @@ Critical diagnosis rule:
   integral gain, current limit, or speed limit) before trusting dynamic
   response metrics.  Do NOT declare victory just because rise_time or
   settling_time scored well when steady_state_error is bad.
+
+- **If the motor speed signal is still rising at the end of the simulation
+  window (value_last near value_max, and value_last well below target), the
+  motor has not reached steady-state — it is being rate-limited.**  The
+  bottleneck is almost certainly a slope/ramp limit parameter (SPEED_SLOPE_LIMIT,
+  SPEED_SLOPE, or similar).  Before tuning gains or current limits, check
+  whether the slope limit is set near its minimum.  A slope limit that is too
+  low clamps the acceleration and prevents the motor from ever reaching the
+  target within the simulation window, making all dynamic metrics unreliable.
+  Increase the slope limit substantially (2×–5×) and re-evaluate before
+  adjusting other parameters.
 
 The Python evaluation layer's job is:
 
