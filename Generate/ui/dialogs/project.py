@@ -182,16 +182,10 @@ class NewProjectDialog(QDialog):
         self.candidate_count_spin.setRange(1, 16)
         self.candidate_count_spin.setValue(4)
 
-        self.max_rounds_spin = QSpinBox()
-        self.max_rounds_spin.setRange(1, 50)
-        self.max_rounds_spin.setValue(3)
-        self.max_rounds_spin.setToolTip('多轮迭代的最大轮次上限，达到后即使未满足停止条件也会停止')
-
         form_layout.addRow('项目保存路径', project_parent_row)
         form_layout.addRow('项目名', self.project_name_edit)
-        form_layout.addRow('单轮最大调优次数', self.max_iter_spin)
+        form_layout.addRow('最大迭代次数', self.max_iter_spin)
         form_layout.addRow('候选工作区数量', self.candidate_count_spin)
-        form_layout.addRow('最大迭代轮数', self.max_rounds_spin)
 
         buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttons.accepted.connect(self.on_accept)
@@ -233,7 +227,6 @@ class NewProjectDialog(QDialog):
             'schema_version': 1,
             'workspace_mode': 'competition',
             'candidate_count': int(candidate_count),
-            'max_rounds': int(self.max_rounds_spin.value()),
             'template_project_path': str(template_root),
             'gmp_path': self._read_gmp_root(),
             'paths': {

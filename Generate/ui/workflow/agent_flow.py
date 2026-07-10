@@ -13,7 +13,6 @@ ACTION_SUBMIT_METRICS = 'submit_metrics'
 ACTION_ANSWER_QUESTION = 'answer_question'
 ACTION_START_TUNING = 'start_tuning'
 ACTION_CLARIFY = 'clarify'
-ACTION_CONTINUE_NEXT_ROUND = 'continue_next_round'
 
 VALID_ACTIONS = {
     ACTION_CONFIRM_GENERATE,
@@ -23,7 +22,6 @@ VALID_ACTIONS = {
     ACTION_ANSWER_QUESTION,
     ACTION_START_TUNING,
     ACTION_CLARIFY,
-    ACTION_CONTINUE_NEXT_ROUND,
 }
 
 ROUTER_SYSTEM_PROMPT = (
@@ -37,7 +35,6 @@ ROUTER_SYSTEM_PROMPT = (
     '当用户要求设置、修改、重画、查看负载曲线，或提到转速-转矩点、load.csv 时，选择 show_load_curve。'
     '当用户提供超调、调整时间、上升时间、稳态误差、纹波、目标速度、目标电流、电流限制等可评价性能指标时，选择 submit_metrics。'
     '当三类信息都已经准备好，或用户明确要求开始/重新调优时，选择 start_tuning。'
-    '当用户明确说"继续仿真""下一轮""开始第二轮""继续迭代"等，表示要基于上一轮结果进行下一轮优化时，选择 continue_next_round。'
     '当用户只是询问、解释、比较或确认概念，并没有提交新信息时，选择 answer_question。'
     '当需要追问才能判断时，选择 clarify。'
     '只输出 JSON，不输出 Markdown。格式：'
@@ -164,17 +161,6 @@ def looks_like_program_revision(text: str) -> bool:
     return any(term in normalized for term in program_terms)
 
 
-def looks_like_next_round_request(text: str) -> bool:
-    normalized = normalize_text(text)
-    if not normalized:
-        return False
-    terms = (
-        '继续仿真', '继续迭代', '开始第二轮', '下一轮', '第二轮',
-        '继续优化', '接着跑', '再来一轮', '继续调优',
-    )
-    return any(term in normalized for term in terms)
-
-
 def looks_like_initial_program_requirement(text: str) -> bool:
     normalized = normalize_text(text)
     if not normalized:
@@ -216,9 +202,6 @@ def heuristic_route(text: str, state: dict) -> dict | None:
 
     if looks_like_generation_confirmation(text):
         return {'action': ACTION_CONFIRM_GENERATE, 'reason': '用户确认生成程序'}
-
-    if looks_like_next_round_request(text):
-        return {'action': ACTION_CONTINUE_NEXT_ROUND, 'reason': '用户要求继续下一轮仿真'}
 
     if looks_like_load_curve_request(text):
         return {'action': ACTION_SHOW_LOAD_CURVE, 'reason': '用户请求设置或重画负载曲线'}
