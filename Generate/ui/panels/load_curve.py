@@ -6,7 +6,6 @@ from PyQt5.QtWidgets import (
     QLabel,
     QMessageBox,
     QPushButton,
-    QSizePolicy,
     QTableWidget,
     QTableWidgetItem,
     QWidget,
@@ -23,48 +22,10 @@ from Competition.competition_workspace import discover_candidate_dirs
 from styles.theme import current_theme
 
 
-def _message_box_qss() -> str:
-    return '''
-        QMessageBox {
-            background: #ffffff;
-            color: #111827;
-        }
-        QMessageBox QLabel {
-            color: #111827;
-            background: transparent;
-            font-size: 10pt;
-        }
-        QMessageBox QPushButton {
-            background: #f8fafc;
-            color: #111827;
-            border: 1px solid #cbd5e1;
-            border-radius: 6px;
-            padding: 6px 14px;
-            min-width: 72px;
-        }
-        QMessageBox QPushButton:hover {
-            background: #eef4ff;
-            border-color: #93c5fd;
-        }
-    '''
-
-
-def _show_message(parent, icon, title: str, text: str):
-    box = QMessageBox(parent)
-    box.setIcon(icon)
-    box.setWindowTitle(title)
-    box.setText(text)
-    box.setStandardButtons(QMessageBox.Ok)
-    box.setStyleSheet(_message_box_qss())
-    box.exec_()
-
-
 class CurveCanvas(QFrame):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setObjectName('CurveCanvas')
-        self.setMinimumHeight(310)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.setMinimumHeight(260)
         self.setFrameShape(QFrame.StyledPanel)
         self._points: list[tuple[float, float]] = []
         self._title = '负载曲线'
@@ -84,23 +45,14 @@ class CurveCanvas(QFrame):
         painter.setRenderHint(QPainter.Antialiasing)
         t = current_theme()
 
-        rect = QRectF(self.rect()).adjusted(14, 14, -14, -14)
+        rect = self.rect().adjusted(12, 12, -12, -12)
         painter.fillRect(rect, QColor(t.canvas_grid_bg))
 
-        title_rect = QRectF(rect.left() + 8, rect.top() + 4, rect.width() - 16, 24)
+        title_rect = QRectF(rect.left(), rect.top(), rect.width(), 24)
         painter.setPen(QColor(t.canvas_title))
         painter.drawText(title_rect, Qt.AlignLeft | Qt.AlignVCenter, self._title)
 
-        left_axis_width = 82
-        top_axis_height = 54
-        bottom_axis_height = 46
-        right_padding = 18
-        plot_rect = QRectF(
-            rect.left() + left_axis_width,
-            rect.top() + top_axis_height,
-            rect.width() - left_axis_width - right_padding,
-            rect.height() - top_axis_height - bottom_axis_height,
-        )
+        plot_rect = QRectF(rect.left() + 44, rect.top() + 32, rect.width() - 58, rect.height() - 64)
         if plot_rect.width() <= 0 or plot_rect.height() <= 0:
             return
 
@@ -118,12 +70,8 @@ class CurveCanvas(QFrame):
         painter.drawLine(int(plot_rect.left()), int(plot_rect.top()), int(plot_rect.left()), int(plot_rect.bottom()))
 
         painter.setPen(QColor(t.canvas_axis))
-        painter.save()
-        painter.translate(rect.left() + 12, plot_rect.center().y())
-        painter.rotate(-90)
-        painter.drawText(QRectF(-plot_rect.height() / 2, -10, plot_rect.height(), 20), Qt.AlignCenter, self._y_label)
-        painter.restore()
-        painter.drawText(QRectF(plot_rect.left(), rect.bottom() - 20, plot_rect.width(), 18), Qt.AlignCenter, self._x_label)
+        painter.drawText(QRectF(rect.left(), plot_rect.top() - 18, 38, 18), Qt.AlignRight | Qt.AlignVCenter, self._y_label)
+        painter.drawText(QRectF(plot_rect.left(), rect.bottom() - 18, plot_rect.width(), 18), Qt.AlignCenter, self._x_label)
 
         if len(self._points) < 2:
             painter.setPen(QColor(t.muted))
@@ -159,7 +107,7 @@ class CurveCanvas(QFrame):
             py = plot_rect.bottom() - y_ratio * plot_rect.height()
             painter.drawLine(int(plot_rect.left() - 6), int(py), int(plot_rect.left()), int(py))
             ytxt = ('%g' % (round(yval, 6)))
-            painter.drawText(QRectF(plot_rect.left() - 58, py - 8, 50, 16), Qt.AlignRight | Qt.AlignVCenter, ytxt)
+            painter.drawText(QRectF(rect.left(), py - 8, 40, 16), Qt.AlignRight | Qt.AlignVCenter, ytxt)
 
         def map_point(x_val, y_val):
             x_ratio = (x_val - min_x) / (max_x - min_x)
@@ -189,8 +137,8 @@ class LoadCurvePanel(QWidget):
         self.save_callback = None
         self._updating_table = False
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(4, 4, 4, 4)
-        layout.setSpacing(10)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(8)
 
         self.chart_canvas = CurveCanvas()
         self.chart_hint = QLabel('说明：在下方输入两列数值后，曲线会自动更新。')
@@ -203,11 +151,8 @@ class LoadCurvePanel(QWidget):
         self.table.setSelectionBehavior(QAbstractItemView.SelectItems)
         self.table.setEditTriggers(QAbstractItemView.AllEditTriggers)
         self.table.itemChanged.connect(self.ensure_trailing_row)
-        self.table.setMinimumHeight(150)
 
-        self.title_label = QLabel('负载曲线设置')
-        self.title_label.setStyleSheet(f'font-size:12pt;font-weight:700;color:{current_theme().text_strong};')
-        layout.addWidget(self.title_label)
+        layout.addWidget(QLabel('负载曲线设置'))
         layout.addWidget(self.chart_canvas, 2)
         layout.addWidget(self.chart_hint)
         layout.addWidget(self.table, 1)
@@ -300,7 +245,7 @@ class LoadCurvePanel(QWidget):
     def save_to_csv(self):
         points = self.collect_points()
         if not points:
-            _show_message(self, QMessageBox.Warning, '提示', '没有可保存的数据。')
+            QMessageBox.warning(self, '提示', '没有可保存的数据。')
             return
         out_dir = self._simulate_folder()
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -313,11 +258,11 @@ class LoadCurvePanel(QWidget):
             for candidate_sim_dir in self._candidate_simulate_folders():
                 candidate_sim_dir.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(out_path, candidate_sim_dir / 'load.csv')
-            _show_message(self, QMessageBox.Information, '完成', f'已保存：{out_path}')
+            QMessageBox.information(self, '完成', f'已保存：{out_path}')
             if callable(self.save_callback):
                 self.save_callback()
         except Exception as exc:
-            _show_message(self, QMessageBox.Critical, '错误', f'保存失败：{exc}')
+            QMessageBox.critical(self, '错误', f'保存失败：{exc}')
 
     def clear_points(self):
         self._updating_table = True
@@ -386,4 +331,4 @@ class LoadCurvePanel(QWidget):
                 
                 self.chart_canvas.set_curve(self.collect_points(), title='负载曲线', x_label='转速', y_label='转矩')
         except Exception as exc:
-            _show_message(self, QMessageBox.Critical, '错误', f'加载失败：{exc}')
+            QMessageBox.critical(self, '错误', f'加载失败：{exc}')

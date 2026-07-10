@@ -131,6 +131,35 @@ def optimize_project_is_current(project_json_path, optimize_config):
     return True
 
 
+def _sync_target_velocity_for_ui_project(project_json_path: str) -> None:
+    """Walk every candidate under the project and rewrite ctl_main.c target velocity."""
+    try:
+        import json as _json
+        from pathlib import Path as _Path
+    except Exception:
+        return
+
+    project_dir = _Path(project_json_path).parent
+    candidates_dir = project_dir / "candidates"
+    if not candidates_dir.is_dir():
+        return
+
+    for cdir in sorted(candidates_dir.glob("candidate_*")):
+        cj = cdir / "candidate.json"
+        ctl_main = cdir / "src" / "ctl_main.c"
+        if not cj.exists() or not ctl_main.exists():
+            continue
+        try:
+            candidate = _json.loads(cj.read_text(encoding="utf-8-sig"))
+        except Exception:
+            continue
+        try:
+            from Competition.competition_workspace import _sync_target_velocity_to_ctl_main
+            _sync_target_velocity_to_ctl_main(candidate, ctl_main)
+        except Exception:
+            pass
+
+
 def run_agent_optimization(project_json_path):
     optimize_config = normalize_optimize_config(load_settings())
     
@@ -176,8 +205,11 @@ def run_agent_optimization(project_json_path):
         print("等待 2 秒后启动调优脚本...")
         time.sleep(2)
 
+    # ── 每轮仿真前同步目标转速 ───────────────────────────────────────
+    _sync_target_velocity_for_ui_project(project_json_path)
+
     print(f"\n开始执行调优脚本...")
-    
+
     try:
         cmd_command = f'start cmd /k "{run_tuning_bat} \"{project_json_path}\""'
         subprocess.run(cmd_command, shell=True, check=True, cwd=os.path.dirname(run_tuning_bat))
