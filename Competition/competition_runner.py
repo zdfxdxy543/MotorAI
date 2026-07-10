@@ -560,6 +560,16 @@ def main(argv: list[str] | None = None) -> int:
             force_next_round=args.force_next_round,
             round_number=args.round,
         )
+
+        # ── 生成跨轮次迭代摘要，供 UI 可视化使用 ──────────────────────
+        try:
+            from Competition.iteration_summary import generate_iteration_summary  # noqa: E402
+            summary_path = generate_iteration_summary(args.project_json)
+            result["iteration_summary"] = str(summary_path.resolve())
+            print(f"iteration_summary written: {summary_path}", file=sys.stderr)
+        except Exception as exc:
+            print(f"Warning: iteration_summary generation failed: {exc}", file=sys.stderr)
+
     except Exception as exc:
         print(f"Error: {type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
