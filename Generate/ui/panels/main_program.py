@@ -315,11 +315,12 @@ class GenerateProgramWorker(QThread):
                             patch_tunable_parameters,
                         )
                         import re
+                        from Competition.parameter_seeder import _FIXED_PARAMETERS
                         target_params = read_tunable_parameters_detailed(paras_output)
                         source_params = read_tunable_parameters_detailed(source_header)
                         inherited = {}
                         for name in target_params:
-                            if name in source_params:
+                            if name in source_params and name.upper().strip() not in _FIXED_PARAMETERS:
                                 inherited[name] = source_params[name].value
                         if mode == 'inherit_then_perturb':
                             perturbation_text = str(seed_policy.get('perturbation_direction', '') or '').strip()

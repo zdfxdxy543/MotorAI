@@ -3,7 +3,18 @@
     "allow": [
       "Bash(python -c \"from silworker.scheduler import main as s_main; print\\('scheduler OK'\\)\")",
       "Bash(python -c \"from silworker.heartbeat import start_heartbeat; print\\('heartbeat OK'\\)\")",
-      "Bash(python -c \"import json; exec\\(open\\('silworker/remote_sil_worker.py'\\).read\\(\\).split\\('def main'\\)[0]\\); print\\('worker OK'\\)\")"
+      "Bash(python -c \"import json; exec\\(open\\('silworker/remote_sil_worker.py'\\).read\\(\\).split\\('def main'\\)[0]\\); print\\('worker OK'\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit -m 'feat: 继续仿真交互按钮 — 轮次完成后可对话触发下一轮 *)",
+      "Bash(python -c ' *)",
+      "Read(//e/Related_Github_Project/gmp_pro/ctl/suite/FinalGo/**)",
+      "Read(//e/Related_Github_Project/gmp_pro/ctl/suite/FinalGo/rounds/round_01/**)",
+      "Read(//e/Related_Github_Project/gmp_pro/ctl/suite/FinalGo/rounds/round_02/**)",
+      "Read(//e/Related_Github_Project/gmp_pro/ctl/suite/FinalGreat/**)",
+      "Bash(ls rounds/)",
+      "Read(//e/Related_Github_Project/gmp_pro/ctl/suite/FinalFinal/rounds/**)",
+      "Read(//e/Related_Github_Project/gmp_pro/ctl/suite/FinalFinal/candidates/**)",
+      "Read(//e/Related_Github_Project/ui/**)"
     ]
   }
 }

@@ -13,6 +13,7 @@ candidate_evidence.py  —  Step 2: 为每个 candidate 生成优化证据摘要
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,9 @@ from Optimize.agent_optimize.agent_core.parameters.parameter_history import (
     read_optimization_history,
     extract_overall_score,
 )
+
+# 匹配 C 宏风格的参数名：大写字母 + 下划线 + 数字
+_PARAM_NAME_RE = re.compile(r"\b([A-Z][A-Z0-9]*(?:_[A-Z0-9]+)+)\b")
 
 
 # ── 辅助：加载 JSON 文件 ──────────────────────────────────────────────────
@@ -182,6 +186,56 @@ def _judge_convergence(history_records: list[dict[str, Any]]) -> str:
     return "unknown"
 
 
+# ── 诊断提取 ────────────────────────────────────────────────────────────────
+
+def _extract_diagnosed_but_unchanged(
+    history_records: list[dict[str, Any]],
+) -> list[str]:
+    """Find parameter names the agent discussed but never changed.
+
+    Scans agent_reason text for UPPER_CASE parameter name patterns and
+    subtracts the set of names that appear in any iteration's parameter_updates.
+    """
+    mentioned: set[str] = set()
+    changed: set[str] = set()
+
+    for rec in history_records:
+        reason = str(rec.get("agent_reason", "") or "")
+        mentioned.update(_PARAM_NAME_RE.findall(reason))
+
+        updates = rec.get("parameter_updates")
+        if isinstance(updates, dict):
+            changed.update(str(k).upper() for k in updates)
+
+    return sorted(mentioned - changed)
+
+
+def _build_tuning_diagnostics(
+    history_records: list[dict[str, Any]],
+) -> dict[str, Any]:
+    """Build a structured tuning_diagnostics block from optimisation history."""
+    iterations_log: list[dict[str, Any]] = []
+    for i, rec in enumerate(history_records, start=1):
+        reason = rec.get("agent_reason", "")
+        updates = rec.get("parameter_updates", {})
+        iterations_log.append({
+            "iteration": i,
+            "agent_reason": reason,
+            "parameters_changed": (
+                sorted(updates.keys()) if isinstance(updates, dict) else []
+            ),
+        })
+
+    final_assessment = iterations_log[-1]["agent_reason"] if iterations_log else ""
+    diagnosed_but_unchanged = _extract_diagnosed_but_unchanged(history_records)
+
+    return {
+        "final_agent_assessment": final_assessment,
+        "parameters_diagnosed_but_unchanged": diagnosed_but_unchanged,
+        "iterations_log": iterations_log,
+    }
+
+
 # ── 主函数 ────────────────────────────────────────────────────────────────
 
 def write_candidate_evidence(candidate_dir: str | Path) -> Path:
@@ -265,6 +319,13 @@ def write_candidate_evidence(candidate_dir: str | Path) -> Path:
         "controller_manifest": str(manifest_path.resolve()),
         "paras_header": str(paras_header.resolve()),
     }
+
+    # ── 7. tuning_diagnostics：agent 诊断的结构化提取 ───────────────
+    # agent 在 agent_reason 中的根因诊断原本是自由文本，在后续
+    # round_feedback → next_round_strategy 链路中被丢弃。
+    # 这里把它结构化：迭代日志 + 最终评估 + "提到但没改"的参数。
+    history_records = _load_jsonl(history_path)
+    evidence["tuning_diagnostics"] = _build_tuning_diagnostics(history_records)
 
     # ── 写入 ──────────────────────────────────────────────────────
     log_optimize.mkdir(parents=True, exist_ok=True)

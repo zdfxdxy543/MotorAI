@@ -1,0 +1,518 @@
+Hiro:
+对，你说得完全对。第二轮不能只喂这种：
+
+```json
+{
+  "candidate_id": "candidate_01",
+  "structure": "pid + conservative limit",
+  "score": 0.61,
+  "strength": "稳定",
+  "weakness": "响应慢"
+}
+```
+
+这个只能做人类展示，不够给 agent 做第二轮决策。真正应该给第二轮 agent 的，是一个**机器可读的 round evidence 包**，它必须从每个 candidate 的真实产物里汇总，而不是靠一句主观总结。
+
+**第二轮 Agent 应该读取什么**
+
+至少要读取这些文件：
+
+```text
+candidate_xx/candidate.json
+candidate_xx/log/generate/design_strategy.json
+candidate_xx/log/generate/controller_loop_ids_generated.json
+candidate_xx/src/paras.generated.h
+candidate_xx/log/optimize/tuning_result.json
+candidate_xx/log/optimize/evaluation_result.json
+candidate_xx/log/optimize/optimization_history.jsonl
+candidate_xx/log/optimize/evaluation_summary.txt
+```
+
+其中最重要的是：
+
+`tuning_result.json`：看这轮参数迭代是否成功、每轮评价结果、最终评分、停止原因。  
+`evaluation_result.json`：看具体哪些指标没达标。  
+`optimization_history.jsonl`：看参数是怎么变的，哪些参数方向有效，哪些调参陷入无效。  
+`controller_loop_ids_generated.json`：看这次到底生成了什么控制结构。  
+`paras.generated.h`：看这个结构暴露了哪些可调参数，以及最终参数能否迁移到下一轮。
+
+**现在的 design_strategy 和 controller_loop_ids_generated 足够吗**
+
+不够，但它们是必要输入。
+
+`design_strategy.json` 现在更像“生成意图”：这个 candidate 想偏稳健、偏快速、偏抗扰。  
+`controller_loop_ids_generated.json` 是“结构选择结果”：比如选了 current loop、mech loop、pid/mit/smc 等。
+
+但它们缺几个关键东西：
+
+1. **生成后的结构摘要**
+   不只是 selected loops，还要有结构签名、控制方法、环路层级、参数组。
+
+2. **参数初值和最终参数**
+   第二轮需要知道第一轮哪些参数收敛到了哪里。
+
+3. **失败指标和失败程度**
+   例如超调差多少、调节时间差多少、稳态误差差多少。
+
+4. **结构和指标之间的关系**
+   例如：快速响应 candidate 分数高但超调超标，说明第二轮可以保留较快外环，但要加强限幅/滤波/抗饱和。
+
+所以我建议新增一个文件：
+
+```text
+candidate_xx/log/generate/controller_manifest.json
+```
+
+它由 generate 阶段写出，内容可以简洁但必须结构化：
+
+```json
+{
+  "schema_version": 1,
+  "candidate_id": "candidate_01",
+  "structure_signature": "current_loop+mech_loop:pid",
+  "loop_hierarchy": ["current_loop", "mech_loop"],
+  "control_methods": ["pid"],
+  "selected_loops": [],
+  "generated_files": {
+    "ctl_main_c": "src/ctl_main.c",
+    "paras_header": "src/paras.generated.h"
+  },
+  "tunable_parameters": [    {
+      "name": "MOTORAI_SPEED_KP",
+      "loop": "mech_loop",
+      "role": "kp"
+    }
+  ],
+  "generation_intent": {
+    "profile_name": "稳健低超调方案",
+    "preferred_control_methods": ["pid", "gain_scheduling"]
+  }
+}
+```
+
+`controller_loop_ids_generated.json` 偏 LLM 输出，`controller_manifest.json` 偏系统内部证据。后者给第二轮 agent 用，会稳很多。
+
+**第二轮不要直接读散文件，应该先生成 round_feedback.json**
+
+推荐先由程序汇总，不要让 LLM 自己到处找文件。新增：
+
+```text
+round_01/round_feedback.json
+```
+
+它里面包含所有 candidate 的真实数据摘要和原始文件路径：
+
+```json
+{
+  "round": 1,
+  "requirement_satisfied": false,
+  "stop_conditions": {},
+  "winner": "candidate_03",
+  "candidates": [    {
+      "candidate_id": "candidate_03",
+      "structure_manifest": {},
+      "final_evaluation": {},
+      "failed_metrics": [],
+      "final_parameters": {},
+      "parameter_history_summary": {},
+      "source_files": {
+        "tuning_result": ".../tuning_result.json",
+        "evaluation_result": ".../evaluation_result.json",
+        "optimization_history": ".../optimization_history.jsonl",
+        "controller_manifest": ".../controller_manifest.json"
+      }
+    }
+  ],
+  "next_round_instruction": {
+    "preserve": ["表现最好的环路层级或参数范围"],
+    "avoid": ["明显失败的结构组合"],
+    "explore": ["针对 failed_metrics 的替代结构"]
+  }
+}
+```
+
+这里的 `strength/weakness` 可以有，但只能作为 derived diagnosis，不能作为主要依据。
+
+**目录结构怎么放**
+
+我不建议在同一个 `candidate_01` 下面再分结构迭代轮次。因为 candidate 本质上应该代表“一次具体结构假设 + 对应源码 + 对应调参结果”。如果在 candidate 下放 round，会导致 `src/ctl_main.c`、`paras.generated.h`、optimize log 都变成可变状态，后面追溯会很麻烦。
+
+更推荐这样：
+
+```text
+project/
+  rounds/
+    round_01/
+      candidates/
+        candidate_01/
+        candidate_02/
+      round_result.json
+      round_feedback.json
+
+    round_02/
+      candidates/
+        candidate_01/
+        candidate_02/
+      input_feedback.json
+      round_result.json
+      round_feedback.json
+```
+
+如果为了兼容现有代码暂时不想大改，也可以折中命名：
+
+```text
+project/
+  candidates/
+    round_01_candidate_01/
+    round_01_candidate_02/
+    round_02_candidate_01/
+    round_02_candidate_02/
+```
+
+但从长期设计看，`rounds/round_xx/candidates/candidate_xx` 更干净。
+
+**第二轮生成时的正确输入**
+
+第二轮 agent 的输入应该是：
+
+1. 用户原始需求
+2. 当前支持的结构空间
+3. 第一轮 `round_feedback.json`
+4. 每个 candidate 的 `controller_manifest.json`
+5. 每个 candidate 的 `tuning_result.json` 摘要
+6. 每个 candidate 的失败指标
+7. 可迁移参数表
+
+然后让它输出下一轮的：
+
+```text
+round_02/common/candidate_profiles.json
+```
+
+或者直接输出每个 candidate 的 generation context。
+
+一句话：  
+第二轮 agent 不应该“听说第一轮失败了”，而应该“读第一轮实验报告”。`tuning_result.json` 必须读，`controller_manifest.json` 建议新增，目录最好按 round 高于 candidate 分层。
+
+Hiro:
+请你综合以上信息，给出一个可一步步执行的生成计划，接下来我将让你顺着这个计划去生成。每生成一步，我就会运行一次以验证，再让你走下一步
+
+Hiro:
+可以。我们把它拆成**可逐步验证、每步都不破坏现有流程**的生成计划。核心策略是：先补“证据文件”，再补“轮次反馈”，最后再做“第二轮结构生成”。
+
+**总原则**
+
+先不大改现有 `candidate_01/candidate_02` 工作流。第一阶段保持兼容：
+
+```text
+project/
+  candidates/
+    candidate_01/
+    candidate_02/
+  rounds/
+    round_01/
+      round_feedback.json
+    round_02/
+      input_feedback.json
+```
+
+等多轮闭环跑通后，再考虑把 candidate 移到：
+
+```text
+rounds/round_01/candidates/candidate_01
+```
+
+否则第一步就重构目录，风险太大。
+
+**Step 1：给每个 candidate 生成结构证据 manifest**
+
+目标：generate 阶段结束后，每个 candidate 自动写：
+
+```text
+candidate/log/generate/controller_manifest.json
+```
+
+它从这些文件提取：
+
+```text
+candidate/log/generate/design_strategy.json
+candidate/log/generate/controller_loop_ids_generated.json
+candidate/src/paras.generated.h
+candidate/src/ctl_main.c
+candidate/src/ctl_main.h
+```
+
+建议内容：
+
+```json
+{
+  "schema_version": 1,
+  "candidate_id": "candidate_01",
+  "structure_signature": "current_loop+mech_loop:pid",
+  "loop_hierarchy": ["current_loop", "mech_loop"],
+  "control_methods": ["pid"],
+  "selected_loops": [],
+  "tunable_parameters": [],
+  "generation_intent": {},
+  "generated_files": {}
+}
+```
+
+验证方式：
+
+```powershell
+python Competition/competition_runner.py <project_json> --candidates 4 --skip-optimize
+```
+
+然后检查：
+
+```text
+candidate_*/log/generate/controller_manifest.json
+```
+
+这一阶段不改优化逻辑，只补结构证据。
+
+**Step 2：给每个 candidate 生成优化证据 summary**
+
+目标：optimize 阶段结束后，每个 candidate 自动写：
+
+```text
+candidate/log/optimize/candidate_evidence.json
+```
+
+它读取：
+
+```text
+candidate/log/optimize/tuning_result.json
+candidate/log/optimize/evaluation_result.json
+candidate/log/optimize/optimization_history.jsonl
+candidate/log/generate/controller_manifest.json
+candidate/log/generate/design_strategy.json
+```
+
+建议内容：
+
+```json
+{
+  "schema_version": 1,
+  "candidate_id": "candidate_01",
+  "structure": {},
+  "final_evaluation": {},
+  "failed_metrics": [],
+  "final_parameters": {},
+  "parameter_history_summary": {},
+  "source_files": {}
+}
+```
+
+这里的 `failed_metrics` 必须尽量从 `evaluation_result.json` 和 `tuning_result.json` 里程序化提取，不要让 LLM 编。
+
+验证方式：
+
+```powershell
+python Competition/competition_runner.py <project_json> --candidates 4 --skip-generate
+```
+
+然后检查：
+
+```text
+candidate_*/log/optimize/candidate_evidence.json
+```
+
+**Step 3：生成 round_feedback.json**
+
+目标：新增一个 round 汇总器，把所有 candidate evidence 聚合成：
+
+```text
+project/rounds/round_01/round_feedback.json
+```
+
+它读取每个 candidate 的：
+
+```text
+log/generate/controller_manifest.json
+log/optimize/candidate_evidence.json
+log/optimize/tuning_result.json
+log/optimize/evaluation_result.json
+```
+
+输出包括：
+
+```json
+{
+  "schema_version": 1,
+  "round": 1,
+  "requirement_satisfied": false,
+  "winner": {},
+  "scoreboard": [],
+  "candidates": [],
+  "failed_metrics_summary": [],
+  "next_round_constraints": {
+    "preserve": [],
+    "avoid": [],
+    "explore": []
+  }
+}
+```
+
+验证方式：
+
+```powershell
+python Competition/round_feedback.py <project_json> --round 1 --candidates all
+```
+
+然后检查：
+
+```text
+project/rounds/round_01/round_feedback.json
+```
+
+这一阶段仍然不生成第二轮，只证明“第一轮实验报告”可靠。
+
+**Step 4：让第二轮 agent 生成 candidate_profiles.json**
+
+目标：新增一个“下一轮策略生成器”，读取：
+
+```text
+project/rounds/round_01/round_feedback.json
+project/common/user_requirement.json
+project/common/candidate_profiles.json
+```
+
+然后写：
+
+```text
+project/rounds/round_02/input_feedback.json
+project/rounds/round_02/candidate_profiles.json
+```
+
+第二轮 profiles 里要包含：
+
+```json
+{
+  "candidate_id": "candidate_01",
+  "name": "第二轮低超调快速响应方案",
+  "structure_bias": "...",
+  "preferred_control_methods": ["pid", "filtering"],
+  "reference_candidates": ["round_01/candidate_03"],
+  "parameter_seed_policy": {
+    "mode": "inherit_matching_parameters",
+    "source_candidate": "candidate_03"
+  },
+  "expected_improvement": {
+    "target_failed_metrics": ["overshoot", "settling_time"]
+  }
+}
+```
+
+验证方式：
+
+```powershell
+python Competition/next_round_strategy.py <project_json> --from-round 1 --to-round 2 --candidates 4
+```
+
+然后人工看：
+
+```text
+project/rounds/round_02/candidate_profiles.json
+```
+
+确认它确实引用了第一轮数据，而不是泛泛重试。
+
+**Step 5：第二轮生成时使用 round_02 profiles**
+
+目标：让现有 `generate_candidates()` 可以指定 profile 来源：
+
+```text
+project/rounds/round_02/candidate_profiles.json
+```
+
+生成时把第二轮策略写入每个 candidate 的：
+
+```text
+candidate/log/generate/design_strategy.json
+candidate/log/generate/controller_manifest.json
+```
+
+初期可以先复用原来的 `project/candidates/candidate_01`，但建议加参数：
+
+```powershell
+python Competition/competition_runner.py <project_json> --candidates 4 --round 2 --skip-optimize
+```
+
+验证重点：
+
+```text
+design_strategy.json 里包含 round_01 feedback 引用
+controller_manifest.json 里是新结构
+```
+
+**Step 6：第二轮参数 warm start**
+
+目标：第二轮生成完结构后，在 optimize 前做参数迁移。
+
+规则先简单实现：
+
+1. 如果参数名完全一致，继承第一轮 best candidate 的最终值。
+2. 如果 loop/method 相同但参数名前缀不同，暂时不迁移，只记录 skipped。
+3. 如果结构完全不同，使用生成器默认参数。
+
+输出：
+
+```text
+candidate/log/optimize/parameter_seed_report.json
+```
+
+内容：
+
+```json
+{
+  "source_candidate": "candidate_03",
+  "matched_parameters": [],
+  "skipped_parameters": [],
+  "seeded_header": "src/paras.generated.h"
+}
+```
+
+验证方式：
+
+```powershell
+python Competition/parameter_seed.py <project_json> --from-round 1 --to-round 2
+```
+
+检查 `paras.generated.h` 是否正确继承，以及 `parameter_seed_report.json` 是否可追踪。
+
+**Step 7：跑第二轮 optimize 并再次反馈**
+
+目标：第二轮完整闭环：
+
+```powershell
+python Competition/competition_runner.py <project_json> --candidates 4 --round 2 --skip-generate
+python Competition/round_feedback.py <project_json> --round 2 --candidates all
+```
+
+输出：
+
+```text
+project/rounds/round_02/round_feedback.json
+```
+
+如果成功，停止；如果失败，可以继续：
+
+```powershell
+python Competition/next_round_strategy.py <project_json> --from-round 2 --to-round 3
+```
+
+**建议实际执行顺序**
+
+我建议我们接下来按这个顺序生成：
+
+1. `controller_manifest.json`
+2. `candidate_evidence.json`
+3. `round_feedback.json`
+4. `next_round_strategy.py`
+5. `--round` 参数与 round profile 接入
+6. 参数 warm start
+7. 完整多轮 runner
+
+第一步最小、最稳，而且马上能验证 generate 阶段证据是否足够。

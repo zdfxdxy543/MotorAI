@@ -28,6 +28,10 @@ from styles.theme import (
 
 
 CHAT_LINE_CHARS = 30
+CHAT_BOTTOM_SAFE_PADDING = 1
+USER_BUBBLE_HORIZONTAL_PADDING = 18
+USER_BUBBLE_VERTICAL_PADDING = 8
+USER_BUBBLE_MIN_HEIGHT = 0
 
 
 def _font_text_width(metrics, text: str) -> int:
@@ -117,7 +121,14 @@ class ChatBubbleWidget(QFrame):
         t = current_theme()
         if self.role == 'user':
             self.header_widget.hide()
-            layout.setContentsMargins(16, 8, 16, 8)
+            layout.setContentsMargins(
+                USER_BUBBLE_HORIZONTAL_PADDING,
+                USER_BUBBLE_VERTICAL_PADDING,
+                USER_BUBBLE_HORIZONTAL_PADDING,
+                USER_BUBBLE_VERTICAL_PADDING,
+            )
+            if USER_BUBBLE_MIN_HEIGHT > 0:
+                self.setMinimumHeight(USER_BUBBLE_MIN_HEIGHT)
             self.setStyleSheet(
                 f'QFrame#chatBubble_user{{background:#F0F0F0;border:none;border-radius:{RADIUS_BUBBLE}px;}}'
                 'QFrame#chatBubble_user * { border: none; }'
@@ -243,7 +254,9 @@ class ChatBubbleWidget(QFrame):
         if self.role == 'assistant':
             # Fill the readable chat width for borderless assistant replies.
             target = available
-            self.body.setMaximumWidth(max(1, target - horizontal_padding))
+            # QLabel sizeHint can stay too tall when only maximumWidth changes,
+            # which leaves phantom scroll space below long conversations.
+            self.body.setFixedWidth(max(1, target - horizontal_padding))
             return target
 
         if self.role == 'user':
@@ -257,7 +270,7 @@ class ChatBubbleWidget(QFrame):
 
         max_status_width = min(available, self._line_width(28) + horizontal_padding)
         target = min(max_status_width, max(160, self._raw_text_width() + horizontal_padding))
-        self.body.setMaximumWidth(max(1, target - horizontal_padding))
+        self.body.setFixedWidth(max(1, target - horizontal_padding))
         return max(1, target)
 
     def _line_width(self, char_count: int) -> int:
@@ -354,15 +367,15 @@ class ChatStreamWidget(QWidget):
         self.container.setAttribute(Qt.WA_StyledBackground, True)
         self.container.setStyleSheet(f'QWidget#chatStreamContainer{{background:{t.surface};border:none;}}')
         self.container_layout = QVBoxLayout(self.container)
-        self.container_layout.setContentsMargins(12, 12, 12, 12)
+        self.container_layout.setContentsMargins(12, 12, 12, CHAT_BOTTOM_SAFE_PADDING)
         self.container_layout.setSpacing(14)
-        self.container_layout.addStretch(1)
+        self.container_layout.setAlignment(Qt.AlignTop)
 
         self.scroll.setWidget(self.container)
         outer_layout.addWidget(self.scroll)
 
     def _message_insert_index(self) -> int:
-        return max(0, self.container_layout.count() - 1)
+        return self.container_layout.count()
 
     def clear_messages(self):
         for role, _row, content in self.message_rows:
@@ -380,7 +393,7 @@ class ChatStreamWidget(QWidget):
             widget = item.widget()
             if widget:
                 widget.deleteLater()
-        self.container_layout.addStretch(1)
+        self.container_layout.setAlignment(Qt.AlignTop)
 
     def append_message(self, role: str, text: str):
         role = ChatBubbleWidget._normalize_role(role)

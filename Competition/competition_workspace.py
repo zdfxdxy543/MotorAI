@@ -1028,6 +1028,142 @@ def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: 
     return output
 
 
+def sync_tuning_policy_with_header(candidate_json: Path) -> dict[str, Any]:
+    """Auto-complete tuning_policy.allowed_parameters from paras.generated.h.
+
+    Reads the actual tunable parameters from the generated header, compares them
+    with the user-configured whitelist, and adds any missing parameters with
+    sensible min/max ranges inferred from the parameter name and current value.
+
+    Call after code generation, so paras.generated.h reflects the actual control
+    structure.  The updated whitelist is written back to candidate.json on disk.
+
+    Returns:
+        A summary dict with ``auto_added``, ``nonexistent``, and ``updated`` keys.
+    """
+    from Optimize.agent_optimize.agent_core.parameters.parameter_header_editor import (
+        read_tunable_parameters,
+        ParameterHeaderError,
+    )
+    from Optimize.agent_optimize.agent_core.app import _infer_parameter_range
+
+    candidate_json = Path(candidate_json).expanduser().resolve()
+    candidate = load_json_object(candidate_json)
+
+    # ── read current whitelist ──────────────────────────────────────
+    tuning_policy = candidate.get("tuning_policy")
+    if not isinstance(tuning_policy, dict):
+        return {"updated": False, "reason": "no tuning_policy in candidate.json"}
+    allowed_params = tuning_policy.get("allowed_parameters")
+    if not isinstance(allowed_params, dict):
+        allowed_params = {}
+
+    # ── read header ─────────────────────────────────────────────────
+    header_path_raw = candidate.get("iteration_parameter_header_path")
+    if not header_path_raw:
+        header_path_raw = candidate.get("paths", {}).get("header_path")
+    if not header_path_raw:
+        src_dir = Path(str(candidate.get("src_folder_path") or "")).expanduser().resolve()
+        header_path_raw = str(src_dir / "paras.generated.h")
+    header_path = Path(str(header_path_raw)).expanduser()
+    if not header_path.is_absolute():
+        header_path = candidate_json.parent / header_path
+    header_path = header_path.resolve()
+
+    if not header_path.exists():
+        return {"updated": False, "reason": f"header not found: {header_path}"}
+
+    try:
+        header_params = read_tunable_parameters(header_path)
+    except (ParameterHeaderError, OSError, TypeError, ValueError) as exc:
+        return {"updated": False, "reason": f"cannot read header: {exc}"}
+
+    if not header_params:
+        return {"updated": False, "reason": "no parameters in header"}
+
+    # ── diff ────────────────────────────────────────────────────────
+    header_names = {str(k).upper() for k in header_params}
+    policy_names = {str(k).upper() for k in allowed_params}
+    missing = header_names - policy_names
+    nonexistent = policy_names - header_names
+
+    if not missing and not nonexistent:
+        return {"updated": False, "reason": "coverage already complete", "header_param_count": len(header_names)}
+
+    # ── auto-add missing ────────────────────────────────────────────
+    # SPEED_LIMIT 等保护参数不加入白名单，防止 agent 误调
+    _FIXED_TUNABLE = {"SPEED_LIMIT"}
+    auto_added: list[str] = []
+    for name in sorted(missing):
+        if name.upper() in _FIXED_TUNABLE:
+            continue
+        original_name = name
+        for hk in header_params:
+            if str(hk).upper() == name:
+                original_name = str(hk)
+                break
+        current_val = float(header_params.get(original_name, 1.0))
+        inferred = _infer_parameter_range(original_name, current_val)
+        allowed_params[original_name] = inferred
+        auto_added.append(original_name)
+
+    # ── persist back to candidate.json ──────────────────────────────
+    if tuning_policy is not candidate.get("tuning_policy"):
+        candidate["tuning_policy"] = dict(candidate.get("tuning_policy", {}))
+    candidate["tuning_policy"]["allowed_parameters"] = allowed_params
+    write_json(candidate_json, candidate)
+
+    # ── also update the parent project JSON (the source of truth) ────
+    parent_updated = False
+    parent_raw = candidate.get("parent_project_json")
+    if parent_raw:
+        parent_path = Path(str(parent_raw)).expanduser()
+        if not parent_path.is_absolute():
+            parent_path = candidate_json.parent / parent_path
+        parent_path = parent_path.resolve()
+        if parent_path.exists():
+            try:
+                parent = load_json_object(parent_path)
+                parent_tp = parent.get("tuning_policy")
+                if not isinstance(parent_tp, dict):
+                    parent["tuning_policy"] = {}
+                parent_ap = parent["tuning_policy"].get("allowed_parameters")
+                if not isinstance(parent_ap, dict):
+                    parent_ap = {}
+                # merge: keep user-configured entries, add auto-inferred ones
+                parent_ap.update(
+                    {name: allowed_params[name] for name in auto_added}
+                )
+                parent["tuning_policy"]["allowed_parameters"] = parent_ap
+                write_json(parent_path, parent)
+                parent_updated = True
+            except Exception:
+                pass
+
+    summary = {
+        "updated": True,
+        "parent_updated": parent_updated,
+        "header_param_count": len(header_names),
+        "policy_param_before": len(policy_names),
+        "policy_param_after": len(allowed_params),
+        "auto_added": auto_added,
+        "nonexistent_in_policy": sorted(nonexistent) if nonexistent else [],
+    }
+
+    if auto_added:
+        print(
+            f"  [tuning_policy] auto-completed {len(auto_added)} parameter(s): "
+            f"{', '.join(auto_added)}"
+        )
+    if nonexistent:
+        print(
+            f"  [tuning_policy] warning: {len(nonexistent)} parameter(s) in whitelist "
+            f"not found in header: {', '.join(sorted(nonexistent))}"
+        )
+
+    return summary
+
+
 # Default motor max speed in RPM, used to convert rad/s target to per-unit.
 _DEFAULT_MAX_SPEED_RPM = 3000.0
 
@@ -1324,6 +1460,21 @@ def run_generate_for_candidate(candidate_dir: Path, *, dry_run: bool) -> dict[st
     )
     stdout_path.write_text(result.stdout or "", encoding="utf-8")
     stderr_path.write_text(result.stderr or "", encoding="utf-8")
+
+    # ── generate 成功后立即同步 tuning_policy ─────────────────────────
+    # paras.generated.h 刚刚生成完毕，用它的实际参数列表自动补全
+    # tuning_policy.allowed_parameters，同时写回 candidate.json 和父级
+    # project.json（如 MergeTest.json）。这样 generate 完成的那一刻，
+    # 白名单就已经是完整的，后续 optimize 不会漏参数。
+    if result.returncode == 0:
+        try:
+            sync_result = sync_tuning_policy_with_header(candidate_json)
+            outputs["tuning_policy_sync"] = sync_result
+        except Exception as exc:
+            print(
+                f"  [tuning_policy] sync failed for {candidate_dir.name}: {exc}",
+                file=sys.stderr,
+            )
 
     return {
         "candidate_id": candidate_dir.name,

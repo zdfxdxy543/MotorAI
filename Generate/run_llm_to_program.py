@@ -224,9 +224,10 @@ def _inherit_parameters(
     source_params = read_tunable_parameters_detailed(source_header)
 
     # ── Step 1: 继承同名参数 ──────────────────────────────────────────
+    from Competition.parameter_seeder import _FIXED_PARAMETERS  # noqa: E402
     inherited: dict[str, Any] = {}
     for name in target_params:
-        if name in source_params:
+        if name in source_params and name.upper().strip() not in _FIXED_PARAMETERS:
             inherited[name] = source_params[name].value
 
     # ── Step 2: inherit_then_perturb 模式，解析扰动方向 ───────────────

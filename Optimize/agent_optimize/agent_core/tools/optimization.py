@@ -88,6 +88,107 @@ def _detect_tunable_allowlist(all_params: dict[str, Any]) -> set[str] | None:
     return None
 
 
+def _get_effective_allowlist(
+    ctx: Any,
+    header_params: dict[str, Any],
+) -> set[str] | None:
+    """Merge controller-type allowlist with tuning_policy.allowed_parameters.
+
+    Layered enforcement:
+    1. Controller-type allowlist (LADRC / SMC) — always enforced when applicable.
+    2. tuning_policy.allowed_parameters from the job JSON — enforced on top,
+       including for PID where the controller allowlist is None.
+
+    Returns:
+        A set of allowed parameter names (upper-cased), or None to allow all.
+    """
+    controller_allowlist = _detect_tunable_allowlist(header_params)
+
+    # ── read tuning_policy.allowed_parameters from context ──────────
+    policy_names: list[str] | None = None
+    try:
+        auto = getattr(ctx, "automation", None)
+        if callable(auto):
+            policy_names = auto().get("_tuning_policy_allowed_names")
+    except Exception:
+        policy_names = None
+
+    if not policy_names:
+        # No tuning_policy configured — fall back to controller-only behaviour.
+        return controller_allowlist
+
+    policy_set = {str(n).upper() for n in policy_names}
+    header_names = {str(k).upper() for k in header_params}
+    policy_effective = policy_set & header_names  # only names that actually exist
+
+    if controller_allowlist is None:
+        # PID / unknown controller: tuning_policy is the only restriction.
+        return policy_effective
+
+    # LADRC / SMC: intersection of both restrictions.
+    return controller_allowlist & policy_effective
+
+
+def validate_tuning_policy_coverage(
+    header_path: Path | str,
+    ctx: Any,
+) -> dict[str, Any]:
+    """Compare header parameters against tuning_policy.allowed_parameters.
+
+    Call this after the header file exists and tuning_policy has been injected
+    into the context.  Returns a structured report that can be logged into
+    tuning_result.json so operators can spot whitelist gaps without digging
+    through agent transcripts.
+
+    When no tuning_policy is configured the function returns a no-op result
+    (backward-compatible).
+    """
+    header_params: dict[str, Any] = {}
+    try:
+        header_params = read_header_parameters(Path(header_path))
+    except (ParameterHeaderError, OSError, TypeError, ValueError) as exc:
+        return {
+            "status": "skipped",
+            "reason": f"cannot read header: {exc}",
+            "is_coverage_complete": None,
+        }
+
+    header_names = {str(k).upper() for k in header_params}
+
+    # ── resolve tuning_policy names from context ──────────────────────
+    policy_names_raw: list[str] | None = None
+    try:
+        auto = getattr(ctx, "automation", None)
+        if callable(auto):
+            policy_names_raw = auto().get("_tuning_policy_allowed_names")
+    except Exception:
+        policy_names_raw = None
+
+    if not policy_names_raw:
+        return {
+            "status": "no_policy",
+            "reason": "tuning_policy.allowed_parameters not configured — all header parameters are tunable.",
+            "header_param_count": len(header_names),
+            "header_parameters": sorted(header_names),
+            "is_coverage_complete": True,
+        }
+
+    policy_names = {str(n).upper() for n in policy_names_raw}
+    untunable = header_names - policy_names
+    nonexistent = policy_names - header_names
+
+    return {
+        "status": "validated",
+        "header_param_count": len(header_names),
+        "header_parameters": sorted(header_names),
+        "policy_param_count": len(policy_names),
+        "policy_parameters": sorted(policy_names),
+        "untunable_parameters": sorted(untunable),
+        "nonexistent_in_policy": sorted(nonexistent),
+        "is_coverage_complete": len(untunable) == 0,
+    }
+
+
 class OptimizationTools:
     """LLM-callable tools for one-step tuning orchestration.
 
@@ -235,7 +336,7 @@ class OptimizationTools:
         # Read parameters before running, so even failed runs report current state.
         try:
             all_params = read_header_parameters(resolved_header_path)
-            tunable_allowlist = _detect_tunable_allowlist(all_params)
+            tunable_allowlist = _get_effective_allowlist(self.ctx, all_params)
             context["current_parameters_before_run"] = (
                 {k: v for k, v in all_params.items() if tunable_allowlist is None or k in tunable_allowlist}
                 if tunable_allowlist is not None
@@ -284,7 +385,7 @@ class OptimizationTools:
 
         try:
             all_after = read_header_parameters(resolved_header_path)
-            tunable_allowlist = _detect_tunable_allowlist(all_after)
+            tunable_allowlist = _get_effective_allowlist(self.ctx, all_after)
             context["current_parameters_after_run"] = (
                 {k: v for k, v in all_after.items() if tunable_allowlist is None or k in tunable_allowlist}
                 if tunable_allowlist is not None
@@ -341,7 +442,7 @@ class OptimizationTools:
             evaluation_result_path = self._evaluation_result_path()
 
             parameters_before = read_header_parameters(resolved_header_path)
-            tunable_allowlist = _detect_tunable_allowlist(parameters_before)
+            tunable_allowlist = _get_effective_allowlist(self.ctx, parameters_before)
             evaluation_result = self._load_json_file(evaluation_result_path)
 
             patch_result = patch_header_parameters(
@@ -445,7 +546,7 @@ class OptimizationTools:
                 resolved_output_path = self.ctx.resolve_config_path("../log/tuning_context_snapshot.json")
 
             all_params = read_header_parameters(resolved_header_path)
-            tunable_allowlist = _detect_tunable_allowlist(all_params)
+            tunable_allowlist = _get_effective_allowlist(self.ctx, all_params)
 
             snapshot = {
                 "status": "ok",
@@ -683,4 +784,9 @@ def register_optimization_tools(registry: ToolRegistry, ctx: ProjectContext) -> 
     return tool
 
 
-__all__ = ["OptimizationTools", "register_optimization_tools"]
+__all__ = [
+    "OptimizationTools",
+    "register_optimization_tools",
+    "validate_tuning_policy_coverage",
+    "_get_effective_allowlist",
+]

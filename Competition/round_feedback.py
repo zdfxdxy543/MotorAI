@@ -108,6 +108,7 @@ def _read_candidate_data(candidate_dir: Path) -> dict[str, Any] | None:
         "failed_metrics": evidence.get("failed_metrics", []),
         "final_parameters": evidence.get("final_parameters", []),
         "parameter_history_summary": evidence.get("parameter_history_summary", {}),
+        "tuning_diagnostics": evidence.get("tuning_diagnostics", {}),
         "source_files": evidence.get("source_files", {}),
     }
 

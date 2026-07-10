@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import (
     QAction,
     QFileDialog,
+    QFrame,
+    QGraphicsDropShadowEffect,
     QDialog,
     QDialogButtonBox,
     QHBoxLayout,
@@ -13,8 +15,17 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
-from PyQt5.QtCore import Qt, QProcess, QTimer
-from PyQt5.QtGui import QIcon
+from PyQt5.QtCore import (
+    QEasingCurve,
+    QPoint,
+    QProcess,
+    QPropertyAnimation,
+    Qt,
+    QTimer,
+    pyqtProperty,
+    pyqtSignal,
+)
+from PyQt5.QtGui import QColor, QIcon
 import json
 import os
 import subprocess
@@ -35,6 +46,250 @@ from styles.theme import (
     dark_qss,
     primary_button_qss,
 )
+
+
+class DrawerHandle(QFrame):
+    clicked = pyqtSignal()
+
+    def __init__(self, side: str, label: str, parent=None):
+        super().__init__(parent)
+        self.side = side
+        self.label = label
+        self._expanded = True
+        self.setObjectName('drawerHandle')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setCursor(Qt.PointingHandCursor)
+        self.setFixedWidth(12)
+
+        layout = QHBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+
+        self.grip = QFrame()
+        self.grip.setObjectName('drawerHandleGrip')
+        self.grip.setFixedSize(3, 40)
+        layout.addWidget(self.grip, 0, Qt.AlignCenter)
+
+        self._apply_style()
+        self.set_expanded(True)
+
+    def _apply_style(self):
+        t = current_theme()
+        self.setStyleSheet(
+            'QFrame#drawerHandle{background:transparent;border:none;}'
+            f'QFrame#drawerHandle:hover{{background:{t.primary_soft};}}'
+            f'QFrame#drawerHandleGrip{{background:{t.border_strong};border:none;border-radius:1px;}}'
+        )
+
+    def set_expanded(self, expanded: bool):
+        self._expanded = expanded
+        action = '收起' if expanded else '展开'
+        self.setToolTip(f'{action}{self.label}')
+
+    def mousePressEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            event.accept()
+            self.clicked.emit()
+            return
+        super().mousePressEvent(event)
+
+
+class CenterInsetHost(QWidget):
+    def __init__(self, center_widget: QWidget, parent=None):
+        super().__init__(parent)
+        self._left_inset = 0
+        self._right_inset = 0
+
+        self.setObjectName('centerInsetHost')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(f'QWidget#centerInsetHost{{background:{current_theme().surface};border:none;}}')
+
+        self._layout = QVBoxLayout(self)
+        self._layout.setContentsMargins(0, 0, 0, 0)
+        self._layout.setSpacing(0)
+        self._layout.addWidget(center_widget)
+
+        self._left_animation = QPropertyAnimation(self, b'leftInset', self)
+        self._right_animation = QPropertyAnimation(self, b'rightInset', self)
+        for animation in (self._left_animation, self._right_animation):
+            animation.setDuration(240)
+            animation.setEasingCurve(QEasingCurve.OutCubic)
+
+    def set_target_insets(self, left: int, right: int, animated: bool):
+        left = max(0, int(left))
+        right = max(0, int(right))
+
+        if not animated:
+            self._left_animation.stop()
+            self._right_animation.stop()
+            self.leftInset = left
+            self.rightInset = right
+            return
+
+        self._animate_inset(self._left_animation, self.leftInset, left)
+        self._animate_inset(self._right_animation, self.rightInset, right)
+
+    @staticmethod
+    def _animate_inset(animation: QPropertyAnimation, start: int, end: int):
+        animation.stop()
+        animation.setStartValue(start)
+        animation.setEndValue(end)
+        animation.start()
+
+    def _apply_insets(self):
+        self._layout.setContentsMargins(self._left_inset, 0, self._right_inset, 0)
+
+    def _get_left_inset(self) -> int:
+        return self._left_inset
+
+    def _set_left_inset(self, value: int):
+        self._left_inset = max(0, int(value))
+        self._apply_insets()
+
+    def _get_right_inset(self) -> int:
+        return self._right_inset
+
+    def _set_right_inset(self, value: int):
+        self._right_inset = max(0, int(value))
+        self._apply_insets()
+
+    leftInset = pyqtProperty(int, _get_left_inset, _set_left_inset)
+    rightInset = pyqtProperty(int, _get_right_inset, _set_right_inset)
+
+
+class FloatingDrawer(QFrame):
+    expandedChanged = pyqtSignal(bool)
+
+    def __init__(self, side: str, content: QWidget, label: str, preferred_width: int, parent=None):
+        super().__init__(parent)
+        self.side = side
+        self.content = content
+        self.label = label
+        self.preferred_width = preferred_width
+        self.handle_width = 12
+        self._content_width = preferred_width
+        self._expanded = True
+
+        self.setObjectName(f'{side}FloatingDrawer')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet('QFrame{background:transparent;border:none;}')
+
+        self.content.setParent(self)
+        self.content.show()
+
+        self.handle = DrawerHandle(side, label, self)
+        self.handle.clicked.connect(self.toggle)
+
+        self._animation = QPropertyAnimation(self, b'pos', self)
+        self._animation.setDuration(240)
+        self._animation.setEasingCurve(QEasingCurve.OutCubic)
+
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(26)
+        shadow.setOffset(5 if side == 'left' else -5, 0)
+        shadow.setColor(QColor(15, 23, 42, 42))
+        self.setGraphicsEffect(shadow)
+
+    def toggle(self):
+        self.set_expanded(not self._expanded, animated=True)
+
+    def set_expanded(self, expanded: bool, animated: bool = True):
+        changed = self._expanded != expanded
+        self._expanded = expanded
+        self.handle.set_expanded(expanded)
+        self.raise_()
+
+        target = QPoint(self._target_x(), 0)
+        if not animated:
+            self._animation.stop()
+            self.move(target)
+            if changed:
+                self.expandedChanged.emit(expanded)
+            return
+
+        self._animation.stop()
+        self._animation.setStartValue(self.pos())
+        self._animation.setEndValue(target)
+        self._animation.start()
+        if changed:
+            self.expandedChanged.emit(expanded)
+
+    def sync_geometry(self, parent_width: int, parent_height: int):
+        self._content_width = self._resolve_content_width(parent_width)
+        total_width = self._content_width + self.handle_width
+        self.resize(total_width, parent_height)
+
+        if self.side == 'left':
+            self.content.setGeometry(0, 0, self._content_width, parent_height)
+            self.handle.setGeometry(self._content_width, 0, self.handle_width, parent_height)
+        else:
+            self.handle.setGeometry(0, 0, self.handle_width, parent_height)
+            self.content.setGeometry(self.handle_width, 0, self._content_width, parent_height)
+
+        self.set_expanded(self._expanded, animated=False)
+
+    def _resolve_content_width(self, parent_width: int) -> int:
+        if self.side == 'left':
+            if parent_width < 860:
+                return max(180, min(210, int(parent_width * 0.24)))
+            if parent_width < 1200:
+                return max(200, min(230, int(parent_width * 0.20)))
+            return max(240, min(280, int(parent_width * 0.20), self.preferred_width))
+        if parent_width < 860:
+            return max(210, min(250, int(parent_width * 0.30)))
+        if parent_width < 1200:
+            return max(240, min(280, int(parent_width * 0.24)))
+        return max(320, min(380, int(parent_width * 0.27), self.preferred_width))
+
+    def _target_x(self) -> int:
+        parent = self.parentWidget()
+        parent_width = parent.width() if parent is not None else self.width()
+        if self.side == 'left':
+            return 0 if self._expanded else -self._content_width
+        return parent_width - self.width() if self._expanded else parent_width - self.handle_width
+
+    def content_width(self) -> int:
+        return self._content_width
+
+    def is_expanded(self) -> bool:
+        return self._expanded
+
+
+class OverlayWorkspace(QWidget):
+    def __init__(self, center_widget: QWidget, left_widget: QWidget, right_widget: QWidget, parent=None):
+        super().__init__(parent)
+        self.setObjectName('overlayWorkspace')
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet(f'QWidget#overlayWorkspace{{background:{current_theme().surface};border:none;}}')
+
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        self.center_host = CenterInsetHost(center_widget, self)
+        layout.addWidget(self.center_host)
+
+        self.left_drawer = FloatingDrawer('left', left_widget, '历史栏', 280, self)
+        self.right_drawer = FloatingDrawer('right', right_widget, '结果栏', 400, self)
+        self.left_drawer.expandedChanged.connect(lambda _expanded: self._sync_center_insets(animated=True))
+        self.right_drawer.expandedChanged.connect(lambda _expanded: self._sync_center_insets(animated=True))
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.left_drawer.sync_geometry(self.width(), self.height())
+        self.right_drawer.sync_geometry(self.width(), self.height())
+        self._sync_center_insets(animated=False)
+        self.left_drawer.raise_()
+        self.right_drawer.raise_()
+
+    def _sync_center_insets(self, animated: bool):
+        gap = 8
+        left = self._reserved_width(self.left_drawer, gap)
+        right = self._reserved_width(self.right_drawer, gap)
+        self.center_host.set_target_insets(left, right, animated=animated)
+
+    @staticmethod
+    def _reserved_width(drawer: FloatingDrawer, gap: int) -> int:
+        return drawer.handle_width + drawer.content_width() + gap
 
 
 class NetworkConfigDialog(QDialog):
@@ -63,7 +318,8 @@ class MainWindow(QMainWindow):
         self._apply_visual_theme()
 
         self.setWindowTitle('GMP Generator Engine - UI')
-        self.resize(1000, 600)
+        self.resize(1440, 760)
+        self.setMinimumSize(1080, 620)
         
         icon_path = os.path.join(os.path.dirname(__file__), '..', 'icon.png')
         if os.path.exists(icon_path):
@@ -117,11 +373,8 @@ class MainWindow(QMainWindow):
         toolbar_layout.addStretch()
         toolbar.setFixedHeight(48)
 
-        # Central area: history (1) | AI chat (3) | controller+tuning (1)
-        central = QWidget()
-        central_layout = QHBoxLayout(central)
-        central_layout.setContentsMargins(0, 0, 0, 0)
-        central_layout.setSpacing(6)
+        # Central area: AI chat is the base canvas; history and result panels
+        # float above it as animated off-canvas drawers.
 
         self.controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
         self.controller_panel.setStyleSheet(f'background:{current_theme().panel};border:none;')
@@ -134,7 +387,7 @@ class MainWindow(QMainWindow):
         )
         self.right_panel_widget.setStyleSheet(f'background:{current_theme().surface};border:none;')
         self.right_panel_widget.set_controller_panel(self.controller_panel)
-        self.right_panel_widget.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
+        self.right_panel_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.right_panel_widget.setMinimumWidth(0)
 
         right_splitter = QSplitter(Qt.Vertical)
@@ -156,13 +409,17 @@ class MainWindow(QMainWindow):
         )
         self.history_panel.setMinimumWidth(200)
 
-        central_layout.addWidget(self.history_panel, 1)
-        central_layout.addWidget(self.right_panel_widget, 3)
-        central_layout.addWidget(right_splitter, 1)
+        central = OverlayWorkspace(
+            center_widget=self.right_panel_widget,
+            left_widget=self.history_panel,
+            right_widget=right_splitter,
+        )
+        self.overlay_workspace = central
+        central.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
         # Assemble main layout
         main_layout.addWidget(toolbar)
-        main_layout.addWidget(central)
+        main_layout.addWidget(central, 1)
 
         self.setCentralWidget(container)
         self._install_surface_effects()
@@ -262,7 +519,7 @@ class MainWindow(QMainWindow):
         if not project_json_path:
             QMessageBox.warning(self, '提示', '请先打开或创建一个项目文件')
             return
-        
+
         try:
             with open(project_json_path, 'r', encoding='utf-8') as f:
                 project_data = json.load(f)
@@ -278,7 +535,7 @@ class MainWindow(QMainWindow):
                     return
                 candidate_count = int(project_data.get('candidate_count') or 4)
 
-                # 使用 QProcess 监控进程完成，而非 subprocess.Popen
+                # 使用 QProcess 监控进程完成，支持多轮自动继续
                 project_dir = Path(project_json_path).parent
                 log_dir = project_dir / 'log' / 'ui'
                 log_dir.mkdir(parents=True, exist_ok=True)
@@ -302,14 +559,13 @@ class MainWindow(QMainWindow):
                         self._on_competition_finished(exit_code, exit_status,
                                                        project_json_path)
                 )
+
                 # 确定当前轮次：手动点击永远从 1 开始，自动继续才传具体轮次
                 if round_number <= 0:
-                    current_round = 1  # 手动触发，从第一轮开始
+                    current_round = 1
                 else:
-                    current_round = round_number  # 自动继续，使用指定轮次
+                    current_round = round_number
 
-                # 第二轮及以后需要重新 generate（可能换控制结构），
-                # 第一轮通过 UI 已手动 generate，所以 skip
                 cmd_args = [
                     str(runner_script),
                     str(project_json_path),
@@ -326,8 +582,10 @@ class MainWindow(QMainWindow):
                 right_panel = self.right_panel()
                 if right_panel is not None:
                     try:
-                        right_panel.main_program_panel._append_debug(f'第 {current_round} 轮调优已启动（后台运行中）...')
-                        right_panel.main_program_panel._set_status_text(f'状态：第 {current_round} 轮调优进行中')
+                        right_panel.main_program_panel._append_debug(
+                            f'第 {current_round} 轮调优已启动（后台运行中）...')
+                        right_panel.main_program_panel._set_status_text(
+                            f'状态：第 {current_round} 轮调优进行中')
                     except RuntimeError:
                         pass
                 return
@@ -360,7 +618,7 @@ class MainWindow(QMainWindow):
 
         project_dir = Path(project_json_path).parent
 
-        # 读取最新已完成的轮次反馈（必须有 round_feedback.json 才算完成）
+        # 读取最新已完成的轮次反馈
         rounds_root = project_dir / 'rounds'
         current_round = 0
         feedback = {}
@@ -379,7 +637,7 @@ class MainWindow(QMainWindow):
                         pass
                     break
         if current_round <= 0:
-            current_round = 1  # 第一轮还在跑
+            current_round = 1
 
         winner = feedback.get('winner', {})
         scoreboard = feedback.get('scoreboard', [])
@@ -411,7 +669,6 @@ class MainWindow(QMainWindow):
         except RuntimeError:
             return
 
-        # 自动继续：如果未满足停止条件且进程正常退出，直接启动下一轮
         # 检查 max_rounds 上限
         try:
             with open(project_json_path, 'r', encoding='utf-8') as f:
@@ -452,10 +709,13 @@ class MainWindow(QMainWindow):
                         f'正在生成第 {next_round} 轮方案策略（需要调用 LLM）...'
                     )
                 from Competition.next_round_strategy import generate_next_round_strategy
-                generate_next_round_strategy(project_json_path, from_round=next_round - 1, to_round=next_round)
+                generate_next_round_strategy(project_json_path,
+                                             from_round=next_round - 1,
+                                             to_round=next_round)
             except Exception as exc:
                 if right_panel is not None:
-                    right_panel.main_program_panel._append_error(f'无法生成第 {next_round} 轮策略：{exc}')
+                    right_panel.main_program_panel._append_error(
+                        f'无法生成第 {next_round} 轮策略：{exc}')
                 return
 
         # 直接启动，不弹窗

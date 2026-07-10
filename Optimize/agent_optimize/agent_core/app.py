@@ -621,10 +621,13 @@ def run_headless_job(
         nonexistent = policy_names - header_names
 
         # ── 自动补全缺失参数 ──────────────────────────────────────
+        # SPEED_LIMIT 等保护参数不加入白名单，防止 agent 误调
+        _FIXED_TUNABLE = {"SPEED_LIMIT"}
         auto_added: list[str] = []
         for name in sorted(missing):
-            original_name = name  # header 里的原始大小写
-            # 在 header_params 中找到原始 key
+            if name in _FIXED_TUNABLE:
+                continue
+            original_name = name
             for hk in header_params:
                 if str(hk).upper() == name:
                     original_name = str(hk)
