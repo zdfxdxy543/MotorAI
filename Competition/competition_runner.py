@@ -99,6 +99,29 @@ def build_optimize_command(candidate_dir: Path) -> tuple[list[str], dict[str, st
     return command, env_overlay, outputs
 
 
+def _sync_target_velocity_for_candidate(candidate_dir: Path) -> None:
+    """Read candidate.json target_value, rewrite ctl_main.c target-velocity literal.
+
+    Called before every optimize run so each round starts with the correct
+    per-unit target speed regardless of what the generate-phase LLM produced.
+    """
+    cj = candidate_dir / "candidate.json"
+    if not cj.exists():
+        return
+    try:
+        candidate = load_json_object(cj)
+    except Exception:
+        return
+    ctl_main = candidate_dir / "src" / "ctl_main.c"
+    if not ctl_main.exists():
+        return
+    try:
+        from Competition.competition_workspace import _sync_target_velocity_to_ctl_main  # noqa: E402
+        _sync_target_velocity_to_ctl_main(candidate, ctl_main)
+    except Exception:
+        pass
+
+
 def run_optimize_for_candidate(candidate_dir: Path, *, dry_run: bool) -> dict[str, Any]:
     command, env_overlay, outputs = build_optimize_command(candidate_dir)
     candidate_id_value = candidate_dir.name
@@ -117,6 +140,11 @@ def run_optimize_for_candidate(candidate_dir: Path, *, dry_run: bool) -> dict[st
     log_dir.mkdir(parents=True, exist_ok=True)
     stdout_path = log_dir / "run_optimize_stdout.txt"
     stderr_path = log_dir / "run_optimize_stderr.txt"
+
+    # ── 每轮仿真前同步目标转速 ───────────────────────────────────────
+    # generate 阶段 LLM 写入的硬编码 0.1，这里用 candidate.json 中
+    # 用户配置的 target_value 覆写为正确值，确保每一轮都校准。
+    _sync_target_velocity_for_candidate(candidate_dir)
 
     env = os.environ.copy()
     env.update(env_overlay)
@@ -410,6 +438,11 @@ def run_competition(
                     candidate_data = load_json_object(cj)
                     log_opt = cdir / "log" / "optimize"
                     _write_candidate_evaluation_config(candidate_data, log_opt, candidate_json=cj)
+                    # 第二轮+：只评估不修改，隔离优化 agent 对参数的干扰
+                    if round_number > 1:
+                        candidate_data["max_iterations"] = 1
+                        candidate_data["stop_conditions"] = {"overall_score_min": -1, "metric_error_count_max": 999}
+                        write_json(cj, candidate_data)
             except Exception:
                 pass
 

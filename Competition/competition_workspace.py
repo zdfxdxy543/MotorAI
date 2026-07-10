@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import shutil
@@ -1025,6 +1026,80 @@ def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: 
         write_json(candidate_json, candidate)
 
     return output
+
+
+# Default motor max speed in RPM, used to convert rad/s target to per-unit.
+_DEFAULT_MAX_SPEED_RPM = 3000.0
+
+
+def _extract_target_speed_pu_from_candidate(candidate: dict[str, Any]) -> float | None:
+    """Extract target speed in per-unit from a candidate dict's targets/metrics.
+
+    Looks for a speed-related target (signal name containing 'speed') and
+    converts its target_value from rad/s to per-unit.
+    Returns None when no suitable target is found.
+    """
+    # ── try the targets section first ──────────────────────────────────
+    targets = candidate.get("targets")
+    if isinstance(targets, dict):
+        for signal_name, spec in targets.items():
+            if not isinstance(spec, dict):
+                continue
+            if "speed" not in signal_name.lower():
+                continue
+            tv = spec.get("target_value")
+            if isinstance(tv, (int, float)) and tv > 0:
+                return float(tv) * 60.0 / (_DEFAULT_MAX_SPEED_RPM * 2.0 * math.pi)
+
+    # ── fall back to the first metric with a target_value ──────────────
+    metrics = candidate.get("metrics")
+    if isinstance(metrics, list):
+        for metric in metrics:
+            if not isinstance(metric, dict):
+                continue
+            signal = str(metric.get("signal", "") or "").lower()
+            if "speed" not in signal:
+                continue
+            tv = metric.get("target_value")
+            if isinstance(tv, (int, float)) and tv > 0:
+                return float(tv) * 60.0 / (_DEFAULT_MAX_SPEED_RPM * 2.0 * math.pi)
+
+    return None
+
+
+def _sync_target_velocity_to_ctl_main(candidate: dict[str, Any], ctl_main_path: Path) -> bool:
+    """Rewrite the target-velocity literal in ctl_main.c from candidate.json.
+
+    After generate, ctl_main.c contains a hardcoded placeholder (0.1).  This
+    function computes the correct per-unit value from the user-configured
+    target_value (rad/s) and replaces it in-place via regex.
+    """
+    target_pu = _extract_target_speed_pu_from_candidate(candidate)
+    if target_pu is None:
+        print("  [target] no speed target found in candidate config, skipping ctl_main.c rewrite")
+        return False
+
+    if not ctl_main_path.exists():
+        print(f"  [target] ctl_main.c not found: {ctl_main_path}, skipping rewrite")
+        return False
+
+    text = ctl_main_path.read_text(encoding="utf-8")
+
+    # Match both PID and LADRC target-velocity calls.
+    pattern = re.compile(
+        r'(ctl_set_(?:mech|ladrc)_target_velocity\s*\(\s*&(?:\w+)\s*,\s*)[\d]+(?:\.[\d]*)?(?:f)?'
+    )
+    new_literal = f"{target_pu:.6f}f"
+    new_text, count = pattern.subn(rf'\g<1>{new_literal}', text)
+
+    if count == 0:
+        print("  [target] warning: no target-velocity call found in ctl_main.c, nothing rewritten")
+        return False
+
+    ctl_main_path.write_text(new_text, encoding="utf-8")
+    rad_s = candidate.get("targets", {}).get("rotor_speed_rad_s", {}).get("target_value", "?")
+    print(f"  [target] ctl_main.c: {count} call(s) rewritten to {new_literal}  ({rad_s} rad/s)")
+    return True
 
 
 def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:

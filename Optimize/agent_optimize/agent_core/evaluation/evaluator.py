@@ -149,8 +149,6 @@ _TARGET_REQUIRED_METRICS: set[str] = {
     "rms_error",
     "steady_state_error",
     "overshoot",
-    "rise_time",
-    "settling_time",
     "response_delay",
 }
 

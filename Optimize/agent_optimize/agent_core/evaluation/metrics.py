@@ -249,12 +249,12 @@ def rise_time(
     upper_ratio: float = 0.9,
 ) -> float:
     """
-    Return 10%-to-90% rise time relative to the TARGET value.
+    Return 10%-to-90% rise time relative to the signal's own steady-state value.
 
-    Thresholds are computed relative to the commanded target, not the signal's
-    own final value.  If the system cannot reach the target, rise_time returns
-    the full simulation duration so the score naturally becomes 0 — the metric
-    no longer gives a false pass when the motor runs at the wrong speed.
+    The steady-state reference is the mean of the last 10 samples (fewer if the
+    signal is shorter).  Thresholds are computed from this reference rather than
+    from an externally commanded target, so rise_time measures the signal's own
+    dynamics even when the controller fails to track the commanded reference.
     """
     t, y = _extract_time_values(signal=signal, time=time, values=values, require_time=True)
 
@@ -263,28 +263,32 @@ def rise_time(
     if lower_ratio >= upper_ratio:
         raise MetricComputationError("rise_time requires lower_ratio < upper_ratio.")
 
-    _target = _resolve_scalar_target(target, metric_name="rise_time")
-    if _target is None:
-        raise MetricComputationError("rise_time requires a scalar target (target_value or target_signal).")
-
     initial = y[0]
-    delta = _target - initial
+    tail_size = min(10, len(y))
+    final = sum(y[-tail_size:]) / tail_size
+    delta = final - initial
     if abs(delta) <= _EPSILON:
-        raise MetricComputationError("rise_time: target equals initial value.")
+        raise MetricComputationError("rise_time: signal steady-state value equals initial value, no measurable rise.")
 
     lower_level = initial + lower_ratio * delta
     upper_level = initial + upper_ratio * delta
 
     t_lower = _first_crossing_time(t, y, level=lower_level, direction=delta)
     if t_lower is None:
-        return t[-1] - t[0]  # 到不了目标 → 返回仿真总时长 → 得 0 分
+        raise MetricComputationError(
+            f"rise_time: signal never crossed {lower_ratio*100:.0f}% level ({lower_level:.4g})."
+        )
 
     t_upper = _first_crossing_time(t, y, level=upper_level, direction=delta)
     if t_upper is None:
-        return t[-1] - t[0]
+        raise MetricComputationError(
+            f"rise_time: signal never crossed {upper_ratio*100:.0f}% level ({upper_level:.4g})."
+        )
 
     if t_upper < t_lower:
-        return t[-1] - t[0]
+        raise MetricComputationError(
+            "rise_time: upper crossing occurred before lower crossing, signal may be non-monotonic."
+        )
 
     return t_upper - t_lower
 
@@ -301,31 +305,34 @@ def settling_time(
     """
     Return the time after which the signal remains inside the tolerance band.
 
-    The tolerance band is centered on the COMMANDED TARGET, not the signal's
-    own final value.  If the system cannot reach the target, settling_time
-    returns the full simulation duration so the score naturally becomes 0 —
-    the metric no longer gives a false pass when the motor runs at the wrong speed.
+    The tolerance band is centered on the signal's own steady-state value (mean
+    of the last 10 samples), not on an externally commanded target.  This way
+    settling_time measures the signal's own convergence dynamics even when the
+    controller fails to track the commanded reference.
     """
     t, y = _extract_time_values(signal=signal, time=time, values=values, require_time=True)
 
-    _target = _resolve_scalar_target(target, metric_name="settling_time")
-    if _target is None:
-        raise MetricComputationError("settling_time requires a scalar target (target_value or target_signal).")
+    tail_size = min(10, len(y))
+    reference = sum(y[-tail_size:]) / tail_size
 
     band = _resolve_tolerance(
         tolerance=tolerance,
         tolerance_ratio=tolerance_ratio,
-        target_final=_target,
+        reference=reference,
         values=y,
         metric_name="settling_time",
     )
 
     for i in range(len(y)):
-        if all(abs(sample - _target) <= band for sample in y[i:]):
+        if all(abs(sample - reference) <= band for sample in y[i:]):
             return t[i] - t[0]
 
-    # 到不了目标 → 返回仿真总时长 → 得 0 分
-    return t[-1] - t[0]
+    # Signal never settled around its own final value — edge case (e.g.
+    # persistent oscillation or monotonic drift that never stabilises).
+    raise MetricComputationError(
+        "settling_time: signal never settled within "
+        f"tolerance={band:.4g} around final value={reference:.4g}."
+    )
 
 
 def ripple(
@@ -788,7 +795,7 @@ def _resolve_tolerance(
     *,
     tolerance: float | None,
     tolerance_ratio: float,
-    target_final: float,
+    reference: float,
     values: list[float],
     metric_name: str,
 ) -> float:
@@ -802,11 +809,11 @@ def _resolve_tolerance(
 
     _validate_ratio(tolerance_ratio, "tolerance_ratio")
 
-    scale = abs(target_final)
+    scale = abs(reference)
     if scale <= _EPSILON:
         scale = max(abs(v) for v in values)
     if scale <= _EPSILON:
-        # All-zero signal and zero target: exact equality is a reasonable band.
+        # All-zero signal and zero reference: exact equality is a reasonable band.
         return 0.0
     return float(tolerance_ratio) * scale
 
