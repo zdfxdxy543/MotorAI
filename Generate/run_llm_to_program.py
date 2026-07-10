@@ -91,12 +91,37 @@ def main(
     return 0
 
 
-def _seed_candidate_parameters(paras_output: Path) -> None:
-    """Post-generate step: perturbs paras.generated.h based on design profile.
+def _resolve_source_header(candidate_dir: Path, source_id: str) -> Path:
+    """解析参数继承的源文件路径，优先使用 rounds 备份中的优化后值。
 
-    The candidate directory is derived from the paras output path:
-        <candidate_dir>/src/paras.generated.h  →  <candidate_dir>
-    Design profile and candidate index are read from candidate.json.
+    generate 阶段 LLM 会先用模板默认值覆写 paras.generated.h，
+    如果 source 是同一轮的其他 candidate，此时读到的是模板默认值而非优化值。
+    因此优先从 rounds/ 备份中读取上一轮的优化后参数。
+    """
+    # 直接在 candidates/ 下找（可能已被覆写）
+    direct = candidate_dir.parent / source_id / "src" / "paras.generated.h"
+
+    # 查找 rounds/ 备份中的最新版本
+    project_root = candidate_dir.parent.parent
+    rounds_dir = project_root / "rounds"
+    if rounds_dir.is_dir():
+        # 按轮次降序排列，找最新备份
+        round_dirs = sorted(rounds_dir.glob("round_*"), reverse=True)
+        for rd in round_dirs:
+            backup = rd / "candidates" / source_id / "src" / "paras.generated.h"
+            if backup.exists():
+                return backup
+
+    return direct
+
+
+def _seed_candidate_parameters(paras_output: Path) -> None:
+    """Post-generate step: 根据 parameter_seed_policy 初始化参数。
+
+    支持三种模式：
+    - inherit：从 source_candidate 的最终参数值原样复制同名参数
+    - inherit_then_perturb：先继承，再按 perturbation_direction 描述微调
+    - fresh（或无 policy）：走原有的差异化乘性扰动逻辑
     """
     candidate_dir = paras_output.expanduser().resolve().parent.parent
     candidate_json = candidate_dir / "candidate.json"
@@ -111,7 +136,6 @@ def _seed_candidate_parameters(paras_output: Path) -> None:
         except Exception:
             pass
 
-    # Fallback: parse index from directory name "candidate_03"
     if candidate_index <= 1 and not profile:
         import re
         match = re.search(r"candidate[_\s]*(\d+)", candidate_dir.name, re.IGNORECASE)
@@ -120,13 +144,55 @@ def _seed_candidate_parameters(paras_output: Path) -> None:
 
     seed_report_dir = candidate_dir / "log" / "generate"
 
+    # ── 检查 parameter_seed_policy ──────────────────────────────────────
+    seed_policy = None
+    if isinstance(profile, dict):
+        seed_policy = profile.get("parameter_seed_policy")
+    if not isinstance(seed_policy, dict):
+        seed_policy = None
+
+    mode = str(seed_policy.get("mode", "") or "").strip() if seed_policy else ""
+    source_id = str(seed_policy.get("source_candidate", "") or "").strip() if seed_policy else ""
+
+    if mode in ("inherit", "inherit_then_perturb") and source_id:
+        # ── 从 source candidate 继承参数 ──────────────────────────────
+        # 优先读备份（rounds/ 下的优化后值），避免读到 LLM 刚生成的模板默认值
+        source_header = _resolve_source_header(candidate_dir, source_id)
+        try:
+            report = _inherit_parameters(
+                target_header=paras_output,
+                source_header=source_header,
+                candidate_index=candidate_index,
+                mode=mode,
+                perturbation_text=str(seed_policy.get("perturbation_direction", "") or "").strip() if mode == "inherit_then_perturb" else "",
+                seed_report_dir=seed_report_dir,
+                label=candidate_dir.name,
+                source_label=source_id,
+            )
+            updated = report.get("updated_count", 0)
+            inherited = report.get("inherited_count", 0)
+            print(f"  [seed] parameter inherit complete: {inherited} inherited, {updated} perturbed (mode={mode}, source={source_id})")
+            for p in report.get("parameters", []):
+                if p.get("skipped"):
+                    continue
+                print(f"    {p['name']}: {p.get('old_value')} -> {p.get('new_value')}")
+        except Exception as exc:
+            print(f"  [seed] warning: parameter inherit failed ({exc}), falling back to fresh")
+            _run_default_seeding(paras_output, candidate_index, profile, seed_report_dir, candidate_dir.name)
+    else:
+        # ── fresh 模式或无 policy：走原有逻辑 ─────────────────────────
+        _run_default_seeding(paras_output, candidate_index, profile, seed_report_dir, candidate_dir.name)
+
+
+def _run_default_seeding(paras_output, candidate_index, profile, seed_report_dir, label):
+    """原有的乘性扰动逻辑，用于 fresh 模式或回退。"""
     try:
         report = seed_parameters(
             paras_output,
             candidate_index=candidate_index,
             profile=profile,
             seed_report_dir=seed_report_dir,
-            label=candidate_dir.name,
+            label=label,
         )
         updated = report.get("updated_count", 0)
         skipped = report.get("skipped_count", 0)
@@ -134,16 +200,96 @@ def _seed_candidate_parameters(paras_output: Path) -> None:
         for p in report.get("parameters", []):
             if p.get("skipped"):
                 continue
-            old_v = p.get("old_value")
-            new_v = p.get("new_value")
-            mult = p.get("multiplier", 0)
-            if isinstance(old_v, float):
-                old_v = round(old_v, 4)
-            if isinstance(new_v, float):
-                new_v = round(new_v, 4)
-            print(f"    {p['name']}: {old_v} -> {new_v}  (x{mult:.3f}, {p['category']})")
+            print(f"    {p['name']}: {p.get('old_value')} -> {p.get('new_value')}  (x{p.get('multiplier', 0):.3f}, {p['category']})")
     except Exception as exc:
         print(f"  [seed] warning: parameter seeding failed ({exc}), keeping defaults")
+
+
+def _inherit_parameters(
+    target_header, source_header, candidate_index, mode,
+    perturbation_text, seed_report_dir, label, source_label,
+):
+    """从 source_header 继承同名参数到 target_header。
+
+    使用 Optimize 的 parameter_header_editor 读写 paras.generated.h。
+    perturbation_text 为 LLM 自由文本，用正则提取参数名和百分比。
+    """
+    from Optimize.agent_optimize.agent_core.parameters.parameter_header_editor import (
+        read_tunable_parameters_detailed,
+        patch_tunable_parameters,
+    )
+    import re
+
+    target_params = read_tunable_parameters_detailed(target_header)
+    source_params = read_tunable_parameters_detailed(source_header)
+
+    # ── Step 1: 继承同名参数 ──────────────────────────────────────────
+    inherited: dict[str, Any] = {}
+    for name in target_params:
+        if name in source_params:
+            inherited[name] = source_params[name].value
+
+    # ── Step 2: inherit_then_perturb 模式，解析扰动方向 ───────────────
+    perturbed: dict[str, Any] = {}
+    if mode == "inherit_then_perturb" and perturbation_text:
+        # 匹配 "提高/增加/加大 PARAM1 和 PARAM2 约 10%" 或 "降低 PARAM 约 20%"
+        # 支持多个参数名用 "和"、"、", "," 连接。
+        for match in re.finditer(
+            r'(提高|增加|加大|升高|上调|降低|减少|减小|下调)\s*'
+            r'([A-Za-z_][A-Za-z0-9_]*(?:\s*(?:和|、|,)\s*[A-Za-z_][A-Za-z0-9_]*)*)\s*'
+            r'(?:约|約|大约|大概)?\s*(\d+(?:\.\d+)?)\s*%',
+            perturbation_text,
+        ):
+            direction = match.group(1)
+            names_text = match.group(2)
+            pct = float(match.group(3)) / 100.0
+            param_names = re.split(r'\s*(?:和|、|,)\s*', names_text)
+            for raw_name in param_names:
+                param_name = raw_name.strip().upper()
+                if not param_name:
+                    continue
+                if param_name in inherited:
+                    if direction in ("提高", "增加", "加大", "升高", "上调"):
+                        inherited[param_name] = inherited[param_name] * (1.0 + pct)
+                    else:
+                        inherited[param_name] = inherited[param_name] * (1.0 - pct)
+                    perturbed[param_name] = inherited[param_name]
+
+    # ── Step 3: 合并并写入 ────────────────────────────────────────────
+    updates = dict(inherited)
+    patch_result = patch_tunable_parameters(target_header, updates, backup=True) if updates else {"status": "skipped", "changed": False, "header_path": str(target_header), "updated_parameters": {}}
+
+    # ── Step 4: 报告 ──────────────────────────────────────────────────
+    report_params: list[dict[str, Any]] = []
+    for name in sorted(target_params.keys()):
+        old_v = target_params[name].value
+        new_v = updates.get(name, old_v)
+        report_params.append({
+            "name": name,
+            "old_value": old_v,
+            "new_value": new_v,
+            "inherited": name in inherited,
+            "perturbed": name in perturbed,
+            "skipped": name not in inherited,
+        })
+
+    report = {
+        "schema_version": 1,
+        "meta": {"label": label, "candidate_index": candidate_index, "mode": mode, "source": source_label},
+        "header_path": str(target_header),
+        "parameters": report_params,
+        "inherited_count": len(inherited),
+        "updated_count": len(perturbed),
+        "skipped_count": len(target_params) - len(inherited),
+        "patch": {"status": patch_result.get("status"), "changed": patch_result.get("changed")},
+    }
+    if seed_report_dir:
+        report_dir = Path(seed_report_dir)
+        report_dir.mkdir(parents=True, exist_ok=True)
+        (report_dir / "parameter_seed_report.json").write_text(
+            json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        report["report_path"] = str((report_dir / "parameter_seed_report.json").resolve())
+    return report
 
 
 def _write_candidate_manifest(paras_output: Path) -> None:

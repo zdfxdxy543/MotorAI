@@ -438,11 +438,6 @@ def run_competition(
                     candidate_data = load_json_object(cj)
                     log_opt = cdir / "log" / "optimize"
                     _write_candidate_evaluation_config(candidate_data, log_opt, candidate_json=cj)
-                    # 第二轮+：只评估不修改，隔离优化 agent 对参数的干扰
-                    if round_number > 1:
-                        candidate_data["max_iterations"] = 1
-                        candidate_data["stop_conditions"] = {"overall_score_min": -1, "metric_error_count_max": 999}
-                        write_json(cj, candidate_data)
             except Exception:
                 pass
 
