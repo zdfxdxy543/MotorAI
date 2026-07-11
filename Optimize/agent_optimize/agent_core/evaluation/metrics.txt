@@ -144,21 +144,22 @@ good_threshold = 62.3 × 0.02 = 1.246
 
 8. overshoot
 
-这是你现在发现问题的指标。
+含义：超调量。
 
-当前公式：
+当前公式（已改用信号自身稳态值，与 rise_time / settling_time 一致）：
 
-target_final = target_value 或 target_signal 的最后一个值
+稳态参考值 = 信号最后 10 个采样点的均值（不足 10 个则取全部）
+
 initial = signal[0]
-direction = target_final - initial
+direction = steady_state - initial
 
 如果是上升响应：
 
-amount = max(signal) - target_final
+amount = max(signal) - steady_state
 
 如果是下降响应：
 
-amount = target_final - min(signal)
+amount = steady_state - min(signal)
 
 然后：
 
@@ -166,61 +167,26 @@ amount = max(0, amount)
 
 如果：
 
-"normalize": true
+“normalize”: true
 
 则：
 
-overshoot = amount / abs(target_final)
+overshoot = amount / abs(steady_state)
 
 如果：
 
-"normalize": false
+“normalize”: false
 
 则：
 
 overshoot = amount
-当前问题
 
-你希望的是：
+注意：如果稳态值接近 0，归一化会退回绝对超调量。
 
-overshoot = max(signal) - steady_state_value
-
-但当前代码用的是：
-
-overshoot = max(signal) - target_value
-
-所以你这次：
-
-target_value = 62.3
-max(signal) ≈ 45.997
-
-于是：
-
-max(signal) - target_value = 45.997 - 62.3 < 0
-
-被截断成：
-
-0
-
-因此 overshoot = 0。
-
-你想要的工程公式应改为
-
-建议改成：
-
-steady_value = mean(最后 window_ratio 的 signal)
-amount = max(signal) - steady_value
-amount = max(0, amount)
-
-如果归一化：
-
-overshoot_ratio = amount / abs(steady_value)
-
-但这里要注意：如果稳态值是负数，例如你这次最终反转，公式会变复杂。更稳妥的是再加一个专门指标：
-
-reverse_overspeed = max(0, -min(signal)) / abs(target_value)
-
-否则“反转”会和“超调”概念混在一起。
+改进原因：之前用的是 target_value 作为参考基准，当信号达不到目标值
+（例如 target=62.3, max(signal)=45.997）时，max-target 为负被截断为 0，
+导致超调量永远检测不到。改用信号自身稳态值后，即使控制器没有跟踪到目标，
+也能正确反映信号在自身稳态附近的超调行为。
 
 9. rise_time
 

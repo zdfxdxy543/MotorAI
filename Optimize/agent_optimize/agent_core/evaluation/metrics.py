@@ -206,34 +206,45 @@ def overshoot(
     normalize: bool = True,
 ) -> float:
     """
-    Return overshoot relative to the final target value.
+    Return overshoot relative to the signal's own steady-state value.
 
-    For an increasing response, overshoot is max(signal) - target_final.
-    For a decreasing response, overshoot is target_final - min(signal).
+    The steady-state reference is the mean of the last 10 samples (fewer if the
+    signal is shorter). This is consistent with rise_time and settling_time,
+    which also use the signal's own final value rather than an external target.
+    Using the signal's own steady state ensures overshoot is detected even when
+    the controller fails to reach the commanded target.
+
+    For an increasing response, overshoot is max(signal) - steady_state.
+    For a decreasing response, overshoot is steady_state - min(signal).
 
     Negative overshoot is clamped to 0.
 
-    If normalize=True, return overshoot ratio relative to abs(target_final).
-    If abs(target_final) is near zero, absolute overshoot is returned instead
+    If normalize=True, return overshoot ratio relative to abs(steady_state).
+    If abs(steady_state) is near zero, absolute overshoot is returned instead
     because a meaningful ratio cannot be formed.
+
+    The ``target`` parameter is accepted for backward compatibility but is
+    not used in the calculation.
     """
     _, y = _extract_time_values(signal=signal, values=values, require_time=False)
-    target_final = _target_final_value(target, metric_name="overshoot")
+
+    tail_size = min(10, len(y))
+    steady_state = sum(y[-tail_size:]) / tail_size
 
     initial = y[0]
-    direction = target_final - initial
+    direction = steady_state - initial
 
     if direction >= 0:
-        amount = max(y) - target_final
+        amount = max(y) - steady_state
     else:
-        amount = target_final - min(y)
+        amount = steady_state - min(y)
 
     amount = max(0.0, amount)
 
     if not normalize:
         return amount
 
-    denom = abs(target_final)
+    denom = abs(steady_state)
     if denom <= _EPSILON:
         return amount
     return amount / denom

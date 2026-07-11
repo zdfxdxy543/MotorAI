@@ -148,7 +148,6 @@ _TARGET_REQUIRED_METRICS: set[str] = {
     "mean_absolute_error",
     "rms_error",
     "steady_state_error",
-    "overshoot",
     "response_delay",
 }
 
