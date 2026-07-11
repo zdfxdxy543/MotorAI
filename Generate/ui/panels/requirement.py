@@ -738,6 +738,8 @@ class RequirementPanel(QWidget):
                         )
                 if ref_target and ref_target != 0:
                     overrides['good_threshold'] = value / 100.0 * abs(ref_target)
+                    if 'bad_threshold' not in overrides and overrides['good_threshold'] > 0:
+                        overrides['bad_threshold'] = overrides['good_threshold'] * 5.0
 
             # target_* 约束不在此处处理——由 _collect_signal_targets 预先聚合
 

@@ -140,6 +140,12 @@ window_ratio = 0.1
 
 good_threshold = 62.3 × 0.02 = 1.246
 
+bad_threshold 建议设置为 good_threshold × 5（即目标值的 10%），例如：
+
+bad_threshold = 1.246 × 5 = 6.23
+
+UI 面板和校准函数均遵循 good × 5 规则自动推导 bad_threshold。
+
 这一点你之前的 Main2.json 是对的。
 
 8. overshoot

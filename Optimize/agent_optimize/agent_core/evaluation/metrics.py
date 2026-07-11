@@ -211,8 +211,6 @@ def overshoot(
     The steady-state reference is the mean of the last 10 samples (fewer if the
     signal is shorter). This is consistent with rise_time and settling_time,
     which also use the signal's own final value rather than an external target.
-    Using the signal's own steady state ensures overshoot is detected even when
-    the controller fails to reach the commanded target.
 
     For an increasing response, overshoot is max(signal) - steady_state.
     For a decreasing response, overshoot is steady_state - min(signal).
@@ -220,11 +218,13 @@ def overshoot(
     Negative overshoot is clamped to 0.
 
     If normalize=True, return overshoot ratio relative to abs(steady_state).
-    If abs(steady_state) is near zero, absolute overshoot is returned instead
-    because a meaningful ratio cannot be formed.
+    If abs(steady_state) is near zero, absolute overshoot is returned instead.
 
-    The ``target`` parameter is accepted for backward compatibility but is
-    not used in the calculation.
+    When *target* is provided and the signal's steady-state falls short of the
+    target (i.e. the controller never reached the commanded value), the returned
+    value is the maximum of the true overshoot ratio and the normalised tracking
+    shortfall.  This prevents a spurious perfect score when the signal simply
+    never rose far enough to overshoot.
     """
     _, y = _extract_time_values(signal=signal, values=values, require_time=False)
 
@@ -247,7 +247,26 @@ def overshoot(
     denom = abs(steady_state)
     if denom <= _EPSILON:
         return amount
-    return amount / denom
+    result = amount / denom
+
+    # ── 跟踪不足惩罚 ────────────────────────────────────────────────
+    # 若信号稳态值明显低于目标值，说明控制器未有效跟踪，此时的"低超调"
+    # 是虚假的——信号根本没到达目标。用跟踪缺口替代 overshoot 值，
+    # 确保评分能反映真实的跟踪质量。
+    if target is not _MISSING and target is not None:
+        try:
+            target_final = _target_final_value(target, metric_name="overshoot")
+        except TargetDataError:
+            target_final = None
+        if target_final is not None and abs(target_final) > _EPSILON:
+            if direction >= 0 and steady_state < target_final:
+                shortfall = (target_final - steady_state) / abs(target_final)
+                result = max(result, shortfall)
+            elif direction < 0 and steady_state > target_final:
+                shortfall = (steady_state - target_final) / abs(target_final)
+                result = max(result, shortfall)
+
+    return result
 
 
 def rise_time(

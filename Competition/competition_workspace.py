@@ -964,7 +964,7 @@ def _normalize_metric_thresholds(metrics: list[dict[str, Any]]) -> list[dict[str
 
     规则（对 minimize 指标）：
     - good >= bad         → bad = good * 2
-    - bad > target * 0.3  → bad = target * 0.15（误差类指标，bad 不应超过目标值 30%）
+    - bad > target * 0.3  → bad = good * 5（bad 是旧模板残留值，按 good 等比缩放）
     - bad > good * 10     → bad = good * 5（兜底，压制模板残留的极端值）
     """
     if not isinstance(metrics, list):
@@ -984,9 +984,9 @@ def _normalize_metric_thresholds(metrics: list[dict[str, Any]]) -> list[dict[str
             if good >= bad:
                 m["bad_threshold"] = good * 2.0
                 bad = m["bad_threshold"]
-            # bad 超过目标值 30%，说明是旧模板残留的绝对值，按 target 缩放
+            # bad 超过目标值 30%，说明是旧模板残留的绝对值
             if isinstance(target, (int, float)) and target > 0 and bad > target * 0.3:
-                m["bad_threshold"] = target * 0.15
+                m["bad_threshold"] = good * 5.0
                 bad = m["bad_threshold"]
             # 兜底：bad 仍超过 good 的 10 倍
             if bad > good * 10:
@@ -1026,6 +1026,58 @@ def _write_candidate_evaluation_config(candidate: dict[str, Any], optimize_dir: 
         write_json(candidate_json, candidate)
 
     return output
+
+
+def _sync_calibrated_metrics_to_parent(candidate: dict[str, Any], candidate_json: Path) -> None:
+    """将校准后的 metrics 阈值回写到父项目 JSON。
+
+    _write_candidate_evaluation_config 已将校准后的阈值写入 candidate.json，
+    但父项目 JSON（如 FinalFifth.json）中的原始值未更新。若用户后续使用
+    --force-init 重建 candidate，旧值会被 sync_candidate_common_fields 拷回，
+    导致校准失效。此函数消除该风险。
+
+    仅当 candidate["metrics"] 与父项目 JSON 的 metrics 结构一致（逐项
+    metric_name + signal 匹配）时才执行回写；不匹配则跳过，避免误写。
+    """
+    parent_raw = candidate.get("parent_project_json")
+    if not parent_raw:
+        return
+    parent_path = Path(str(parent_raw)).expanduser()
+    if not parent_path.is_absolute():
+        parent_path = candidate_json.parent / parent_path
+    parent_path = parent_path.resolve()
+    if not parent_path.exists():
+        return
+
+    calibrated_metrics = candidate.get("metrics")
+    if not isinstance(calibrated_metrics, list) or not calibrated_metrics:
+        return
+
+    try:
+        parent = load_json_object(parent_path)
+    except Exception:
+        return
+
+    parent_metrics = parent.get("metrics")
+    if not isinstance(parent_metrics, list) or len(parent_metrics) != len(calibrated_metrics):
+        return
+
+    # 逐项匹配：仅当 metric_name + signal 一致时才覆盖阈值
+    updated = False
+    for pm, cm in zip(parent_metrics, calibrated_metrics):
+        if not isinstance(pm, dict) or not isinstance(cm, dict):
+            return
+        if pm.get("metric_name") != cm.get("metric_name"):
+            return
+        if pm.get("signal") != cm.get("signal"):
+            return
+        for key in ("good_threshold", "bad_threshold"):
+            if key in cm and pm.get(key) != cm.get(key):
+                pm[key] = cm[key]
+                updated = True
+
+    if updated:
+        write_json(parent_path, parent)
 
 
 def sync_tuning_policy_with_header(candidate_json: Path) -> dict[str, Any]:
@@ -1296,6 +1348,14 @@ def configure_candidate_optimize(candidate_json: Path) -> dict[str, Any]:
     # 这样 evaluator 无论走 direct-evaluation override 还是读默认路径，
     # 都能拿到正确的评估配置，不依赖 LLM 的行为。
     _write_candidate_evaluation_config(candidate, log_optimize, candidate_json=candidate_json)
+
+    # ── 回写校准后的指标阈值到父项目 JSON ───────────────────────────
+    # candidate["metrics"] 已被 _write_candidate_evaluation_config 原地更新为
+    # 校准后的值，同步回 FinalFifth.json 防止 --force-init 时旧值被拷回。
+    try:
+        _sync_calibrated_metrics_to_parent(candidate, candidate_json)
+    except Exception:
+        pass  # 回写失败不阻塞 configure 流程
 
     modify_simulink_vcxproj(str(sln_dir), gmp_root)
     modify_gmp_compiler_include_summaries(candidate_root, gmp_root)

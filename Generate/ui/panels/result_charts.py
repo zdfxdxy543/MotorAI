@@ -17,7 +17,9 @@ from pathlib import Path
 from typing import Any
 
 from PyQt5.QtWidgets import (
+    QComboBox,
     QGridLayout,
+    QHBoxLayout,
     QLabel,
     QSizePolicy,
     QVBoxLayout,
@@ -321,27 +323,59 @@ def _latest_round(project_root: Path) -> int:
     return best
 
 
-def _find_processed_json(project_root: Path, candidate_id: str) -> Path | None:
+def _all_rounds(project_root: Path) -> list[int]:
+    """返回所有可用轮次编号（升序）。"""
+    rounds_dir = project_root / "rounds"
+    if not rounds_dir.is_dir():
+        return []
+    result: list[int] = []
+    for d in rounds_dir.glob("round_*"):
+        if d.is_dir():
+            try:
+                result.append(int(d.name.replace("round_", "")))
+            except ValueError:
+                pass
+    return sorted(result)
+
+
+def _latest_round(project_root: Path) -> int:
+    """找到已完成的最大轮次编号。"""
+    all_r = _all_rounds(project_root)
+    return all_r[-1] if all_r else 0
+
+
+def _find_processed_json(project_root: Path, candidate_id: str, round_number: int | None = None) -> Path | None:
     """为指定 candidate 查找 simulation/processed.json。
 
-    优先级：rounds 备份（高轮次优先）→ candidates/ 目录。
+    当 round_number 为 None 或等于 latest 时，使用 candidates/ 当前数据；
+    否则从 rounds/round_NN/ 备份中读取。
     """
+    latest = _latest_round(project_root)
+    if round_number is None or round_number == latest:
+        # 最新一轮：用 candidates/ 当前数据
+        direct = project_root / "candidates" / candidate_id / "log" / "optimize" / "simulation" / "processed.json"
+        if direct.exists():
+            return direct
+    # 指定历史轮次或 candidates/ 不存在：走 rounds 备份
+    if round_number is not None and round_number != latest:
+        proc = project_root / "rounds" / f"round_{round_number:02d}" / "candidates" / candidate_id / "log" / "optimize" / "simulation" / "processed.json"
+        if proc.exists():
+            return proc
+    # 兜底：逐轮回退
     rounds_dir = project_root / "rounds"
     if rounds_dir.is_dir():
         for rd in sorted(rounds_dir.glob("round_*"), reverse=True):
             proc = rd / "candidates" / candidate_id / "log" / "optimize" / "simulation" / "processed.json"
             if proc.exists():
                 return proc
-    # fallback：candidates/ 目录
-    direct = project_root / "candidates" / candidate_id / "log" / "optimize" / "simulation" / "processed.json"
-    return direct if direct.exists() else None
+    return None
 
 
-def _load_speed_signals(project_root: Path, candidate_dirs: list[Path]) -> list[dict[str, Any]]:
-    """从 rounds 备份或 candidates/ 中提取各 candidate 的转子速度波形。"""
+def _load_speed_signals(project_root: Path, candidate_dirs: list[Path], round_number: int | None = None) -> list[dict[str, Any]]:
+    """提取各 candidate 的转子速度波形。"""
     result: list[dict[str, Any]] = []
     for cdir in candidate_dirs:
-        proc = _find_processed_json(project_root, cdir.name)
+        proc = _find_processed_json(project_root, cdir.name, round_number)
         if proc is None:
             continue
         data = _read_json(proc)
@@ -355,11 +389,11 @@ def _load_speed_signals(project_root: Path, candidate_dirs: list[Path]) -> list[
     return result
 
 
-def _load_angle_signals(project_root: Path, candidate_dirs: list[Path]) -> list[dict[str, Any]]:
-    """从 rounds 备份或 candidates/ 中提取各 candidate 的转角波形。"""
+def _load_angle_signals(project_root: Path, candidate_dirs: list[Path], round_number: int | None = None) -> list[dict[str, Any]]:
+    """提取各 candidate 的转角波形。"""
     result: list[dict[str, Any]] = []
     for cdir in candidate_dirs:
-        proc = _find_processed_json(project_root, cdir.name)
+        proc = _find_processed_json(project_root, cdir.name, round_number)
         if proc is None:
             continue
         data = _read_json(proc)
@@ -411,12 +445,19 @@ class ResultChartsPanel(QWidget):
     def __init__(self, project_json_getter=None, parent=None):
         super().__init__(parent)
         self._project_json_getter = project_json_getter
+        self._current_round: int = 0
+        self._project_root: Path | None = None
         self.setObjectName("resultChartsPanel")
 
         # ── 布局 ──────────────────────────────────────────────────────
         outer_layout = QVBoxLayout(self)
         outer_layout.setContentsMargins(0, 0, 0, 0)
         outer_layout.setSpacing(0)
+
+        # 标题行：标题 + 轮次下拉框
+        header = QHBoxLayout()
+        header.setContentsMargins(0, 0, 0, 0)
+        header.setSpacing(8)
 
         self._title_label = QLabel("📊 仿真结果图表")
         self._title_label.setObjectName("chartPanelTitle")
@@ -427,7 +468,32 @@ class ResultChartsPanel(QWidget):
             f"background:{current_theme().panel};border:none;}}"
         )
         self._title_label.setFixedHeight(36)
-        outer_layout.addWidget(self._title_label)
+        header.addWidget(self._title_label)
+
+        header.addStretch()
+
+        self._round_combo = QComboBox()
+        self._round_combo.setFixedHeight(28)
+        self._round_combo.setMinimumWidth(160)
+        self._round_combo.setStyleSheet(
+            f"QComboBox{{"
+            f"font-size:13px;padding:2px 8px;"
+            f"color:{current_theme().text};"
+            f"background:{current_theme().surface};"
+            f"border:1px solid {current_theme().border};"
+            f"border-radius:4px;}}"
+            f"QComboBox:hover{{border-color:{current_theme().border_strong};}}"
+            f"QComboBox QAbstractItemView{{"
+            f"color:{current_theme().text};"
+            f"background:{current_theme().surface};"
+            f"selection-background-color:{current_theme().selection};}}"
+        )
+        self._round_combo.currentIndexChanged.connect(self._on_round_changed)
+        header.addWidget(self._round_combo)
+
+        header_widget = QWidget()
+        header_widget.setLayout(header)
+        outer_layout.addWidget(header_widget)
 
         # ── 2×2 网格布局 ────────────────────────────────────────────
         grid = QGridLayout()
@@ -469,6 +535,28 @@ class ResultChartsPanel(QWidget):
         for chart in [self.speed_chart, self.score_chart, self.param_chart, self.angle_chart]:
             chart.show_empty(msg)
 
+    def _rebuild_round_combo(self, project_root: Path, latest: int):
+        """根据可用轮次重建下拉框选项。"""
+        self._round_combo.blockSignals(True)
+        try:
+            self._round_combo.clear()
+            all_r = _all_rounds(project_root)
+            # 当前（最新轮次）始终排在第一位
+            self._round_combo.addItem(f"当前 (Round {latest})", latest)
+            for r in sorted(all_r, reverse=True):
+                if r != latest:
+                    self._round_combo.addItem(f"Round {r} (历史)", r)
+        finally:
+            self._round_combo.blockSignals(False)
+
+    def _on_round_changed(self, index: int):
+        if index < 0 or self._project_root is None:
+            return
+        selected_round = self._round_combo.currentData()
+        if selected_round is not None and selected_round != self._current_round:
+            self._current_round = selected_round
+            self._reload_charts()
+
     def reload_for_project(self):
         """读取项目数据并刷新全部图表。"""
         getter = self._project_json_getter
@@ -483,29 +571,56 @@ class ResultChartsPanel(QWidget):
             return
 
         project_root = project_json.parent
-        rn = _latest_round(project_root)
-        if rn <= 0:
+        self._project_root = project_root
+        latest = _latest_round(project_root)
+        if latest <= 0:
             self._show_empty_all()
             return
 
+        # ── 重建下拉框 ───────────────────────────────────────────────
+        self._rebuild_round_combo(project_root, latest)
+        self._current_round = latest
+
+        # ── 收集 candidate 目录 ──────────────────────────────────────
+        candidates_root = project_root / "candidates"
+        self._candidate_dirs = sorted(
+            [d for d in candidates_root.glob("candidate_*") if d.is_dir()]
+        )
+
+        # ── 刷新图表 ─────────────────────────────────────────────────
+        self._reload_charts()
+
+    def _reload_charts(self):
+        """根据当前选中的轮次刷新全部图表。"""
+        project_root = self._project_root
+        if project_root is None:
+            return
+        rn = self._current_round
+        candidate_dirs = getattr(self, "_candidate_dirs", [])
+        if not candidate_dirs:
+            return
+
+        # ── 读取对应轮次的 feedback ──────────────────────────────────
         fb_path = project_root / "rounds" / f"round_{rn:02d}" / "round_feedback.json"
         feedback = _read_json(fb_path)
         if not feedback:
             self._show_empty_all()
             return
 
-        # ── 收集 candidate 目录 ──────────────────────────────────────
-        candidates_root = project_root / "candidates"
-        candidate_dirs = sorted(
-            [d for d in candidates_root.glob("candidate_*") if d.is_dir()]
-        )
-
         # ── 更新标题 ─────────────────────────────────────────────────
-        self._title_label.setText(f"📊 仿真结果图表  —  Round {rn}")
+        latest = _latest_round(project_root)
+        if rn == latest:
+            self._title_label.setText(f"📊 仿真结果图表  —  Round {rn} (当前)")
+        else:
+            self._title_label.setText(f"📊 仿真结果图表  —  Round {rn} (历史)")
+
+        # ── 获取项目 JSON 路径 ───────────────────────────────────────
+        getter = self._project_json_getter
+        project_json = Path(getter()) if callable(getter) else None
 
         # ── 图 1：速度波形 ───────────────────────────────────────────
-        speed_data = _load_speed_signals(project_root, candidate_dirs)
-        target = _extract_target_speed(project_json)
+        speed_data = _load_speed_signals(project_root, candidate_dirs, rn)
+        target = _extract_target_speed(project_json) if project_json else None
         self.speed_chart.plot(speed_data, target)
 
         # ── 图 2：评分对比 ───────────────────────────────────────────
@@ -515,7 +630,6 @@ class ResultChartsPanel(QWidget):
         self.score_chart.plot(scoreboard, winner_id)
 
         # ── 图 3：参数调优变化量 ─────────────────────────────────────
-        # 展示 winner 的参数变化
         candidates_fb = feedback.get("candidates", [])
         winner_params: list[dict[str, Any]] = []
         for c in candidates_fb:
@@ -525,5 +639,5 @@ class ResultChartsPanel(QWidget):
         self.param_chart.plot(winner_params, winner_id)
 
         # ── 图 4：转角波形 ───────────────────────────────────────────
-        angle_data = _load_angle_signals(project_root, candidate_dirs)
+        angle_data = _load_angle_signals(project_root, candidate_dirs, rn)
         self.angle_chart.plot(angle_data)

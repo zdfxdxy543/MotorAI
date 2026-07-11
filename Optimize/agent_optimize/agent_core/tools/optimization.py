@@ -221,6 +221,8 @@ class OptimizationTools:
         self.ctx = ctx
         self.automation_tools = AutomationTools(ctx)
         self.evaluation_tools = EvaluationTools(ctx)
+        self._best_score: float | None = None
+        self._best_parameters: dict[str, Any] | None = None
 
     def _automation(self) -> Dict[str, Any]:
         return self.ctx.automation()
@@ -383,6 +385,52 @@ class OptimizationTools:
             context["evaluation_result_read_error"] = f"{type(exc).__name__}: {exc}"
             context["evaluation_result"] = {}
 
+        # ── 最佳分数追踪 & 自动回退 ──────────────────────────────────────
+        current_score = context.get("overall_score")
+        if isinstance(current_score, (int, float)) and current_score is not None:
+            if self._best_score is None or current_score > self._best_score:
+                # 新的最佳：记录参数快照
+                self._best_score = float(current_score)
+                self._best_parameters = dict(all_params)
+                context["best_score_so_far"] = self._best_score
+                context["parameters_rolled_back"] = False
+            elif current_score < self._best_score:
+                # 评分退化：回退头文件到最佳参数
+                context["best_score_so_far"] = self._best_score
+                context["score_degraded"] = True
+                context["score_delta_from_best"] = round(current_score - self._best_score, 4)
+                if self._best_parameters is not None:
+                    try:
+                        patch_header_parameters(
+                            resolved_header_path,
+                            self._best_parameters,
+                            backup=False,
+                            dry_run=False,
+                            allowed_names=None,
+                        )
+                    except Exception as exc:
+                        context["rollback_error"] = f"{type(exc).__name__}: {exc}"
+                        context["parameters_rolled_back"] = False
+                    else:
+                        context["parameters_rolled_back"] = True
+                        context["rollback_warning"] = (
+                            f"⚠️ 本轮评分 {current_score:.1f} 低于历史最佳 {self._best_score:.1f}"
+                            f"（Δ = {current_score - self._best_score:.1f}），"
+                            "参数已自动回退到最佳状态。\n"
+                            "刚才的修改已记录在 recent_history 中，请注意：\n"
+                            "  - 可能是方向正确但步子太大 → 尝试更小幅度的同方向调整\n"
+                            "  - 也可能是方向本身有问题 → 尝试调整其他参数或换一个方向\n"
+                            "请根据 history 中记录的 parameter_updates 判断属于哪种情况。"
+                        )
+            else:
+                # 分数持平
+                context["best_score_so_far"] = self._best_score
+                context["parameters_rolled_back"] = False
+        else:
+            # 仿真失败或无有效分数：不更新最佳记录，也不回退
+            context["best_score_so_far"] = self._best_score
+            context["parameters_rolled_back"] = False
+
         try:
             all_after = read_header_parameters(resolved_header_path)
             tunable_allowlist = _get_effective_allowlist(self.ctx, all_after)
@@ -401,11 +449,19 @@ class OptimizationTools:
             context["history_read_error"] = f"{type(exc).__name__}: {exc}"
 
         context["status"] = "ok" if context["evaluation_success"] else "evaluation_failed"
-        context["next_action"] = (
-            "Analyze evaluation_result, current_parameters_after_run, and recent_history. "
-            "If a parameter update is justified, call apply_parameter_update_and_record with "
-            "the proposed numeric updates and a concise agent_reason."
-        )
+        if context.get("parameters_rolled_back"):
+            context["next_action"] = (
+                "Parameters were rolled back because this iteration degraded the score. "
+                "Inspect recent_history to see which update caused the regression. "
+                "Consider: (1) same direction but smaller step, or (2) adjust a different "
+                "parameter. Then call apply_parameter_update_and_record."
+            )
+        else:
+            context["next_action"] = (
+                "Analyze evaluation_result, current_parameters_after_run, and recent_history. "
+                "If a parameter update is justified, call apply_parameter_update_and_record with "
+                "the proposed numeric updates and a concise agent_reason."
+            )
         return self._json_dumps(context)
 
     def apply_parameter_update_and_record(
