@@ -389,6 +389,15 @@ def run_competition(
                         src_file = log_opt / name
                         if src_file.exists():
                             shutil.copy2(src_file, backup_log / name)
+                    # 仿真波形数据
+                    sim_dir = log_opt / "simulation"
+                    if sim_dir.is_dir():
+                        backup_sim = backup_log / "simulation"
+                        backup_sim.mkdir(parents=True, exist_ok=True)
+                        for sim_name in ("processed.json", "raw.json", "scope_channel_map.json"):
+                            src_sim = sim_dir / sim_name
+                            if src_sim.exists():
+                                shutil.copy2(src_sim, backup_sim / sim_name)
 
         # 用本轮 profiles 覆盖 common
         round_profiles = project_root / "rounds" / f"round_{round_number:02d}" / "candidate_profiles.json"

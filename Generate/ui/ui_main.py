@@ -38,6 +38,7 @@ from dialogs.project import NewProjectDialog, SettingsDialog
 from panels.controller_structure import ControllerStructurePanel
 from panels.cosim_config import CandidateNetworkPanel
 from panels.history import HistoryPanel, add_to_history
+from panels.result_charts import ResultChartsPanel
 from panels.tuning_result import TuningResultPanel
 from panels.workspace import Design3RightPanel
 from styles.theme import (
@@ -235,11 +236,8 @@ class FloatingDrawer(QFrame):
             if parent_width < 1200:
                 return max(200, min(230, int(parent_width * 0.20)))
             return max(240, min(280, int(parent_width * 0.20), self.preferred_width))
-        if parent_width < 860:
-            return max(210, min(250, int(parent_width * 0.30)))
-        if parent_width < 1200:
-            return max(240, min(280, int(parent_width * 0.24)))
-        return max(320, min(380, int(parent_width * 0.27), self.preferred_width))
+        # 右侧面板：展开后覆盖半个屏幕
+        return max(320, parent_width // 2)
 
     def _target_x(self) -> int:
         parent = self.parentWidget()
@@ -284,7 +282,8 @@ class OverlayWorkspace(QWidget):
     def _sync_center_insets(self, animated: bool):
         gap = 8
         left = self._reserved_width(self.left_drawer, gap)
-        right = self._reserved_width(self.right_drawer, gap)
+        # 右侧面板以覆盖方式展示，中间内容只预留 handle 的窄条空间
+        right = self.right_drawer.handle_width + gap
         self.center_host.set_target_insets(left, right, animated=animated)
 
     @staticmethod
@@ -377,9 +376,12 @@ class MainWindow(QMainWindow):
         # float above it as animated off-canvas drawers.
 
         self.controller_panel = ControllerStructurePanel(project_json_getter=self.get_current_project_json_path)
-        self.controller_panel.setStyleSheet(f'background:{current_theme().panel};border:none;')
         self.tuning_result_panel = TuningResultPanel(project_json_getter=self.get_current_project_json_path)
         self.tuning_result_panel.setStyleSheet(f'background:{current_theme().panel};border:none;')
+
+        self.result_charts_panel = ResultChartsPanel(
+            project_json_getter=self.get_current_project_json_path,
+        )
 
         self.right_panel_widget = Design3RightPanel(
             project_json_getter=self.get_current_project_json_path,
@@ -396,10 +398,10 @@ class MainWindow(QMainWindow):
             f'QSplitter{{background:{current_theme().panel};border:none;}}'
             f'QSplitter::handle{{background:{current_theme().background};}}'
         )
-        right_splitter.addWidget(self.controller_panel)
         right_splitter.addWidget(self.tuning_result_panel)
-        right_splitter.setStretchFactor(0, 3)
-        right_splitter.setStretchFactor(1, 2)
+        right_splitter.addWidget(self.result_charts_panel)
+        right_splitter.setStretchFactor(0, 2)
+        right_splitter.setStretchFactor(1, 5)
         right_splitter.setSizePolicy(QSizePolicy.Ignored, QSizePolicy.Expanding)
         right_splitter.setMinimumWidth(0)
 
@@ -440,7 +442,7 @@ class MainWindow(QMainWindow):
             self.setStyleSheet(app_qss())
 
     def _install_surface_effects(self):
-        for widget in [self.controller_panel, self.right_panel()]:
+        for widget in [self.right_panel()]:
             if widget is not None:
                 widget.setGraphicsEffect(None)
 
@@ -588,6 +590,9 @@ class MainWindow(QMainWindow):
                             f'状态：第 {current_round} 轮调优进行中')
                     except RuntimeError:
                         pass
+                # 图表切到运行中占位状态
+                if hasattr(self, 'result_charts_panel') and self.result_charts_panel is not None:
+                    self.result_charts_panel.show_running(current_round)
                 return
 
             run_agent_script = Path(__file__).parent / 'run_agent.py'
@@ -668,6 +673,13 @@ class MainWindow(QMainWindow):
                 )
         except RuntimeError:
             return
+
+        # 每轮结束后刷新图表
+        if hasattr(self, 'result_charts_panel') and self.result_charts_panel is not None:
+            try:
+                self.result_charts_panel.reload_for_project()
+            except Exception:
+                pass
 
         # 检查 max_rounds 上限
         try:
@@ -788,6 +800,10 @@ class MainWindow(QMainWindow):
                     widget.load_from_project_json()
                 except Exception:
                     pass
+
+        # 刷新仿真结果图表
+        if hasattr(self, 'result_charts_panel') and self.result_charts_panel is not None:
+            self.result_charts_panel.reload_for_project()
 
     def save_project_json(self):
         if not self.current_project_json_path:
