@@ -2,3 +2,38 @@
 __pycache__/
 *.py[cod]
 *.pyo
+*.pyd
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.bak
+*.slxc
+*.slx.autosave
+log/
+simulation/
+*.log
+
+# Settings with secrets
+motorai_settings.json
